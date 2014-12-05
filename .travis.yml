@@ -69,4 +69,4 @@ script:
   - bin/developer assets:compile-less -v
   - bin/developer assets:build-javascript -v
   - sh tests/js/run.sh
-  - bin/phpunit
+  - php -d zend.enable_gc=0 bin/phpunit
