@@ -44,7 +44,6 @@ class DebuggerSubscriber implements EventSubscriberInterface
         if ($this->app['phraseanet.configuration']->isSetup()
             && isset($this->app['phraseanet.configuration']['debugger'])
             && isset($this->app['phraseanet.configuration']['debugger']['allowed-ips'])) {
-
             $allowedIps = $this->app['phraseanet.configuration']['debugger']['allowed-ips'];
             $allowedIps = is_array($allowedIps) ? $allowedIps : array($allowedIps);
         } else {

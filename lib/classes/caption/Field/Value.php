@@ -105,7 +105,6 @@ class caption_Field_Value implements cache_cacheableInterface
 
             return $this;
         } catch (\Exception $e) {
-
         }
 
         $connbas = $this->databox_field->get_databox()->get_connection();
@@ -124,31 +123,30 @@ class caption_Field_Value implements cache_cacheableInterface
             $this->VocabularyType = $row['VocabularyType'] ? Vocabulary\Controller::get($this->app, $row['VocabularyType']) : null;
             $this->VocabularyId = $row['VocabularyId'];
         } catch (\InvalidArgumentException $e) {
-
         }
 
         if ($this->VocabularyType) {
             /**
              * Vocabulary Control has been deactivated
              */
-            if ( ! $this->databox_field->getVocabularyControl()) {
+            if (! $this->databox_field->getVocabularyControl()) {
                 $this->removeVocabulary();
             }
             /**
              * Vocabulary Control has changed
              */ elseif ($this->databox_field->getVocabularyControl()->getType() !== $this->VocabularyType->getType()) {
-                $this->removeVocabulary();
-            }
+     $this->removeVocabulary();
+ }
             /**
              * Current Id is not available anymore
-             */ elseif ( ! $this->VocabularyType->validate($this->VocabularyId)) {
-                $this->removeVocabulary();
-            }
+             */ elseif (! $this->VocabularyType->validate($this->VocabularyId)) {
+     $this->removeVocabulary();
+ }
             /**
              * String equivalence has changed
              */ elseif ($this->VocabularyType->getValue($this->VocabularyId) !== $this->value) {
-                $this->set_value($this->VocabularyType->getValue($this->VocabularyId));
-            }
+     $this->set_value($this->VocabularyType->getValue($this->VocabularyId));
+ }
         }
 
         $datas = array(
@@ -222,7 +220,7 @@ class caption_Field_Value implements cache_cacheableInterface
         $params = array(
             ':VocabType'    => null
             , ':VocabularyId' => null
-            , ':meta_id'      => $this->getId()
+            , ':meta_id'      => $this->getId(),
         );
 
         $sql_up = 'UPDATE metadatas
@@ -246,7 +244,7 @@ class caption_Field_Value implements cache_cacheableInterface
         $params = array(
             ':VocabType'    => $vocabulary->getType()
             , ':VocabularyId' => $vocab_id
-            , ':meta_id'      => $this->getId()
+            , ':meta_id'      => $this->getId(),
         );
 
         $sql_up = 'UPDATE metadatas
@@ -270,7 +268,7 @@ class caption_Field_Value implements cache_cacheableInterface
 
         $params = array(
             ':meta_id' => $this->id
-            , ':value'   => $value
+            , ':value'   => $value,
         );
 
         $sql_up = 'UPDATE metadatas SET value = :value WHERE id = :meta_id';
@@ -304,7 +302,7 @@ class caption_Field_Value implements cache_cacheableInterface
         /**
          * Check consistency
          */
-        if ( ! $databox_field->is_multi()) {
+        if (! $databox_field->is_multi()) {
             try {
                 $field = $record->get_caption()->get_field($databox_field->get_name());
                 $values = $field->get_values();
@@ -320,7 +318,6 @@ class caption_Field_Value implements cache_cacheableInterface
 
                 return $caption_field_value;
             } catch (\Exception $e) {
-
             }
         }
 
@@ -378,9 +375,9 @@ class caption_Field_Value implements cache_cacheableInterface
         $context_noacc = $this->app['unicode']->remove_indexer_chars($context_noacc);
 
         // find all synonyms in all related branches
-        $q = "(" . $tbranch . ")//sy[@w='" . $term_noacc . "'";
+        $q = "(".$tbranch.")//sy[@w='".$term_noacc."'";
         if ($context_noacc) {
-            $q .= " and @k='" . $context_noacc . "']";
+            $q .= " and @k='".$context_noacc."']";
         } else {
             $q .= " and not(@k)]";
         }
@@ -395,8 +392,9 @@ class caption_Field_Value implements cache_cacheableInterface
             $note = 0;
             $note += ($node->getAttribute("lng") == $this->app['locale.I18n']) ? 4 : 0;
             $note += ($node->getAttribute("w") == $term_noacc) ? 2 : 0;
-            if($context_noacc != "")
+            if ($context_noacc != "") {
                 $note += ($node->getAttribute("k") == $context_noacc) ? 1 : 0;
+            }
             if ($note > $bestnote) {
                 $bestnote = $note;
                 $bestnode = $node;
@@ -407,7 +405,7 @@ class caption_Field_Value implements cache_cacheableInterface
             list($term, $context) = $this->splitTermAndContext(str_replace(array("[[em]]", "[[/em]]"), array("", ""), $value));
             // a value has been found in thesaurus, update value & set the query to bounce to the value
             $this->value = $bestnode->getAttribute('v');
-            $this->qjs = $term . ($context ? '['.$context.']' : '');
+            $this->qjs = $term.($context ? '['.$context.']' : '');
             $this->isThesaurusValue = true;
         } else {
             $this->isThesaurusValue = false;
@@ -455,7 +453,7 @@ class caption_Field_Value implements cache_cacheableInterface
      */
     public function get_cache_key($option = null)
     {
-        return 'caption_fieldvalue_' . $this->id . '_' . ($option ? '_' . $option : '');
+        return 'caption_fieldvalue_'.$this->id.'_'.($option ? '_'.$option : '');
     }
 
     /**
@@ -501,7 +499,6 @@ class caption_Field_Value implements cache_cacheableInterface
         try {
             $this->record->get_caption()->get_field($this->databox_field->get_name())->delete_data_from_cache();
         } catch (\Exception $e) {
-
         }
 
         unset(self::$localCache[$this->get_cache_key($option)]);

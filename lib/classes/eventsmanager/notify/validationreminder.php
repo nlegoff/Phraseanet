@@ -56,7 +56,7 @@ class eventsmanager_notify_validationreminder extends eventsmanager_notifyAbstra
             'from'    => ''
             , 'to'      => ''
             , 'ssel_id' => ''
-            , 'url'     => ''
+            , 'url'     => '',
         );
 
         $params = array_merge($default, $params);
@@ -94,7 +94,6 @@ class eventsmanager_notify_validationreminder extends eventsmanager_notifyAbstra
         }
 
         if ($this->shouldSendNotificationFor($params['to'])) {
-
             $readyToSend = false;
             try {
                 $basket = $this->app['EM']
@@ -107,7 +106,6 @@ class eventsmanager_notify_validationreminder extends eventsmanager_notifyAbstra
 
                 $readyToSend = true;
             } catch (\Exception $e) {
-
             }
 
             if ($readyToSend) {
@@ -149,20 +147,20 @@ class eventsmanager_notify_validationreminder extends eventsmanager_notifyAbstra
 
             $basket = $repository->findUserBasket($this->app, $ssel_id, $this->app['authentication']->getUser(), false);
 
-            $basket_name = trim($basket->getName()) ? : _('Une selection');
+            $basket_name = trim($basket->getName()) ?: _('Une selection');
         } catch (\Exception $e) {
             $basket_name = _('Une selection');
         }
 
         $bask_link = '<a href="#" onclick="openPreview(\'BASK\',1,\''
-            . (string) $sx->ssel_id . '\');return false;">'
-            . $basket_name . '</a>';
+            .(string) $sx->ssel_id.'\');return false;">'
+            .$basket_name.'</a>';
 
         $ret = array(
             'text'  => sprintf(
                 _('Rappel : Il vous reste %1$d jours pour valider %2$s de %3$s'), $this->app['phraseanet.registry']->get('GV_validation_reminder'), $bask_link, $sender
             )
-            , 'class' => ($unread == 1 ? 'reload_baskets' : '')
+            , 'class' => ($unread == 1 ? 'reload_baskets' : ''),
         );
 
         return $ret;

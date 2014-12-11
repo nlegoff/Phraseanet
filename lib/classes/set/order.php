@@ -94,7 +94,7 @@ class set_order extends set_abstract
             $stmt->execute(array(
                 ':from_usr_id' => $orderer->get_id(),
                 ':usage'       => $usage,
-                ':deadline'    => (null !== $deadline ? $app['date-formatter']->format_mysql($deadline) : $deadline)
+                ':deadline'    => (null !== $deadline ? $app['date-formatter']->format_mysql($deadline) : $deadline),
             ));
 
             $stmt->closeCursor();
@@ -110,7 +110,7 @@ class set_order extends set_abstract
                 $stmt->execute(array(
                     ':order_id'  => $orderId,
                     ':base_id'   => $record->get_base_id(),
-                    ':record_id' => $record->get_record_id()
+                    ':record_id' => $record->get_record_id(),
                 ));
             }
 
@@ -124,7 +124,7 @@ class set_order extends set_abstract
 
         $app['events-manager']->trigger('__NEW_ORDER__', array(
             'order_id' => $orderId,
-            'usr_id'   => $orderer->get_id()
+            'usr_id'   => $orderer->get_id(),
         ));
 
         return $orderId;
@@ -143,14 +143,13 @@ class set_order extends set_abstract
      */
     public static function listOrders(Application $app, array $baseIds, $offsetStart = 0, $perPage = 10, $sort = null)
     {
-
         $sql = 'SELECT distinct o.id, o.usr_id, created_on, deadline, `usage`
         FROM (`order_elements` e, `order` o)
-        WHERE e.base_id IN (' . implode(', ', $baseIds) . ')
+        WHERE e.base_id IN ('.implode(', ', $baseIds).')
         AND e.order_id = o.id
         GROUP BY o.id
         ORDER BY o.id DESC
-        LIMIT ' . $offsetStart . ',' . $perPage;
+        LIMIT '.$offsetStart.','.$perPage;
 
         $elements = array();
 
@@ -190,7 +189,7 @@ class set_order extends set_abstract
     {
         $sql = 'SELECT distinct o.id
         FROM (`order_elements` e, `order` o)
-        WHERE ' . (count($baseIds > 0 ) ? 'e.base_id IN (' . implode(', ', $baseIds) . ') AND ': '' ).
+        WHERE '.(count($baseIds > 0) ? 'e.base_id IN ('.implode(', ', $baseIds).') AND ' : '').
         'e.order_id = o.id
         GROUP BY o.id
         ORDER BY o.id DESC';
@@ -231,8 +230,9 @@ class set_order extends set_abstract
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
-            throw new NotFoundHttpException('unknown order ' . $id);
+        if (! $row) {
+            throw new NotFoundHttpException('unknown order '.$id);
+        }
 
         $current_user = User_Adapter::getInstance($row['usr_id'], $app);
 
@@ -251,7 +251,7 @@ class set_order extends set_abstract
               FROM order_elements e
               WHERE order_id = :order_id
               AND e.base_id
-              IN (' . implode(',', $base_ids) . ')';
+              IN ('.implode(',', $base_ids).')';
 
         $stmt = $conn->prepare($sql);
         $stmt->execute(array(':order_id' => $id));
@@ -348,7 +348,7 @@ class set_order extends set_abstract
      *
      * @return set_order
      */
-    public function send_elements(Application $app, Array $elements_ids, $force)
+    public function send_elements(Application $app, array $elements_ids, $force)
     {
         $conn = $app['phraseanet.appbox']->get_connection();
 
@@ -357,7 +357,7 @@ class set_order extends set_abstract
             if (isset($this->elements[$id])) {
                 $basrecs[$id] = array(
                     'base_id'   => $this->elements[$id]->get_base_id(),
-                    'record_id' => $this->elements[$id]->get_record_id()
+                    'record_id' => $this->elements[$id]->get_record_id(),
                 );
             }
         }
@@ -422,7 +422,7 @@ class set_order extends set_abstract
                 $params = array(
                     ':usr_id'           => $app['authentication']->getUser()->get_id()
                     , ':order_id'         => $this->id
-                    , ':order_element_id' => $order_element_id
+                    , ':order_element_id' => $order_element_id,
                 );
 
                 $stmt->execute($params);
@@ -432,7 +432,6 @@ class set_order extends set_abstract
 
                 unset($record);
             } catch (\Exception $e) {
-
             }
         }
 
@@ -444,7 +443,7 @@ class set_order extends set_abstract
                 'ssel_id' => $this->ssel_id,
                 'from'    => $app['authentication']->getUser()->get_id(),
                 'to'      => $this->user->get_id(),
-                'n'       => $n
+                'n'       => $n,
             );
 
             $app['events-manager']->trigger('__ORDER_DELIVER__', $params);
@@ -458,7 +457,7 @@ class set_order extends set_abstract
      * @param  Array     $elements_ids
      * @return set_order
      */
-    public function deny_elements(Array $elements_ids)
+    public function deny_elements(array $elements_ids)
     {
         $conn = $this->app['phraseanet.appbox']->get_connection();
 
@@ -473,7 +472,7 @@ class set_order extends set_abstract
             $params = array(
                 ':order_master_id'  => $this->app['authentication']->getUser()->get_id()
                 , ':order_id'         => $this->id
-                , ':order_element_id' => $order_element_id
+                , ':order_element_id' => $order_element_id,
             );
             $stmt = $conn->prepare($sql);
             $stmt->execute($params);
@@ -485,7 +484,7 @@ class set_order extends set_abstract
             $params = array(
                 'from' => $this->app['authentication']->getUser()->get_id(),
                 'to'   => $this->user->get_id(),
-                'n'    => $n
+                'n'    => $n,
             );
 
             $this->app['events-manager']->trigger('__ORDER_NOT_DELIVERED__', $params);

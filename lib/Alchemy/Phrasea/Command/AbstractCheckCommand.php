@@ -28,31 +28,30 @@ abstract class AbstractCheckCommand extends Command
         $ret = static::CHECK_OK;
 
         foreach ($this->provideRequirements() as $collection) {
-
             $output->writeln('');
-            $output->writeln($collection->getName() . ' requirements : ');
+            $output->writeln($collection->getName().' requirements : ');
             $output->writeln('');
 
             foreach ($collection->getRequirements() as $requirement) {
                 $result = $requirement->isFulfilled() ? '<info>OK       </info>' : ($requirement->isOptional() ? '<comment>WARNING</comment>  ' : '<error>ERROR</error>    ');
-                $output->write(' ' . $result);
+                $output->write(' '.$result);
 
                 $output->writeln($requirement->getTestMessage());
 
                 if (!$requirement->isFulfilled()) {
                     $ret = static::CHECK_ERROR;
-                    $output->writeln("          " . $requirement->getHelpText());
+                    $output->writeln("          ".$requirement->getHelpText());
                     $output->writeln('');
                 }
             }
 
             $output->writeln('');
-            $output->writeln($collection->getName() . ' recommendations : ');
+            $output->writeln($collection->getName().' recommendations : ');
             $output->writeln('');
 
             foreach ($collection->getRecommendations() as $requirement) {
                 $result = $requirement->isFulfilled() ? '<info>OK       </info>' : ($requirement->isOptional() ? '<comment>WARNING</comment>  ' : '<error>ERROR</error>    ');
-                $output->write(' ' . $result);
+                $output->write(' '.$result);
 
                 $output->writeln($requirement->getTestMessage());
 
@@ -60,7 +59,7 @@ abstract class AbstractCheckCommand extends Command
                     if ($ret === static::CHECK_OK) {
                         $ret = static::CHECK_WARNING;
                     }
-                    $output->writeln("          " . $requirement->getHelpText());
+                    $output->writeln("          ".$requirement->getHelpText());
                     $output->writeln('');
                 }
             }

@@ -13,7 +13,6 @@ namespace Alchemy\Phrasea\Twig;
 
 class Fit extends \Twig_Extension
 {
-
     public function getName()
     {
         return 'fit';
@@ -22,7 +21,7 @@ class Fit extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'fitIn' => new \Twig_Function_Method($this, 'fitIn')
+            'fitIn' => new \Twig_Function_Method($this, 'fitIn'),
         );
     }
 
@@ -71,11 +70,11 @@ class Fit extends \Twig_Extension
                 $top = ($box['height'] - $height) / 2;
             } elseif ($contentRatio < 1) {
                 // mode portrait
-                $left = ($box['width'] - $width) / 2;;
+                $left = ($box['width'] - $width) / 2;
             } else {
                 // square mode
                 $top = ($box['height'] - $height) / 2;
-                $left = ($box['width'] - $width) / 2;;
+                $left = ($box['width'] - $width) / 2;
             }
         }
 
@@ -83,7 +82,7 @@ class Fit extends \Twig_Extension
             'width' => round($width),
             'height' => round($height),
             'top' => round($top),
-            'left' => round($left)
+            'left' => round($left),
         );
     }
 }

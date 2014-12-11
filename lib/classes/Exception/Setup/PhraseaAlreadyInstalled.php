@@ -17,5 +17,4 @@
  */
 class Exception_Setup_PhraseaAlreadyInstalled extends Exception
 {
-
 }

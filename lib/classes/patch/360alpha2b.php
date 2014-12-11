@@ -74,7 +74,6 @@ class patch_360alpha2b implements patchInterface
             $stmt->execute();
             $stmt->closeCursor();
         } catch (\Exception $e) {
-
         }
 
         try {
@@ -84,7 +83,6 @@ class patch_360alpha2b implements patchInterface
             $stmt->execute();
             $stmt->closeCursor();
         } catch (\PDOException $e) {
-
         }
 
         $sql = 'SELECT m . *
@@ -104,7 +102,7 @@ class patch_360alpha2b implements patchInterface
             $sql = 'SELECT m . *
             FROM metadatas_structure s, metadatas m
             WHERE m.meta_struct_id = s.id
-            AND s.multi = "1" LIMIT ' . $n . ', ' . $perPage;
+            AND s.multi = "1" LIMIT '.$n.', '.$perPage;
 
             $stmt = $databox->get_connection()->prepare($sql);
             $stmt->execute();
@@ -122,7 +120,7 @@ class patch_360alpha2b implements patchInterface
             foreach ($rs as $row) {
                 $meta_struct_id = $row['meta_struct_id'];
 
-                if ( ! isset($databox_fields[$meta_struct_id])) {
+                if (! isset($databox_fields[$meta_struct_id])) {
                     $databox_fields[$meta_struct_id] = \databox_field::get_instance($app, $databox, $meta_struct_id);
                 }
 
@@ -152,7 +150,7 @@ class patch_360alpha2b implements patchInterface
 
             $databox->get_connection()->commit();
 
-            $n+= $perPage;
+            $n += $perPage;
         }
 
         /**
@@ -164,7 +162,6 @@ class patch_360alpha2b implements patchInterface
             $stmt->execute();
             $stmt->closeCursor();
         } catch (\Exception $e) {
-
         }
 
         return true;

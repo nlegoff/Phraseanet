@@ -65,29 +65,29 @@ class databox_status
 
         $sbas_params = phrasea::sbas_params($app);
 
-        if ( ! isset($sbas_params[$sbas_id])) {
+        if (! isset($sbas_params[$sbas_id])) {
             return;
         }
 
         $uniqid = md5(implode('-', array(
             $sbas_params[$sbas_id]["host"],
             $sbas_params[$sbas_id]["port"],
-            $sbas_params[$sbas_id]["dbname"]
+            $sbas_params[$sbas_id]["dbname"],
         )));
 
-        $path = $this->path = $app['root.path'] . "/config/status/" . $uniqid;
-        $url = $this->url = "/custom/status/" . $uniqid;
+        $path = $this->path = $app['root.path']."/config/status/".$uniqid;
+        $url = $this->url = "/custom/status/".$uniqid;
 
         $databox = $app['phraseanet.appbox']->get_databox((int) $sbas_id);
         $xmlpref = $databox->get_structure();
         $sxe = simplexml_load_string($xmlpref);
 
         if ($sxe !== false) {
-
             foreach ($sxe->statbits->bit as $sb) {
                 $bit = (int) ($sb["n"]);
-                if ($bit < 4 && $bit > 31)
+                if ($bit < 4 && $bit > 31) {
                     continue;
+                }
 
                 $this->status[$bit]["labeloff"] = (string) $sb['labelOff'];
                 $this->status[$bit]["labelon"] = (string) $sb['labelOn'];
@@ -109,13 +109,13 @@ class databox_status
                 $this->status[$bit]["img_off"] = null;
                 $this->status[$bit]["img_on"] = null;
 
-                if (is_file($path . "-stat_" . $bit . "_0.gif")) {
-                    $this->status[$bit]["img_off"] = $url . "-stat_" . $bit . "_0.gif?etag=".md5_file($path . "-stat_" . $bit . "_0.gif");
-                    $this->status[$bit]["path_off"] = $path . "-stat_" . $bit . "_0.gif";
+                if (is_file($path."-stat_".$bit."_0.gif")) {
+                    $this->status[$bit]["img_off"] = $url."-stat_".$bit."_0.gif?etag=".md5_file($path."-stat_".$bit."_0.gif");
+                    $this->status[$bit]["path_off"] = $path."-stat_".$bit."_0.gif";
                 }
-                if (is_file($path . "-stat_" . $bit . "_1.gif")) {
-                    $this->status[$bit]["img_on"] = $url . "-stat_" . $bit . "_1.gif?etag=".md5_file($path . "-stat_" . $bit . "_1.gif");
-                    $this->status[$bit]["path_on"] = $path . "-stat_" . $bit . "_1.gif";
+                if (is_file($path."-stat_".$bit."_1.gif")) {
+                    $this->status[$bit]["img_on"] = $url."-stat_".$bit."_1.gif?etag=".md5_file($path."-stat_".$bit."_1.gif");
+                    $this->status[$bit]["path_on"] = $path."-stat_".$bit."_1.gif";
                 }
 
                 $this->status[$bit]["searchable"] = isset($sb['searchable']) ? (int) $sb['searchable'] : 0;
@@ -129,9 +129,9 @@ class databox_status
 
     public static function getStatus(Application $app, $sbas_id)
     {
-
-        if ( ! isset(self::$_status[$sbas_id]))
+        if (! isset(self::$_status[$sbas_id])) {
             self::$_status[$sbas_id] = new databox_status($app, $sbas_id);
+        }
 
         return self::$_status[$sbas_id]->status;
     }
@@ -150,7 +150,6 @@ class databox_status
             try {
                 $statuses[$databox->get_sbas_id()] = $databox->get_statusbits();
             } catch (\Exception $e) {
-
             }
         }
 
@@ -179,14 +178,12 @@ class databox_status
             try {
                 $statuses[$databox->get_sbas_id()] = $databox->get_statusbits();
             } catch (\Exception $e) {
-
             }
         }
 
         $stats = array();
 
         foreach ($statuses as $sbas_id => $status) {
-
             $see_this = isset($see_all[$sbas_id]) ? $see_all[$sbas_id] : false;
 
             if ($app['authentication']->getUser()->ACL()->has_right_on_sbas($sbas_id, 'bas_modify_struct')) {
@@ -194,9 +191,9 @@ class databox_status
             }
 
             foreach ($status as $bit => $props) {
-
-                if ($props['searchable'] == 0 && ! $see_this)
+                if ($props['searchable'] == 0 && ! $see_this) {
                     continue;
+                }
 
                 $set = false;
                 if (isset($stats[$bit])) {
@@ -215,7 +212,7 @@ class databox_status
                             'labels_on_i18n'  => $props['labels_on_i18n'],
                             'labels_off_i18n' => $props['labels_off_i18n'],
                             'imgoff'          => $props['img_off'],
-                            'imgon'           => $props['img_on']
+                            'imgon'           => $props['img_on'],
                         );
                         $set = true;
                     }
@@ -230,8 +227,8 @@ class databox_status
                             'labels_on_i18n'  => $props['labels_on_i18n'],
                             'labels_off_i18n' => $props['labels_off_i18n'],
                             'imgoff'          => $props['img_off'],
-                            'imgon'           => $props['img_on']
-                        )
+                            'imgon'           => $props['img_on'],
+                        ),
                     );
                 }
             }
@@ -242,7 +239,7 @@ class databox_status
 
     public static function getPath(Application $app, $sbas_id)
     {
-        if ( ! isset(self::$_status[$sbas_id])) {
+        if (! isset(self::$_status[$sbas_id])) {
             self::$_status[$sbas_id] = new databox_status($app, $sbas_id);
         }
 
@@ -251,7 +248,7 @@ class databox_status
 
     public static function getUrl(Application $app, $sbas_id)
     {
-        if ( ! isset(self::$_status[$sbas_id])) {
+        if (! isset(self::$_status[$sbas_id])) {
             self::$_status[$sbas_id] = new databox_status($app, $sbas_id);
         }
 
@@ -266,15 +263,16 @@ class databox_status
             $doc = $databox->get_dom_structure();
             if ($doc) {
                 $xpath = $databox->get_xpath_structure();
-                $entries = $xpath->query($q = "/record/statbits/bit[@n=" . $bit . "]");
+                $entries = $xpath->query($q = "/record/statbits/bit[@n=".$bit."]");
 
                 foreach ($entries as $sbit) {
                     if ($p = $sbit->previousSibling) {
-                        if ($p->nodeType == XML_TEXT_NODE && $p->nodeValue == "\n\t\t")
+                        if ($p->nodeType == XML_TEXT_NODE && $p->nodeValue == "\n\t\t") {
                             $p->parentNode->removeChild($p);
+                        }
                     }
                     if ($sbit->parentNode->removeChild($sbit)) {
-                        $sql = 'UPDATE record SET status = status&(~(1<<' . $bit . '))';
+                        $sql = 'UPDATE record SET status = status&(~(1<<'.$bit.'))';
                         $stmt = $databox->get_connection()->prepare($sql);
                         $stmt->execute();
                         $stmt->closeCursor();
@@ -302,7 +300,7 @@ class databox_status
 
     public static function updateStatus(Application $app, $sbas_id, $bit, $properties)
     {
-         self::getStatus($app, $sbas_id);
+        self::getStatus($app, $sbas_id);
 
         $databox = $app['phraseanet.appbox']->get_databox((int) $sbas_id);
 
@@ -317,13 +315,14 @@ class databox_status
             }
 
             if ($statbits) {
-                $entries = $xpath->query("/record/statbits/bit[@n=" . $bit . "]");
+                $entries = $xpath->query("/record/statbits/bit[@n=".$bit."]");
 
                 if ($entries->length >= 1) {
                     foreach ($entries as $k => $sbit) {
                         if ($p = $sbit->previousSibling) {
-                            if ($p->nodeType == XML_TEXT_NODE && $p->nodeValue == "\n\t\t")
+                            if ($p->nodeType == XML_TEXT_NODE && $p->nodeValue == "\n\t\t") {
                                 $p->parentNode->removeChild($p);
+                            }
                         }
                         $sbit->parentNode->removeChild($sbit);
                     }
@@ -377,11 +376,11 @@ class databox_status
             self::$_status[$sbas_id]->status[$bit]["searchable"] = (Boolean) $properties['searchable'];
             self::$_status[$sbas_id]->status[$bit]["printable"] = (Boolean) $properties['printable'];
 
-            if ( ! isset(self::$_status[$sbas_id]->status[$bit]['img_on'])) {
+            if (! isset(self::$_status[$sbas_id]->status[$bit]['img_on'])) {
                 self::$_status[$sbas_id]->status[$bit]['img_on'] = null;
             }
 
-            if ( ! isset(self::$_status[$sbas_id]->status[$bit]['img_off'])) {
+            if (! isset(self::$_status[$sbas_id]->status[$bit]['img_off'])) {
                 self::$_status[$sbas_id]->status[$bit]['img_off'] = null;
             }
         }
@@ -399,13 +398,13 @@ class databox_status
             return false;
         }
 
-        if ($status[$bit]['img_' . $switch]) {
-            if (isset($status[$bit]['path_' . $switch])) {
-                $app['filesystem']->remove($status[$bit]['path_' . $switch]);
+        if ($status[$bit]['img_'.$switch]) {
+            if (isset($status[$bit]['path_'.$switch])) {
+                $app['filesystem']->remove($status[$bit]['path_'.$switch]);
             }
 
-            $status[$bit]['img_' . $switch] = false;
-            unset($status[$bit]['path_' . $switch]);
+            $status[$bit]['img_'.$switch] = false;
+            unset($status[$bit]['path_'.$switch]);
         }
 
         return true;
@@ -426,21 +425,21 @@ class databox_status
             throw new Exception_Upload_FileTooBig();
         }
 
-        if ( ! $file->isValid()) {
+        if (! $file->isValid()) {
             throw new Exception_Upload_Error();
         }
 
         self::deleteIcon($app, $sbas_id, $bit, $switch);
 
-        $name = "-stat_" . $bit . "_" . ($switch == 'on' ? '1' : '0') . ".gif";
+        $name = "-stat_".$bit."_".($switch == 'on' ? '1' : '0').".gif";
 
         try {
-            $file = $file->move($app['root.path'] . "/config/status/", $path.$name);
+            $file = $file->move($app['root.path']."/config/status/", $path.$name);
         } catch (FileException $e) {
             throw new Exception_Upload_CannotWriteFile();
         }
 
-        $custom_path = $app['root.path'] . '/www/custom/status/';
+        $custom_path = $app['root.path'].'/www/custom/status/';
 
         $app['filesystem']->mkdir($custom_path, 0750);
 
@@ -450,16 +449,15 @@ class databox_status
         $imageSpec->setDimensions(16, 16);
 
         $filePath = sprintf("%s%s", $path, $name);
-        $destPath = sprintf("%s%s", $custom_path, basename($path . $name));
+        $destPath = sprintf("%s%s", $custom_path, basename($path.$name));
 
         try {
             $app['media-alchemyst']->turninto($filePath, $destPath, $imageSpec);
         } catch (\MediaAlchemyst\Exception $e) {
-
         }
 
-        self::$_status[$sbas_id]->status[$bit]['img_' . $switch] = $url . $name;
-        self::$_status[$sbas_id]->status[$bit]['path_' . $switch] = $filePath;
+        self::$_status[$sbas_id]->status[$bit]['img_'.$switch] = $url.$name;
+        self::$_status[$sbas_id]->status[$bit]['path_'.$switch] = $filePath;
 
         return true;
     }
@@ -477,7 +475,7 @@ class databox_status
             $stat2 = self::hex2bin($app, substr($stat2, 2));
         }
 
-        $sql = 'select bin(0b' . trim($stat1) . ' & 0b' . trim($stat2) . ') as result';
+        $sql = 'select bin(0b'.trim($stat1).' & 0b'.trim($stat2).') as result';
 
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -506,10 +504,10 @@ class databox_status
         $conn = connection::getPDOConnection($app);
 
         $status = '0';
-        $stat1_or  = '0b' . trim(str_replace("x", "0", $stat1));
-        $stat1_and = '0b' . trim(str_replace("x", "1", $stat1));
-        $stat2_or  = '0b' . trim(str_replace("x", "0", $stat2));
-        $stat2_and = '0b' . trim(str_replace("x", "1", $stat2));
+        $stat1_or  = '0b'.trim(str_replace("x", "0", $stat1));
+        $stat1_and = '0b'.trim(str_replace("x", "1", $stat1));
+        $stat2_or  = '0b'.trim(str_replace("x", "0", $stat2));
+        $stat2_and = '0b'.trim(str_replace("x", "1", $stat2));
 
         // $sql = "SELECT BIN(((((0 | :o1) & :a1)) | :o2) & :a2) AS result";
         // $stmt = $conn->prepare($sql);
@@ -542,7 +540,7 @@ class databox_status
             $stat2 = self::hex2bin($app, substr($stat2, 2));
         }
 
-        $sql = 'select bin(0b' . trim($stat1) . ' & ~0b' . trim($stat2) . ') as result';
+        $sql = 'select bin(0b'.trim($stat1).' & ~0b'.trim($stat2).') as result';
 
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -569,7 +567,7 @@ class databox_status
             $stat2 = self::hex2bin($app, substr($stat2, 2));
         }
 
-        $sql = 'select bin(0b' . trim($stat1) . ' | 0b' . trim($stat2) . ') as result';
+        $sql = 'select bin(0b'.trim($stat1).' | 0b'.trim($stat2).') as result';
 
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -587,13 +585,13 @@ class databox_status
     {
         $status = (string) $status;
 
-        if ( ! ctype_digit($status)) {
+        if (! ctype_digit($status)) {
             throw new \Exception(sprintf('`%s`is non-decimal value', $status));
         }
 
         $conn = connection::getPDOConnection($app);
 
-        $sql = 'select bin(' . $status . ') as result';
+        $sql = 'select bin('.$status.') as result';
 
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -616,13 +614,13 @@ class databox_status
             $status = substr($status, 2);
         }
 
-        if ( ! ctype_xdigit($status)) {
+        if (! ctype_xdigit($status)) {
             throw new \Exception('Non-hexadecimal value');
         }
 
         $conn = connection::getPDOConnection($app);
 
-        $sql = 'select BIN( CAST( 0x' . trim($status) . ' AS UNSIGNED ) ) as result';
+        $sql = 'select BIN( CAST( 0x'.trim($status).' AS UNSIGNED ) ) as result';
 
         $stmt = $conn->prepare($sql);
         $stmt->execute();

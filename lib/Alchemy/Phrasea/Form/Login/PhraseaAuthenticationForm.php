@@ -47,19 +47,19 @@ class PhraseaAuthenticationForm extends AbstractType
         ));
 
         if ($this->app['phraseanet.configuration']['session']['idle'] < 1) {
-            $builder->add('remember-me', 'checkbox' , array(
+            $builder->add('remember-me', 'checkbox', array(
                 'label'    =>  _('Remember me'),
                 'mapped'   => false,
                 'required' => false,
                 'attr'     => array(
                     'value'   => '1',
-                )
+                ),
             ));
         } else {
-            $builder->add('remember-me', 'hidden' , array(
+            $builder->add('remember-me', 'hidden', array(
                 'label'    =>  '',
                 'mapped'   => false,
-                'required' => false
+                'required' => false,
             ));
         }
 
@@ -70,7 +70,7 @@ class PhraseaAuthenticationForm extends AbstractType
 
     public function getName()
     {
-        return null;
+        return;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

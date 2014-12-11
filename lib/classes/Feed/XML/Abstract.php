@@ -178,13 +178,13 @@ abstract class Feed_XML_Abstract
         $prefix = $namespaced ? 'atom:' : '';
 
         if ($this->previous_page instanceof Feed_Link) {
-            $prev_link = $this->addTag($document, $node, $prefix . 'link');
+            $prev_link = $this->addTag($document, $node, $prefix.'link');
             $prev_link->setAttribute('rel', 'previous');
             $prev_link->setAttribute('href', $this->previous_page->get_href());
         }
 
         if ($this->next_page instanceof Feed_Link) {
-            $next_link = $this->addTag($document, $node, $prefix . 'link');
+            $next_link = $this->addTag($document, $node, $prefix.'link');
             $next_link->setAttribute('rel', 'next');
             $next_link->setAttribute('href', $this->next_page->get_href());
         }
@@ -204,8 +204,9 @@ abstract class Feed_XML_Abstract
     {
         $tag = $document->createElement($tagname);
 
-        if (trim($tagcontent) !== '')
+        if (trim($tagcontent) !== '') {
             $tag->appendChild($document->createTextNode($tagcontent));
+        }
         $node->appendChild($tag);
 
         return $tag;
@@ -227,7 +228,7 @@ abstract class Feed_XML_Abstract
 
         $medium = strtolower($content->get_record()->get_type());
 
-        if ( ! in_array($medium, array('image', 'audio', 'video'))) {
+        if (! in_array($medium, array('image', 'audio', 'video'))) {
             return $this;
         }
 
@@ -301,12 +302,15 @@ abstract class Feed_XML_Abstract
             $preview->setAttribute('expression', 'full');
             $preview->setAttribute('isDefault', 'true');
 
-            if ($preview_sd->get_width())
+            if ($preview_sd->get_width()) {
                 $preview->setAttribute('width', $preview_sd->get_width());
-            if ($preview_sd->get_height())
+            }
+            if ($preview_sd->get_height()) {
                 $preview->setAttribute('height', $preview_sd->get_height());
-            if ($duration)
+            }
+            if ($duration) {
                 $preview->setAttribute('duration', $duration);
+            }
         }
 
         if ($thumbnail_permalink) {
@@ -314,10 +318,12 @@ abstract class Feed_XML_Abstract
 
             $thumbnail->setAttribute('url', (string) $thumbnail_permalink->get_url());
 
-            if ($thumbnail_sd->get_width())
+            if ($thumbnail_sd->get_width()) {
                 $thumbnail->setAttribute('width', $thumbnail_sd->get_width());
-            if ($thumbnail_sd->get_height())
+            }
+            if ($thumbnail_sd->get_height()) {
                 $thumbnail->setAttribute('height', $thumbnail_sd->get_height());
+            }
 
             $thumbnail = $this->addTag($document, $group, 'media:content');
 
@@ -327,12 +333,15 @@ abstract class Feed_XML_Abstract
             $thumbnail->setAttribute('medium', $medium);
             $thumbnail->setAttribute('isDefault', 'false');
 
-            if ($thumbnail_sd->get_width())
+            if ($thumbnail_sd->get_width()) {
                 $thumbnail->setAttribute('width', $thumbnail_sd->get_width());
-            if ($thumbnail_sd->get_height())
+            }
+            if ($thumbnail_sd->get_height()) {
                 $thumbnail->setAttribute('height', $thumbnail_sd->get_height());
-            if ($duration)
+            }
+            if ($duration) {
                 $thumbnail->setAttribute('duration', $duration);
+            }
         }
 
         return $this;

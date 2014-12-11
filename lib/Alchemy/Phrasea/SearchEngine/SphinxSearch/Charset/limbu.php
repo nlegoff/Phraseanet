@@ -17,5 +17,4 @@ class limbu extends AbstractCharset
     # Limbu
     U+1900..U+191C, U+1930..U+1938, U+1946..U+194F
 ';
-
 }

@@ -16,5 +16,4 @@ class TfAtime extends AbstractTag
     protected $Type = '';
     protected $Writable = false;
     protected $Description = 'The a-time of the file when archiving';
-
 }

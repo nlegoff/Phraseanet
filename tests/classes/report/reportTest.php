@@ -147,7 +147,7 @@ class reportTest extends PhraseanetPHPUnitAuthenticatedAbstract
     {
 
         foreach ($this->ret as $sbasid => $collections) {
-            $report = $this->getMock('module_report', array('buildReq', 'buildResult'), array(), '', FALSE);
+            $report = $this->getMock('module_report', array('buildReq', 'buildResult'), array(), '', false);
             $report->setSbas_id($sbasid);
             $this->assertEquals($sbasid, $report->getSbas_id());
 

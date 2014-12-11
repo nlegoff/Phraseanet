@@ -26,7 +26,7 @@ class Minifier implements ControllerProviderInterface
         $controllers->get('/', function (Application $app, Request $request) {
 
             // cache directory path
-            $min_cachePath = $app['root.path'] . '/tmp/cache_minify';
+            $min_cachePath = $app['root.path'].'/tmp/cache_minify';
 
             /**
              * Cache file locking. Set to false if filesystem is NFS. On at least one
@@ -103,12 +103,11 @@ class Minifier implements ControllerProviderInterface
 
             \Minify::$uploaderHoursBehind = $min_uploaderHoursBehind;
             \Minify::setCache(
-                isset($min_cachePath) ? $min_cachePath : ''
-                ,$min_cacheFileLocking
+                isset($min_cachePath) ? $min_cachePath : '', $min_cacheFileLocking
             );
 
             // required to work well :(
-            $_SERVER['DOCUMENT_ROOT'] = __DIR__ . '/../../../../www/';
+            $_SERVER['DOCUMENT_ROOT'] = __DIR__.'/../../../../www/';
             \Minify::$isDocRootSet = true;
 
             $min_serveOptions['minifierOptions']['text/css']['symlinks'] = $min_symlinks;
@@ -119,7 +118,7 @@ class Minifier implements ControllerProviderInterface
 
             if (isset($_GET['g'])) {
                 // well need groups config
-                $min_serveOptions['minApp']['groups'] = require __DIR__ . '/../../../conf.d/minifyGroupsConfig.php';
+                $min_serveOptions['minApp']['groups'] = require __DIR__.'/../../../conf.d/minifyGroupsConfig.php';
             }
 
             if (null === $request->query->get('f') && null === $request->query->get('g')) {

@@ -139,7 +139,7 @@ class API_V1_Log
 
         $params = array(
             ':api_account_id' => $this->account_id
-            , ':log_id'         => $this->id
+            , ':log_id'         => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -164,7 +164,7 @@ class API_V1_Log
 
         $params = array(
             ':date'   => $this->date->format("Y-m-d H:i:s")
-            , ':log_id' => $this->id
+            , ':log_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -189,7 +189,7 @@ class API_V1_Log
 
         $params = array(
             ':code'   => $this->status_code
-            , ':log_id' => $this->id
+            , ':log_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -206,9 +206,9 @@ class API_V1_Log
 
     public function set_format($format)
     {
-
-        if ( ! in_array($format, array('json', 'jsonp', 'yaml', 'unknow')))
+        if (! in_array($format, array('json', 'jsonp', 'yaml', 'unknow'))) {
             throw new Exception_InvalidArgument();
+        }
 
         $this->format = $format;
 
@@ -218,7 +218,7 @@ class API_V1_Log
 
         $params = array(
             ':format' => $this->format
-            , ':log_id' => $this->id
+            , ':log_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -235,8 +235,9 @@ class API_V1_Log
 
     public function set_ressource($ressource)
     {
-        if ( ! in_array($format, array(self::DATABOXES_RESSOURCE, self::BASKETS_RESSOURCE, self::FEEDS_RESSOURCE, self::RECORDS_RESSOURCE)))
+        if (! in_array($format, array(self::DATABOXES_RESSOURCE, self::BASKETS_RESSOURCE, self::FEEDS_RESSOURCE, self::RECORDS_RESSOURCE))) {
             throw new Exception_InvalidArgument();
+        }
 
         $this->ressource = $ressource;
 
@@ -246,7 +247,7 @@ class API_V1_Log
 
         $params = array(
             ':ressource' => $this->ressource
-            , ':log_id'    => $this->id
+            , ':log_id'    => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -271,7 +272,7 @@ class API_V1_Log
 
         $params = array(
             ':general' => $this->general
-            , ':log_id'  => $this->id
+            , ':log_id'  => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -296,7 +297,7 @@ class API_V1_Log
 
         $params = array(
             ':aspect' => $this->aspect
-            , ':log_id' => $this->id
+            , ':log_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -321,7 +322,7 @@ class API_V1_Log
 
         $params = array(
             ':action' => $this->action
-            , ':log_id' => $this->id
+            , ':log_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -373,7 +374,7 @@ class API_V1_Log
             ':ressource'   => $ressource,
             ':general'     => $general,
             ':aspect'      => $aspect,
-            ':action'      => $action
+            ':action'      => $action,
         );
 
         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);

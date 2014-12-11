@@ -115,7 +115,6 @@ class eventsmanager_notify_uploadquarantine extends eventsmanager_notifyAbstract
                 $receiver = Receiver::fromUser($user);
                 $readyToSend = true;
             } catch (\Exception $e) {
-
             }
 
             if ($readyToSend) {
@@ -152,8 +151,8 @@ class eventsmanager_notify_uploadquarantine extends eventsmanager_notifyAbstract
 
         $text = sprintf(_('The document %s has been quarantined'), $filename);
 
-        if ( ! ! count($reasons)) {
-            $text .= ' ' . sprintf(_('for the following reasons : %s'), implode(', ', $reasons));
+        if (! ! count($reasons)) {
+            $text .= ' '.sprintf(_('for the following reasons : %s'), implode(', ', $reasons));
         }
 
         $ret = array('text'  => $text, 'class' => '');

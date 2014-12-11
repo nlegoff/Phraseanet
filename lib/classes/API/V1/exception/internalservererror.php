@@ -18,5 +18,4 @@
 class API_V1_exception_internalservererror extends API_V1_exception_abstract
 {
     protected static $details = 'Internal Server Error';
-
 }

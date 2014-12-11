@@ -34,7 +34,7 @@ class recordutils_image extends recordutils
             $palette = new RGB();
         }
 
-        $xmlToColor = function($attr, $ret = array(255, 255, 255)) use ($palette) {
+        $xmlToColor = function ($attr, $ret = array(255, 255, 255)) use ($palette) {
             try {
                 return $palette->color($attr, 0);
             } catch (ImagineException $e) {
@@ -78,8 +78,8 @@ class recordutils_image extends recordutils
             return $subdef->get_pathfile();
         }
 
-        $pathIn = $subdef->get_path() . $subdef->get_file();
-        $pathOut = $subdef->get_path() . 'stamp_' . $subdef->get_file();
+        $pathIn = $subdef->get_path().$subdef->get_file();
+        $pathOut = $subdef->get_path().'stamp_'.$subdef->get_file();
 
         $vars = $xpprefs->query('/baseprefs/stamp/*/var');
 
@@ -124,21 +124,20 @@ class recordutils_image extends recordutils
 
         // open the logo
         $logo_phywidth = $logo_phyheight = 0; // physical size
-        $logo_file = $app['root.path'] . '/config/stamp/' . $base_id;
+        $logo_file = $app['root.path'].'/config/stamp/'.$base_id;
         try {
             $logo_obj = $app['imagine']->open($logo_file);
             $logo_size = $logo_obj->getSize();
             $logo_phywidth = $logo_size->getWidth();
             $logo_phyheight = $logo_size->getHeight();
         } catch (ImagineException $e) {
-
         }
 
         $tables = array(
             'TOP' => array('h'    => 0, 'rows' => array()),
             'TOP-OVER' => array('h'    => 0, 'rows' => array()),
             'BOTTOM' => array('h'    => 0, 'rows' => array()),
-            'BOTTOM-OVER' => array('h'    => 0, 'rows' => array())
+            'BOTTOM-OVER' => array('h'    => 0, 'rows' => array()),
         );
 
         for ($istamp = 0; $istamp < $stampNodes->length; $istamp++) {
@@ -181,10 +180,10 @@ class recordutils_image extends recordutils
                 $x = $sxxml->description->{$fieldname};
                 if (is_array($x)) {
                     foreach ($x as $v) {
-                        $fldval .= ( $fldval ? '; ' : '') . (string) $v;
+                        $fldval .= ($fldval ? '; ' : '').(string) $v;
                     }
                 } else {
-                    $fldval .= ( $fldval ? '; ' : '') . (string) $x;
+                    $fldval .= ($fldval ? '; ' : '').(string) $x;
                 }
                 $n->parentNode->replaceChild($domprefs->createTextNode($fldval), $n);
             }
@@ -200,7 +199,6 @@ class recordutils_image extends recordutils
             $logo_reswidth = 0;
             $logo_resheight = 0;
             if ($logo_phywidth > 0 && $logo_phyheight > 0) {
-
                 $v = $xpprefs->query('logo', $stamp);
                 if ($v->length > 0) {
                     $logo_reswidth = $logo_phywidth;
@@ -257,12 +255,12 @@ class recordutils_image extends recordutils
                 $txtline = $texts->item($i)->nodeValue;
 
                 if ($txtline != '') {
-                    $wrap = static::wrap($app['imagine'], $fontsize, 0, __DIR__ . '/arial.ttf', $txtline, $text_width);
+                    $wrap = static::wrap($app['imagine'], $fontsize, 0, __DIR__.'/arial.ttf', $txtline, $text_width);
                     $txtblock[] = array(
                         'fontsize'  => $fontsize,
                         'fontcolor' => $xmlToColor($texts->item($i)->getAttribute('color'), array(0, 0, 0)),
                         'h'     => $wrap['toth'],
-                        'lines' => $wrap['l']
+                        'lines' => $wrap['l'],
                     );
                     $txth += $wrap['toth'];
                 }
@@ -298,7 +296,7 @@ class recordutils_image extends recordutils
             $draw = $imfg->draw();
             $txt_ypos = 0;
             foreach ($txtblock as $block) {
-                $font = $app['imagine']->font(__DIR__ . '/arial.ttf', $block['fontsize'], $block['fontcolor']);
+                $font = $app['imagine']->font(__DIR__.'/arial.ttf', $block['fontsize'], $block['fontcolor']);
                 foreach ($block['lines'] as $line) {
                     if ($line['t'] != '') {
                         $draw->text($line['t'], $font, new Point($logo_reswidth, $txt_ypos), 0);
@@ -313,7 +311,7 @@ class recordutils_image extends recordutils
                 'y0'  => $tables[$stamp_position]['h'],
                 'w'   => $image_width,
                 'h'   => $stampheight,
-                'img' => $imfg
+                'img' => $imfg,
             );
 
             $tables[$stamp_position]['h'] += $stampheight;
@@ -352,9 +350,10 @@ class recordutils_image extends recordutils
 
         if (is_file($pathOut)) {
             // copy metadatas to the stamped file if we can
-            if(method_exists($app['exiftool.writer'], "copy")) {
+            if (method_exists($app['exiftool.writer'], "copy")) {
                 $app['exiftool.writer']->copy($subdef->get_pathfile(), $pathOut);
             }
+
             return $pathOut;
         }
 
@@ -390,13 +389,13 @@ class recordutils_image extends recordutils
             return false;
         }
 
-        $pathIn = $subdef->get_path() . $subdef->get_file();
+        $pathIn = $subdef->get_path().$subdef->get_file();
 
         if (!is_file($pathIn)) {
             return false;
         }
 
-        $pathOut = $subdef->get_path() . 'watermark_' . $subdef->get_file();
+        $pathOut = $subdef->get_path().'watermark_'.$subdef->get_file();
 
         // cache
         if (is_file($pathOut)) {
@@ -408,7 +407,7 @@ class recordutils_image extends recordutils
         $in_w = $in_size->getWidth();
         $in_h = $in_size->getHeight();
 
-        $wm_file = $app['root.path'] . '/config/wm/' . $base_id;
+        $wm_file = $app['root.path'].'/config/wm/'.$base_id;
         if (file_exists($wm_file)) {
             $wm_image = $app['imagine']->open($wm_file);
             $wm_size = $wm_image->getSize();
@@ -435,8 +434,8 @@ class recordutils_image extends recordutils
 
             $fsize = max(8, (int) (max($in_w, $in_h) / 30));
             $fonts = array(
-                $app['imagine']->font(__DIR__ . '/arial.ttf', $fsize, $black),
-                $app['imagine']->font(__DIR__ . '/arial.ttf', $fsize, $white)
+                $app['imagine']->font(__DIR__.'/arial.ttf', $fsize, $black),
+                $app['imagine']->font(__DIR__.'/arial.ttf', $fsize, $white),
             );
             $testbox = $fonts[0]->box($collname, 0);
             $tx_w = min($in_w, $testbox->getWidth());
@@ -513,7 +512,7 @@ class recordutils_image extends recordutils
                     $buff = '';
                     $lastw = $lasth = 0;
                     foreach ($twords as $i => $wrd) {
-                        $test = $buff . $wrd[0] . $wrd[1];
+                        $test = $buff.$wrd[0].$wrd[1];
                         $testbox = $font->box($test, $angle);
                         $w = $testbox->getWidth();
                         $h = $testbox->getHeight();

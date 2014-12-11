@@ -70,8 +70,8 @@ class patch_361alpha1a implements patchInterface
             try {
                 $connbas = connection::getPDOConnection($app, $sbas_id);
             } catch (\Exception $e) {
-                $conn->exec('DELETE FROM ValidationDatas WHERE basket_element_id = ' . $row['id']);
-                $conn->exec('DELETE FROM BasketElements WHERE id = ' . $row['id']);
+                $conn->exec('DELETE FROM ValidationDatas WHERE basket_element_id = '.$row['id']);
+                $conn->exec('DELETE FROM BasketElements WHERE id = '.$row['id']);
                 continue;
             }
 
@@ -82,8 +82,8 @@ class patch_361alpha1a implements patchInterface
             $stmt->closeCursor();
 
             if ($rowCount == 0) {
-                $conn->exec('DELETE FROM ValidationDatas WHERE basket_element_id = ' . $row['id']);
-                $conn->exec('DELETE FROM BasketElements WHERE id = ' . $row['id']);
+                $conn->exec('DELETE FROM ValidationDatas WHERE basket_element_id = '.$row['id']);
+                $conn->exec('DELETE FROM BasketElements WHERE id = '.$row['id']);
             }
         }
 

@@ -135,8 +135,9 @@ class record_preview extends record_adapter
                         $sbas_id = $child->get_sbas_id();
                         $this->original_item = $child;
                         $record_id = $child->get_record_id();
-                        if ($child->get_number() == $pos)
+                        if ($child->get_number() == $pos) {
                             break;
+                        }
                     }
                     $number = $pos;
                     $this->total = $children->get_count();
@@ -283,21 +284,21 @@ class record_preview extends record_adapter
             return $this->title;
         }
 
-        $this->title = collection::getLogo($this->get_base_id(), $this->app) . ' ';
+        $this->title = collection::getLogo($this->get_base_id(), $this->app).' ';
 
         switch ($this->env) {
 
             case "RESULT":
                 $this->title .= sprintf(
-                    _('preview:: resultat numero %s '), '<span id="current_result_n">' . ($this->number + 1)
-                    . '</span> : '
+                    _('preview:: resultat numero %s '), '<span id="current_result_n">'.($this->number + 1)
+                    .'</span> : '
                 );
 
                 $this->title .= parent::get_title($highlight, $search_engine);
                 break;
             case "BASK":
-                $this->title .= $this->name . ' - ' . parent::get_title($highlight, $search_engine)
-                    . ' (' . $this->get_number() . '/' . $this->total . ') ';
+                $this->title .= $this->name.' - '.parent::get_title($highlight, $search_engine)
+                    .' ('.$this->get_number().'/'.$this->total.') ';
                 break;
             case "REG":
                 $title = parent::get_title();
@@ -305,7 +306,7 @@ class record_preview extends record_adapter
                     $this->title .= $title;
                 } else {
                     $this->title .= sprintf(
-                        '%s %s', $title, $this->get_number() . '/' . $this->total
+                        '%s %s', $title, $this->get_number().'/'.$this->total
                     );
                 }
                 break;
@@ -332,7 +333,7 @@ class record_preview extends record_adapter
      */
     public function get_short_history()
     {
-        if ( ! is_null($this->short_history)) {
+        if (! is_null($this->short_history)) {
             return $this->short_history;
         }
 
@@ -364,46 +365,49 @@ class record_preview extends record_adapter
         foreach ($rs as $row) {
             $hour = $this->app['date-formatter']->getPrettyString(new DateTime($row['date']));
 
-            if ( ! isset($tab[$hour]))
+            if (! isset($tab[$hour])) {
                 $tab[$hour] = array();
+            }
 
             $site = $row['site'];
 
-            if ( ! isset($tab[$hour][$site]))
+            if (! isset($tab[$hour][$site])) {
                 $tab[$hour][$site] = array();
+            }
 
             $action = $row['action'];
 
-            if ( ! isset($tab[$hour][$site][$action]))
+            if (! isset($tab[$hour][$site][$action])) {
                 $tab[$hour][$site][$action] = array();
+            }
 
-            if ( ! isset($tab[$hour][$site][$action][$row['usr_id']])) {
+            if (! isset($tab[$hour][$site][$action][$row['usr_id']])) {
                 $user = null;
 
                 try {
                     $user = \User_Adapter::getInstance($row['usr_id'], $this->app);
                 } catch (\Exception $e) {
-
                 }
 
                 $tab[$hour][$site][$action][$row['usr_id']] =
                     array(
                         'final' => array()
                         , 'comment' => array()
-                        , 'user' => $user
+                        , 'user' => $user,
                 );
             }
 
-            if ( ! in_array($row['final'], $tab[$hour][$site][$action][$row['usr_id']]['final'])) {
+            if (! in_array($row['final'], $tab[$hour][$site][$action][$row['usr_id']]['final'])) {
                 if ($action == 'collection') {
                     $tab[$hour][$site][$action][$row['usr_id']]['final'][] = phrasea::baseFromColl($this->get_sbas_id(), $row['final'], $this->app);
                 } else {
                     $tab[$hour][$site][$action][$row['usr_id']]['final'][] = $row['final'];
                 }
             }
-            if ( ! in_array($row['comment'], $tab[$hour][$site][$action][$row['usr_id']]['comment']))
+            if (! in_array($row['comment'], $tab[$hour][$site][$action][$row['usr_id']]['comment'])) {
                 $tab[$hour][$site][$action][$row['usr_id']]['comment'][] =
                     $row['comment'];
+            }
         }
 
         $this->short_history = array_reverse($tab);
@@ -417,14 +421,14 @@ class record_preview extends record_adapter
      */
     public function get_view_popularity()
     {
-        if ( ! is_null($this->view_popularity)) {
+        if (! is_null($this->view_popularity)) {
             return $this->view_popularity;
         }
 
         $report = $this->app['authentication']->getUser()->ACL()->has_right_on_base(
             $this->get_base_id(), 'canreport');
 
-        if ( ! $report && ! $this->app['phraseanet.registry']->get('GV_google_api')) {
+        if (! $report && ! $this->app['phraseanet.registry']->get('GV_google_api')) {
             $this->view_popularity = false;
 
             return $this->view_popularity;
@@ -437,8 +441,7 @@ class record_preview extends record_adapter
         $average = 0;
 
         while ($day >= 0) {
-
-            $datetime = new DateTime('-' . $day . ' days');
+            $datetime = new DateTime('-'.$day.' days');
             $date = date_format($datetime, 'Y-m-d');
             $views[$date] = $dwnls[$date] = 0;
             $day --;
@@ -456,7 +459,7 @@ class record_preview extends record_adapter
         $stmt->execute(
             array(
                 ':record_id' => $this->get_record_id(),
-                ':site'      => $this->app['phraseanet.configuration']['main']['key']
+                ':site'      => $this->app['phraseanet.configuration']['main']['key'],
             )
         );
         $rs = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -480,20 +483,20 @@ class record_preview extends record_adapter
 
         $width = 350;
         $height = 150;
-        $url = Url::factory('https://chart.googleapis.com/chart?' .
-            'chs=' . $width . 'x' . $height .
-            '&chd=t:' . implode(',', $views) .
-            '&cht=lc' .
-            '&chf=bg,s,00000000' .
-            '&chxt=x,y,r' .
-            '&chds=0,' . $topScale .
-            '&chls=2.0&chxtc=2,-350' .
-            '&chxl=0:|' . date_format(new DateTime('-30 days'), 'd M') . '|'
-            . date_format(new DateTime('-15 days'), 'd M') . '|'
-            . date_format(new DateTime(), 'd M') . '|1:|0|'
-            . round($top / 2, 2) . '|' . $top
-            . '|2:|min|average|max' .
-            '&chxp=2,' . $min . ',' . $average . ',' . $max);
+        $url = Url::factory('https://chart.googleapis.com/chart?'.
+            'chs='.$width.'x'.$height.
+            '&chd=t:'.implode(',', $views).
+            '&cht=lc'.
+            '&chf=bg,s,00000000'.
+            '&chxt=x,y,r'.
+            '&chds=0,'.$topScale.
+            '&chls=2.0&chxtc=2,-350'.
+            '&chxl=0:|'.date_format(new DateTime('-30 days'), 'd M').'|'
+            .date_format(new DateTime('-15 days'), 'd M').'|'
+            .date_format(new DateTime(), 'd M').'|1:|0|'
+            .round($top / 2, 2).'|'.$top
+            .'|2:|min|average|max'.
+            '&chxp=2,'.$min.','.$average.','.$max);
 
         $this->view_popularity = new media_adapter($url, $width, $height);
 
@@ -506,14 +509,14 @@ class record_preview extends record_adapter
      */
     public function get_refferer_popularity()
     {
-        if ( ! is_null($this->refferer_popularity)) {
+        if (! is_null($this->refferer_popularity)) {
             return $this->refferer_popularity;
         }
 
         $report = $this->app['authentication']->getUser()->ACL()->has_right_on_base(
             $this->get_base_id(), 'canreport');
 
-        if ( ! $report && ! $this->app['phraseanet.registry']->get('GV_google_api')) {
+        if (! $report && ! $this->app['phraseanet.registry']->get('GV_google_api')) {
             $this->refferer_popularity = false;
 
             return $this->refferer_popularity;
@@ -535,25 +538,31 @@ class record_preview extends record_adapter
         $referrers = array();
 
         foreach ($rs as $row) {
-            if ($row['referrer'] == 'NO REFERRER')
+            if ($row['referrer'] == 'NO REFERRER') {
                 $row['referrer'] = _('report::acces direct');
-            if ($row['referrer'] == $this->app['phraseanet.registry']->get('GV_ServerName') . 'prod/')
+            }
+            if ($row['referrer'] == $this->app['phraseanet.registry']->get('GV_ServerName').'prod/') {
                 $row['referrer'] = _('admin::monitor: module production');
-            if ($row['referrer'] == $this->app['phraseanet.registry']->get('GV_ServerName') . 'client/')
+            }
+            if ($row['referrer'] == $this->app['phraseanet.registry']->get('GV_ServerName').'client/') {
                 $row['referrer'] = _('admin::monitor: module client');
-            if (strpos($row['referrer'], $this->app['phraseanet.registry']->get('GV_ServerName') . 'login/') !== false)
+            }
+            if (strpos($row['referrer'], $this->app['phraseanet.registry']->get('GV_ServerName').'login/') !== false) {
                 $row['referrer'] = _('report:: page d\'accueil');
-            if (strpos($row['referrer'], 'http://apps.cooliris.com/') !== false)
+            }
+            if (strpos($row['referrer'], 'http://apps.cooliris.com/') !== false) {
                 $row['referrer'] = _('report:: visualiseur cooliris');
+            }
 
-            if (strpos($row['referrer'], $this->app['phraseanet.registry']->get('GV_ServerName') . 'document/') !== false) {
+            if (strpos($row['referrer'], $this->app['phraseanet.registry']->get('GV_ServerName').'document/') !== false) {
                 $row['referrer'] = _('report::acces direct');
             }
-            if (strpos($row['referrer'], $this->app['phraseanet.registry']->get('GV_ServerName') . 'permalink/') !== false) {
+            if (strpos($row['referrer'], $this->app['phraseanet.registry']->get('GV_ServerName').'permalink/') !== false) {
                 $row['referrer'] = _('report::acces direct');
             }
-            if ( ! isset($referrers[$row['referrer']]))
+            if (! isset($referrers[$row['referrer']])) {
                 $referrers[$row['referrer']] = 0;
+            }
             $referrers[$row['referrer']] += (int) $row['views'];
         }
 
@@ -561,11 +570,11 @@ class record_preview extends record_adapter
         $height = 100;
 
         $url = Url::factory('https://chart.googleapis.com/chart?'
-            . 'cht=p3&chf=bg,s,00000000&chd=t:'
-            . implode(',', $referrers)
-            . '&chs=' . $width . 'x' . $height
-            . '&chl='
-            . urlencode(implode('|', array_keys($referrers))));
+            .'cht=p3&chf=bg,s,00000000&chd=t:'
+            .implode(',', $referrers)
+            .'&chs='.$width.'x'.$height
+            .'&chl='
+            .urlencode(implode('|', array_keys($referrers))));
 
         $this->refferer_popularity = new media_adapter($url, $width, $height);
 
@@ -578,14 +587,14 @@ class record_preview extends record_adapter
      */
     public function get_download_popularity()
     {
-        if ( ! is_null($this->download_popularity)) {
+        if (! is_null($this->download_popularity)) {
             return $this->download_popularity;
         }
 
         $report = $this->app['authentication']->getUser()->ACL()->has_right_on_base($this->get_base_id(), 'canreport');
 
         $ret = false;
-        if ( ! $report && ! $this->app['phraseanet.registry']->get('GV_google_api')) {
+        if (! $report && ! $this->app['phraseanet.registry']->get('GV_google_api')) {
             $this->download_popularity = false;
 
             return $this->download_popularity;
@@ -598,8 +607,7 @@ class record_preview extends record_adapter
         $average = 0;
 
         while ($day >= 0) {
-
-            $datetime = new DateTime('-' . $day . ' days');
+            $datetime = new DateTime('-'.$day.' days');
             $date = date_format($datetime, 'Y-m-d');
             $views[$date] = $dwnls[$date] = 0;
             $day --;
@@ -619,7 +627,7 @@ class record_preview extends record_adapter
         $stmt->execute(
             array(
                 ':record_id' => $this->get_record_id(),
-                ':site'      => $this->app['phraseanet.configuration']['main']['key']
+                ':site'      => $this->app['phraseanet.configuration']['main']['key'],
             )
         );
         $rs = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -636,17 +644,17 @@ class record_preview extends record_adapter
 
         $width = 250;
         $height = 150;
-        $url = Url::factory('https://chart.googleapis.com/chart?' .
-            'chs=' . $width . 'x' . $height .
-            '&chd=t:' . implode(',', $dwnls) .
-            '&cht=lc' .
-            '&chf=bg,s,00000000' .
-            '&chxt=x,y' .
-            '&chds=0,' . $top .
-            '&chxl=0:|' . date_format(new DateTime('-30 days'), 'd M') . '|'
-            . date_format(new DateTime('-15 days'), 'd M') . '|'
-            . date_format(new DateTime(), 'd M') . '|1:|0|'
-            . round($top / 2) . '|' . $top);
+        $url = Url::factory('https://chart.googleapis.com/chart?'.
+            'chs='.$width.'x'.$height.
+            '&chd=t:'.implode(',', $dwnls).
+            '&cht=lc'.
+            '&chf=bg,s,00000000'.
+            '&chxt=x,y'.
+            '&chds=0,'.$top.
+            '&chxl=0:|'.date_format(new DateTime('-30 days'), 'd M').'|'
+            .date_format(new DateTime('-15 days'), 'd M').'|'
+            .date_format(new DateTime(), 'd M').'|1:|0|'
+            .round($top / 2).'|'.$top);
 
         $ret = new media_adapter($url, $width, $height);
         $this->download_popularity = $ret;

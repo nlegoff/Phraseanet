@@ -16,7 +16,6 @@
  */
 class patchthesaurus_200
 {
-
     public function patch($version, &$domct, &$domth, connection_pdo &$connbas)
     {
         if ($version == "2.0.0") {
@@ -28,8 +27,9 @@ class patchthesaurus_200
             $te = $xp->query("/thesaurus//te");
             for ($i = 0; $i < $te->length; $i ++) {
                 $id = $te->item($i)->getAttribute("id");
-                if ($id[0] >= "0" && $id[0] <= "9")
-                    $te->item($i)->setAttribute("id", "T" . $id);
+                if ($id[0] >= "0" && $id[0] <= "9") {
+                    $te->item($i)->setAttribute("id", "T".$id);
+                }
             }
             $ct->setAttribute("version", $version = "2.0.1");
             $th->setAttribute("version", $version = "2.0.1");

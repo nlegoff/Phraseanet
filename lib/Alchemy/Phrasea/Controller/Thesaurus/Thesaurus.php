@@ -157,12 +157,11 @@ class Thesaurus implements ControllerProviderInterface
                     } elseif ($request->get("id") == "C") {
                         $q = "/cterms";
                     } else {
-                        $q = "//te[@id='" . $request->get("id") . "']";
+                        $q = "//te[@id='".$request->get("id")."']";
                     }
                     $this->export0($xpathth->query($q)->item(0), $tnodes, $thits, $output, $request->get('iln'), $request->get('hit'), $request->get('ilg'), $request->get('osl'));
                 }
             } catch (\Exception $e) {
-
             }
         }
 
@@ -185,36 +184,36 @@ class Thesaurus implements ControllerProviderInterface
             switch ($node["type"]) {
                 case "ROOT":
                     if ($numlig) {
-                        $output .= $ilig ++ . "\t";
+                        $output .= $ilig ++."\t";
                     }
                     if ($hits && ! $oneline) {
                         $output .= "\t";
                     }
-                    $output .= $tabs . $node["name"] . "\n";
+                    $output .= $tabs.$node["name"]."\n";
                     break;
                 case "TRASH":
                     if ($numlig) {
-                        $output .= $ilig ++ . "\t";
+                        $output .= $ilig ++."\t";
                     }
                     if ($hits && ! $oneline) {
                         $output .= "\t";
                     }
-                    $output .= $tabs . "{TRASH}\n";
+                    $output .= $tabs."{TRASH}\n";
                     break;
                 case "FIELD":
                     if ($numlig) {
-                        $output .= $ilig ++ . "\t";
+                        $output .= $ilig ++."\t";
                     }
                     if ($hits && ! $oneline) {
                         $output .= "\t";
                     }
-                    $output .= $tabs . $node["name"] . "\n";
+                    $output .= $tabs.$node["name"]."\n";
                     break;
                 case "TERM":
                     $isyn = 0;
                     if ($oneline) {
                         if ($numlig) {
-                            $output .= $ilig ++ . "\t";
+                            $output .= $ilig ++."\t";
                         }
                         $output .= $tabs;
                         $isyn = 0;
@@ -224,10 +223,10 @@ class Thesaurus implements ControllerProviderInterface
                             }
                             $output .= $syn["v"];
                             if ($ilg) {
-                                $output .= " [" . $syn["lng"] . "]";
+                                $output .= " [".$syn["lng"]."]";
                             }
                             if ($hits) {
-                                $output .= " [" . $syn["hits"] . "]";
+                                $output .= " [".$syn["hits"]."]";
                             }
                             $isyn ++;
                         }
@@ -236,10 +235,10 @@ class Thesaurus implements ControllerProviderInterface
                         $isyn = 0;
                         foreach ($node["syns"] as $syn) {
                             if ($numlig) {
-                                $output .= $ilig ++ . "\t";
+                                $output .= $ilig ++."\t";
                             }
                             if ($hits) {
-                                $output .= $syn["hits"] . "\t";
+                                $output .= $syn["hits"]."\t";
                             }
                             $output .= $tabs;
 
@@ -250,7 +249,7 @@ class Thesaurus implements ControllerProviderInterface
                             $output .= $syn["v"];
 
                             if ($ilg) {
-                                $output .= " [" . $syn["lng"] . "]";
+                                $output .= " [".$syn["lng"]."]";
                             }
                             $output .= "\n";
                             $isyn ++;
@@ -260,7 +259,7 @@ class Thesaurus implements ControllerProviderInterface
             }
             if (! $oneline) {
                 if ($numlig) {
-                    $output .= $ilig ++ . "\t";
+                    $output .= $ilig ++."\t";
                 }
                 $output .= "\n";
             }
@@ -276,20 +275,20 @@ class Thesaurus implements ControllerProviderInterface
                     "depth" => $depth,
                     "name"  => $nname,
                     "cdate" => $node->getAttribute("creation_date"),
-                    "mdate" => $node->getAttribute("modification_date")
+                    "mdate" => $node->getAttribute("modification_date"),
                 );
             } elseif (($fld = $node->getAttribute("field"))) {
                 if ($node->getAttribute("delbranch")) {
                     $tnodes[] = array(
                         "type"    => "TRASH",
                         "depth"   => $depth,
-                        "name"    => $fld
+                        "name"    => $fld,
                     );
                 } else {
                     $tnodes[] = array(
                         "type"  => "FIELD",
                         "depth" => $depth,
-                        "name"  => $fld
+                        "name"  => $fld,
                     );
                 }
             } else {
@@ -297,8 +296,8 @@ class Thesaurus implements ControllerProviderInterface
                 for ($n = $node->firstChild; $n; $n = $n->nextSibling) {
                     if ($n->nodeName == "sy") {
                         $id = $n->getAttribute("id");
-                        if (array_key_exists($id . '.', $thits)) {
-                            $hits = 0 + $thits[$id . '.'];
+                        if (array_key_exists($id.'.', $thits)) {
+                            $hits = 0 + $thits[$id.'.'];
                         } else {
                             $hits = 0;
                         }
@@ -306,7 +305,7 @@ class Thesaurus implements ControllerProviderInterface
                         $tsy[] = array(
                             "v"       => $n->getAttribute("v"),
                             "lng"     => $n->getAttribute("lng"),
-                            "hits"    => $hits
+                            "hits"    => $hits,
                         );
                     }
                 }
@@ -321,8 +320,9 @@ class Thesaurus implements ControllerProviderInterface
         $depth = 0;
 
         for ($node = $znode->parentNode; $node; $node = $node->parentNode) {
-            if ($node->nodeType == XML_ELEMENT_NODE)
+            if ($node->nodeType == XML_ELEMENT_NODE) {
                 $nodes[] = $node;
+            }
         }
         $nodes = array_reverse($nodes);
 
@@ -414,7 +414,7 @@ class Thesaurus implements ControllerProviderInterface
                 } elseif ($request->get("id") == "C") {
                     $q = "/cterms";
                 } else {
-                    $q = "//te[@id='" . $request->get("id") . "']";
+                    $q = "//te[@id='".$request->get("id")."']";
                 }
 
                 if ($request->get('ofm') == 'toscreen') {
@@ -439,11 +439,11 @@ class Thesaurus implements ControllerProviderInterface
                     if ($request->get("ofm") == 'toscreen') {
                         $lngs[$lng] = str_replace(array('&', '<', '>'), array('&amp;', '&lt;', '&gt;'), $dom->saveXML());
                     } elseif ($request->get("ofm") == 'tofiles') {
-                        $fname = 'topics_' . $lng . '.xml';
+                        $fname = 'topics_'.$lng.'.xml';
 
-                        @rename($app['root.path'] . '/config/topics/' . $fname, $app['root.path'] . '/config/topics/topics_' . $lng . '_BKP_' . $now . '.xml');
+                        @rename($app['root.path'].'/config/topics/'.$fname, $app['root.path'].'/config/topics/topics_'.$lng.'_BKP_'.$now.'.xml');
 
-                        if ($dom->save($app['root.path'] . '/config/topics/' . $fname)) {
+                        if ($dom->save($app['root.path'].'/config/topics/'.$fname)) {
                             $lngs[$lng] = \p4string::MakeString(sprintf(_('thesaurus:: fichier genere : %s'), $fname));
                         } else {
                             $lngs[$lng] = \p4string::MakeString(_('thesaurus:: erreur lors de l\'enregsitrement du fichier'));
@@ -452,7 +452,6 @@ class Thesaurus implements ControllerProviderInterface
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return $app['twig']->render('thesaurus/export-topics.html.twig', array(
@@ -484,14 +483,15 @@ class Thesaurus implements ControllerProviderInterface
                             if (! $query0) {
                                 $query0 = $n2->getAttribute("w");
                                 if ($n2->getAttribute("k")) {
-                                    $query0 .= ( ' (' . $n2->getAttribute("k") . ')');
+                                    $query0 .= (' ('.$n2->getAttribute("k").')');
                                 }
                                 $label0 = $n2->getAttribute("v");
                             }
                             if ($n2->getAttribute("lng") == $lng) {
                                 $query = $n2->getAttribute("w");
-                                if ($n2->getAttribute("k"))
-                                    $query .= ( ' (' . $n2->getAttribute("k") . ')');
+                                if ($n2->getAttribute("k")) {
+                                    $query .= (' ('.$n2->getAttribute("k").')');
+                                }
                                 $label = $n2->getAttribute("v");
                                 break;
                             }
@@ -511,8 +511,9 @@ class Thesaurus implements ControllerProviderInterface
                 }
             }
 
-            if ($srt)
+            if ($srt) {
                 natcasesort($t_sort);
+            }
 
             foreach ($t_sort as $i => $query) {
                 $topic = $topics->appendChild($dom->createElement('topic'));
@@ -522,19 +523,19 @@ class Thesaurus implements ControllerProviderInterface
                 }
                 $topic->appendChild($dom->createElement('label'))->appendChild($dom->createTextNode($t_node[$i]['label']));
 
-                $query = '"' . $query . '"';
+                $query = '"'.$query.'"';
                 if ($sth) {
-                    $query = '*:' . $query;
+                    $query = '*:'.$query;
                     if ($sand) {
-                        $query = '(' . $query . ')';
+                        $query = '('.$query.')';
                     }
                 }
 
                 if ($sand && $prevQuery != '') {
-                    $query = $prevQuery . ' ' . _('phraseanet::technique:: et') . ' ' . $query . '';
+                    $query = $prevQuery.' '._('phraseanet::technique:: et').' '.$query.'';
                 }
 
-                $topic->appendChild($dom->createElement('query'))->appendChild($dom->createTextNode('' . $query . ''));
+                $topic->appendChild($dom->createElement('query'))->appendChild($dom->createTextNode(''.$query.''));
 
                 $topics2 = $dom->createElement('topics');
 
@@ -597,7 +598,7 @@ class Thesaurus implements ControllerProviderInterface
                         $iline = 0;
                         $curdepth = -1;
                         $tid = array(-1    => -1, 0     => -1);
-                        while ( ! $err && ! feof($fp) && ($line = fgets($fp)) !== FALSE) {
+                        while (! $err && ! feof($fp) && ($line = fgets($fp)) !== FALSE) {
                             $iline ++;
                             if (trim($line) == '') {
                                 continue;
@@ -612,7 +613,7 @@ class Thesaurus implements ControllerProviderInterface
 
                             $line = trim($line);
 
-                            if ( ! $this->checkEncoding($line, 'UTF-8')) {
+                            if (! $this->checkEncoding($line, 'UTF-8')) {
                                 $err = sprintf(_("bad encoding at line %s"), $iline);
                                 continue;
                             }
@@ -630,10 +631,10 @@ class Thesaurus implements ControllerProviderInterface
                             $curdepth = $depth;
 
                             $nid = (int) ($node->getAttribute('nextid'));
-                            $id = $node->getAttribute('id') . '.' . $nid;
+                            $id = $node->getAttribute('id').'.'.$nid;
                             $pid = $node->getAttribute('id');
 
-                            $te_id = ($pid ? ($pid . '.') : 'T') . $nid;
+                            $te_id = ($pid ? ($pid.'.') : 'T').$nid;
 
                             $node->setAttribute('nextid', (string) ($nid + 1));
 
@@ -652,7 +653,7 @@ class Thesaurus implements ControllerProviderInterface
                                 if (($ob = strpos($syn, '[')) !== false) {
                                     if (($cb = strpos($syn, ']', $ob)) !== false) {
                                         $lng = trim(substr($syn, $ob + 1, $cb - $ob - 1));
-                                        $syn = substr($syn, 0, $ob) . substr($syn, $cb + 1);
+                                        $syn = substr($syn, 0, $ob).substr($syn, $cb + 1);
                                     } else {
                                         $lng = trim(substr($syn, $ob + 1));
                                         $syn = substr($syn, 0, $ob);
@@ -661,7 +662,7 @@ class Thesaurus implements ControllerProviderInterface
                                     if (($ob = strpos($syn, '[')) !== false) {
                                         if (($cb = strpos($syn, ']', $ob)) !== false) {
                                             $hit = trim(substr($syn, $ob + 1, $cb - $ob - 1));
-                                            $syn = substr($syn, 0, $ob) . substr($syn, $cb + 1);
+                                            $syn = substr($syn, 0, $ob).substr($syn, $cb + 1);
                                         } else {
                                             $hit = trim(substr($syn, $ob + 1));
                                             $syn = substr($syn, 0, $ob);
@@ -671,7 +672,7 @@ class Thesaurus implements ControllerProviderInterface
                                 if (($ob = strpos($syn, '(')) !== false) {
                                     if (($cb = strpos($syn, ')', $ob)) !== false) {
                                         $kon = trim(substr($syn, $ob + 1, $cb - $ob - 1));
-                                        $syn = substr($syn, 0, $ob) . substr($syn, $cb + 1);
+                                        $syn = substr($syn, 0, $ob).substr($syn, $cb + 1);
                                     } else {
                                         $kon = trim(substr($syn, $ob + 1));
                                         $syn = substr($syn, 0, $ob);
@@ -681,10 +682,10 @@ class Thesaurus implements ControllerProviderInterface
                                 $syn = trim($syn);
 
                                 $sy = $node->appendChild($dom->createElement('sy'));
-                                $sy->setAttribute('id', $te_id . '.' . $nsy);
+                                $sy->setAttribute('id', $te_id.'.'.$nsy);
                                 $v = $syn;
                                 if ($kon) {
-                                    $v .= ' (' . $kon . ')';
+                                    $v .= ' ('.$kon.')';
                                 }
                                 $sy->setAttribute('v', $v);
                                 $sy->setAttribute('w', $app['unicode']->remove_indexer_chars($syn));
@@ -701,7 +702,6 @@ class Thesaurus implements ControllerProviderInterface
 
                         fclose($fp);
                     }
-
                 } else {
                     // on importe dans une branche
                     $err = 'not implemented';
@@ -735,7 +735,6 @@ class Thesaurus implements ControllerProviderInterface
                 $stmt->closeCursor();
             }
         } catch (\Exception $e) {
-
         }
 
         return $app['twig']->render('thesaurus/import.html.twig', array('err' => $err));
@@ -818,44 +817,43 @@ class Thesaurus implements ControllerProviderInterface
                 $xpathth = new \DOMXPath($domth);
                 $xpathstruct = new \DOMXPath($domstruct);
 
-                    if ($request->get('tid') !== "") {
-                        $q = "//te[@id='" . $request->get('tid') . "']";
-                    } else {
-                        $q = "//te[not(@id)]";
-                    }
+                if ($request->get('tid') !== "") {
+                    $q = "//te[@id='".$request->get('tid')."']";
+                } else {
+                    $q = "//te[not(@id)]";
+                }
 
-                    $nodes = $xpathth->query($q);
-                    $fullBranch = "";
-                    if ($nodes->length == 1) {
-                        for ($n = $nodes->item(0); $n && $n->nodeType == XML_ELEMENT_NODE && $n->getAttribute("id") !== ""; $n = $n->parentNode) {
-                            $sy = $xpathth->query("sy", $n)->item(0);
-                            $sy = $sy ? $sy->getAttribute("v") : "";
-                            if (! $sy) {
-                                $sy = $sy = "...";
-                            }
-                            $fullBranch = " / " . $sy . $fullBranch;
+                $nodes = $xpathth->query($q);
+                $fullBranch = "";
+                if ($nodes->length == 1) {
+                    for ($n = $nodes->item(0); $n && $n->nodeType == XML_ELEMENT_NODE && $n->getAttribute("id") !== ""; $n = $n->parentNode) {
+                        $sy = $xpathth->query("sy", $n)->item(0);
+                        $sy = $sy ? $sy->getAttribute("v") : "";
+                        if (! $sy) {
+                            $sy = $sy = "...";
                         }
+                        $fullBranch = " / ".$sy.$fullBranch;
                     }
-                    $fieldnames = array();
-                    $nodes = $xpathstruct->query("/record/description/*");
-                    for ($i = 0; $i < $nodes->length; $i ++) {
-                        $fieldname = $nodes->item($i)->nodeName;
-                        $tbranch = $nodes->item($i)->getAttribute("tbranch");
-                        $ck = false;
-                        if ($tbranch) {
-                            // ce champ a deje un tbranch, est-ce qu'il pointe sur la branche selectionnee ?
+                }
+                $fieldnames = array();
+                $nodes = $xpathstruct->query("/record/description/*");
+                for ($i = 0; $i < $nodes->length; $i ++) {
+                    $fieldname = $nodes->item($i)->nodeName;
+                    $tbranch = $nodes->item($i)->getAttribute("tbranch");
+                    $ck = false;
+                    if ($tbranch) {
+                        // ce champ a deje un tbranch, est-ce qu'il pointe sur la branche selectionnee ?
                             $thnodes = $xpathth->query($tbranch);
-                            for ($j = 0; $j < $thnodes->length; $j ++) {
-                                if ($thnodes->item($j)->getAttribute("id") == $request->get('tid')) {
-                                    $ck = true;
-                                }
+                        for ($j = 0; $j < $thnodes->length; $j ++) {
+                            if ($thnodes->item($j)->getAttribute("id") == $request->get('tid')) {
+                                $ck = true;
                             }
                         }
-                        $fieldnames[$fieldname] = $ck;
                     }
+                    $fieldnames[$fieldname] = $ck;
+                }
             }
         } catch (\Exception $e) {
-
         }
 
         return $app['twig']->render('thesaurus/link-field-step1.html.twig', array(
@@ -863,7 +861,7 @@ class Thesaurus implements ControllerProviderInterface
             'bid'        => $request->get('bid'),
             'tid'        => $request->get('tid'),
             'fullBranch' => $fullBranch,
-            'fieldnames' => $fieldnames
+            'fieldnames' => $fieldnames,
         ));
     }
 
@@ -912,25 +910,25 @@ class Thesaurus implements ControllerProviderInterface
                             unset($tids[$request->get('tid')]);
                         } else {
                             // print("il n'etait pas lie a la branche, il l'est maintenant<br/>\n");
-                            $tids[$request->get('tid')] = $xpathth->query("/thesaurus//te[@id='" . \thesaurus::xquery_escape($request->get('tid')) . "']")->item(0);
+                            $tids[$request->get('tid')] = $xpathth->query("/thesaurus//te[@id='".\thesaurus::xquery_escape($request->get('tid'))."']")->item(0);
                         }
                         $newtbranch = "";
                         foreach ($tids as $kitd => $node) {
                             if ($kitd === "") {
-                                $newtbranch .= ( $newtbranch ? " | " : "") . "/thesaurus";
+                                $newtbranch .= ($newtbranch ? " | " : "")."/thesaurus";
                             } else {
                                 $neb = "";
                                 while ($node && $node->nodeName == "te") {
-                                    $neb = "/te[@id='" . $node->getAttribute("id") . "']" . $neb;
+                                    $neb = "/te[@id='".$node->getAttribute("id")."']".$neb;
                                     $node = $node->parentNode;
                                 }
-                                $newtbranch .= ( $newtbranch ? " | " : "") . "/thesaurus" . $neb;
+                                $newtbranch .= ($newtbranch ? " | " : "")."/thesaurus".$neb;
                             }
                         }
 
                         $oldlinks[$fieldname] = array(
                             'old_branch' => $oldbranch,
-                            'new_branch' => $newtbranch
+                            'new_branch' => $newtbranch,
                         );
 
                         if ($newtbranch != "") {
@@ -940,7 +938,6 @@ class Thesaurus implements ControllerProviderInterface
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return $app['twig']->render('thesaurus/link-field-step2.html.twig', array(
@@ -972,12 +969,12 @@ class Thesaurus implements ControllerProviderInterface
 
                 $candidates2del = array();
                 foreach ($request->get("f2unlk", array()) as $f2unlk) {
-                    $q = "/cterms/te[@field='" . \thesaurus::xquery_escape($f2unlk) . "']";
+                    $q = "/cterms/te[@field='".\thesaurus::xquery_escape($f2unlk)."']";
                     $nodes = $xpathct->query($q);
                     for ($i = 0; $i < $nodes->length; $i ++) {
                         $candidates2del[] = array(
                             "field" => $f2unlk,
-                            "node"  => $nodes->item($i)
+                            "node"  => $nodes->item($i),
                         );
                     }
 
@@ -1022,7 +1019,6 @@ class Thesaurus implements ControllerProviderInterface
                 $stmt->closeCursor();
             }
         } catch (\Exception $e) {
-
         }
 
         return $app['twig']->render('thesaurus/link-field-step3.html.twig', array(
@@ -1042,10 +1038,9 @@ class Thesaurus implements ControllerProviderInterface
             $version = '1.0.0';
         }
 
-        while (class_exists($cls = "patchthesaurus_" . str_replace(".", "", $version))) {
-
+        while (class_exists($cls = "patchthesaurus_".str_replace(".", "", $version))) {
             $last_version = $version;
-            $zcls = new $cls;
+            $zcls = new $cls();
             $version = $zcls->patch($version, $domct, $domth, $connbas);
 
             if ($version == $last_version) {
@@ -1075,21 +1070,20 @@ class Thesaurus implements ControllerProviderInterface
             $domth = $databox->get_dom_thesaurus();
             $now = date("YmdHis");
 
-            if ( ! $domct && $request->get('repair') == 'on') {
+            if (! $domct && $request->get('repair') == 'on') {
                 $domct = new \DOMDocument();
-                $domct->load(__DIR__ . "/../../../../conf.d/blank_cterms.xml");
+                $domct->load(__DIR__."/../../../../conf.d/blank_cterms.xml");
                 $domct->documentElement->setAttribute("creation_date", $now);
                 $databox->saveCterms($domct);
             }
-            if ( ! $domth && $request->get('repair') == 'on') {
+            if (! $domth && $request->get('repair') == 'on') {
                 $domth = new \DOMDocument();
-                $domth->load(__DIR__ . "/../../../../conf.d/blank_thesaurus.xml");
+                $domth->load(__DIR__."/../../../../conf.d/blank_thesaurus.xml");
                 $domth->documentElement->setAttribute("creation_date", $now);
                 $databox->saveThesaurus($domth);
             }
 
             if ($domct && $domth) {
-
                 $oldversion = $domth->documentElement->getAttribute("version");
                 if (($version = $this->fixThesaurus($app, $domct, $domth, $connbas)) != $oldversion) {
                     $updated = true;
@@ -1101,7 +1095,7 @@ class Thesaurus implements ControllerProviderInterface
                     if ($ct->nodeName == "te") {
                         $ctlist[] = array(
                             'id' => $ct->getAttribute("id"),
-                            'field' => $ct->getAttribute("field")
+                            'field' => $ct->getAttribute("field"),
                         );
                     }
                 }
@@ -1109,7 +1103,6 @@ class Thesaurus implements ControllerProviderInterface
                 $validThesaurus = false;
             }
         } catch (\Exception $e) {
-
         }
 
         return $app['twig']->render('thesaurus/load-thesaurus.html.twig', array(
@@ -1117,7 +1110,7 @@ class Thesaurus implements ControllerProviderInterface
             'name' => $name,
             'cterms' => $ctlist,
             'valid_thesaurus' => $validThesaurus,
-            'updated' => $updated
+            'updated' => $updated,
         ));
     }
 
@@ -1137,7 +1130,6 @@ class Thesaurus implements ControllerProviderInterface
         ));
     }
 
-
     public function newTerm(Application $app, Request $request)
     {
         list($term, $context) = $this->splitTermAndContext($request->get("t"));
@@ -1152,10 +1144,10 @@ class Thesaurus implements ControllerProviderInterface
         $flist_ok = $flist_bad = "";
         for ($i = 0; $i < $candidates->length; $i ++) {
             if ($candidates->item($i)->getAttribute("sourceok") == "1") { // && $candidates->item($i)->getAttribute("cid"))
-                $flist_ok .= ( $flist_ok ? ", " : "") . $candidates->item($i)->getAttribute("field");
+                $flist_ok .= ($flist_ok ? ", " : "").$candidates->item($i)->getAttribute("field");
                 $nb_candidates_ok ++;
             } else {
-                $flist_bad .= ( $flist_bad ? ", " : "") . $candidates->item($i)->getAttribute("field");
+                $flist_bad .= ($flist_bad ? ", " : "").$candidates->item($i)->getAttribute("field");
                 $nb_candidates_bad ++;
             }
         }
@@ -1244,7 +1236,6 @@ class Thesaurus implements ControllerProviderInterface
         ));
     }
 
-
     public function acceptXml(Application $app, Request $request)
     {
         $ret = new \DOMDocument("1.0", "UTF-8");
@@ -1271,10 +1262,10 @@ class Thesaurus implements ControllerProviderInterface
 
             $dom = $databox->get_dom_cterms();
             $xpath = new \DOMXPath($dom);
-            $q = "/cterms//te[@id='" . $request->get('id') . "']";
+            $q = "/cterms//te[@id='".$request->get('id')."']";
 
             if ($request->get('debug')) {
-                print("q:" . $q . "<br/>\n");
+                print("q:".$q."<br/>\n");
             }
 
             $te = $xpath->query($q)->item(0);
@@ -1292,7 +1283,6 @@ class Thesaurus implements ControllerProviderInterface
                 $r->setAttribute("type", "CT");
             }
         } catch (\Exception $e) {
-
         }
 
         return new Response($ret->saveXML(), 200, array('Content-Type' => 'text/xml'));
@@ -1301,10 +1291,10 @@ class Thesaurus implements ControllerProviderInterface
     private function acceptBranch(Application $app, $sbas_id, &$node)
     {
         if (strlen($oldid = $node->getAttribute("id")) > 1) {
-            $node->setAttribute("id", $newid = ("C" . substr($oldid, 1)));
+            $node->setAttribute("id", $newid = ("C".substr($oldid, 1)));
 
-            $thit_oldid = str_replace(".", "d", $oldid) . "d";
-            $thit_newid = str_replace(".", "d", $newid) . "d";
+            $thit_oldid = str_replace(".", "d", $oldid)."d";
+            $thit_newid = str_replace(".", "d", $newid)."d";
 
             $sql = "UPDATE thit SET value = thit_new WHERE value = :thit_old";
 
@@ -1313,11 +1303,10 @@ class Thesaurus implements ControllerProviderInterface
                 $stmt = $connbas->prepare($sql);
                 $stmt->execute(array(
                     ':thit_new' => $thit_newid,
-                    'thit_old'  => $thit_oldid
+                    'thit_old'  => $thit_oldid,
                 ));
                 $stmt->closeCursor();
             } catch (\Exception $e) {
-
             }
         }
         for ($n = $node->firstChild; $n; $n = $n->nextSibling) {
@@ -1362,7 +1351,7 @@ class Thesaurus implements ControllerProviderInterface
                 if ($request->get('pid') == "T") {
                     $q = "/thesaurus";
                 } else {
-                    $q = "/thesaurus//te[@id='" . $request->get('pid') . "']";
+                    $q = "/thesaurus//te[@id='".$request->get('pid')."']";
                 }
 
                 if ($request->get('debug')) {
@@ -1377,7 +1366,7 @@ class Thesaurus implements ControllerProviderInterface
 
                     $icid = 0;
                     foreach ($request->get("cid") as $cid) {
-                        $q = "//te[@id='" . $cid . "']";
+                        $q = "//te[@id='".$cid."']";
 
                         if ($request->get('debug')) {
                             printf("qct: %s<br/>\n", $q);
@@ -1396,9 +1385,9 @@ class Thesaurus implements ControllerProviderInterface
                                 $chgids = array();
 
                                 if (($pid = $parentnode->getAttribute("id")) == "") {
-                                    $pid = "T" . $nid;
+                                    $pid = "T".$nid;
                                 } else {
-                                    $pid .= "." . $nid;
+                                    $pid .= ".".$nid;
                                 }
 
                                 $this->renumerate($te, $pid, $chgids);
@@ -1408,8 +1397,8 @@ class Thesaurus implements ControllerProviderInterface
                                     printf("newid=%s<br/>\n", $te->getAttribute("id"));
                                 }
 
-                                $soldid = str_replace(".", "d", $oldid) . "d";
-                                $snewid = str_replace(".", "d", $pid) . "d";
+                                $soldid = str_replace(".", "d", $oldid)."d";
+                                $snewid = str_replace(".", "d", $pid)."d";
                                 $l = strlen($soldid) + 1;
 
                                 $sql = "UPDATE thit
@@ -1420,7 +1409,7 @@ class Thesaurus implements ControllerProviderInterface
                                     printf("soldid=%s ; snewid=%s<br/>\nsql=%s<br/>\n", $soldid, $snewid, $sql);
                                 } else {
                                     $stmt = $connbas->prepare($sql);
-                                    $stmt->execute(array(':like' => $soldid . '%'));
+                                    $stmt->execute(array(':like' => $soldid.'%'));
                                     $stmt->closeCursor();
                                 }
 
@@ -1452,9 +1441,9 @@ class Thesaurus implements ControllerProviderInterface
                                     $te = $domth->importNode($ct2, true);
                                     $chgids = array();
                                     if (($pid = $parentnode->getAttribute("id")) == "") {
-                                        $pid = "T" . $nid;
+                                        $pid = "T".$nid;
                                     } else {
-                                        $pid .= "." . $nid;
+                                        $pid .= ".".$nid;
                                     }
 
                                     $this->renumerate($te, $pid, $chgids);
@@ -1464,8 +1453,8 @@ class Thesaurus implements ControllerProviderInterface
                                         printf("newid=%s<br/>\n", $te->getAttribute("id"));
                                     }
 
-                                    $soldid = str_replace(".", "d", $oldid) . "d";
-                                    $snewid = str_replace(".", "d", $pid) . "d";
+                                    $soldid = str_replace(".", "d", $oldid)."d";
+                                    $snewid = str_replace(".", "d", $pid)."d";
                                     $l = strlen($soldid) + 1;
 
                                     $sql = "UPDATE thit
@@ -1476,7 +1465,7 @@ class Thesaurus implements ControllerProviderInterface
                                         printf("soldid=%s ; snewid=%s<br/>\nsql=%s<br/>\n", $soldid, $snewid, $sql);
                                     } else {
                                         $stmt = $connbas->prepare($sql);
-                                        $stmt->execute(array(':like' => $soldid . '%'));
+                                        $stmt->execute(array(':like' => $soldid.'%'));
                                         $stmt->closeCursor();
                                     }
 
@@ -1506,7 +1495,6 @@ class Thesaurus implements ControllerProviderInterface
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return new Response($ret->saveXML(), 200, array('Content-Type' => 'text/xml'));
@@ -1518,7 +1506,7 @@ class Thesaurus implements ControllerProviderInterface
         $nchild = 0;
         for ($n = $node->firstChild; $n; $n = $n->nextSibling) {
             if ($n->nodeType == XML_ELEMENT_NODE && ($n->nodeName == "te" || $n->nodeName == "sy")) {
-                $this->renumerate($n, $id . "." . $nchild, $chgids, $depth + 1);
+                $this->renumerate($n, $id.".".$nchild, $chgids, $depth + 1);
                 $nchild ++;
             }
         }
@@ -1558,10 +1546,10 @@ class Thesaurus implements ControllerProviderInterface
 
             if ($dom) {
                 $xpath = new \DOMXPath($dom);
-                $q = "/$xqroot//sy[@id='" . $request->get('id') . "']";
+                $q = "/$xqroot//sy[@id='".$request->get('id')."']";
 
                 if ($request->get('debug')) {
-                    print("q:" . $q . "<br/>\n");
+                    print("q:".$q."<br/>\n");
                 }
 
                 $sy0 = $xpath->query($q)->item(0);
@@ -1585,7 +1573,6 @@ class Thesaurus implements ControllerProviderInterface
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return new Response($ret->saveXML(), 200, array('Content-Type' => 'text/xml'));
@@ -1626,9 +1613,10 @@ class Thesaurus implements ControllerProviderInterface
 
             if ($dom) {
                 $xpath = new \DOMXPath($dom);
-                $q = "/$xqroot//sy[@id='" . $request->get('id') . "']";
-                if ($request->get('debug'))
-                    print("q:" . $q . "<br/>\n");
+                $q = "/$xqroot//sy[@id='".$request->get('id')."']";
+                if ($request->get('debug')) {
+                    print("q:".$q."<br/>\n");
+                }
 
                 $sy0 = $xpath->query($q)->item(0);
                 if ($sy0) {
@@ -1655,7 +1643,6 @@ class Thesaurus implements ControllerProviderInterface
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return new Response($ret->saveXML(), 200, array('Content-Type' => 'text/xml'));
@@ -1694,7 +1681,7 @@ class Thesaurus implements ControllerProviderInterface
             $stmt->closeCursor();
 
             foreach ($rs as $rowbas) {
-                $s_thits .= str_replace('d', '.', $rowbas['value']) . ';';
+                $s_thits .= str_replace('d', '.', $rowbas['value']).';';
             }
 
             if ($request->get('typ') == 'CT') {
@@ -1711,7 +1698,7 @@ class Thesaurus implements ControllerProviderInterface
                 } elseif ($request->get('id') == "C") {
                     $q = "/cterms";
                 } else {
-                    $q = "//te[@id='" . $request->get('id') . "']";
+                    $q = "//te[@id='".$request->get('id')."']";
                 }
 
                 if (($znode = $xpath->query($q)->item(0))) {
@@ -1731,7 +1718,6 @@ class Thesaurus implements ControllerProviderInterface
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return new Response($ret->saveXML(), 200, array('Content-Type' => 'text/xml'));
@@ -1741,7 +1727,7 @@ class Thesaurus implements ControllerProviderInterface
     {
         $ret = 0;
         if ($node->nodeType == XML_ELEMENT_NODE) { // && $node->nodeName=='te')
-            $id = $node->getAttribute('id') . '.';
+            $id = $node->getAttribute('id').'.';
 
             if ((strpos($s_thits, $id)) === false && ! $node->getAttribute('field')) {
                 // this id has no hits, neither any of his children
@@ -1795,10 +1781,10 @@ class Thesaurus implements ControllerProviderInterface
 
             if ($dom && $domct) {
                 $xpath = new \DOMXPath($dom);
-                $q = "/$xqroot//sy[@id='" . $request->get('id') . "']";
+                $q = "/$xqroot//sy[@id='".$request->get('id')."']";
 
                 if ($request->get('debug')) {
-                    print("q:" . $q . "<br/>\n");
+                    print("q:".$q."<br/>\n");
                 }
 
                 $sy0 = $xpath->query($q)->item(0);
@@ -1807,7 +1793,7 @@ class Thesaurus implements ControllerProviderInterface
 
                     // on cherche la branche 'deleted' dans les cterms
                     $nodes = $xpathct->query("/cterms/te[@delbranch='1']");
-                    if ( ! $nodes || ($nodes->length == 0)) {
+                    if (! $nodes || ($nodes->length == 0)) {
                         // 'deleted' n'existe pas, on la cree
                         $id = $domct->documentElement->getAttribute("nextid");
                         if ($request->get('debug')) {
@@ -1815,7 +1801,7 @@ class Thesaurus implements ControllerProviderInterface
                         }
                         $domct->documentElement->setAttribute("nextid", (int) ($id) + 1);
                         $del = $domct->documentElement->appendChild($domct->createElement("te"));
-                        $del->setAttribute("id", "C" . $id);
+                        $del->setAttribute("id", "C".$id);
                         $del->setAttribute("field", _('thesaurus:: corbeille'));
                         $del->setAttribute("nextid", "0");
                         $del->setAttribute("delbranch", "1");
@@ -1843,11 +1829,11 @@ class Thesaurus implements ControllerProviderInterface
 
                     $del->setAttribute("nextid", $delteid + 1);
                     $delte = $del->appendChild($domct->createElement("te"));
-                    $delte->setAttribute("id", $delid . "." . $delteid);
+                    $delte->setAttribute("id", $delid.".".$delteid);
                     $delte->setAttribute("nextid", "1");
 
                     $delsy = $delte->appendChild($domct->createElement("sy"));
-                    $delsy->setAttribute("id", $newid = ($delid . "." . $delteid . ".0"));
+                    $delsy->setAttribute("id", $newid = ($delid.".".$delteid.".0"));
                     // $delsy->setAttribute("id", $newid = ($delid . "." . $delteid));
                     $delsy->setAttribute("lng", $sy0->getAttribute("lng"));
                     $delsy->setAttribute("v", $sy0->getAttribute("v"));
@@ -1860,8 +1846,8 @@ class Thesaurus implements ControllerProviderInterface
                     $te = $sy0->parentNode;
                     $te->removeChild($sy0);
 
-                    $sql_oldid = str_replace(".", "d", $oldid) . "d";
-                    $sql_newid = str_replace(".", "d", $newid) . "d";
+                    $sql_oldid = str_replace(".", "d", $oldid)."d";
+                    $sql_newid = str_replace(".", "d", $newid)."d";
 
                     $sql = "UPDATE thit SET value = :new_id WHERE value = :old_id";
 
@@ -1908,12 +1894,11 @@ class Thesaurus implements ControllerProviderInterface
 
                     if ($request->get('debug')) {
                         printf("url: %s<br/>\n", $url);
-                        printf("<pre>" . $ret2->saveXML() . "</pre>");
+                        printf("<pre>".$ret2->saveXML()."</pre>");
                     }
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return new Response($ret->saveXML(), 200, array('Content-Type' => 'text/xml'));
@@ -1948,7 +1933,7 @@ class Thesaurus implements ControllerProviderInterface
                 $xpathth = new \DOMXPath($domth);
                 $xpathct = new \DOMXPath($domct);
                 if ($request->get('id') !== "") {    // secu pour pas exploser le thesaurus
-                    $q = "/thesaurus//te[@id='" . $request->get('id') . "']";
+                    $q = "/thesaurus//te[@id='".$request->get('id')."']";
 
                     if ($request->get('debug')) {
                         printf("q:%s<br/>\n", $q);
@@ -1963,7 +1948,7 @@ class Thesaurus implements ControllerProviderInterface
                         }
 
                         $nodes = $xpathct->query("/cterms/te[@delbranch='1']");
-                        if ( ! $nodes || ($nodes->length == 0)) {
+                        if (! $nodes || ($nodes->length == 0)) {
                             $id = $domct->documentElement->getAttribute("nextid");
 
                             if ($request->get('debug')) {
@@ -1972,7 +1957,7 @@ class Thesaurus implements ControllerProviderInterface
 
                             $domct->documentElement->setAttribute("nextid", (int) ($id) + 1);
                             $ct = $domct->documentElement->appendChild($domct->createElement("te"));
-                            $ct->setAttribute("id", "C" . $id);
+                            $ct->setAttribute("id", "C".$id);
                             $ct->setAttribute("field", _('thesaurus:: corbeille'));
                             $ct->setAttribute("nextid", "0");
                             $ct->setAttribute("delbranch", "1");
@@ -1992,11 +1977,11 @@ class Thesaurus implements ControllerProviderInterface
                         $newte = $ct->appendChild($domct->importNode($thnode, true));
                         $oldid = $newte->getAttribute("id");
 
-                        $this->renumerate($newte, $ct->getAttribute("id") . "." . $teid, $chgids);
+                        $this->renumerate($newte, $ct->getAttribute("id").".".$teid, $chgids);
 
-                        $newid = $ct->getAttribute("id") . "." . $teid;
-                        $soldid = str_replace(".", "d", $oldid) . "d";
-                        $snewid = str_replace(".", "d", $newid) . "d";
+                        $newid = $ct->getAttribute("id").".".$teid;
+                        $soldid = str_replace(".", "d", $oldid)."d";
+                        $snewid = str_replace(".", "d", $newid)."d";
                         $l = strlen($soldid) + 1;
 
                         $connbas = \connection::getPDOConnection($app, $bid);
@@ -2005,7 +1990,7 @@ class Thesaurus implements ControllerProviderInterface
                                 WHERE value LIKE :like";
 
                         $stmt = $connbas->prepare($sql);
-                        $stmt->execute(array(':like' => $soldid . '%'));
+                        $stmt->execute(array(':like' => $soldid.'%'));
                         $stmt->closeCursor();
 
                         $thnode->parentNode->removeChild($thnode);
@@ -2027,7 +2012,6 @@ class Thesaurus implements ControllerProviderInterface
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return new Response($ret->saveXML(), 200, array('Content-Type' => 'text/xml'));
@@ -2072,11 +2056,11 @@ class Thesaurus implements ControllerProviderInterface
                 } elseif ($request->get('id') == "C") {
                     $q = "/cterms";
                 } else {
-                    $q = "/$xqroot//te[@id='" . $request->get('id') . "']";
+                    $q = "/$xqroot//te[@id='".$request->get('id')."']";
                 }
 
                 if ($request->get('debug')) {
-                    print("q:" . $q . "<br/>\n");
+                    print("q:".$q."<br/>\n");
                 }
 
                 $node = $xpath->query($q)->item(0);
@@ -2084,7 +2068,6 @@ class Thesaurus implements ControllerProviderInterface
                 $this->formatHTMLBranch($node, $ret, $html, 0);
             }
         } catch (\Exception $e) {
-
         }
 
         return new Response($ret->saveXML(), 200, array('Content-Type' => 'text/xml'));
@@ -2101,14 +2084,14 @@ class Thesaurus implements ControllerProviderInterface
 
                 $id = $n->getAttribute("id");
                 $div_the = $dstnode->appendChild($dstdom->createElement("div"));
-                $div_the->setAttribute("id", "THE_" . $id);
+                $div_the->setAttribute("id", "THE_".$id);
                 $div_the->setAttribute("class", "s_");
 
                 $u = $div_the->appendChild($dstdom->createElement("u"));
-                $u->setAttribute("id", "THP_" . $id);
+                $u->setAttribute("id", "THP_".$id);
 
                 $div_thb = $dstnode->appendChild($dstdom->createElement("div"));
-                $div_thb->setAttribute("id", "THB_" . $id);
+                $div_thb->setAttribute("id", "THB_".$id);
 
                 $t = $this->formatHTMLBranch($n, $dstdom, $div_thb, $depth + 1);
                 if ($t["nts"] == 0) {
@@ -2121,7 +2104,7 @@ class Thesaurus implements ControllerProviderInterface
 
                 $div_the->appendChild($dstdom->createTextNode($t["allsy"]));
             } elseif ($n->nodeName == "sy") {
-                $allsy .= ( $allsy ? " ; " : "") . $n->getAttribute("v");
+                $allsy .= ($allsy ? " ; " : "").$n->getAttribute("v");
             }
         }
 
@@ -2170,11 +2153,11 @@ class Thesaurus implements ControllerProviderInterface
                 } elseif ($request->get('id') == "C") {
                     $q = "/cterms";
                 } else {
-                    $q = "/$xqroot//sy[@id='" . $request->get('id') . "']";
+                    $q = "/$xqroot//sy[@id='".$request->get('id')."']";
                 }
 
                 if ($request->get('debug')) {
-                    print("q:" . $q . "<br/>\n");
+                    print("q:".$q."<br/>\n");
                 }
 
                 $nodes = $xpath->query($q);
@@ -2182,11 +2165,11 @@ class Thesaurus implements ControllerProviderInterface
                     $t = $nodes->item(0)->getAttribute("v");
 
                     if (($k = $nodes->item(0)->getAttribute("k"))) {
-                        $t .= " (" . $k . ")";
+                        $t .= " (".$k.")";
                     }
 
-                    $fullpath_html = "<span class='path_separator'> / </span><span class='main_term'>" . $t . "</span>";
-                    $fullpath = " / " . $t;
+                    $fullpath_html = "<span class='path_separator'> / </span><span class='main_term'>".$t."</span>";
+                    $fullpath = " / ".$t;
 
                     $sy = $root->appendchild($ret->createElement("sy"));
                     $sy->setAttribute("t", $t);
@@ -2196,17 +2179,17 @@ class Thesaurus implements ControllerProviderInterface
                         }
                     }
 
-                    for ($depth = -1, $n = $nodes->item(0)->parentNode->parentNode; $n; $n = $n->parentNode, $depth -- ) {
+                    for ($depth = -1, $n = $nodes->item(0)->parentNode->parentNode; $n; $n = $n->parentNode, $depth --) {
                         if ($n->nodeName == "te") {
                             if ($request->get('debug')) {
                                 printf("parent:%s<br/>\n", $n->nodeName);
                             }
                             if ($request->get('typ') == "CT" && ($fld = $n->getAttribute("field")) != "") {
-                                $fullpath = " / " . $fld . $fullpath;
+                                $fullpath = " / ".$fld.$fullpath;
                                 if ($depth == 0) {
-                                    $fullpath_html = "<span class='path_separator'> / </span><span class='main_term'>" . $fld . "</span>" . $fullpath_html;
+                                    $fullpath_html = "<span class='path_separator'> / </span><span class='main_term'>".$fld."</span>".$fullpath_html;
                                 } else {
-                                    $fullpath_html = "<span class='path_separator'> / </span>" . $fld . $fullpath_html;
+                                    $fullpath_html = "<span class='path_separator'> / </span>".$fld.$fullpath_html;
                                 }
                                 break;
                             }
@@ -2230,8 +2213,8 @@ class Thesaurus implements ControllerProviderInterface
                             if (! $goodsy) {
                                 $goodsy = $firstsy;
                             }
-                            $fullpath = " / " . $goodsy . $fullpath;
-                            $fullpath_html = "<span class='path_separator'> / </span>" . $goodsy . $fullpath_html;
+                            $fullpath = " / ".$goodsy.$fullpath;
+                            $fullpath_html = "<span class='path_separator'> / </span>".$goodsy.$fullpath_html;
                         }
                     }
                     $fp = $root->appendchild($ret->createElement("fullpath"));
@@ -2241,7 +2224,7 @@ class Thesaurus implements ControllerProviderInterface
                     $fp->appendChild($ret->createTextNode($fullpath_html));
 
                     // $id = "S" . str_replace(".", "d", substr($nodes->item(0)->getAttribute("id"), 1)) . "d";
-                    $id = str_replace(".", "d", $nodes->item(0)->getAttribute("id")) . "d";
+                    $id = str_replace(".", "d", $nodes->item(0)->getAttribute("id"))."d";
                     $hits = "0";
 
                     $sql = "SELECT COUNT(DISTINCT(record_id)) AS hits FROM thit WHERE value = :id";
@@ -2262,7 +2245,6 @@ class Thesaurus implements ControllerProviderInterface
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return new Response($ret->saveXML(), 200, array('Content-Type' => 'text/xml'));
@@ -2329,7 +2311,7 @@ class Thesaurus implements ControllerProviderInterface
                         } else {
                             if (($databox_field = $meta->get_element_by_name($acf)) instanceof \databox_field) {
                                 $tbranch = $databox_field->get_tbranch();
-                                $q = "(" . $tbranch . ")/descendant-or-self::te[@id='" . $id . "']";
+                                $q = "(".$tbranch.")/descendant-or-self::te[@id='".$id."']";
 
                                 if ($debug) {
                                     printf("tbranch-q = \" $q \" <br/>\n");
@@ -2346,14 +2328,14 @@ class Thesaurus implements ControllerProviderInterface
                     } elseif ($id == "C") {
                         $q = "/cterms";
                     } else {
-                        $q = "/$xqroot//te[@id='" . $id . "']";
+                        $q = "/$xqroot//te[@id='".$id."']";
                     }
                     if ($debug) {
-                        print("q:" . $q . "<br/>\n");
+                        print("q:".$q."<br/>\n");
                     }
 
                     $nodes = $xpath->query($q);
-                    $root->setAttribute('found', '' . $nodes->length);
+                    $root->setAttribute('found', ''.$nodes->length);
                     if ($nodes->length > 0) {
                         $nts = 0;
                         $tts = array();
@@ -2384,9 +2366,9 @@ class Thesaurus implements ControllerProviderInterface
                                                 }
                                                 if (! $realksy && $piv && $lng == $piv) {
                                                     $realksy = $ksy;
-                                                    $allsy = $t . ($allsy ? " ; " : "") . $allsy;
+                                                    $allsy = $t.($allsy ? " ; " : "").$allsy;
                                                 } else {
-                                                    $allsy .= ( $allsy ? " ; " : "") . $t;
+                                                    $allsy .= ($allsy ? " ; " : "").$t;
                                                 }
                                             }
                                         }
@@ -2396,25 +2378,25 @@ class Thesaurus implements ControllerProviderInterface
                                     }
                                     if ($sortsy && $piv) {
                                         for ($uniq = 0; $uniq < 9999; $uniq ++) {
-                                            if ( ! isset($tts[$realksy . "_" . $uniq])) {
+                                            if (! isset($tts[$realksy."_".$uniq])) {
                                                 break;
                                             }
                                         }
-                                        $tts[$realksy . "_" . $uniq] = array(
+                                        $tts[$realksy."_".$uniq] = array(
                                             "id"     => $n->getAttribute("id"),
                                             "allsy"  => $allsy,
-                                            "nchild" => $xpath->query("te", $n)->length
+                                            "nchild" => $xpath->query("te", $n)->length,
                                         );
                                     } else {
                                         $tts[] = array(
                                             "id"     => $n->getAttribute("id"),
                                             "allsy"  => $allsy,
-                                            "nchild" => $xpath->query("te", $n)->length
+                                            "nchild" => $xpath->query("te", $n)->length,
                                         );
                                     }
                                 }
                             } elseif ($n->nodeName == "sy") {
-                                $value_id = str_replace(".", "d", $n->getAttribute("id")) . "d";
+                                $value_id = str_replace(".", "d", $n->getAttribute("id"))."d";
                                 $hits = "";
 
                                 $sql = "SELECT COUNT(DISTINCT(record_id)) AS hits
@@ -2462,7 +2444,7 @@ class Thesaurus implements ControllerProviderInterface
                         }
 
                         $fullpath_html = $fullpath = "";
-                        for ($depth = 0, $n = $nodes->item(0); $n; $n = $n->parentNode, $depth -- ) {
+                        for ($depth = 0, $n = $nodes->item(0); $n; $n = $n->parentNode, $depth --) {
                             if ($n->nodeName == "te") {
                                 if ($debug) {
                                     printf("parent:%s<br/>\n", $n->nodeName);
@@ -2476,12 +2458,12 @@ class Thesaurus implements ControllerProviderInterface
                                     $cfield->setAttribute("field", $fld);
                                     $cfield->setAttribute("delbranch", $n->getAttribute("delbranch"));
 
-                                    $fullpath = " / " . $fld . $fullpath;
+                                    $fullpath = " / ".$fld.$fullpath;
 
                                     if ($depth == 0) {
-                                        $fullpath_html = "<span class='path_separator'> / </span><span class='main_term'>" . $fld . "</span>" . $fullpath_html;
+                                        $fullpath_html = "<span class='path_separator'> / </span><span class='main_term'>".$fld."</span>".$fullpath_html;
                                     } else {
-                                        $fullpath_html = "<span class='path_separator'> / </span>" . $fld . $fullpath_html;
+                                        $fullpath_html = "<span class='path_separator'> / </span>".$fld.$fullpath_html;
                                     }
                                     break;
                                 }
@@ -2508,12 +2490,12 @@ class Thesaurus implements ControllerProviderInterface
                                     $goodsy = $firstsy;
                                 }
 
-                                $fullpath = " / " . $goodsy . $fullpath;
+                                $fullpath = " / ".$goodsy.$fullpath;
 
                                 if ($depth == 0) {
-                                    $fullpath_html = "<span class='path_separator'> / </span><span class='main_term'>" . $goodsy . "</span>" . $fullpath_html;
+                                    $fullpath_html = "<span class='path_separator'> / </span><span class='main_term'>".$goodsy."</span>".$fullpath_html;
                                 } else {
-                                    $fullpath_html = "<span class='path_separator'> / </span>" . $goodsy . $fullpath_html;
+                                    $fullpath_html = "<span class='path_separator'> / </span>".$goodsy.$fullpath_html;
                                 }
                             }
                         }
@@ -2527,7 +2509,7 @@ class Thesaurus implements ControllerProviderInterface
                         $fp = $root->appendchild($ret->createElement("fullpath_html"));
                         $fp->appendChild($ret->createTextNode($fullpath_html));
 
-                        $value_id = str_replace(".", "d", $nodes->item(0)->getAttribute("id")) . "d";
+                        $value_id = str_replace(".", "d", $nodes->item(0)->getAttribute("id"))."d";
                         $hits = "0";
 
                         $sql = "SELECT COUNT(DISTINCT(record_id)) AS hits
@@ -2550,7 +2532,7 @@ class Thesaurus implements ControllerProviderInterface
                                 FROM thit WHERE value LIKE :like";
 
                         $stmt = $connbas->prepare($sql);
-                        $stmt->execute(array(':like'  => $value_id . '%'));
+                        $stmt->execute(array(':like'  => $value_id.'%'));
                         $rowbas2 = $stmt->fetch(\PDO::FETCH_ASSOC);
                         $stmt->closeCursor();
 
@@ -2563,7 +2545,6 @@ class Thesaurus implements ControllerProviderInterface
                     }
                 }
             } catch (\Exception $e) {
-
             }
         }
 
@@ -2605,10 +2586,10 @@ class Thesaurus implements ControllerProviderInterface
 
             if ($dom) {
                 $xpath = new \DOMXPath($dom);
-                $q = "/$xqroot//te[@id='" . $request->get('id') . "']";
+                $q = "/$xqroot//te[@id='".$request->get('id')."']";
 
                 if ($request->get('debug')) {
-                    print("q:" . $q . "<br/>\n");
+                    print("q:".$q."<br/>\n");
                 }
 
                 $sy0 = $xpath->query($q)->item(0);
@@ -2623,11 +2604,11 @@ class Thesaurus implements ControllerProviderInterface
                     $te = $sy0->parentNode;
                     $te->removeChild($sy0);
 
-                    $xml_oldid = str_replace(".", "d", $oldid) . "d";
+                    $xml_oldid = str_replace(".", "d", $oldid)."d";
                     $sql = "DELETE FROM thit WHERE value LIKE :like";
 
                     $stmt = $connbas->prepare($sql);
-                    $stmt->execute(array(':like' => $xml_oldid . '%'));
+                    $stmt->execute(array(':like' => $xml_oldid.'%'));
                     $stmt->closeCursor();
 
                     if ($request->get('typ') == "CT") {
@@ -2656,12 +2637,11 @@ class Thesaurus implements ControllerProviderInterface
                     }
 
                     if ($request->get('debug')) {
-                        printf("<pre>" . $ret2->saveXML() . "</pre>");
+                        printf("<pre>".$ret2->saveXML()."</pre>");
                     }
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return new Response($ret->saveXML(), 200, array('Content-Type' => 'text/xml'));
@@ -2699,7 +2679,7 @@ class Thesaurus implements ControllerProviderInterface
                 if ($bid === "T") {
                     $q = "/thesaurus";
                 } else {
-                    $q = "/thesaurus//te[@id='" . $request->get('pid') . "']";
+                    $q = "/thesaurus//te[@id='".$request->get('pid')."']";
                 }
 
                 $te = $xpathth->query($q)->item(0);
@@ -2708,7 +2688,7 @@ class Thesaurus implements ControllerProviderInterface
                     $te->setAttribute("nextid", $tenextid + 1);
 
                     $sy = $te->appendChild($domth->createElement("sy"));
-                    $syid = $te->getAttribute("id") . "." . $tenextid;
+                    $syid = $te->getAttribute("id").".".$tenextid;
                     $sy->setAttribute("id", $syid);
 
                     if ($request->get('debug')) {
@@ -2723,11 +2703,11 @@ class Thesaurus implements ControllerProviderInterface
 
                     list($v, $k) = $this->splitTermAndContext($request->get('t'));
 
-                    $k = trim($k) . trim($request->get('k'));
+                    $k = trim($k).trim($request->get('k'));
                     $w = $app['unicode']->remove_indexer_chars($v);
 
                     if ($k) {
-                        $v .= " (" . $k . ")";
+                        $v .= " (".$k.")";
                     }
 
                     $k = $app['unicode']->remove_indexer_chars($k);
@@ -2760,7 +2740,6 @@ class Thesaurus implements ControllerProviderInterface
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return new Response($ret->saveXML(), 200, array('Content-Type' => 'text/xml'));
@@ -2814,7 +2793,7 @@ class Thesaurus implements ControllerProviderInterface
                 if ($request->get('pid') === "T") {
                     $q = "/thesaurus";
                 } else {
-                    $q = "/thesaurus//te[@id='" . $request->get('pid') . "']";
+                    $q = "/thesaurus//te[@id='".$request->get('pid')."']";
                 }
 
                 $parentnode = $xpathth->query($q)->item(0);
@@ -2824,14 +2803,14 @@ class Thesaurus implements ControllerProviderInterface
                     $te = $parentnode->appendChild($domth->createElement("te"));
 
                     if ($request->get('pid') === "T") {
-                        $te->setAttribute("id", $teid = "T" . ($nid));
+                        $te->setAttribute("id", $teid = "T".($nid));
                     } else {
-                        $te->setAttribute("id", $teid = ($request->get('pid') . "." . $nid));
+                        $te->setAttribute("id", $teid = ($request->get('pid').".".$nid));
                     }
 
                     $te->setAttribute("nextid", "1");
                     $sy = $te->appendChild($domth->createElement("sy"));
-                    $sy->setAttribute("id", $teid . ".0");
+                    $sy->setAttribute("id", $teid.".0");
 
                     if ($request->get('sylng')) {
                         $sy->setAttribute("lng", $request->get('sylng'));
@@ -2840,7 +2819,7 @@ class Thesaurus implements ControllerProviderInterface
                     }
 
                     list($v, $k) = $this->splitTermAndContext($request->get('t'));
-                    $k = trim($k) . trim($request->get('k'));
+                    $k = trim($k).trim($request->get('k'));
 
                     if ($request->get('debug')) {
                         printf("k='%s'<br/>\n", $k);
@@ -2849,7 +2828,7 @@ class Thesaurus implements ControllerProviderInterface
                     $w = $app['unicode']->remove_indexer_chars($v);
 
                     if ($k) {
-                        $v .= " (" . $k . ")";
+                        $v .= " (".$k.")";
                     }
 
                     $k = $app['unicode']->remove_indexer_chars($k);
@@ -2883,7 +2862,6 @@ class Thesaurus implements ControllerProviderInterface
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return new Response($ret->saveXML(), 200, array('Content-Type' => 'text/xml'));
@@ -2929,11 +2907,11 @@ class Thesaurus implements ControllerProviderInterface
                 } elseif ($request->get('id') == "C") {
                     $q = "/cterms";
                 } else {
-                    $q = "/$xqroot//te[@id='" . $request->get('id') . "']";
+                    $q = "/$xqroot//te[@id='".$request->get('id')."']";
                 }
 
                 if ($request->get('debug')) {
-                    print("q:" . $q . "<br/>\n");
+                    print("q:".$q."<br/>\n");
                 }
 
                 if (($znode = $xpath->query($q)->item(0))) {
@@ -2941,29 +2919,29 @@ class Thesaurus implements ControllerProviderInterface
                         $t = $this->splitTermAndContext($request->get('t'));
                         switch ($request->get('method')) {
                             case "begins":
-                                $q2 = "starts-with(@w, '" . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[0])) . "')";
+                                $q2 = "starts-with(@w, '".\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[0]))."')";
                                 if ($t[1]) {
-                                    $q2 .= " and starts-with(@k, '" . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[1])) . "')";
+                                    $q2 .= " and starts-with(@k, '".\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[1]))."')";
                                 }
                                 break;
                             case "contains":
-                                $q2 = "contains(@w, '" . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[0])) . "')";
+                                $q2 = "contains(@w, '".\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[0]))."')";
                                 if ($t[1]) {
-                                    $q2 .= " and contains(@k, '" . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[1])) . "')";
+                                    $q2 .= " and contains(@k, '".\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[1]))."')";
                                 }
                                 break;
                             case "equal":
                             default:
-                                $q2 = "(@w='" . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[0])) . "')";
+                                $q2 = "(@w='".\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[0]))."')";
                                 if ($t[1]) {
-                                    $q2 .= " and (@k='" . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[1])) . "')";
+                                    $q2 .= " and (@k='".\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[1]))."')";
                                 }
                                 break;
                         }
-                        $q2 = "//sy[" . $q2 . "]";
+                        $q2 = "//sy[".$q2."]";
                     }
                     if ($request->get('debug')) {
-                        print("q2:" . $q2 . "<br/>\n");
+                        print("q2:".$q2."<br/>\n");
                     }
 
                     $nodes = $xpath->query($q2, $znode);
@@ -2980,7 +2958,6 @@ class Thesaurus implements ControllerProviderInterface
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return new Response($ret->saveXML(), 200, array('Content-Type' => 'text/xml'));
@@ -2997,14 +2974,14 @@ class Thesaurus implements ControllerProviderInterface
                     if ($n->getAttribute("open")) {
                         $id = $n->getAttribute("id");
                         $div_the = $dstnode->appendChild($dstdom->createElement("div"));
-                        $div_the->setAttribute("id", "THE_" . $id);
+                        $div_the->setAttribute("id", "THE_".$id);
                         $div_the->setAttribute("class", "s_");
 
                         $u = $div_the->appendChild($dstdom->createElement("u"));
-                        $u->setAttribute("id", "THP_" . $id);
+                        $u->setAttribute("id", "THP_".$id);
 
                         $div_thb = $dstnode->appendChild($dstdom->createElement("div"));
-                        $div_thb->setAttribute("id", "THB_" . $id);
+                        $div_thb->setAttribute("id", "THB_".$id);
 
                         $t = $this->getBranchHTML($type, $n, $dstdom, $div_thb, $depth + 1);
                         if ($t["nts"] == 0) {
@@ -3022,7 +2999,7 @@ class Thesaurus implements ControllerProviderInterface
                     if ($k = $n->getAttribute("k")) {
                         //        $t .= " ($k)";
                     }
-                    $allsy .= ( $allsy ? " ; " : "") . $t;
+                    $allsy .= ($allsy ? " ; " : "").$t;
                 }
             }
         }
@@ -3065,10 +3042,10 @@ class Thesaurus implements ControllerProviderInterface
 
             if ($dom) {
                 $xpath = new \DOMXPath($dom);
-                $q = "/cterms//te[@id='" . $request->get('id') . "']";
+                $q = "/cterms//te[@id='".$request->get('id')."']";
 
                 if ($request->get('debug')) {
-                    print("q:" . $q . "<br/>\n");
+                    print("q:".$q."<br/>\n");
                 }
 
                 $te = $xpath->query($q)->item(0);
@@ -3087,7 +3064,6 @@ class Thesaurus implements ControllerProviderInterface
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return new Response($ret->saveXML(), 200, array('Content-Type' => 'text/xml'));
@@ -3096,10 +3072,10 @@ class Thesaurus implements ControllerProviderInterface
     private function doRejectBranch(\connection_pdo $connbas, &$node)
     {
         if (strlen($oldid = $node->getAttribute("id")) > 1) {
-            $node->setAttribute("id", $newid = ("R" . substr($oldid, 1)));
+            $node->setAttribute("id", $newid = ("R".substr($oldid, 1)));
 
-            $thit_oldid = str_replace(".", "d", $oldid) . "d";
-            $thit_newid = str_replace(".", "d", $newid) . "d";
+            $thit_oldid = str_replace(".", "d", $oldid)."d";
+            $thit_newid = str_replace(".", "d", $newid)."d";
             $sql = "UPDATE thit SET value = :new_value WHERE value = :old_value";
             $stmt = $connbas->prepare($sql);
             $stmt->execute(array(':old_value' => $thit_oldid, ':new_value' => $thit_newid));
@@ -3160,16 +3136,16 @@ class Thesaurus implements ControllerProviderInterface
                     $fieldname = $nodes->item($i)->nodeName;
                     $tbranch = $nodes->item($i)->getAttribute("tbranch");
                     if ($pid != "") {
-                        $q = "(" . $tbranch . ")/descendant-or-self::te[@id='" . $pid . "']";
+                        $q = "(".$tbranch.")/descendant-or-self::te[@id='".$pid."']";
                     } else {
-                        $q = "(" . $tbranch . ")/descendant-or-self::te[not(@id)]";
+                        $q = "(".$tbranch.")/descendant-or-self::te[not(@id)]";
                     }
 
                     $fields[$fieldname] = array(
                         "name"     => $fieldname,
                         "tbranch"  => $tbranch,
                         "cid"      => null,
-                        "sourceok" => false
+                        "sourceok" => false,
                     );
 
                     if (! $tbranch) {
@@ -3195,14 +3171,14 @@ class Thesaurus implements ControllerProviderInterface
                     "name"     => _('thesaurus:: corbeille'),
                     "tbranch"  => null,
                     "cid"      => null,
-                    "sourceok" => true
+                    "sourceok" => true,
                 );
 
                 if (count($fields) > 0) {
-                    $q = "@w='" . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t)) . "'";
+                    $q = "@w='".\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t))."'";
                     if ($k) {
                         if ($k != "*") {
-                            $q .= " and @k='" . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($k)) . "'";
+                            $q .= " and @k='".\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($k))."'";
                         }
                     } else {
                         $q .= " and not(@k)";
@@ -3246,7 +3222,6 @@ class Thesaurus implements ControllerProviderInterface
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return $ret;
@@ -3284,7 +3259,7 @@ class Thesaurus implements ControllerProviderInterface
             $stmt->closeCursor();
 
             foreach ($rs as $rowbas) {
-                $s_thits .= str_replace('d', '.', $rowbas['value']) . ';';
+                $s_thits .= str_replace('d', '.', $rowbas['value']).';';
             }
 
             if ($request->get('typ') == 'CT') {
@@ -3301,7 +3276,7 @@ class Thesaurus implements ControllerProviderInterface
                 } elseif ($request->get('id') == "C") {
                     $q = "/cterms";
                 } else {
-                    $q = "//te[@id='" . $request->get('id') . "']";
+                    $q = "//te[@id='".$request->get('id')."']";
                 }
 
                 if ($znode = $xpath->query($q)->item(0)) {
@@ -3309,7 +3284,6 @@ class Thesaurus implements ControllerProviderInterface
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return new Response($ret->saveXML(), 200, array('Content-Type' => 'text/xml'));
@@ -3319,7 +3293,7 @@ class Thesaurus implements ControllerProviderInterface
     {
         $ret = 0;
         if ($node->nodeType == XML_ELEMENT_NODE) { // && $node->nodeName=='te')
-            $id = $node->getAttribute('id') . '.';
+            $id = $node->getAttribute('id').'.';
 
             if ((strpos($s_thits, $id)) === false && ! $node->getAttribute('field')) {
                 // this id has no hits, neither any of his children

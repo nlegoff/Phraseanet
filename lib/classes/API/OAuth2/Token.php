@@ -78,8 +78,9 @@ class API_OAuth2_Token
         $stmt->execute(array(':account_id' => $this->account->get_id()));
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ( ! $row)
+        if (! $row) {
             throw new NotFoundHttpException('Account not found');
+        }
 
         $stmt->closeCursor();
 
@@ -112,7 +113,7 @@ class API_OAuth2_Token
 
         $params = array(
             ':oauth_token'   => $oauth_token
-            , ':current_token' => $this->token
+            , ':current_token' => $this->token,
         );
 
         $stmt = $this->appbox->get_connection()->prepare($sql);
@@ -145,7 +146,7 @@ class API_OAuth2_Token
 
         $params = array(
             ':session_id'    => $session_id
-            , ':current_token' => $this->token
+            , ':current_token' => $this->token,
         );
 
         $stmt = $this->appbox->get_connection()->prepare($sql);
@@ -178,7 +179,7 @@ class API_OAuth2_Token
 
         $params = array(
             ':expires'     => $expires
-            , ':oauth_token' => $this->get_value()
+            , ':oauth_token' => $this->get_value(),
         );
 
         $stmt = $this->appbox->get_connection()->prepare($sql);
@@ -206,7 +207,7 @@ class API_OAuth2_Token
 
         $params = array(
             ':scope'       => $scope
-            , ':oauth_token' => $this->get_value()
+            , ':oauth_token' => $this->get_value(),
         );
 
         $stmt = $this->appbox->get_connection()->prepare($sql);
@@ -240,7 +241,7 @@ class API_OAuth2_Token
 
         $params = array(
             ':new_token' => $new_token
-            , ':old_token' => $this->get_value()
+            , ':old_token' => $this->get_value(),
         );
 
         $stmt = $this->appbox->get_connection()->prepare($sql);
@@ -286,8 +287,9 @@ class API_OAuth2_Token
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new NotFoundHttpException('Account not found');
+        }
 
         $account = new API_OAuth2_Account($app, $row['api_account_id']);
 
@@ -313,7 +315,7 @@ class API_OAuth2_Token
             ':token'      => self::generate_token()
             , ':account_id' => $account->get_id()
             , ':expire'     => $expires->format(DATE_ISO8601)
-            , ':scope'      => $scope
+            , ':scope'      => $scope,
         );
 
         $stmt = $appbox->get_connection()->prepare($sql);

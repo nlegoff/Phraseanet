@@ -33,7 +33,7 @@ class LocalesRequirements extends RequirementCollection implements RequirementIn
                 $this->addRecommendation(
                     'test' === _('test::test'),
                     sprintf('Locale %s (%s) should be supported', $language_name, $code),
-                    'Install support for locale <strong>' . $code . '</strong> (' . $language_name . ').'
+                    'Install support for locale <strong>'.$code.'</strong> ('.$language_name.').'
                 );
 
                 \phrasea::use_i18n($locale);

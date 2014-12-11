@@ -25,7 +25,7 @@ class APIRoutesDumper extends AbstractRoutesDumper
 
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
-        $app = require __DIR__ . '/../../Application/Api.php';
+        $app = require __DIR__.'/../../Application/Api.php';
 
         return $this->dumpRoutes($app['routes'], $input, $output);
     }

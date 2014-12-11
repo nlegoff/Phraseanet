@@ -11,7 +11,6 @@
 
 namespace Alchemy\Phrasea\Core\Event;
 
-use Alchemy\Phrasea\Application;
 use Alchemy\Phrasea\Controller\RecordsRequest;
 use Symfony\Component\EventDispatcher\Event as SfEvent;
 
@@ -32,7 +31,6 @@ class RecordEdit extends SfEvent
             $this->collections[] = $data->get_collection();
             $this->databoxes[] = $data->get_databox();
         }
-
     }
 
     public function getRecords()

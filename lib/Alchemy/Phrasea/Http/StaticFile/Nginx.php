@@ -39,7 +39,7 @@ class Nginx extends AbstractStaticMode implements StaticFileModeInterface
     public function getVirtualHostConfiguration()
     {
         $output = "\n";
-        $output .= "    location " . $this->mapping['mount-point']. " {\n";
+        $output .= "    location ".$this->mapping['mount-point']." {\n";
         $output .= "        alias ".$this->mapping['directory'].";\n";
         $output .= "        types        { }";
         $output .= "        default_type image/jpeg;";

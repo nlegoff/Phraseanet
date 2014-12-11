@@ -17,5 +17,4 @@
  */
 class Bridge_Exception_InvalidRecordType extends Bridge_Exception
 {
-
 }

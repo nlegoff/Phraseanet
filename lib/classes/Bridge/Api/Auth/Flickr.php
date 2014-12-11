@@ -74,8 +74,9 @@ class Bridge_Api_Auth_Flickr extends Bridge_Api_Auth_Abstract implements Bridge_
     public function connect($param)
     {
         $auth_token = $this->get_api()->setAuthTokenFromFrob($param);
-        if ( ! $this->get_api()->isAuthValid())
+        if (! $this->get_api()->isAuthValid()) {
             throw new Bridge_Exception_ApiConnectorAccessTokenFailed();
+        }
 
         $this->get_api()->setAuthToken($auth_token);
 
@@ -118,7 +119,7 @@ class Bridge_Api_Auth_Flickr extends Bridge_Api_Auth_Abstract implements Bridge_
     public function get_auth_signatures()
     {
         return array(
-            'auth_token' => $this->settings->get('auth_token')
+            'auth_token' => $this->settings->get('auth_token'),
         );
     }
 
@@ -127,12 +128,13 @@ class Bridge_Api_Auth_Flickr extends Bridge_Api_Auth_Abstract implements Bridge_
      * @param  array                  $parameters
      * @return Bridge_Api_Auth_Flickr
      */
-    public function set_parameters(Array $parameters)
+    public function set_parameters(array $parameters)
     {
         $avail_parameters = array('flickr_client_id', 'flickr_client_secret', 'permissions');
         foreach ($parameters as $parameter => $value) {
-            if ( ! in_array($parameter, $avail_parameters))
+            if (! in_array($parameter, $avail_parameters)) {
                 continue;
+            }
 
             $this->$parameter = $value;
         }
@@ -144,7 +146,7 @@ class Bridge_Api_Auth_Flickr extends Bridge_Api_Auth_Abstract implements Bridge_
      *
      * @return string
      */
-    public function get_auth_url(Array $supp_params = array())
+    public function get_auth_url(array $supp_params = array())
     {
         $request_token = $this->get_api()->requestFrob();
 

@@ -20,7 +20,6 @@ use Doctrine\Common\Cache\ApcCache as DoctrineApc;
  */
 class ApcCache extends DoctrineApc implements Cache
 {
-
     /**
      * {@inheritdoc}
      */
@@ -50,7 +49,7 @@ class ApcCache extends DoctrineApc implements Cache
      */
     public function get($key)
     {
-        if ( ! $this->contains($key)) {
+        if (! $this->contains($key)) {
             throw new Exception('Unable to retrieve the value');
         }
 

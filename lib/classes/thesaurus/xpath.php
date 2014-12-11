@@ -29,11 +29,11 @@ class thesaurus_xpath extends DOMXPath
      * @param  string      $context_path
      * @return DOMNodeList
      */
-    public function cache_query($xquery, DOMNode $context_node = NULL, $context_path = '')
+    public function cache_query($xquery, DOMNode $context_node = null, $context_path = '')
     {
         $context_path .= $xquery;
 
-        if ( ! array_key_exists($context_path, self::$r)) {
+        if (! array_key_exists($context_path, self::$r)) {
             self::$r[$context_path] = $context_node ?
                 parent::query($xquery, $context_node) : parent::query($xquery);
         }

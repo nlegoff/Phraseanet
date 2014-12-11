@@ -709,7 +709,7 @@ class RSSFeedTest extends \PhraseanetWebTestCaseAbstract
         }
     }
 
-    public function removeBadItems(Array &$item_entries, Array $available_medium)
+    public function removeBadItems(array &$item_entries, array $available_medium)
     {
         $remove = function ($entry_item, $key) use (&$item_entries, $available_medium) {
                 $preview_sd = $entry_item->get_record()->get_subdef('preview');

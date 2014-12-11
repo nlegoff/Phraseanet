@@ -26,7 +26,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CreateCollection extends Command
 {
-
     /**
      * Constructor
      */
@@ -51,7 +50,6 @@ class CreateCollection extends Command
         $new_collection = \collection::create($app, $databox, $this->container['phraseanet.appbox'], $input->getArgument('collname'));
 
         if ($new_collection && $input->getOption('base_id_rights')) {
-
             $query = new \User_Query($this->container);
             $total = $query->on_base_ids(array($input->getOption('base_id_rights')))->get_total();
 
@@ -61,7 +59,7 @@ class CreateCollection extends Command
                 foreach ($results as $user) {
                     $user->ACL()->duplicate_right_from_bas($input->getOption('base_id_rights'), $new_collection->get_base_id());
                 }
-                $n+=40;
+                $n += 40;
             }
         }
 

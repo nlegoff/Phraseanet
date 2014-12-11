@@ -16,5 +16,4 @@ class TfEditdate extends AbstractTag
     protected $Type = '';
     protected $Writable = false;
     protected $Description = 'The last date of editing';
-
 }

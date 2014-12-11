@@ -17,7 +17,6 @@
  */
 interface Feed_XML_Interface
 {
-
     public function set_title($title);
 
     public function set_updated_on(DateTime $datetime);

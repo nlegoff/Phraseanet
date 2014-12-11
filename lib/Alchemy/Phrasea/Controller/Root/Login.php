@@ -59,7 +59,7 @@ class Login implements ControllerProviderInterface
             $items[] = array(
                 'record' => $record,
                 'preview' => $preview,
-                'permalink' => $permalink
+                'permalink' => $permalink,
             );
         }
 
@@ -82,7 +82,7 @@ class Login implements ControllerProviderInterface
             'display_layout' => $app['phraseanet.registry']->get('GV_home_publi'),
             'authentication_providers' => $app['authentication.providers'],
             'registration_fields' => $app['registration.fields'],
-            'registration_optional_fields' => $app['registration.optional-fields']
+            'registration_optional_fields' => $app['registration.optional-fields'],
         );
     }
 
@@ -102,7 +102,6 @@ class Login implements ControllerProviderInterface
         $controllers->get('/', 'login.controller:login')
             ->before(function (Request $request) use ($app) {
                     if (null !== $response = $app['firewall']->requireNotAuthenticated()) {
-
                         return $response;
                     }
                 })
@@ -299,7 +298,7 @@ class Login implements ControllerProviderInterface
                     $this->postAuthProcess($app, $userAuthProvider->getUser($app));
 
                     if (null !== $redirect = $request->query->get('redirect')) {
-                        $redirection = '../' . $redirect;
+                        $redirection = '../'.$redirect;
                     } else {
                         $redirection = $app->path('prod');
                     }
@@ -316,7 +315,7 @@ class Login implements ControllerProviderInterface
                         throw new FormProcessingException(_('Invalid captcha answer.'));
                     }
 
-                    require_once $app['root.path'] . '/lib/classes/deprecated/inscript.api.php';
+                    require_once $app['root.path'].'/lib/classes/deprecated/inscript.api.php';
 
                     if ($app['phraseanet.registry']->get('GV_autoselectDB')) {
                         $selected = null;
@@ -327,7 +326,6 @@ class Login implements ControllerProviderInterface
                     $inscOK = array();
 
                     foreach ($app['phraseanet.appbox']->get_databoxes() as $databox) {
-
                         foreach ($databox->get_collections() as $collection) {
                             if (null !== $selected && !in_array($collection->get_base_id(), $selected)) {
                                 continue;
@@ -378,7 +376,6 @@ class Login implements ControllerProviderInterface
                     $demandOK = array();
 
                     if ($app['phraseanet.registry']->get('GV_autoregister')) {
-
                         $template_user_id = \User_Adapter::get_usr_id_from_login($app, 'autoregister');
 
                         $template_user = \User_Adapter::getInstance($template_user_id, $app);
@@ -408,7 +405,7 @@ class Login implements ControllerProviderInterface
                     $params = array(
                         'demand'       => $demandOK,
                         'autoregister' => $autoReg,
-                        'usr_id'       => $user->get_id()
+                        'usr_id'       => $user->get_id(),
                     );
 
                     $app['events-manager']->trigger('__REGISTER_AUTOREGISTER__', $params);
@@ -446,7 +443,7 @@ class Login implements ControllerProviderInterface
             self::getDefaultTemplateVariables($app),
             array(
                 'geonames_server_uri' => str_replace(sprintf('%s:', parse_url($app['geonames.server-uri'], PHP_URL_SCHEME)), '', $app['geonames.server-uri']),
-                'form' => $form->createView()
+                'form' => $form->createView(),
         )));
     }
 
@@ -723,7 +720,7 @@ class Login implements ControllerProviderInterface
         $app->addFlash('info', _('Vous etes maintenant deconnecte. A bientot.'));
 
         $response = $app->redirectPath('homepage', array(
-            'redirect' => $request->query->get("redirect")
+            'redirect' => $request->query->get("redirect"),
         ));
 
         $response->headers->clearCookie('persistent');
@@ -741,7 +738,7 @@ class Login implements ControllerProviderInterface
      */
     public function login(PhraseaApplication $app, Request $request)
     {
-        require_once $app['root.path'] . '/lib/classes/deprecated/inscript.api.php';
+        require_once $app['root.path'].'/lib/classes/deprecated/inscript.api.php';
 
         try {
             $app['phraseanet.appbox']->get_connection();
@@ -756,7 +753,7 @@ class Login implements ControllerProviderInterface
 
         $form = $app->form(new PhraseaAuthenticationForm($app));
         $form->setData(array(
-            'redirect' => $request->query->get('redirect')
+            'redirect' => $request->query->get('redirect'),
         ));
 
         return $app['twig']->render('login/index.html.twig', array_merge(
@@ -825,7 +822,7 @@ class Login implements ControllerProviderInterface
         if ($browser->isMobile()) {
             $response = $app->redirectPath('lightbox');
         } elseif ($redirect) {
-            $response = new RedirectResponse('../' . ltrim($redirect,'/'));
+            $response = new RedirectResponse('../'.ltrim($redirect, '/'));
         } elseif (true !== $browser->isNewGeneration()) {
             $response = $app->redirectPath('get_client');
         } else {
@@ -840,12 +837,11 @@ class Login implements ControllerProviderInterface
     // move this in an event
     public function postAuthProcess(PhraseaApplication $app, \User_Adapter $user)
     {
-        $date = new \DateTime('+' . (int) $app['phraseanet.registry']->get('GV_validation_reminder') . ' days');
+        $date = new \DateTime('+'.(int) $app['phraseanet.registry']->get('GV_validation_reminder').' days');
 
         foreach ($app['EM']
             ->getRepository('Entities\ValidationParticipant')
             ->findNotConfirmedAndNotRemindedParticipantsByExpireDate($date) as $participant) {
-
             /* @var $participant \Entities\ValidationParticipant */
 
             $validationSession = $participant->getSession();
@@ -925,7 +921,7 @@ class Login implements ControllerProviderInterface
             $this->postAuthProcess($app, $userAuthProvider->getUser($app));
 
             if (null !== $redirect = $request->query->get('redirect')) {
-                $redirection = '../' . $redirect;
+                $redirection = '../'.$redirect;
             } else {
                 $redirection = $app->path('prod');
             }
@@ -948,7 +944,7 @@ class Login implements ControllerProviderInterface
             $this->postAuthProcess($app, $user);
 
             if (null !== $redirect = $request->query->get('redirect')) {
-                $redirection = '../' . $redirect;
+                $redirection = '../'.$redirect;
             } else {
                 $redirection = $app->path('prod');
             }
@@ -965,7 +961,7 @@ class Login implements ControllerProviderInterface
             $this->postAuthProcess($app, $user);
 
             if (null !== $redirect = $request->query->get('redirect')) {
-                $redirection = '../' . $redirect;
+                $redirection = '../'.$redirect;
             } else {
                 $redirection = $app->path('prod');
             }
@@ -1047,7 +1043,7 @@ class Login implements ControllerProviderInterface
 
         if ($request->request->get('remember-me') == '1') {
             $nonce = \random::generatePassword(16);
-            $string = $app['browser']->getBrowser() . '_' . $app['browser']->getPlatform();
+            $string = $app['browser']->getBrowser().'_'.$app['browser']->getPlatform();
 
             $token = $app['auth.password-encoder']->encodePassword($string, $nonce);
 

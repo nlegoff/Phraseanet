@@ -20,5 +20,4 @@ class devanagari extends AbstractCharset
     U+095F->U+092F, U+0904..U+0928, U+092A..U+0930, U+0932, U+0933, U+0935..U+0939,
     U+0960, U+0961, U+0966..U+096F, U+097B..U+097F
 ';
-
 }

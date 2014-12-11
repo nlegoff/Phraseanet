@@ -16,5 +16,4 @@ class TfBasename extends AbstractTag
     protected $Type = '';
     protected $Writable = false;
     protected $Description = 'The original filename with extension';
-
 }

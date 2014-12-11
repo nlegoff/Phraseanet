@@ -52,5 +52,4 @@ class cyrillic extends AbstractCharset
     U+04FE->U+0445, U+04FF->U+0445, U+0410..U+0418->U+0430..U+0438, U+0419->U+0438,
     U+0430..U+0438, U+041A..U+042F->U+043A..U+044F, U+043A..U+044F
 ';
-
 }

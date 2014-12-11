@@ -18,7 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class module_console_systemUpgrade extends Command
 {
-
     public function __construct($name = null)
     {
         parent::__construct($name);
@@ -53,7 +52,7 @@ class module_console_systemUpgrade extends Command
             $dialog = $this->getHelperSet()->get('dialog');
 
             do {
-                $continue = mb_strtolower($dialog->ask($output, '<question>' . _('Continuer ?') . ' (Y/n)</question>', 'Y'));
+                $continue = mb_strtolower($dialog->ask($output, '<question>'._('Continuer ?').' (Y/n)</question>', 'Y'));
             } while (!in_array($continue, array('y', 'n')));
         } else {
             $continue = 'y';
@@ -87,7 +86,7 @@ class module_console_systemUpgrade extends Command
                         }
                     }
                     if ($stderr) {
-                        fclose ($handle);
+                        fclose($handle);
                     }
 
                     $output->writeln("\n");
@@ -109,7 +108,7 @@ class module_console_systemUpgrade extends Command
             if (null !== $this->getApplication()) {
                 $command = $this->getApplication()->find('crossdomain:generate');
                 $command->run(new ArrayInput(array(
-                    'command' => 'crossdomain:generate'
+                    'command' => 'crossdomain:generate',
                 )), $output);
             }
         } else {

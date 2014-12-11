@@ -103,8 +103,9 @@ class UsrListOwner
      */
     public function setRole($role)
     {
-        if ( ! in_array($role, array(self::ROLE_ADMIN, self::ROLE_EDITOR, self::ROLE_USER)))
-            throw new \Exception('Unknown role `' . $role . '`');
+        if (! in_array($role, array(self::ROLE_ADMIN, self::ROLE_EDITOR, self::ROLE_USER))) {
+            throw new \Exception('Unknown role `'.$role.'`');
+        }
 
         $this->role = $role;
 

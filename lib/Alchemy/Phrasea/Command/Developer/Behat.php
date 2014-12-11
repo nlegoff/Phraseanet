@@ -34,7 +34,7 @@ class Behat extends Command
         $output->writeln('and run it with the following command "java -jar selenium-server-standalone-2.31.0.jar > /dev/null &"');
         $output->writeln('Then you must run the following command :');
 
-        $relativePath = $fs->makePathRelative(getcwd(), $this->container['root.path'] . '/behat.yml');
+        $relativePath = $fs->makePathRelative(getcwd(), $this->container['root.path'].'/behat.yml');
 
         $cmd = sprintf('cp %sbehat.yml.dist %sbehat.yml', $relativePath, $relativePath);
 

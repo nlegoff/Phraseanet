@@ -46,7 +46,7 @@ class eventsmanager_notify_register extends eventsmanager_notifyAbstract
     {
         $default = array(
             'usr_id' => ''
-            , 'demand' => array()
+            , 'demand' => array(),
         );
 
         $params = array_merge($default, $params);
@@ -63,7 +63,7 @@ class eventsmanager_notify_register extends eventsmanager_notifyAbstract
       FROM usr u, basusr b
       WHERE u.usr_id = b.usr_id
       AND b.base_id
-      IN (' . implode(', ', array_keys($base_ids)) . ')
+      IN ('.implode(', ', array_keys($base_ids)).')
       AND model_of="0"
       AND b.canadmin="1"
       AND b.actif="1"
@@ -75,13 +75,13 @@ class eventsmanager_notify_register extends eventsmanager_notifyAbstract
             $stmt->closeCursor();
 
             foreach ($rs as $row) {
-                if ( ! isset($mailColl[$row['usr_id']]))
+                if (! isset($mailColl[$row['usr_id']])) {
                     $mailColl[$row['usr_id']] = array();
+                }
 
                 $mailColl[$row['usr_id']][] = $row['base_id'];
             }
         } catch (\Exception $e) {
-
         }
 
         $dom_xml = new DOMDocument('1.0', 'UTF-8');
@@ -166,9 +166,9 @@ class eventsmanager_notify_register extends eventsmanager_notifyAbstract
 
         $ret = array(
             'text'  => sprintf(
-                _('%1$s demande votre approbation sur une ou plusieurs %2$scollections%3$s'), $sender, '<a href="' . $this->app->url('admin', array('section' => 'registrations')) . '" target="_blank">', '</a>'
+                _('%1$s demande votre approbation sur une ou plusieurs %2$scollections%3$s'), $sender, '<a href="'.$this->app->url('admin', array('section' => 'registrations')).'" target="_blank">', '</a>'
             )
-            , 'class' => ''
+            , 'class' => '',
         );
 
         return $ret;

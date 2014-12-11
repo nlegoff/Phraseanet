@@ -25,7 +25,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Databox implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -435,7 +434,7 @@ class Databox implements ControllerProviderInterface
             'databox'    => $databox,
             'showDetail' => (int) $request->query->get("sta") < 1,
             'errorMsg'   => $errorMsg,
-            'reloadTree' => $request->query->get('reload-tree') === '1'
+            'reloadTree' => $request->query->get('reload-tree') === '1',
         ));
     }
 
@@ -452,7 +451,7 @@ class Databox implements ControllerProviderInterface
         return $app['twig']->render('admin/databox/cgus.html.twig', array(
             'languages'      => $app['locales.available'],
             'cgus'           => $app['phraseanet.appbox']->get_databox($databox_id)->get_cgus(),
-            'current_locale' => $app['locale']
+            'current_locale' => $app['locale'],
         ));
     }
 
@@ -481,14 +480,13 @@ class Databox implements ControllerProviderInterface
                 $msg = _('Successful removal');
             }
         } catch (\Exception $e) {
-
         }
 
         if ('json' === $app['request']->getRequestFormat()) {
             return $app->json(array(
                 'success' => $success,
                 'msg'     => $msg,
-                'sbas_id' => $databox->get_sbas_id()
+                'sbas_id' => $databox->get_sbas_id(),
             ));
         }
 
@@ -531,11 +529,11 @@ class Databox implements ControllerProviderInterface
         if ('json' === $app['request']->getRequestFormat()) {
             return $app->json(array(
                 'success' => $success,
-                'msg'     => $success ? _('Successful update') : _('An error occured')
+                'msg'     => $success ? _('Successful update') : _('An error occured'),
             ));
         }
 
-        return $app->redirect('/admin/databox/' . $databox->get_sbas_id() . '/?success=' . (int) $success . '&reload-tree=1');
+        return $app->redirect('/admin/databox/'.$databox->get_sbas_id().'/?success='.(int) $success.'&reload-tree=1');
     }
 
     /**
@@ -554,14 +552,13 @@ class Databox implements ControllerProviderInterface
             $app['phraseanet.appbox']->get_databox($databox_id)->reindex();
             $success = true;
         } catch (\Exception $e) {
-
         }
 
         if ('json' === $app['request']->getRequestFormat()) {
             return $app->json(array(
                 'success' => $success,
                 'msg'     => $success ? _('Successful update') : _('An error occured'),
-                'sbas_id' => $databox_id
+                'sbas_id' => $databox_id,
             ));
         }
 
@@ -587,14 +584,13 @@ class Databox implements ControllerProviderInterface
             $app['phraseanet.appbox']->set_databox_indexable($app['phraseanet.appbox']->get_databox($databox_id), !!$request->request->get('indexable', false));
             $success = true;
         } catch (\Exception $e) {
-
         }
 
         if ('json' === $app['request']->getRequestFormat()) {
             return $app->json(array(
                 'success' => $success,
                 'msg'     => $success ? _('Successful update') : _('An error occured'),
-                'sbas_id' => $databox_id
+                'sbas_id' => $databox_id,
             ));
         }
 
@@ -693,7 +689,6 @@ class Databox implements ControllerProviderInterface
     {
         try {
             if (null !== ($file = $request->files->get('newLogoPdf')) && $file->isValid()) {
-
                 if ($file->getClientSize() < 65536) {
                     $databox = $app['phraseanet.appbox']->get_databox($databox_id);
                     $app['phraseanet.appbox']->write_databox_pic($app['media-alchemyst'], $app['filesystem'], $databox, $file, \databox::PIC_PDF);
@@ -742,14 +737,13 @@ class Databox implements ControllerProviderInterface
             $app['phraseanet.appbox']->write_databox_pic($app['media-alchemyst'], $app['filesystem'], $app['phraseanet.appbox']->get_databox($databox_id), null, \databox::PIC_PDF);
             $success = true;
         } catch (\Exception $e) {
-
         }
 
         if ('json' === $app['request']->getRequestFormat()) {
             return $app->json(array(
                 'success' => $success,
                 'msg'     => $success ? _('Successful removal') : _('An error occured'),
-                'sbas_id' => $databox_id
+                'sbas_id' => $databox_id,
             ));
         }
 
@@ -775,14 +769,13 @@ class Databox implements ControllerProviderInterface
             $app['phraseanet.appbox']->get_databox($databox_id)->clear_logs();
             $success = true;
         } catch (\Exception $e) {
-
         }
 
         if ('json' === $app['request']->getRequestFormat()) {
             return $app->json(array(
                 'success' => $success,
                 'msg'     => $success ? _('Successful update') : _('An error occured'),
-                'sbas_id' => $databox_id
+                'sbas_id' => $databox_id,
             ));
         }
 
@@ -812,14 +805,13 @@ class Databox implements ControllerProviderInterface
             $app['phraseanet.appbox']->get_databox($databox_id)->set_viewname($viewName);
             $success = true;
         } catch (\Exception $e) {
-
         }
 
         if ('json' === $app['request']->getRequestFormat()) {
             return $app->json(array(
                 'success' => $success,
                 'msg'     => $success ? _('Successful update') : _('An error occured'),
-                'sbas_id' => $databox_id
+                'sbas_id' => $databox_id,
             ));
         }
 
@@ -847,14 +839,13 @@ class Databox implements ControllerProviderInterface
 
             $success = true;
         } catch (\Exception $e) {
-
         }
 
         if ('json' === $app['request']->getRequestFormat()) {
             return $app->json(array(
                 'success' => $success,
                 'msg'     => $success ? _('The publication has been stopped') : _('An error occured'),
-                'sbas_id' => $databox_id
+                'sbas_id' => $databox_id,
             ));
         }
 
@@ -884,7 +875,7 @@ class Databox implements ControllerProviderInterface
                 if ($collection->get_record_amount() <= 500) {
                     $collection->empty_collection(500);
                 } else {
-                    $settings = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><tasksettings><base_id>" . $collection->get_base_id() . "</base_id></tasksettings>";
+                    $settings = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><tasksettings><base_id>".$collection->get_base_id()."</base_id></tasksettings>";
                     \task_period_emptyColl::create($app, $settings);
                 }
             }
@@ -896,14 +887,13 @@ class Databox implements ControllerProviderInterface
                 $msg = _('A task has been created, please run it to complete empty collection');
             }
         } catch (\Exception $e) {
-
         }
 
         if ('json' === $app['request']->getRequestFormat()) {
             return $app->json(array(
                 'success' => $success,
                 'msg'     => $msg,
-                'sbas_id' => $databox_id
+                'sbas_id' => $databox_id,
             ));
         }
 
@@ -938,7 +928,7 @@ class Databox implements ControllerProviderInterface
             'xml_indexed'       => 0,
             'thesaurus_indexed' => 0,
             'viewname'          => null,
-            'printLogoURL'      => null
+            'printLogoURL'      => null,
         );
 
         try {
@@ -952,14 +942,13 @@ class Databox implements ControllerProviderInterface
             $ret['xml_indexed'] = $datas['xml_indexed'];
             $ret['thesaurus_indexed'] = $datas['thesaurus_indexed'];
             $ret['jeton_subdef'] = $datas['jeton_subdef'];
-            if ($app['filesystem']->exists($app['root.path'] . '/config/minilogos/logopdf_' . $databox_id . '.jpg')) {
-                $ret['printLogoURL'] = '/custom/minilogos/logopdf_' . $databox_id . '.jpg';
+            if ($app['filesystem']->exists($app['root.path'].'/config/minilogos/logopdf_'.$databox_id.'.jpg')) {
+                $ret['printLogoURL'] = '/custom/minilogos/logopdf_'.$databox_id.'.jpg';
             }
 
             $ret['success'] = true;
             $ret['msg'] = _('Successful update');
         } catch (\Exception $e) {
-
         }
 
         return $app->json($ret);
@@ -1004,7 +993,7 @@ class Databox implements ControllerProviderInterface
             return $app->json(array(
                 'success' => $success,
                 'msg'     => $success ? _('Successful update') : _('An error occured'),
-                'sbas_id' => $databox_id
+                'sbas_id' => $databox_id,
             ));
         }
 
@@ -1089,7 +1078,7 @@ class Databox implements ControllerProviderInterface
             $details[$collName] = array(
                 'total_subdefs' => 0,
                 'total_size' => 0,
-                'medias' => array()
+                'medias' => array(),
             );
 
             foreach ($colDetails as $subdefName => $subdefDetails) {
@@ -1098,7 +1087,7 @@ class Databox implements ControllerProviderInterface
                 $details[$collName]['total_size'] += $subdefDetails['siz'];
                 $total['total_size'] += $subdefDetails['siz'];
 
-                $details[$collName]['medias'][] = array (
+                $details[$collName]['medias'][] = array(
                     'subdef_name' => $subdefName,
                     'total_subdefs' => $subdefDetails['n'],
                     'total_size' => $subdefDetails['siz'],
@@ -1109,7 +1098,7 @@ class Databox implements ControllerProviderInterface
         return $app['twig']->render('admin/databox/details.html.twig', array(
             'databox' => $databox,
             'table'   => $details,
-            'total'   => $total
+            'total'   => $total,
         ));
     }
 

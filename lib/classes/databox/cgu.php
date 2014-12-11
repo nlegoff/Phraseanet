@@ -18,7 +18,6 @@ use Alchemy\Phrasea\Application;
  */
 class databox_cgu
 {
-
     public function __construct(databox $databox, $locale)
     {
         return $this;
@@ -34,12 +33,12 @@ class databox_cgu
             if (trim($term['terms']) == '') {
                 continue;
             }
-            $out .= '<div style="display:none;" class="cgu-dialog" title="' . str_replace('"', '&quot;', sprintf(_('cgus:: CGUs de la base %s'), $name)) . '">';
+            $out .= '<div style="display:none;" class="cgu-dialog" title="'.str_replace('"', '&quot;', sprintf(_('cgus:: CGUs de la base %s'), $name)).'">';
 
-            $out .= '<blockquote>' . $term['terms'] . '</blockquote>';
-            $out .= '<div>' . _('cgus:: Pour continuer a utiliser lapplication, vous devez accepter les conditions precedentes') . '
-                <input id="terms_of_use_' . $term['sbas_id'] . '" type="button" date="' . $term['date'] . '" class="cgus-accept" value="' . _('cgus :: accepter') . '"/>
-                <input id="sbas_' . $term['sbas_id'] . '" type="button" class="cgus-cancel" value="' . _('cgus :: refuser') . '"/>
+            $out .= '<blockquote>'.$term['terms'].'</blockquote>';
+            $out .= '<div>'._('cgus:: Pour continuer a utiliser lapplication, vous devez accepter les conditions precedentes').'
+                <input id="terms_of_use_'.$term['sbas_id'].'" type="button" date="'.$term['date'].'" class="cgus-accept" value="'._('cgus :: accepter').'"/>
+                <input id="sbas_'.$term['sbas_id'].'" type="button" class="cgus-cancel" value="'._('cgus :: refuser').'"/>
                 </div>';
             $out .= '</div>';
         }
@@ -55,8 +54,9 @@ class databox_cgu
             try {
                 $cgus = $databox->get_cgus();
 
-                if ( ! isset($cgus[$app['locale']]))
+                if (! isset($cgus[$app['locale']])) {
                     throw new Exception('No CGus for this locale');
+                }
                 $name = $databox->get_label($app['locale.I18n']);
 
                 $update = $cgus[$app['locale']]['updated_on'];
@@ -64,16 +64,16 @@ class databox_cgu
                 $userValidation = true;
 
                 if (! $home) {
-                    if ( ! $app['authentication']->getUser()->ACL()->has_access_to_sbas($databox->get_sbas_id())) {
+                    if (! $app['authentication']->getUser()->ACL()->has_access_to_sbas($databox->get_sbas_id())) {
                         continue;
                     }
-                    $userValidation = ($app['authentication']->getUser()->getPrefs('terms_of_use_' . $databox->get_sbas_id()) !== $update && trim($value) !== '');
+                    $userValidation = ($app['authentication']->getUser()->getPrefs('terms_of_use_'.$databox->get_sbas_id()) !== $update && trim($value) !== '');
                 }
 
-                if ($userValidation)
+                if ($userValidation) {
                     $terms[$name] = array('sbas_id' => $databox->get_sbas_id(), 'terms'   => $value, 'date'    => $update);
+                }
             } catch (\Exception $e) {
-
             }
         }
 
@@ -87,15 +87,17 @@ class databox_cgu
         $out = '';
 
         foreach ($terms as $name => $term) {
-            if (trim($term['terms']) == '')
+            if (trim($term['terms']) == '') {
                 continue;
+            }
 
-            if ($out != '')
+            if ($out != '') {
                 $out .= '<hr/>';
+            }
 
-            $out .= '<div><h1 style="text-align:center;">' . str_replace('"', '&quot;', sprintf(_('cgus:: CGUs de la base %s'), $name)) . '</h1>';
+            $out .= '<div><h1 style="text-align:center;">'.str_replace('"', '&quot;', sprintf(_('cgus:: CGUs de la base %s'), $name)).'</h1>';
 
-            $out .= '<blockquote>' . $term['terms'] . '</blockquote>';
+            $out .= '<blockquote>'.$term['terms'].'</blockquote>';
 
             $out .= '</div>';
         }

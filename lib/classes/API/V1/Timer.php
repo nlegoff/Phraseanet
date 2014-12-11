@@ -27,7 +27,7 @@ class API_V1_Timer implements ServiceProviderInterface
             $n = 1;
             while (isset($app['api.timers']->{$name})) {
                 $n++;
-                $name = $event->getName() . '#' . $n;
+                $name = $event->getName().'#'.$n;
             }
             $app['api.timers']->add(array(
                 'name' => $name,

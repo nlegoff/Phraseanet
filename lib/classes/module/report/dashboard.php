@@ -77,10 +77,11 @@ class module_report_dashboard implements module_report_dashboard_componentInterf
     {
         $this->app = $app;
         $this->usr = $usr;
-        if (is_null($sbasid))
+        if (is_null($sbasid)) {
             $this->sbasid = 'all';
-        else
+        } else {
             $this->sbasid = $sbasid;
+        }
         $this->initDate();
         $this->setAuthCollection();
         $this->getPlotLegendDay($this->dmin);
@@ -143,8 +144,9 @@ class module_report_dashboard implements module_report_dashboard_componentInterf
             $datetime = new Datetime($this->dmin);
 
             return $this->app['date-formatter']->getPrettyString($datetime);
-        } else
+        } else {
             throw new Exception('argument must be string dmin or dmax');
+        }
     }
 
     /**
@@ -246,7 +248,7 @@ class module_report_dashboard implements module_report_dashboard_componentInterf
         foreach ($base_ids as $base_id => $collection) {
             $databox = $collection->get_databox();
             $sbas_id = $databox->get_sbas_id();
-            if ( ! isset($all_coll[$sbas_id])) {
+            if (! isset($all_coll[$sbas_id])) {
                 $all_coll[$sbas_id] = array();
                 $all_coll[$sbas_id]['name_sbas'] = $databox->get_label($this->app['locale.I18n']);
             }
@@ -254,7 +256,7 @@ class module_report_dashboard implements module_report_dashboard_componentInterf
                 'base_id' => $base_id,
                 'sbas_id' => $sbas_id,
                 'coll_id' => $collection->get_base_id(),
-                'name'    => $collection->get_label($this->app['locale.I18n'])
+                'name'    => $collection->get_label($this->app['locale.I18n']),
             );
         }
 
@@ -279,7 +281,7 @@ class module_report_dashboard implements module_report_dashboard_componentInterf
             $this->authorizedCollection[(int) $sbas] = array(
                 'sbas_id' => (int) $sbas,
                 'coll'    => implode(',', $listeColl),
-                'name'    => phrasea::sbas_labels($sbas, $this->app)
+                'name'    => phrasea::sbas_labels($sbas, $this->app),
             );
         }
 
@@ -298,7 +300,7 @@ class module_report_dashboard implements module_report_dashboard_componentInterf
         $all_coll = $this->getAllColl();
         $liste = '';
         foreach ($all_coll as $sbas => $info) {
-            $liste .= phrasea::sbas_labels($sbas, $this->app) . ' ' . $separator . ' ';
+            $liste .= phrasea::sbas_labels($sbas, $this->app).' '.$separator.' ';
         }
 
         return $liste;
@@ -329,7 +331,6 @@ class module_report_dashboard implements module_report_dashboard_componentInterf
                     );
                 }
             } catch (\Exception $e) {
-
             }
             $i ++;
         }

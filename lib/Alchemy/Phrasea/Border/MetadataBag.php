@@ -30,16 +30,13 @@ class MetadataBag extends ArrayCollection implements MetaBagInterface
         $unicode = new \unicode();
 
         foreach ($metadatasStructure as $databox_field) {
-
             if ('' === $databox_field->get_tag()->getTagname()) {
                 // skipping fields without sources
                 continue;
             }
 
             if ($this->containsKey($databox_field->get_tag()->getTagname())) {
-
                 if ($databox_field->is_multi()) {
-
                     $values = $this->get($databox_field->get_tag()->getTagname())->getValue()->asArray();
 
                     $tmp = array();
@@ -53,7 +50,6 @@ class MetadataBag extends ArrayCollection implements MetaBagInterface
                     $values = array_unique($tmp);
 
                     foreach ($values as $value) {
-
                         $value = $unicode->substituteCtrlCharacters($value, ' ');
                         $value = $unicode->toUTF8($value);
                         if ($databox_field->get_type() == 'date') {
@@ -63,7 +59,7 @@ class MetadataBag extends ArrayCollection implements MetaBagInterface
                         $metas[] = array(
                             'meta_struct_id' => $databox_field->get_id(),
                             'value'          => $value,
-                            'meta_id'        => null
+                            'meta_id'        => null,
                         );
                     }
                 } else {
@@ -78,7 +74,7 @@ class MetadataBag extends ArrayCollection implements MetaBagInterface
                     $metas[] = array(
                         'meta_struct_id' => $databox_field->get_id(),
                         'value'          => $value,
-                        'meta_id'        => null
+                        'meta_id'        => null,
                     );
                 }
             }

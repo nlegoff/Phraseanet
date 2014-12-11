@@ -237,11 +237,11 @@ class User_Query implements User_QueryInterface
             if (!$this->app['authentication']->getUser()) {
                 throw new InvalidArgumentException('Unable to load templates while disconnected');
             }
-            $sql .= ' AND model_of = ' . $this->app['authentication']->getUser()->get_id();
+            $sql .= ' AND model_of = '.$this->app['authentication']->getUser()->get_id();
         } elseif ($this->include_templates === false) {
             $sql .= ' AND model_of=0';
         } elseif ($this->app['authentication']->getUser()) {
-            $sql .= ' AND (model_of=0 OR model_of = ' . $this->app['authentication']->getUser()->get_id() . ' ) ';
+            $sql .= ' AND (model_of=0 OR model_of = '.$this->app['authentication']->getUser()->get_id().' ) ';
         } else {
             $sql .= ' AND model_of=0';
         }
@@ -269,61 +269,59 @@ class User_Query implements User_QueryInterface
         $baslist = array();
 
         if (count($this->base_ids) == 0) {
-            if ($this->bases_restrictions)
+            if ($this->bases_restrictions) {
                 throw new Exception('No base available for you, not enough rights');
+            }
         } else {
             $extra = $this->include_phantoms ? ' OR base_id IS NULL ' : '';
 
             $not_base_id = array_diff($this->active_bases, $this->base_ids);
 
             if (count($not_base_id) > 0 && count($not_base_id) < count($this->base_ids)) {
-                $sql .= sprintf('  AND ((base_id != %s ) ' . $extra . ')'
-                    , implode(' AND base_id != ', $not_base_id)
+                $sql .= sprintf('  AND ((base_id != %s ) '.$extra.')', implode(' AND base_id != ', $not_base_id)
                 );
             } else {
-                $sql .= sprintf(' AND (base_id = %s  ' . $extra . ') '
-                    , implode(' OR base_id = ', $this->base_ids)
+                $sql .= sprintf(' AND (base_id = %s  '.$extra.') ', implode(' OR base_id = ', $this->base_ids)
                 );
             }
         }
 
         if (count($this->sbas_ids) == 0) {
-            if ($this->sbas_restrictions)
+            if ($this->sbas_restrictions) {
                 throw new Exception('No base available for you, not enough rights');
+            }
         } else {
             $extra = $this->include_phantoms ? ' OR sbas_id IS NULL ' : '';
 
             $not_sbas_id = array_diff($this->active_sbas, $this->sbas_ids);
 
             if (count($not_sbas_id) > 0 && count($not_sbas_id) < count($this->sbas_ids)) {
-                $sql .= sprintf('  AND ((sbas_id != %s ) ' . $extra . ')'
-                    , implode(' AND sbas_id != ', $not_sbas_id)
+                $sql .= sprintf('  AND ((sbas_id != %s ) '.$extra.')', implode(' AND sbas_id != ', $not_sbas_id)
                 );
             } else {
-                $sql .= sprintf(' AND (sbas_id = %s  ' . $extra . ') '
-                    , implode(' OR sbas_id = ', $this->sbas_ids)
+                $sql .= sprintf(' AND (sbas_id = %s  '.$extra.') ', implode(' OR sbas_id = ', $this->sbas_ids)
                 );
             }
         }
 
         if ($this->in_ids) {
-            $sql .= 'AND (usr.usr_id = ' . implode(' OR usr.usr_id = ', $this->in_ids) . ')';
+            $sql .= 'AND (usr.usr_id = '.implode(' OR usr.usr_id = ', $this->in_ids).')';
         }
 
         if ($this->have_rights) {
             foreach ($this->have_rights as $right) {
-                $sql .= ' AND basusr.`' . $right . '` = 1 ';
+                $sql .= ' AND basusr.`'.$right.'` = 1 ';
             }
         }
 
         if ($this->have_not_rights) {
             foreach ($this->have_not_rights as $right) {
-                $sql .= ' AND basusr.`' . $right . '` = 0 ';
+                $sql .= ' AND basusr.`'.$right.'` = 0 ';
             }
         }
 
         if ($this->last_model) {
-            $sql .= ' AND usr.lastModel = ' . $this->app['phraseanet.appbox']->get_connection()->quote($this->last_model) . ' ';
+            $sql .= ' AND usr.lastModel = '.$this->app['phraseanet.appbox']->get_connection()->quote($this->last_model).' ';
         }
 
         $sql_like = array();
@@ -333,21 +331,19 @@ class User_Query implements User_QueryInterface
                 case self::LIKE_NAME:
                     $qrys = array();
                     foreach (explode(' ', $like_value) as $like_val) {
-                        if (trim($like_val) === '')
+                        if (trim($like_val) === '') {
                             continue;
+                        }
 
                         $qrys[] = sprintf(
                             ' (usr.`%s` LIKE "%s%%"  COLLATE utf8_unicode_ci
-                OR usr.`%s` LIKE "%s%%"  COLLATE utf8_unicode_ci)  '
-                            , self::LIKE_FIRSTNAME
-                            , str_replace(array('"', '%'), array('\"', '\%'), $like_val)
-                            , self::LIKE_LASTNAME
-                            , str_replace(array('"', '%'), array('\"', '\%'), $like_val)
+                OR usr.`%s` LIKE "%s%%"  COLLATE utf8_unicode_ci)  ', self::LIKE_FIRSTNAME, str_replace(array('"', '%'), array('\"', '\%'), $like_val), self::LIKE_LASTNAME, str_replace(array('"', '%'), array('\"', '\%'), $like_val)
                         );
                     }
 
-                    if (count($qrys) > 0)
-                        $sql_like[] = ' (' . implode(' AND ', $qrys) . ') ';
+                    if (count($qrys) > 0) {
+                        $sql_like[] = ' ('.implode(' AND ', $qrys).') ';
+                    }
 
                     break;
                 case self::LIKE_FIRSTNAME:
@@ -357,9 +353,7 @@ class User_Query implements User_QueryInterface
                 case self::LIKE_LOGIN:
                 case self::LIKE_COUNTRY:
                     $sql_like[] = sprintf(
-                        ' usr.`%s` LIKE "%s%%"  COLLATE utf8_unicode_ci '
-                        , $like_field
-                        , str_replace(array('"', '%'), array('\"', '\%'), $like_value)
+                        ' usr.`%s` LIKE "%s%%"  COLLATE utf8_unicode_ci ', $like_field, str_replace(array('"', '%'), array('\"', '\%'), $like_value)
                     );
                     break;
                 default;
@@ -367,8 +361,9 @@ class User_Query implements User_QueryInterface
             }
         }
 
-        if (count($sql_like) > 0)
+        if (count($sql_like) > 0) {
             $sql .= sprintf(' AND (%s) ', implode($this->like_match, $sql_like));
+        }
 
         return $sql;
     }
@@ -379,10 +374,10 @@ class User_Query implements User_QueryInterface
         $constraints = array();
 
         foreach ($fields as $field) {
-            $constraints[':' . $fieldName . $n ++] = $field;
+            $constraints[':'.$fieldName.$n ++] = $field;
         }
-        $sql = ' AND (' . $fieldName . ' = '
-            . implode(' OR ' . $fieldName . ' = ', array_keys($constraints)) . ') ';
+        $sql = ' AND ('.$fieldName.' = '
+            .implode(' OR '.$fieldName.' = ', array_keys($constraints)).') ';
 
         $this->sql_params = array_merge($this->sql_params, $constraints);
 
@@ -435,7 +430,7 @@ class User_Query implements User_QueryInterface
      * @param  array      $rights
      * @return User_Query
      */
-    public function who_have_right(Array $rights)
+    public function who_have_right(array $rights)
     {
         $this->have_rights = $rights;
 
@@ -483,7 +478,7 @@ class User_Query implements User_QueryInterface
      * @param  array      $rights
      * @return User_Query
      */
-    public function who_have_not_right(Array $rights)
+    public function who_have_not_right(array $rights)
     {
         $this->have_not_rights = $rights;
 
@@ -501,7 +496,6 @@ class User_Query implements User_QueryInterface
         $sorter = array();
 
         foreach ($this->sort as $sort => $ord) {
-
             $k = count($sorter);
 
             switch ($sort) {
@@ -510,20 +504,21 @@ class User_Query implements User_QueryInterface
                 case self::SORT_COMPANY:
                 case self::SORT_LOGIN:
                 case self::SORT_EMAIL:
-                    $sorter[$k] = ' usr.`' . $sort . '` COLLATE utf8_unicode_ci ';
+                    $sorter[$k] = ' usr.`'.$sort.'` COLLATE utf8_unicode_ci ';
                     break;
                 case self::SORT_ID:
                 case self::SORT_CREATIONDATE:
                 case self::SORT_COUNTRY:
                 case self::SORT_LASTMODEL:
-                    $sorter[$k] = ' usr.`' . $sort . '` ';
+                    $sorter[$k] = ' usr.`'.$sort.'` ';
                     break;
                 default:
                     break;
             }
 
-            if ( ! isset($sorter[$k]))
+            if (! isset($sorter[$k])) {
                 continue;
+            }
 
             switch ($ord) {
                 case self::ORD_ASC:
@@ -536,18 +531,17 @@ class User_Query implements User_QueryInterface
             }
         }
 
-        $sql = 'SELECT DISTINCT usr.usr_id ' . $this->generate_sql_constraints();
+        $sql = 'SELECT DISTINCT usr.usr_id '.$this->generate_sql_constraints();
 
         $sorter = implode(', ', $sorter);
 
-        if (trim($sorter) != '')
-            $sql .= ' ORDER BY ' . $sorter;
+        if (trim($sorter) != '') {
+            $sql .= ' ORDER BY '.$sorter;
+        }
 
         if (is_int($this->offset_start) && is_int($this->results_quantity)) {
             $sql .= sprintf(
-                ' LIMIT %d, %d'
-                , $this->offset_start
-                , $this->results_quantity
+                ' LIMIT %d, %d', $this->offset_start, $this->results_quantity
             );
         }
 
@@ -580,7 +574,7 @@ class User_Query implements User_QueryInterface
         $conn = $this->app['phraseanet.appbox']->get_connection();
 
         $sql_count = 'SELECT COUNT(DISTINCT usr.usr_id) as total '
-            . $this->generate_sql_constraints();
+            .$this->generate_sql_constraints();
 
         $stmt = $conn->prepare($sql_count);
         $stmt->execute($this->sql_params);
@@ -626,15 +620,16 @@ class User_Query implements User_QueryInterface
      * @param  array      $rights An array of base rights you need
      * @return User_Query
      */
-    public function on_bases_where_i_am(ACL $ACL, Array $rights)
+    public function on_bases_where_i_am(ACL $ACL, array $rights)
     {
         $this->bases_restrictions = true;
         $baslist = array_keys($ACL->get_granted_base($rights));
 
-        if (count($this->base_ids) > 0)
+        if (count($this->base_ids) > 0) {
             $this->base_ids = array_intersect($this->base_ids, $baslist);
-        else
+        } else {
             $this->base_ids = $baslist;
+        }
 
         $this->total = $this->page = $this->total_page = null;
 
@@ -647,15 +642,16 @@ class User_Query implements User_QueryInterface
      * @param  array      $rights An array of sbas rights you need
      * @return User_Query
      */
-    public function on_sbas_where_i_am(ACL $ACL, Array $rights)
+    public function on_sbas_where_i_am(ACL $ACL, array $rights)
     {
         $this->sbas_restrictions = true;
         $sbaslist = array_keys($ACL->get_granted_sbas($rights));
 
-        if (count($this->sbas_ids) > 0)
+        if (count($this->sbas_ids) > 0) {
             $this->sbas_ids = array_intersect($this->sbas_ids, $sbaslist);
-        else
+        } else {
             $this->sbas_ids = $sbaslist;
+        }
 
         $this->total = $this->page = $this->total_page = null;
 
@@ -686,8 +682,7 @@ class User_Query implements User_QueryInterface
      */
     public function like($like_field, $like_value)
     {
-
-//    if ($like_field == self::LIKE_NAME)
+        //    if ($like_field == self::LIKE_NAME)
 //    {
 //      $this->like_field[self::LIKE_FIRSTNAME] = trim($like_value);
 //      $this->like_field[self::LIKE_LASTNAME] = trim($like_value);
@@ -729,7 +724,7 @@ class User_Query implements User_QueryInterface
      * @param  array      $base_ids
      * @return User_Query
      */
-    public function on_base_ids(Array $base_ids = null)
+    public function on_base_ids(array $base_ids = null)
     {
         if (! $base_ids) {
             return $this;
@@ -739,10 +734,11 @@ class User_Query implements User_QueryInterface
 
         $this->include_phantoms(false);
 
-        if (count($this->base_ids) > 0)
+        if (count($this->base_ids) > 0) {
             $this->base_ids = array_intersect($this->base_ids, $base_ids);
-        else
+        } else {
             $this->base_ids = $base_ids;
+        }
 
         $this->total = $this->page = $this->total_page = null;
 
@@ -754,7 +750,7 @@ class User_Query implements User_QueryInterface
      * @param  array      $sbas_ids
      * @return User_Query
      */
-    public function on_sbas_ids(Array $sbas_ids = null)
+    public function on_sbas_ids(array $sbas_ids = null)
     {
         if (! $sbas_ids) {
             return $this;
@@ -764,10 +760,11 @@ class User_Query implements User_QueryInterface
 
         $this->include_phantoms(false);
 
-        if (count($this->sbas_ids) > 0)
+        if (count($this->sbas_ids) > 0) {
             $this->sbas_ids = array_intersect($this->sbas_ids, $sbas_ids);
-        else
+        } else {
             $this->sbas_ids = $sbas_ids;
+        }
 
         $this->total = $this->page = $this->total_page = null;
 
@@ -796,16 +793,18 @@ class User_Query implements User_QueryInterface
         foreach ($req_activities as $activity) {
             $activity = trim($activity);
 
-            if ($activity === '')
+            if ($activity === '') {
                 continue;
+            }
 
-            if ($Activities->contains($activity))
+            if ($Activities->contains($activity)) {
                 continue;
+            }
 
             $Activities->add($activity);
         }
 
-        if ( ! $Activities->isEmpty()) {
+        if (! $Activities->isEmpty()) {
             $this->activities = $Activities;
         }
 
@@ -819,16 +818,18 @@ class User_Query implements User_QueryInterface
         foreach ($req_positions as $Position) {
             $Position = trim($Position);
 
-            if ($Position === '')
+            if ($Position === '') {
                 continue;
+            }
 
-            if ($Positions->contains($Position))
+            if ($Positions->contains($Position)) {
                 continue;
+            }
 
             $Positions->add($Position);
         }
 
-        if ( ! $Positions->isEmpty()) {
+        if (! $Positions->isEmpty()) {
             $this->positions = $Positions;
         }
 
@@ -842,16 +843,18 @@ class User_Query implements User_QueryInterface
         foreach ($req_countries as $Country) {
             $Country = trim($Country);
 
-            if ($Country === '')
+            if ($Country === '') {
                 continue;
+            }
 
-            if ($Countries->contains($Country))
+            if ($Countries->contains($Country)) {
                 continue;
+            }
 
             $Countries->add($Country);
         }
 
-        if ( ! $Countries->isEmpty()) {
+        if (! $Countries->isEmpty()) {
             $this->countries = $Countries;
         }
 
@@ -865,16 +868,18 @@ class User_Query implements User_QueryInterface
         foreach ($req_companies as $Company) {
             $Company = trim($Company);
 
-            if ($Company === '')
+            if ($Company === '') {
                 continue;
+            }
 
-            if ($Companies->contains($Company))
+            if ($Companies->contains($Company)) {
                 continue;
+            }
 
             $Companies->add($Company);
         }
 
-        if ( ! $Companies->isEmpty()) {
+        if (! $Companies->isEmpty()) {
             $this->companies = $Companies;
         }
 
@@ -888,16 +893,18 @@ class User_Query implements User_QueryInterface
         foreach ($req_templates as $Template) {
             $Template = trim($Template);
 
-            if ($Template === '')
+            if ($Template === '') {
                 continue;
+            }
 
-            if ($Templates->contains($Template))
+            if ($Templates->contains($Template)) {
                 continue;
+            }
 
             $Templates->add($Template);
         }
 
-        if ( ! $Templates->isEmpty()) {
+        if (! $Templates->isEmpty()) {
             $this->templates = $Templates;
         }
 
@@ -922,7 +929,7 @@ class User_Query implements User_QueryInterface
     {
         $conn = $this->app['phraseanet.appbox']->get_connection();
 
-        $sql = 'SELECT DISTINCT usr.activite ' . $this->generate_sql_constraints();
+        $sql = 'SELECT DISTINCT usr.activite '.$this->generate_sql_constraints();
 
         $sql .= ' ORDER BY usr.activite';
 
@@ -934,8 +941,9 @@ class User_Query implements User_QueryInterface
         $activities = array();
 
         foreach ($rs as $row) {
-            if (trim($row['activite']) === '')
+            if (trim($row['activite']) === '') {
                 continue;
+            }
 
             $activities[] = $row['activite'];
         }
@@ -947,7 +955,7 @@ class User_Query implements User_QueryInterface
     {
         $conn = $this->app['phraseanet.appbox']->get_connection();
 
-        $sql = 'SELECT DISTINCT usr.fonction ' . $this->generate_sql_constraints();
+        $sql = 'SELECT DISTINCT usr.fonction '.$this->generate_sql_constraints();
 
         $sql .= ' ORDER BY usr.fonction';
 
@@ -959,8 +967,9 @@ class User_Query implements User_QueryInterface
         $fonction = array();
 
         foreach ($rs as $row) {
-            if (trim($row['fonction']) === '')
+            if (trim($row['fonction']) === '') {
                 continue;
+            }
 
             $fonction[] = $row['fonction'];
         }
@@ -970,11 +979,11 @@ class User_Query implements User_QueryInterface
 
     public function getRelatedCountries()
     {
-        require_once __DIR__ . '/../../classes/deprecated/countries.php';
+        require_once __DIR__.'/../../classes/deprecated/countries.php';
 
         $conn = $this->app['phraseanet.appbox']->get_connection();
 
-        $sql = 'SELECT DISTINCT usr.pays ' . $this->generate_sql_constraints();
+        $sql = 'SELECT DISTINCT usr.pays '.$this->generate_sql_constraints();
 
         $sql .= ' ORDER BY usr.pays';
 
@@ -988,11 +997,13 @@ class User_Query implements User_QueryInterface
         $ctry = \getCountries($this->app['locale']);
 
         foreach ($rs as $row) {
-            if (trim($row['pays']) === '')
+            if (trim($row['pays']) === '') {
                 continue;
+            }
 
-            if (isset($ctry[$row['pays']]))
+            if (isset($ctry[$row['pays']])) {
                 $pays[$row['pays']] = $ctry[$row['pays']];
+            }
         }
 
         return $pays;
@@ -1002,7 +1013,7 @@ class User_Query implements User_QueryInterface
     {
         $conn = $this->app['phraseanet.appbox']->get_connection();
 
-        $sql = 'SELECT DISTINCT usr.societe ' . $this->generate_sql_constraints();
+        $sql = 'SELECT DISTINCT usr.societe '.$this->generate_sql_constraints();
 
         $sql .= ' ORDER BY usr.societe';
 
@@ -1014,8 +1025,9 @@ class User_Query implements User_QueryInterface
         $societe = array();
 
         foreach ($rs as $row) {
-            if (trim($row['societe']) === '')
+            if (trim($row['societe']) === '') {
                 continue;
+            }
 
             $societe[] = $row['societe'];
         }
@@ -1027,7 +1039,7 @@ class User_Query implements User_QueryInterface
     {
         $conn = $this->app['phraseanet.appbox']->get_connection();
 
-        $sql = 'SELECT DISTINCT usr.lastModel ' . $this->generate_sql_constraints();
+        $sql = 'SELECT DISTINCT usr.lastModel '.$this->generate_sql_constraints();
 
         $sql .= ' ORDER BY usr.lastModel';
 
@@ -1039,8 +1051,9 @@ class User_Query implements User_QueryInterface
         $lastModel = array();
 
         foreach ($rs as $row) {
-            if (trim($row['lastModel']) === '')
+            if (trim($row['lastModel']) === '') {
                 continue;
+            }
 
             $lastModel[] = $row['lastModel'];
         }

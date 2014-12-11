@@ -66,7 +66,7 @@ class Session implements ControllerProviderInterface
             'status'  => 'unknown',
             'message' => '',
             'notifications' => false,
-            'changed' => array()
+            'changed' => array(),
         );
 
         if ($app['authentication']->isAuthenticated()) {
@@ -97,7 +97,7 @@ class Session implements ControllerProviderInterface
         $ret['status'] = 'ok';
 
         $ret['notifications'] = $app['twig']->render('prod/notifications.html.twig', array(
-            'notifications' => $app['events-manager']->get_notifications()
+            'notifications' => $app['events-manager']->get_notifications(),
         ));
 
         $baskets = $app['EM']->getRepository('\Entities\Basket')->findUnreadActiveByUser($app['authentication']->getUser());
@@ -136,7 +136,7 @@ class Session implements ControllerProviderInterface
             'status'  => 'unknown',
             'message' => '',
             'notifications' => false,
-            'changed' => array()
+            'changed' => array(),
         );
 
         if ($app['authentication']->isAuthenticated()) {
@@ -182,7 +182,7 @@ class Session implements ControllerProviderInterface
         $ret['status'] = 'ok';
 
         $ret['notifications'] = $app['twig']->render('prod/notifications.html.twig', array(
-            'notifications' => $app['events-manager']->get_notifications()
+            'notifications' => $app['events-manager']->get_notifications(),
         ));
 
         $baskets = $app['EM']->getRepository('\Entities\Basket')->findUnreadActiveByUser($app['authentication']->getUser());
@@ -231,7 +231,7 @@ class Session implements ControllerProviderInterface
         if ($app['request']->isXmlHttpRequest()) {
             return $app->json(array(
                 'success' => true,
-                'session_id' => $id
+                'session_id' => $id,
             ));
         }
 

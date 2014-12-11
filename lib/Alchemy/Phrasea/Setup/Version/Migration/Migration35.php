@@ -24,8 +24,8 @@ class Migration35 implements MigrationInterface
 
     public function migrate()
     {
-        if (!file_exists(__DIR__ . '/../../../../../../config/connexion.inc')
-            || !file_exists(__DIR__ . '/../../../../../../config/config.inc')) {
+        if (!file_exists(__DIR__.'/../../../../../../config/connexion.inc')
+            || !file_exists(__DIR__.'/../../../../../../config/config.inc')) {
             throw new \LogicException('Required config files not found');
         }
 
@@ -36,7 +36,7 @@ class Migration35 implements MigrationInterface
         }
 
         $retrieve_old_credentials = function () {
-            require __DIR__ . '/../../../../../../config/connexion.inc';
+            require __DIR__.'/../../../../../../config/connexion.inc';
 
             return array(
                 'hostname' => $hostname,
@@ -53,10 +53,10 @@ class Migration35 implements MigrationInterface
         }
 
         $retrieve_old_parameters = function () {
-            require __DIR__ . '/../../../../../../config/config.inc';
+            require __DIR__.'/../../../../../../config/config.inc';
 
             return array(
-                'servername' => $servername
+                'servername' => $servername,
             );
         };
 
@@ -64,8 +64,8 @@ class Migration35 implements MigrationInterface
 
         $config['main']['servername'] = $old_parameters['servername'];
 
-        rename(__DIR__ . '/../../../../../../config/connexion.inc', __DIR__ . '/../../../../../../config/connexion.inc.old');
-        rename(__DIR__ . '/../../../../../../config/config.inc', __DIR__ . '/../../../../../../config/config.inc.old');
+        rename(__DIR__.'/../../../../../../config/connexion.inc', __DIR__.'/../../../../../../config/connexion.inc.old');
+        rename(__DIR__.'/../../../../../../config/config.inc', __DIR__.'/../../../../../../config/config.inc.old');
 
         $this->app['phraseanet.configuration']->setConfig($config);
     }

@@ -63,7 +63,7 @@ class Nginx extends AbstractServerMode implements H264Interface
     public function getUrl($pathfile)
     {
         if (!is_file($pathfile)) {
-            return null;
+            return;
         }
         $pathfile = realpath($pathfile);
 
@@ -83,7 +83,7 @@ class Nginx extends AbstractServerMode implements H264Interface
     {
         $output = "\n";
         foreach ($this->mapping as $entry) {
-            $output .= "    location " . $entry['mount-point']. " {\n";
+            $output .= "    location ".$entry['mount-point']." {\n";
             $output .= "        mp4;\n";
             $output .= "        secure_link \$arg_hash,\$arg_expires;\n";
             $output .= "        secure_link_md5 \"\$secure_link_expires\$uri ".$entry['passphrase']."\";\n";

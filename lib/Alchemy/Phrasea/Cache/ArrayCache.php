@@ -20,7 +20,6 @@ use Doctrine\Common\Cache\ArrayCache as DoctrineArray;
  */
 class ArrayCache extends DoctrineArray implements Cache
 {
-
     /**
      * {@inheritdoc}
      */
@@ -50,7 +49,7 @@ class ArrayCache extends DoctrineArray implements Cache
      */
     public function get($id)
     {
-        if ( ! $this->contains($id)) {
+        if (! $this->contains($id)) {
             throw new Exception(sprintf('Unable to find key %s', $id));
         }
 

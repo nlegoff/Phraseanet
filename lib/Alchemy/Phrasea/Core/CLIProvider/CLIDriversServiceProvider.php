@@ -31,8 +31,8 @@ class CLIDriversServiceProvider implements ServiceProviderInterface
         $app['driver.binary-finder'] = $app->protect(function ($name, $configName) use ($app) {
             $extraDirs = array();
 
-            if (is_dir($app['root.path'] . '/node_modules')) {
-                $extraDirs[] = $app['root.path'] . '/node_modules/.bin';
+            if (is_dir($app['root.path'].'/node_modules')) {
+                $extraDirs[] = $app['root.path'].'/node_modules/.bin';
             }
 
             if (!$app['phraseanet.configuration']->isSetup()) {

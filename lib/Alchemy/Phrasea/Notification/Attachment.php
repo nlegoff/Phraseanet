@@ -22,11 +22,11 @@ class Attachment
     private $contentType;
 
     /**
-     * @param string $path          path to an existing file to be added as attachment
-     * @param string $filename      change the name of attachment, (default to '' to use filename from path)
-     * @param string $contentType   change mime, (default to '' to get from path)
+     * @param string $path        path to an existing file to be added as attachment
+     * @param string $filename    change the name of attachment, (default to '' to use filename from path)
+     * @param string $contentType change mime, (default to '' to get from path)
      */
-    public function __construct($path, $filename='', $contentType='')
+    public function __construct($path, $filename = '', $contentType = '')
     {
         $this->path = $path;
         $this->filename = $filename;
@@ -34,17 +34,18 @@ class Attachment
     }
 
     /**
-     * @return \Swift_Mime_Attachment   the attachment as a swift attachment
+     * @return \Swift_Mime_Attachment the attachment as a swift attachment
      */
     public function As_Swift_Attachment()
     {
         $swa = \Swift_Attachment::fromPath($this->path);
-        if($this->filename !== '') {
+        if ($this->filename !== '') {
             $swa->setFilename($this->filename);
         }
-        if($this->contentType !== '') {
+        if ($this->contentType !== '') {
             $swa->setContentType($this->contentType);
         }
+
         return $swa;
     }
 }

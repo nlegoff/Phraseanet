@@ -13,7 +13,7 @@ class AudioTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetType()
     {
-        $object = new Audio;
+        $object = new Audio();
         $this->assertEquals(Type::TYPE_AUDIO, $object->getType());
     }
 }

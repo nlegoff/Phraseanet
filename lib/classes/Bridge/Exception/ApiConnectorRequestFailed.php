@@ -17,5 +17,4 @@
  */
 class Bridge_Exception_ApiConnectorRequestFailed extends Bridge_Exception
 {
-
 }

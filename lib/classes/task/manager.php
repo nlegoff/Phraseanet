@@ -93,7 +93,7 @@ class task_manager
         $tasks = array();
 
         foreach ($rs as $row) {
-            $row['pid'] = NULL;
+            $row['pid'] = null;
 
             $classname = $row['class'];
             if (!class_exists($classname)) {
@@ -195,7 +195,7 @@ class task_manager
         $ret = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        $pid = NULL;
+        $pid = null;
 
         $lockdir = $this->app['root.path'] . '/tmp/locks/';
         if (($schedlock = fopen($lockdir . 'scheduler.lock', 'a+')) != FALSE) {
@@ -251,7 +251,7 @@ class task_manager
 
             try {
                 if (!class_exists($classname)) {
-                    @require_once($file->getRealPath());
+                    @require_once $file->getRealPath());
                 }
                 if (class_exists($classname) && $classname::interfaceAvailable()) {
                     $tasks[] = array(

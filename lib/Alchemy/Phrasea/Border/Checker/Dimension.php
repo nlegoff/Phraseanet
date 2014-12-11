@@ -22,11 +22,11 @@ class Dimension extends AbstractChecker
 
     public function __construct(Application $app, array $options)
     {
-        if ( ! isset($options['width'])) {
+        if (! isset($options['width'])) {
             throw new \InvalidArgumentException('Missing "width" option');
         }
 
-        if ( ! isset($options['height']) || null === $options['height']) {
+        if (! isset($options['height']) || null === $options['height']) {
             $options['height'] = $options['width'];
         }
 
@@ -44,7 +44,6 @@ class Dimension extends AbstractChecker
         $boolean = false;
 
         if (method_exists($file->getMedia(), 'getWidth')) {
-
             $boolean = $file->getMedia()->getWidth() >= $this->width
                 && $file->getMedia()->getHeight() >= $this->height;
         }

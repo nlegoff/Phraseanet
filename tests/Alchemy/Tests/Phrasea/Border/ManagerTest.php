@@ -122,7 +122,7 @@ class ManagerTest extends \PhraseanetWebTestCaseAuthenticatedAbstract
         $postProcessRecord = function ($record) use (&$records) {
                 $records[] = $record;
             };
-        $this->assertEquals(Manager::LAZARET_CREATED, $this->object->process($this->session, File::buildFromPathfile(self::$file1, self::$DI['collection'], self::$DI['app']), NULL, Manager::FORCE_LAZARET));
+        $this->assertEquals(Manager::LAZARET_CREATED, $this->object->process($this->session, File::buildFromPathfile(self::$file1, self::$DI['collection'], self::$DI['app']), null, Manager::FORCE_LAZARET));
         $this->assertEquals(Manager::RECORD_CREATED, $this->object->process($this->session, File::buildFromPathfile(self::$file1, self::$DI['collection'], self::$DI['app']), $postProcessRecord));
 
         foreach ($records as $record) {

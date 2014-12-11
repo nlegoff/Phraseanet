@@ -17,5 +17,4 @@
  */
 class Bridge_Exception_ActionAuthNeedReconnect extends Bridge_Exception
 {
-
 }

@@ -19,14 +19,13 @@ use Alchemy\Phrasea\Application;
  */
 interface User_QueryInterface
 {
-
     public function __construct(Application $app);
 
     public function get_results();
 
-    public function who_have_right(Array $rights);
+    public function who_have_right(array $rights);
 
-    public function who_have_not_right(Array $rights);
+    public function who_have_not_right(array $rights);
 
     public function execute();
 
@@ -34,9 +33,9 @@ interface User_QueryInterface
 
     public function get_page();
 
-    public function on_bases_where_i_am(ACL $ACL, Array $rights);
+    public function on_bases_where_i_am(ACL $ACL, array $rights);
 
-    public function on_sbas_where_i_am(ACL $ACL, Array $rights);
+    public function on_sbas_where_i_am(ACL $ACL, array $rights);
 
     public function limit($offset_start, $results_quantity);
 
@@ -44,9 +43,9 @@ interface User_QueryInterface
 
     public function like_match($like_match);
 
-    public function on_sbas_ids(Array $sbas_ids);
+    public function on_sbas_ids(array $sbas_ids);
 
-    public function on_base_ids(Array $base_ids);
+    public function on_base_ids(array $base_ids);
 
     public function sort_by($sort, $ord = 'asc');
 

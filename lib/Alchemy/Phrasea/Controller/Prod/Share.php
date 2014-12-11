@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Share implements ControllerProviderInterface
 {
-
     /**
      * {@inheritDoc}
      */

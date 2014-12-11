@@ -14,7 +14,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class UsrListEntryRepository extends EntityRepository
 {
-
     /**
      * Get all lists entries matching a given User
      *

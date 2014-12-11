@@ -16,5 +16,4 @@ class TfFilename extends AbstractTag
     protected $Type = '';
     protected $Writable = false;
     protected $Description = 'The original filename without extension';
-
 }

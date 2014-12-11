@@ -2,10 +2,7 @@
 
 namespace Alchemy\Tests\Phrasea\Core\Provider;
 
-use Alchemy\Phrasea\Application as PhraseaApplication;
-use Silex\Application;
-
-class classContentNegotiationServiceProviderTest extends ServiceProviderTestCase
+class ContentNegotiationServiceProviderTest extends ServiceProviderTestCase
 {
     public function provideServiceDescription()
     {

@@ -19,7 +19,6 @@ namespace Alchemy\Phrasea\Media\Type;
  */
 class Flash implements Type
 {
-
     public function getType()
     {
         return self::TYPE_FLASH;

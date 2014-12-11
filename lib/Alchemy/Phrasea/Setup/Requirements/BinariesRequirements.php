@@ -49,7 +49,7 @@ class BinariesRequirements extends RequirementCollection implements RequirementI
             );
 
             $output = null;
-            exec($fileCommand . ' --version 2>&1', $output);
+            exec($fileCommand.' --version 2>&1', $output);
             $data = sscanf($output[0], 'file-%s');
             $version = $data[0];
 
@@ -60,7 +60,7 @@ class BinariesRequirements extends RequirementCollection implements RequirementI
             );
         }
 
-        $exiftool = __DIR__ . '/../../../../../vendor/phpexiftool/exiftool/exiftool' . (defined('PHP_WINDOWS_VERSION_BUILD') ? '.exe' : '');
+        $exiftool = __DIR__.'/../../../../../vendor/phpexiftool/exiftool/exiftool'.(defined('PHP_WINDOWS_VERSION_BUILD') ? '.exe' : '');
 
         $this->addRequirement(
             is_file($exiftool) && is_executable($exiftool),
@@ -70,7 +70,7 @@ class BinariesRequirements extends RequirementCollection implements RequirementI
 
         if (is_file($exiftool) && is_executable($exiftool)) {
             $output = null;
-            exec($exiftool . ' -ver', $output);
+            exec($exiftool.' -ver', $output);
             $version = $output[0];
             $this->addRequirement(
                 version_compare(static::EXIFTOOL_VERSION, $version, '<='),
@@ -89,7 +89,7 @@ class BinariesRequirements extends RequirementCollection implements RequirementI
 
         if (null !== $pdf2swf) {
             $output = null;
-            exec($pdf2swf . ' --version', $output);
+            exec($pdf2swf.' --version', $output);
             $data = sscanf($output[0], 'pdf2swf - part of swftools %d.%d.%d');
             $version = sprintf('%d.%d.%d', $data[0], $data[1], $data[2]);
 
@@ -110,7 +110,7 @@ class BinariesRequirements extends RequirementCollection implements RequirementI
 
         if (null !== $unoconv) {
             $output = null;
-            exec($unoconv . ' --version 2>&1', $output);
+            exec($unoconv.' --version 2>&1', $output);
             $data = sscanf($output[0], 'unoconv %d.%d');
             $version = sprintf('%d.%d', $data[0], $data[1]);
 
@@ -131,7 +131,7 @@ class BinariesRequirements extends RequirementCollection implements RequirementI
 
         if (null !== $swfextract) {
             $output = null;
-            exec($swfextract . ' --version', $output);
+            exec($swfextract.' --version', $output);
             $data = sscanf($output[0], 'swfextract - part of swftools %d.%d.%d');
             $version = sprintf('%d.%d.%d', $data[0], $data[1], $data[2]);
 
@@ -152,7 +152,7 @@ class BinariesRequirements extends RequirementCollection implements RequirementI
 
         if (null !== $swfrender) {
             $output = null;
-            exec($swfrender . ' --version', $output);
+            exec($swfrender.' --version', $output);
             $data = sscanf($output[0], 'swfrender - part of swftools %d.%d.%d');
             $version = sprintf('%d.%d.%d', $data[0], $data[1], $data[2]);
 
@@ -173,7 +173,7 @@ class BinariesRequirements extends RequirementCollection implements RequirementI
 
         if (null !== $mp4box) {
             $output = null;
-            exec($mp4box . ' -version 2>&1', $output);
+            exec($mp4box.' -version 2>&1', $output);
             $data = sscanf($output[0], 'MP4Box - GPAC version %d.%d.%d');
             $version = sprintf('%d.%d.%d', $data[0], $data[1], $data[2]);
 

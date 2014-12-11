@@ -16,5 +16,4 @@
  */
 class Exception_Upload_CannotWriteFile extends Exception
 {
-
 }

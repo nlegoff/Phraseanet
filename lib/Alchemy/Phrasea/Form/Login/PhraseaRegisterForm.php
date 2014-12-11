@@ -64,14 +64,14 @@ class PhraseaRegisterForm extends AbstractType
                 'mapped'        => false,
                 "constraints"   => array(
                     new Assert\True(array(
-                        "message" => _("Please accept the Terms and conditions in order to register.")
-                    ))),
+                        "message" => _("Please accept the Terms and conditions in order to register."),
+                    )), ),
             ));
         }
 
         $builder->add('provider-id', 'hidden');
 
-        require_once $this->app['root.path'] . '/lib/classes/deprecated/inscript.api.php';
+        require_once $this->app['root.path'].'/lib/classes/deprecated/inscript.api.php';
         $choices = array();
         $baseIds = array();
 
@@ -80,7 +80,7 @@ class PhraseaRegisterForm extends AbstractType
                 if ($baseInsc['Colls']) {
                     foreach ($baseInsc['Colls'] as  $collId => $collName) {
                         $baseId = \phrasea::baseFromColl($sbas_id, $collId, $this->app);
-                        $sbasName= \phrasea::sbas_names($sbas_id, $this->app);
+                        $sbasName = \phrasea::sbas_names($sbas_id, $this->app);
 
                         if (!isset($choices[$sbasName])) {
                             $choices[$sbasName] = array();
@@ -94,7 +94,7 @@ class PhraseaRegisterForm extends AbstractType
                 if ($baseInsc['CollsCGU']) {
                     foreach ($baseInsc['CollsCGU'] as  $collId => $collName) {
                         $baseId = \phrasea::baseFromColl($sbas_id, $collId, $this->app);
-                        $sbasName= \phrasea::sbas_names($sbas_id, $this->app);
+                        $sbasName = \phrasea::sbas_names($sbas_id, $this->app);
 
                         if (!isset($choices[$sbasName])) {
                             $choices[$sbasName] = array();
@@ -147,7 +147,7 @@ class PhraseaRegisterForm extends AbstractType
 
     public function getName()
     {
-        return null;
+        return;
     }
 
     private function getType($name)

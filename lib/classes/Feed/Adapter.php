@@ -84,7 +84,6 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
 
             return $this;
         } catch (\Exception $e) {
-
         }
 
         $sql = 'SELECT id, title, subtitle, created_on, updated_on, base_id, public
@@ -94,13 +93,15 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if (!$row)
+        if (!$row) {
             throw new NotFoundHttpException('Feed not found');
+        }
 
         $this->title = $row['title'];
         $this->subtitle = $row['subtitle'];
-        if (!is_null($row['base_id']))
+        if (!is_null($row['base_id'])) {
             $this->collection = collection::get_from_base_id($this->app, $row['base_id']);
+        }
         $this->created_on = new DateTime($row['created_on']);
         $this->updated_on = new DateTime($row['updated_on']);
         $this->public = !!$row['public'];
@@ -113,7 +114,7 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
             , 'base_id'    => $base_id
             , 'created_on' => $this->created_on
             , 'updated_on' => $this->updated_on
-            , 'public'     => $this->public
+            , 'public'     => $this->public,
         );
 
         $this->set_data_to_cache($datas);
@@ -134,10 +135,10 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
         $url = '/skins/icons/rss32.gif';
 
         $file = $this->app['root.path']
-            . '/www/custom/feed_' . $this->get_id() . '.jpg';
+            .'/www/custom/feed_'.$this->get_id().'.jpg';
 
         if (file_exists($file)) {
-            $url = '/custom/feed_' . $this->get_id() . '.jpg';
+            $url = '/custom/feed_'.$this->get_id().'.jpg';
         }
 
         $this->icon_url = $url;
@@ -156,8 +157,8 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
             throw new \Alchemy\Phrasea\Exception\InvalidArgumentException('File does not exists');
         }
 
-        $config_file = $this->app['root.path'] . '/config/feed_' . $this->get_id() . '.jpg';
-        $www_file = $this->app['root.path'] . '/www/custom/feed_' . $this->get_id() . '.jpg';
+        $config_file = $this->app['root.path'].'/config/feed_'.$this->get_id().'.jpg';
+        $www_file = $this->app['root.path'].'/www/custom/feed_'.$this->get_id().'.jpg';
 
         copy($file, $config_file);
         copy($file, $www_file);
@@ -172,7 +173,7 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
             WHERE id = :feed_id';
         $params = array(
             ':created_on'     => $created_on->format(DATE_ISO8601)
-            , ':feed_id'        => $this->get_id()
+            , ':feed_id'        => $this->get_id(),
         );
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
         $stmt->execute($params);
@@ -186,14 +187,16 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
     public function reset_icon()
     {
         $config_file = $this->app['root.path']
-            . '/config/feed_' . $this->get_id() . '.jpg';
+            .'/config/feed_'.$this->get_id().'.jpg';
         $www_file = $this->app['root.path']
-            . '/www/custom/feed_' . $this->get_id() . '.jpg';
+            .'/www/custom/feed_'.$this->get_id().'.jpg';
 
-        if (is_file($config_file))
+        if (is_file($config_file)) {
             unlink($config_file);
-        if (is_file($www_file))
+        }
+        if (is_file($www_file)) {
             unlink($www_file);
+        }
 
         $this->icon_url = null;
 
@@ -377,7 +380,7 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
 
         $params = array(
             ':public'  => $boolean ? '1' : '0',
-            ':feed_id' => $this->get_id()
+            ':feed_id' => $this->get_id(),
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -401,8 +404,9 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
     {
         $title = trim(strip_tags($title));
 
-        if ($title === '')
+        if ($title === '') {
             throw new Exception_InvalidArgument();
+        }
 
         $sql = 'UPDATE feeds SET title = :title, updated_on = NOW()
             WHERE id = :feed_id';
@@ -477,7 +481,6 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
         try {
             return $this->get_data_from_cache(self::CACHE_ENTRY_NUMBER);
         } catch (\Exception $e) {
-
         }
 
         $sql = 'SELECT count(id) as number
@@ -510,8 +513,9 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
             $this->delete_data_from_cache(self::CACHE_ENTRY_NUMBER);
         }
 
-        foreach ($this->get_publishers() as $publishers)
+        foreach ($this->get_publishers() as $publishers) {
             $publishers->delete();
+        }
 
         $sql = 'DELETE FROM feed_tokens WHERE feed_id = :feed_id';
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -546,10 +550,10 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
             FROM feed_entries
             WHERE feed_id = :feed_id
             ORDER BY id DESC
-            LIMIT ' . $offset_start . ', ' . $how_many;
+            LIMIT '.$offset_start.', '.$how_many;
 
         $params = array(
-            ':feed_id' => $this->get_id()
+            ':feed_id' => $this->get_id(),
         );
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
         $stmt->execute($params);
@@ -576,31 +580,21 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
     public function get_homepage_link(registryInterface $registry, $format, $page = null)
     {
         if (!$this->is_public()) {
-            return null;
+            return;
         }
 
         switch ($format) {
             case self::FORMAT_ATOM:
                 return new Feed_Link(
-                        sprintf('%s/feeds/feed/%s/atom/%s'
-                            , rtrim($registry->get('GV_ServerName'), '/')
-                            , $this->get_id()
-                            , ($page ? '?page=' . $page : '')
-                        )
-                        , sprintf('%s - %s', $this->get_title(), 'Atom')
-                        , 'application/atom+xml'
+                        sprintf('%s/feeds/feed/%s/atom/%s', rtrim($registry->get('GV_ServerName'), '/'), $this->get_id(), ($page ? '?page='.$page : '')
+                        ), sprintf('%s - %s', $this->get_title(), 'Atom'), 'application/atom+xml'
                 );
                 break;
             case self::FORMAT_RSS:
             default:
                 return new Feed_Link(
-                        sprintf('%s/feeds/feed/%s/rss/%s'
-                            , rtrim($registry->get('GV_ServerName'), '/')
-                            , $this->get_id()
-                            , ($page ? '?page=' . $page : '')
-                        )
-                        , sprintf('%s - %s', $this->get_title(), 'RSS')
-                        , 'application/rss+xml'
+                        sprintf('%s/feeds/feed/%s/rss/%s', rtrim($registry->get('GV_ServerName'), '/'), $this->get_id(), ($page ? '?page='.$page : '')
+                        ), sprintf('%s - %s', $this->get_title(), 'RSS'), 'application/rss+xml'
                 );
                 break;
         }
@@ -614,13 +608,12 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
      */
     protected function get_token(User_Adapter $user, $renew = false)
     {
-        $cache_key = self::CACHE_USER_TOKEN . '_' . $user->get_id();
+        $cache_key = self::CACHE_USER_TOKEN.'_'.$user->get_id();
         try {
             if (!$renew) {
                 return $this->get_data_from_cache($cache_key);
             }
         } catch (\Exception $e) {
-
         }
 
         $sql = 'SELECT token FROM feed_tokens
@@ -629,7 +622,7 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
 
         $params = array(
             ':usr_id'  => $user->get_id(),
-            ':feed_id' => $this->get_id()
+            ':feed_id' => $this->get_id(),
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -646,7 +639,7 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
                 ':token'      => $token
                 , ':feed_id'    => $this->get_id()
                 , ':usr_id'     => $user->get_id()
-                , ':aggregated' => null
+                , ':aggregated' => null,
             );
 
             $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -675,26 +668,14 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
         switch ($format) {
             case self::FORMAT_ATOM:
                 return new Feed_Link(
-                        sprintf('%s/feeds/userfeed/%s/%s/atom/'
-                            , rtrim($registry->get('GV_ServerName'), '/')
-                            , $this->get_token($user, $renew_token)
-                            , $this->get_id()
-                            , ($page ? '?page=' . $page : '')
-                        )
-                        , sprintf('%s - %s', $this->get_title(), 'Atom')
-                        , 'application/atom+xml'
+                        sprintf('%s/feeds/userfeed/%s/%s/atom/', rtrim($registry->get('GV_ServerName'), '/'), $this->get_token($user, $renew_token), $this->get_id(), ($page ? '?page='.$page : '')
+                        ), sprintf('%s - %s', $this->get_title(), 'Atom'), 'application/atom+xml'
                 );
                 break;
             case self::FORMAT_RSS:
                 return new Feed_Link(
-                        sprintf('%s/feeds/userfeed/%s/%s/rss/%s'
-                            , rtrim($registry->get('GV_ServerName'), '/')
-                            , $this->get_token($user, $renew_token)
-                            , $this->get_id()
-                            , ($page ? '?page=' . $page : '')
-                        )
-                        , sprintf('%s - %s', $this->get_title(), 'RSS')
-                        , 'application/rss+xml'
+                        sprintf('%s/feeds/userfeed/%s/%s/rss/%s', rtrim($registry->get('GV_ServerName'), '/'), $this->get_token($user, $renew_token), $this->get_id(), ($page ? '?page='.$page : '')
+                        ), sprintf('%s - %s', $this->get_title(), 'RSS'), 'application/rss+xml'
                 );
                 break;
         }
@@ -702,7 +683,7 @@ class Feed_Adapter extends Feed_Abstract implements Feed_Interface, cache_cachea
 
     public function get_cache_key($option = null)
     {
-        return 'feed_adapter_' . $this->get_id() . '_' . ($option ? '_' . $option : '');
+        return 'feed_adapter_'.$this->get_id().'_'.($option ? '_'.$option : '');
     }
 
     public function get_data_from_cache($option = null)

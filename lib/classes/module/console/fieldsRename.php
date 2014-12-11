@@ -22,7 +22,6 @@ use Alchemy\Phrasea\Command\Command;
 
 class module_console_fieldsRename extends Command
 {
-
     public function __construct($name = null)
     {
         parent::__construct($name);
@@ -61,9 +60,7 @@ class module_console_fieldsRename extends Command
         $dialog = $this->getHelperSet()->get('dialog');
         $continue = mb_strtolower(
             $dialog->ask(
-                $output
-                , "<question>About to rename " . $field->get_name() . " into " . $new_name . " (y/N)</question>"
-                , 'n'
+                $output, "<question>About to rename ".$field->get_name()." into ".$new_name." (y/N)</question>", 'n'
             )
         );
 
@@ -94,7 +91,7 @@ class module_console_fieldsRename extends Command
             $output->write("\rUpdating records... <info>".min($start, $total)." / $total</info>");
 
             $sql = 'SELECT record_id FROM record
-                  ORDER BY record_id LIMIT ' . $start . ', ' . $quantity;
+                  ORDER BY record_id LIMIT '.$start.', '.$quantity;
             $stmt = $databox->get_connection()->prepare($sql);
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);

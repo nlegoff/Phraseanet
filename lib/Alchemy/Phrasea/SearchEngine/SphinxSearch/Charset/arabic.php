@@ -43,5 +43,4 @@ class arabic extends AbstractCharset
     U+FB75, U+FB79, U+FB7D, U+FB81, U+FB91, U+FB95, U+FB99, U+FB9D, U+FBA3, U+FBA9,
     U+FBAD, U+FBD6, U+FBE7, U+FBE9, U+FBFF
     ';
-
 }

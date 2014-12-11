@@ -80,7 +80,7 @@ class BasketRepository extends EntityRepository
         $params = array(
             'usr_id_owner'       => $user->get_id(),
             'usr_id_ownertwo'    => $user->get_id(),
-            'usr_id_participant' => $user->get_id()
+            'usr_id_participant' => $user->get_id(),
         );
 
         $query = $this->_em->createQuery($dql);
@@ -153,7 +153,6 @@ class BasketRepository extends EntityRepository
                     $basket->getValidation()->getParticipant($user, $app);
                     $participant = true;
                 } catch (\Exception $e) {
-
                 }
             }
             if (!$participant) {
@@ -166,7 +165,6 @@ class BasketRepository extends EntityRepository
 
     public function findContainingRecordForUser(\record_adapter $record, \User_Adapter $user)
     {
-
         $dql = 'SELECT b
             FROM Entities\Basket b
             JOIN b.elements e
@@ -175,7 +173,7 @@ class BasketRepository extends EntityRepository
 
         $params = array(
             'record_id' => $record->get_record_id(),
-            'usr_id'    => $user->get_id()
+            'usr_id'    => $user->get_id(),
         );
 
         $query = $this->_em->createQuery($dql);
@@ -195,7 +193,7 @@ class BasketRepository extends EntityRepository
                 JOIN b.elements e
                 WHERE b.usr_id = :usr_id AND b.pusher_id IS NOT NULL';
                 $params = array(
-                    'usr_id' => $user->get_id()
+                    'usr_id' => $user->get_id(),
                 );
                 break;
             case self::VALIDATION_DONE:
@@ -207,7 +205,7 @@ class BasketRepository extends EntityRepository
                 WHERE b.usr_id != ?1 AND p.usr_id = ?2';
                 $params = array(
                     1       => $user->get_id()
-                    , 2       => $user->get_id()
+                    , 2       => $user->get_id(),
                 );
                 break;
             case self::VALIDATION_SENT:
@@ -217,7 +215,7 @@ class BasketRepository extends EntityRepository
                 JOIN b.validation v
                 WHERE b.usr_id = :usr_id';
                 $params = array(
-                    'usr_id' => $user->get_id()
+                    'usr_id' => $user->get_id(),
                 );
                 break;
             default:
@@ -229,7 +227,7 @@ class BasketRepository extends EntityRepository
                 WHERE (b.usr_id = :usr_id OR p.usr_id = :validating_usr_id)';
                 $params = array(
                     'usr_id'            => $user->get_id(),
-                    'validating_usr_id' => $user->get_id()
+                    'validating_usr_id' => $user->get_id(),
                 );
                 break;
             case self::MYBASKETS:
@@ -240,7 +238,7 @@ class BasketRepository extends EntityRepository
                 LEFT JOIN s.participants p
                 WHERE (b.usr_id = :usr_id)';
                 $params = array(
-                    'usr_id' => $user->get_id()
+                    'usr_id' => $user->get_id(),
                 );
                 break;
         }
@@ -255,8 +253,8 @@ class BasketRepository extends EntityRepository
         if (trim($query) !== '') {
             $dql .= ' AND (b.name LIKE :name OR b.description LIKE :description) ';
 
-            $params['name'] = '%' . $query . '%';
-            $params['description'] = '%' . $query . '%';
+            $params['name'] = '%'.$query.'%';
+            $params['description'] = '%'.$query.'%';
         }
 
         $dql .= ' ORDER BY b.id DESC';

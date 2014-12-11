@@ -69,7 +69,6 @@ class patch_370alpha7a implements patchInterface
         } catch (\PDOException $e) {
             // table not found
             if ($e->getCode() == '42S02') {
-
             }
 
             return;
@@ -85,22 +84,19 @@ class patch_370alpha7a implements patchInterface
         $i = 0;
 
         foreach ($rs as $row) {
-
-            $filePath = $app['root.path'] . '/tmp/lazaret/' . $row['filepath'];
+            $filePath = $app['root.path'].'/tmp/lazaret/'.$row['filepath'];
 
             if (file_exists($filePath)) {
-
                 $spec = new ImageSpec();
 
                 $spec->setResizeMode(ImageSpec::RESIZE_MODE_INBOUND_FIXEDRATIO);
                 $spec->setDimensions(375, 275);
 
-                $thumbPath = $app['root.path'] . '/tmp/lazaret/' . sprintf("thumb_%s", $row['filepath']);
+                $thumbPath = $app['root.path'].'/tmp/lazaret/'.sprintf("thumb_%s", $row['filepath']);
 
                 try {
                     $app['media-alchemyst']->turnInto($filePath, $thumbPath, $spec);
                 } catch (MediaAlchemystException $e) {
-
                 }
 
                 $media = $app['mediavorus']->guess($filePath);

@@ -22,8 +22,8 @@ class LazaretFileRepository extends EntityRepository
         $dql = '
             SELECT f
             FROM Entities\LazaretFile f'
-            . ('' === $base_ids ? '' : ' WHERE f.base_id IN  (' . $base_ids . ')')
-            . ' ORDER BY f.id DESC';
+            .('' === $base_ids ? '' : ' WHERE f.base_id IN  ('.$base_ids.')')
+            .' ORDER BY f.id DESC';
 
         $query = $this->_em->createQuery($dql);
         $query->setFirstResult($offset)

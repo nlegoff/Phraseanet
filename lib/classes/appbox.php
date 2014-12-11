@@ -81,7 +81,6 @@ class appbox extends base
         $filename = null;
 
         if (!is_null($pathfile)) {
-
             if (!in_array(mb_strtolower($pathfile->getMimeType()), array('image/gif', 'image/png', 'image/jpeg', 'image/jpg', 'image/pjpeg'))) {
                 throw new \InvalidArgumentException('Invalid file format');
             }
@@ -99,13 +98,12 @@ class appbox extends base
                     $imageSpec->setDimensions(120, 24);
                 }
 
-                $tmp = tempnam(sys_get_temp_dir(), 'tmpdatabox') . '.jpg';
+                $tmp = tempnam(sys_get_temp_dir(), 'tmpdatabox').'.jpg';
 
                 try {
                     $alchemyst->turninto($pathfile->getPathname(), $tmp, $imageSpec);
                     $filename = $tmp;
                 } catch (\MediaAlchemyst\Exception $e) {
-
                 }
             } elseif ($pic_type === collection::PIC_PRESENTATION) {
                 //resize collection logo
@@ -113,13 +111,12 @@ class appbox extends base
                 $imageSpec->setResizeMode(ImageSpecification::RESIZE_MODE_INBOUND_FIXEDRATIO);
                 $imageSpec->setDimensions(650, 200);
 
-                $tmp = tempnam(sys_get_temp_dir(), 'tmpdatabox') . '.jpg';
+                $tmp = tempnam(sys_get_temp_dir(), 'tmpdatabox').'.jpg';
 
                 try {
                     $alchemyst->turninto($pathfile->getPathname(), $tmp, $imageSpec);
                     $filename = $tmp;
                 } catch (\MediaAlchemyst\Exception $e) {
-
                 }
             }
         }
@@ -143,13 +140,11 @@ class appbox extends base
             $collection->update_logo($pathfile);
         }
 
-        $file = $this->app['root.path'] . '/config/' . $pic_type . '/' . $collection->get_base_id();
-        $custom_path = $this->app['root.path'] . '/www/custom/' . $pic_type . '/' . $collection->get_base_id();
+        $file = $this->app['root.path'].'/config/'.$pic_type.'/'.$collection->get_base_id();
+        $custom_path = $this->app['root.path'].'/www/custom/'.$pic_type.'/'.$collection->get_base_id();
 
         foreach (array($file, $custom_path) as $target) {
-
             if (is_file($target)) {
-
                 $filesystem->remove($target);
             }
 
@@ -170,7 +165,6 @@ class appbox extends base
         $filename = null;
 
         if (!is_null($pathfile)) {
-
             if (!in_array(mb_strtolower($pathfile->getMimeType()), array('image/jpeg', 'image/jpg', 'image/pjpeg', 'image/png', 'image/gif'))) {
                 throw new \InvalidArgumentException('Invalid file format');
             }
@@ -181,28 +175,25 @@ class appbox extends base
         }
 
         if ($pathfile) {
-
             $filename = $pathfile->getPathname();
 
             $imageSpec = new ImageSpecification();
             $imageSpec->setResizeMode(ImageSpecification::RESIZE_MODE_INBOUND_FIXEDRATIO);
             $imageSpec->setDimensions(120, 35);
 
-            $tmp = tempnam(sys_get_temp_dir(), 'tmpdatabox') . '.jpg';
+            $tmp = tempnam(sys_get_temp_dir(), 'tmpdatabox').'.jpg';
 
             try {
                 $alchemyst->turninto($pathfile->getPathname(), $tmp, $imageSpec);
                 $filename = $tmp;
             } catch (\MediaAlchemyst\Exception $e) {
-
             }
         }
 
-        $file = $this->app['root.path'] . '/config/minilogos/' . $pic_type . '_' . $databox->get_sbas_id() . '.jpg';
-        $custom_path = $this->app['root.path'] . '/www/custom/minilogos/' . $pic_type . '_' . $databox->get_sbas_id() . '.jpg';
+        $file = $this->app['root.path'].'/config/minilogos/'.$pic_type.'_'.$databox->get_sbas_id().'.jpg';
+        $custom_path = $this->app['root.path'].'/www/custom/minilogos/'.$pic_type.'_'.$databox->get_sbas_id().'.jpg';
 
         foreach (array($file, $custom_path) as $target) {
-
             if (is_file($target)) {
                 $filesystem->remove($target);
             }
@@ -253,7 +244,7 @@ class appbox extends base
         $stmt = $this->get_connection()->prepare($sql);
         $stmt->execute(array(
             ':indexable' => ($boolean ? '1' : '0'),
-            ':sbas_id'   => $databox->get_sbas_id()
+            ':sbas_id'   => $databox->get_sbas_id(),
         ));
         $stmt->closeCursor();
 
@@ -321,11 +312,11 @@ class appbox extends base
 
         $finder = new Finder();
         $finder->in(array(
-            $this->app['root.path'] . '/tmp/cache_minify/',
-            $this->app['root.path'] . '/tmp/cache_twig/',
-            $this->app['root.path'] . '/tmp/cache/profiler/',
-            $this->app['root.path'] . '/tmp/doctrine/',
-            $this->app['root.path'] . '/tmp/serializer/',
+            $this->app['root.path'].'/tmp/cache_minify/',
+            $this->app['root.path'].'/tmp/cache_twig/',
+            $this->app['root.path'].'/tmp/cache/profiler/',
+            $this->app['root.path'].'/tmp/doctrine/',
+            $this->app['root.path'].'/tmp/serializer/',
         ))
             ->depth(0)
             ->ignoreVCS(true)
@@ -349,7 +340,7 @@ class appbox extends base
         'config/status/'       => 'www/custom/status/',
         'config/wm/'           => 'www/custom/wm/',
         ) as $source => $target) {
-            $app['filesystem']->mirror($this->app['root.path'] . '/' . $source, $this->app['root.path'] . '/' . $target);
+            $app['filesystem']->mirror($this->app['root.path'].'/'.$source, $this->app['root.path'].'/'.$target);
         }
 
         $upgrader->add_steps_complete(1);
@@ -433,7 +424,6 @@ class appbox extends base
             try {
                 $ret[$sbas_id] = new \databox($this->app, $sbas_id);
             } catch (NotFoundHttpException $e) {
-
             }
         }
 
@@ -447,7 +437,6 @@ class appbox extends base
         try {
             return $this->get_data_from_cache(self::CACHE_SBAS_IDS);
         } catch (\Exception $e) {
-
         }
         $sql = 'SELECT sbas_id FROM sbas';
 
@@ -472,7 +461,7 @@ class appbox extends base
         $databoxes = $this->get_databoxes();
 
         if (!array_key_exists($sbas_id, $databoxes)) {
-            throw new NotFoundHttpException('Databox `' . $sbas_id . '` not found');
+            throw new NotFoundHttpException('Databox `'.$sbas_id.'` not found');
         }
 
         return $databoxes[$sbas_id];
@@ -485,7 +474,7 @@ class appbox extends base
      */
     public function get_cache_key($option = null)
     {
-        return 'appbox_' . ($option ? $option . '_' : '');
+        return 'appbox_'.($option ? $option.'_' : '');
     }
 
     public function delete_data_from_cache($option = null)

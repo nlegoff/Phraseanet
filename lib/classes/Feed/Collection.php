@@ -40,7 +40,7 @@ class Feed_Collection implements Feed_CollectionInterface, cache_cacheableInterf
      * @param  array           $feeds
      * @return Feed_Collection
      */
-    public function __construct(Application $app, Array $feeds)
+    public function __construct(Application $app, array $feeds)
     {
         $this->feeds = $feeds;
         $this->app = $app;
@@ -126,7 +126,6 @@ class Feed_Collection implements Feed_CollectionInterface, cache_cacheableInterf
                 return new \Feed_Adapter($app, $id);
             }, $feedIds));
         } catch (CacheException $e) {
-
         }
 
         $sql = 'SELECT id FROM feeds WHERE public = "1" AND base_id IS null ORDER BY created_on DESC';
@@ -149,7 +148,7 @@ class Feed_Collection implements Feed_CollectionInterface, cache_cacheableInterf
 
     public function get_cache_key($option = null)
     {
-        return 'feedcollection_' . ($option ? '_' . $option : '');
+        return 'feedcollection_'.($option ? '_'.$option : '');
     }
 
     public function get_data_from_cache($option = null)

@@ -485,7 +485,7 @@ class unicode
             "\xD5\x93" => "\xD6\x83"    ,  /* U+0553: ARMENIAN CAPITAL LETTER PIWR                             -> U+0583: ARMENIAN SMALL LETTER PIWR                             */
             "\xD5\x94" => "\xD6\x84"    ,  /* U+0554: ARMENIAN CAPITAL LETTER KEH                              -> U+0584: ARMENIAN SMALL LETTER KEH                              */
             "\xD5\x95" => "\xD6\x85"    ,  /* U+0555: ARMENIAN CAPITAL LETTER OH                               -> U+0585: ARMENIAN SMALL LETTER OH                               */
-            "\xD5\x96" => "\xD6\x86"       /* U+0556: ARMENIAN CAPITAL LETTER FEH                              -> U+0586: ARMENIAN SMALL LETTER FEH                              */
+            "\xD5\x96" => "\xD6\x86",       /* U+0556: ARMENIAN CAPITAL LETTER FEH                              -> U+0586: ARMENIAN SMALL LETTER FEH                              */
         ),
 
         self::CONVERT_TO_ND => array(
@@ -863,7 +863,7 @@ class unicode
             "\xD3\xB4" => "\xD0\xA7",  /* U+04F4: CYRILLIC CAPITAL LETTER CHE WITH DIAERESIS               -> U+0427: CYRILLIC CAPITAL LETTER CHE                      */
             "\xD3\xB5" => "\xD1\x87",  /* U+04F5: CYRILLIC SMALL LETTER CHE WITH DIAERESIS                 -> U+0447: CYRILLIC SMALL LETTER CHE                        */
             "\xD3\xB8" => "\xD0\xAB",  /* U+04F8: CYRILLIC CAPITAL LETTER YERU WITH DIAERESIS              -> U+042B: CYRILLIC CAPITAL LETTER YERU                     */
-            "\xD3\xB9" => "\xD1\x8B"   /* U+04F9: CYRILLIC SMALL LETTER YERU WITH DIAERESIS                -> U+044B: CYRILLIC SMALL LETTER YERU                       */
+            "\xD3\xB9" => "\xD1\x8B",   /* U+04F9: CYRILLIC SMALL LETTER YERU WITH DIAERESIS                -> U+044B: CYRILLIC SMALL LETTER YERU                       */
         ),
 
         self::CONVERT_TO_LCND => array(
@@ -1542,8 +1542,8 @@ class unicode
             "\xD5\x93" => "\xD6\x83"    ,  /* U+0553: ARMENIAN CAPITAL LETTER PIWR                             -> U+0583: ARMENIAN SMALL LETTER PIWR                         */
             "\xD5\x94" => "\xD6\x84"    ,  /* U+0554: ARMENIAN CAPITAL LETTER KEH                              -> U+0584: ARMENIAN SMALL LETTER KEH                          */
             "\xD5\x95" => "\xD6\x85"    ,  /* U+0555: ARMENIAN CAPITAL LETTER OH                               -> U+0585: ARMENIAN SMALL LETTER OH                           */
-            "\xD5\x96" => "\xD6\x86"       /* U+0556: ARMENIAN CAPITAL LETTER FEH                              -> U+0586: ARMENIAN SMALL LETTER FEH                          */
-        )
+            "\xD5\x96" => "\xD6\x86",       /* U+0556: ARMENIAN CAPITAL LETTER FEH                              -> U+0586: ARMENIAN SMALL LETTER FEH                          */
+        ),
     );
 
     protected $endCharacters_utf8 = "\t\r\n !\"#\$%&'()+,-./:;<=>@[\]^_`{|}~£§¨°";
@@ -1574,9 +1574,7 @@ class unicode
 
         if (!in_array($target, $ok_methods)) {
             throw new Exception_InvalidArgument(
-                sprintf('Invalid argument 2 "%s", valid values are [%s].'
-                    , $target
-                    , implode('|', $ok_methods)
+                sprintf('Invalid argument 2 "%s", valid values are [%s].', $target, implode('|', $ok_methods)
                 )
             );
         }
@@ -1611,8 +1609,9 @@ class unicode
             if (mb_strpos($this->endCharacters_utf8, $c) !== FALSE) {
                 $lastwasblank = true;
             } else {
-                if ($lastwasblank && $so != "")
+                if ($lastwasblank && $so != "") {
                     $so .= " ";
+                }
                 $so .= $c;
                 $lastwasblank = false;
             }
@@ -1648,8 +1647,9 @@ class unicode
         $l = mb_strlen($string);
         for ($i = 0; $i < $l; $i ++) {
             $c = mb_substr($string, $i, 1);
-            if (preg_match($regexp, $c))
+            if (preg_match($regexp, $c)) {
                 $out .= $c;
+            }
         }
 
         return $out;
@@ -1717,7 +1717,6 @@ class unicode
         static $chars_in = null;
 
         if (is_null($chars_in)) {
-
             $chars_in = array();
 
             for ($cc = 0; $cc < 32; $cc ++) {

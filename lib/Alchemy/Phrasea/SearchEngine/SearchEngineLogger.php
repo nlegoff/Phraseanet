@@ -47,5 +47,4 @@ class SearchEngineLogger
 
         return $this;
     }
-
 }

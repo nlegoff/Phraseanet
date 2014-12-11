@@ -16,5 +16,4 @@ class TfExtension extends AbstractTag
     protected $Type = '';
     protected $Writable = false;
     protected $Description = 'The extension of the archived file';
-
 }

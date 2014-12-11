@@ -22,7 +22,6 @@ use Silex\ControllerProviderInterface;
  */
 class RSSFeeds implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -44,10 +43,11 @@ class RSSFeeds implements ControllerProviderInterface
                 $content = new \Feed_XML_Cooliris();
             }
 
-            if ($user instanceof \User_Adapter)
+            if ($user instanceof \User_Adapter) {
                 $link = $feed->get_user_link($app['phraseanet.registry'], $user, $format, $page);
-            else
+            } else {
                 $link = $feed->get_homepage_link($app['phraseanet.registry'], $format, $page);
+            }
 
             $content->set_updated_on(new \DateTime());
             $content->set_title($feed->get_title());
@@ -56,15 +56,19 @@ class RSSFeeds implements ControllerProviderInterface
             $content->set_link($link);
 
             if ($user instanceof \User_Adapter) {
-                if ($page > 1)
+                if ($page > 1) {
                     $content->set_previous_page($feed->get_user_link($app['phraseanet.registry'], $user, $format, ($page - 1)));
-                if ($total > ($page * $perPage))
+                }
+                if ($total > ($page * $perPage)) {
                     $content->set_next_page($feed->get_user_link($app['phraseanet.registry'], $user, $format, ($page + 1)));
+                }
             } else {
-                if ($page > 1)
+                if ($page > 1) {
                     $content->set_previous_page($feed->get_homepage_link($app['phraseanet.registry'], $format, ($page - 1)));
-                if ($total > ($page * $perPage))
+                }
+                if ($total > ($page * $perPage)) {
                     $content->set_next_page($feed->get_homepage_link($app['phraseanet.registry'], $format, ($page + 1)));
+                }
             }
             foreach ($entries->get_entries() as $entry) {
                 $content->set_item($entry);

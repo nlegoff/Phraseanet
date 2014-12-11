@@ -12,8 +12,6 @@
 namespace Alchemy\Phrasea\Http\StaticFile\Symlink;
 
 use Silex\Application;
-use Symfony\Component\Filesystem\Filesystem;
-use Guzzle\Http\Url;
 
 class SymLinkerEncoder
 {
@@ -33,6 +31,6 @@ class SymLinkerEncoder
 
     public function encode($pathFile)
     {
-        return hash_hmac('sha512', $pathFile , $this->key);
+        return hash_hmac('sha512', $pathFile, $this->key);
     }
 }

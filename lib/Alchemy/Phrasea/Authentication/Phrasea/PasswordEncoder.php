@@ -31,7 +31,7 @@ class PasswordEncoder implements PasswordEncoderInterface
      */
     public function encodePassword($raw, $salt)
     {
-        return hash_hmac('sha512', $raw . $salt, $this->key);
+        return hash_hmac('sha512', $raw.$salt, $this->key);
     }
 
     /**

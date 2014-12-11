@@ -27,7 +27,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class WorkZone implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -63,7 +62,7 @@ class WorkZone implements ControllerProviderInterface
             'WorkZone'      => new WorkzoneHelper($app, $app['request'])
             , 'selected_type' => $app['request']->query->get('type')
             , 'selected_id'   => $app['request']->query->get('id')
-            , 'srt'           => $app['request']->query->get('sort')
+            , 'srt'           => $app['request']->query->get('sort'),
         );
 
         return $app['twig']->render('prod/WorkZone/WorkZone.html.twig', $params);
@@ -86,12 +85,7 @@ class WorkZone implements ControllerProviderInterface
         $offsetStart = max(($Page - 1) * $PerPage, 0);
 
         $Baskets = $BasketRepo->findWorkzoneBasket(
-            $app['authentication']->getUser()
-            , $request->query->get('Query')
-            , $request->query->get('Year')
-            , $request->query->get('Type')
-            , $offsetStart
-            , $PerPage
+            $app['authentication']->getUser(), $request->query->get('Query'), $request->query->get('Year'), $request->query->get('Type'), $offsetStart, $PerPage
         );
 
         $page = floor($offsetStart / $PerPage) + 1;
@@ -104,7 +98,7 @@ class WorkZone implements ControllerProviderInterface
             , 'Total'   => count($Baskets)
             , 'Query'   => $request->query->get('Query')
             , 'Year'    => $request->query->get('Year')
-            , 'Type'    => $request->query->get('Type')
+            , 'Type'    => $request->query->get('Type'),
         );
 
         return $app['twig']->render('prod/WorkZone/Browser/Results.html.twig', $params);
@@ -161,35 +155,28 @@ class WorkZone implements ControllerProviderInterface
         if ($alreadyFixed === 0) {
             if ($done <= 1) {
                 $message = sprintf(
-                    _('%d Story attached to the WorkZone')
-                    , $done
+                    _('%d Story attached to the WorkZone'), $done
                 );
             } else {
                 $message = sprintf(
-                    _('%d Stories attached to the WorkZone')
-                    , $done
+                    _('%d Stories attached to the WorkZone'), $done
                 );
             }
         } else {
             if ($done <= 1) {
                 $message = sprintf(
-                    _('%1$d Story attached to the WorkZone, %2$d already attached')
-                    , $done
-                    , $alreadyFixed
+                    _('%1$d Story attached to the WorkZone, %2$d already attached'), $done, $alreadyFixed
                 );
             } else {
                 $message = sprintf(
-                    _('%1$d Stories attached to the WorkZone, %2$d already attached')
-                    , $done
-                    , $alreadyFixed
+                    _('%1$d Stories attached to the WorkZone, %2$d already attached'), $done, $alreadyFixed
                 );
             }
         }
 
         if ($request->getRequestFormat() == 'json') {
             return $app->json(array(
-                'success' => true
-                , 'message' => $message
+                'success' => true, 'message' => $message,
             ));
         }
 
@@ -214,8 +201,7 @@ class WorkZone implements ControllerProviderInterface
 
         if ($request->getRequestFormat() == 'json') {
             return $app->json(array(
-                'success' => true
-                , 'message' => _('Story detached from the WorkZone')
+                'success' => true, 'message' => _('Story detached from the WorkZone'),
             ));
         }
 

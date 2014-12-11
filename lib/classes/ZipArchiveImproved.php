@@ -91,7 +91,7 @@ class ZipArchiveImproved extends ZipArchive
     public function reopen()
     {
         $archiveFileName = $this->_archiveFileName;
-        if ( ! $this->close()) {
+        if (! $this->close()) {
             return false;
         }
 

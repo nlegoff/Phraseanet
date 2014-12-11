@@ -68,7 +68,7 @@ class File
         $this->media = $media;
         $this->collection = $collection;
         $this->attributes = array();
-        $this->originalName = $originalName ? : pathinfo($this->media->getFile()->getPathname(), PATHINFO_BASENAME);
+        $this->originalName = $originalName ?: pathinfo($this->media->getFile()->getPathname(), PATHINFO_BASENAME);
     }
 
     /**
@@ -146,7 +146,6 @@ class File
                 $this->app['exiftool.writer']->reset();
                 $this->app['exiftool.writer']->write($this->getFile()->getRealPath(), $metadatas);
             } catch (PHPExiftoolException $e) {
-
             }
         }
 
@@ -179,7 +178,7 @@ class File
                 break;
         }
 
-        return null;
+        return;
     }
 
     /**

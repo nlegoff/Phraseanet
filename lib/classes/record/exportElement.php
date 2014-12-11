@@ -65,7 +65,7 @@ class record_exportElement extends record_adapter
 
         if ($this->directory) {
             $unicode = new \unicode();
-            $this->directory = $unicode->remove_nonazAZ09($this->directory) . '/';
+            $this->directory = $unicode->remove_nonazAZ09($this->directory).'/';
         }
 
         $this->remain_hd = $remain_hd;
@@ -104,7 +104,7 @@ class record_exportElement extends record_adapter
         $go_dl = array(
             'document'  => false,
             'preview'   => false,
-            'thumbnail' => true
+            'thumbnail' => true,
         );
 
         if ($this->app['authentication']->getUser()->ACL()->has_right_on_base($this->get_base_id(), 'candwnldhd')) {
@@ -136,16 +136,18 @@ class record_exportElement extends record_adapter
             if ($go_dl['document'] === true) {
                 if ($this->app['authentication']->getUser()->ACL()->is_restricted_download($this->base_id)) {
                     $this->remain_hd --;
-                    if ($this->remain_hd >= 0)
+                    if ($this->remain_hd >= 0) {
                         $downloadable['document'] = array(
                             'class'                   => 'document',
-                            'label'                   => _('document original')
+                            'label'                   => _('document original'),
                         );
-                } else
+                    }
+                } else {
                     $downloadable['document'] = array(
                         'class' => 'document',
-                        'label' => _('document original')
+                        'label' => _('document original'),
                     );
+                }
             }
             if ($go_cmd === true) {
                 $orderable['document'] = true;
@@ -160,8 +162,9 @@ class record_exportElement extends record_adapter
 
             $subdef_label = $name;
             foreach ($subdef->get_labels() as $lang => $label) {
-                if (trim($label) == '')
+                if (trim($label) == '') {
                     continue;
+                }
 
                 if ($lang == $this->app['locale.I18n']) {
                     $subdef_label = $label;
@@ -181,23 +184,24 @@ class record_exportElement extends record_adapter
             if ($go_dl[$class]) {
                 if (isset($sd[$name]) && $sd[$name]->is_physically_present()) {
                     if ($class == 'document') {
-
                         if ($this->app['authentication']->getUser()->ACL()->is_restricted_download($this->base_id)) {
                             $this->remain_hd --;
-                            if ($this->remain_hd >= 0)
+                            if ($this->remain_hd >= 0) {
                                 $downloadable[$name] = array(
                                     'class'              => $class,
-                                    'label'              => $subdef_label
+                                    'label'              => $subdef_label,
                                 );
-                        } else
+                            }
+                        } else {
                             $downloadable[$name] = array(
                                 'class' => $class,
-                                'label' => $subdef_label
+                                'label' => $subdef_label,
                             );
+                        }
                     } else {
                         $downloadable[$name] = array(
                             'class' => $class,
-                            'label' => $subdef_label
+                            'label' => $subdef_label,
                         );
                     }
 
@@ -211,12 +215,12 @@ class record_exportElement extends record_adapter
         if ($xml) {
             $downloadable['caption'] = array(
                 'class'                       => 'caption',
-                'label'                       => _('caption XML')
+                'label'                       => _('caption XML'),
             );
             $this->add_count('caption', strlen($xml));
             $downloadable['caption-yaml'] = array(
                 'class' => 'caption',
-                'label' => _('caption YAML')
+                'label' => _('caption YAML'),
             );
             $this->add_count('caption-yaml', strlen(strip_tags($xml)));
         }
@@ -237,8 +241,9 @@ class record_exportElement extends record_adapter
     {
         if (! $this->size) {
             $objectsize = array();
-        } else
+        } else {
             $objectsize = $this->size;
+        }
 
         $objectsize[$name] = $size;
 

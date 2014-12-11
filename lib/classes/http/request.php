@@ -64,7 +64,7 @@ class http_request
      */
     public static function getInstance()
     {
-        if ( ! (self::$_instance instanceof self)) {
+        if (! (self::$_instance instanceof self)) {
             self::$_instance = new self();
         }
 
@@ -144,7 +144,7 @@ class http_request
             foreach (func_get_arg(0) as $key => $nom) {
                 if (is_string($key)) {
                     $value = isset($_GET[$key]) ?
-                        $_GET[$key] : (isset($_POST[$key]) ? $_POST[$key] : NULL);
+                        $_GET[$key] : (isset($_POST[$key]) ? $_POST[$key] : null);
                     switch ($nom) {
                         case self::SANITIZE_NUMBER_INT:
                             $value = (int) $value;
@@ -158,14 +158,14 @@ class http_request
                     $parm[$key] = $value;
                 } else {
                     $parm[$nom] = isset($_GET[$nom]) ?
-                        $_GET[$nom] : (isset($_POST[$nom]) ? $_POST[$nom] : NULL);
+                        $_GET[$nom] : (isset($_POST[$nom]) ? $_POST[$nom] : null);
                 }
             }
         } else {
             for ($i = 0; $i < $nargs; $i ++) {
                 $nom = func_get_arg($i);
                 $parm[$nom] = isset($_GET[$nom]) ?
-                    $_GET[$nom] : (isset($_POST[$nom]) ? $_POST[$nom] : NULL);
+                    $_GET[$nom] : (isset($_POST[$nom]) ? $_POST[$nom] : null);
             }
         }
 
@@ -178,19 +178,20 @@ class http_request
      * @param  string $serializeds_datas_index
      * @return array
      */
-    public function get_parms_from_serialized_datas(Array $indexes, $serializeds_datas_index)
+    public function get_parms_from_serialized_datas(array $indexes, $serializeds_datas_index)
     {
         $parm = array();
         $tmp_parms = array();
 
-        if (isset($_GET[$serializeds_datas_index]))
+        if (isset($_GET[$serializeds_datas_index])) {
             parse_str($_GET[$serializeds_datas_index], $tmp_parms);
-        elseif (isset($_POST[$serializeds_datas_index]))
+        } elseif (isset($_POST[$serializeds_datas_index])) {
             parse_str($_POST[$serializeds_datas_index], $tmp_parms);
+        }
 
         if (count($tmp_parms) > 0) {
             foreach ($indexes as $nom) {
-                $parm[$nom] = isset($tmp_parms[$nom]) ? $tmp_parms[$nom] : NULL;
+                $parm[$nom] = isset($tmp_parms[$nom]) ? $tmp_parms[$nom] : null;
             }
         }
 

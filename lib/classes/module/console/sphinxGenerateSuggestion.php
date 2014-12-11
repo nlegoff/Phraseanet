@@ -23,7 +23,6 @@ use Symfony\Component\Process\ProcessBuilder;
 
 class module_console_sphinxGenerateSuggestion extends Command
 {
-
     public function __construct($name = null)
     {
         parent::__construct($name);
@@ -43,26 +42,24 @@ class module_console_sphinxGenerateSuggestion extends Command
         foreach ($params as $sbas_id => $p) {
             $index = sprintf("%u", crc32(
                 str_replace(
-                    array('.', '%')
-                    , '_'
-                    , sprintf('%s_%s_%s_%s', $p['host'], $p['port'], $p['user'], $p['dbname'])
+                    array('.', '%'), '_', sprintf('%s_%s_%s_%s', $p['host'], $p['port'], $p['user'], $p['dbname'])
                 )
             ));
 
-            $tmp_file = $this->container['root.path'] . '/tmp/dict' . $index . '.txt';
+            $tmp_file = $this->container['root.path'].'/tmp/dict'.$index.'.txt';
 
             $databox = $this->getService('phraseanet.appbox')->get_databox($sbas_id);
 
-            $output->writeln("process Databox " . $databox->get_label($this->container['locale.I18n']) . " / $index\n");
+            $output->writeln("process Databox ".$databox->get_label($this->container['locale.I18n'])." / $index\n");
 
-            if ( ! is_executable("/usr/local/bin/indexer")) {
+            if (! is_executable("/usr/local/bin/indexer")) {
                 $output->writeln("<error>'/usr/local/bin/indexer' is not executable</error>");
 
                 return 1;
             }
 
             $builder = ProcessBuilder::create(array('/usr/local/bin/indexer'));
-            $builder->add('metadatas' . $index)
+            $builder->add('metadatas'.$index)
                 ->add('--buildstops')
                 ->add($tmp_file)
                 ->add(1000000)
@@ -70,8 +67,8 @@ class module_console_sphinxGenerateSuggestion extends Command
 
             $builder->getProcess()->run();
 
-            if ( ! file_exists($tmp_file)) {
-                $output->writeln("<error> file '" . $tmp_file . "' does not exist</error>");
+            if (! file_exists($tmp_file)) {
+                $output->writeln("<error> file '".$tmp_file."' does not exist</error>");
 
                 return 1;
             }
@@ -103,11 +100,12 @@ class module_console_sphinxGenerateSuggestion extends Command
 
     protected function BuildTrigrams($keyword)
     {
-        $t = "__" . $keyword . "__";
+        $t = "__".$keyword."__";
 
         $trigrams = "";
-        for ($i = 0; $i < strlen($t) - 2; $i ++ )
-            $trigrams .= substr($t, $i, 3) . " ";
+        for ($i = 0; $i < strlen($t) - 2; $i ++) {
+            $trigrams .= substr($t, $i, 3)." ";
+        }
 
         return $trigrams;
     }
@@ -119,12 +117,14 @@ class module_console_sphinxGenerateSuggestion extends Command
         $n = 0;
         $lines = explode("\n", $in);
         foreach ($lines as $line) {
-            if (trim($line) === '')
+            if (trim($line) === '') {
                 continue;
-            list ( $keyword, $freq ) = explode(" ", trim($line));
+            }
+            list($keyword, $freq) = explode(" ", trim($line));
 
-            if ($freq < FREQ_THRESHOLD || strstr($keyword, "_") !== false || strstr($keyword, "'") !== false)
+            if ($freq < FREQ_THRESHOLD || strstr($keyword, "_") !== false || strstr($keyword, "'") !== false) {
                 continue;
+            }
 
             if (ctype_digit($keyword)) {
                 continue;
@@ -135,13 +135,14 @@ class module_console_sphinxGenerateSuggestion extends Command
 
             $trigrams = $this->BuildTrigrams($keyword);
 
-            if ($n ++)
+            if ($n ++) {
                 $out .= ",\n";
+            }
             $out .= "( $n, '$keyword', '$trigrams', $freq )";
         }
 
         if (trim($out) !== '') {
-            $out = "INSERT INTO suggest VALUES " . $out . ";";
+            $out = "INSERT INTO suggest VALUES ".$out.";";
         }
 
         $output->writeln(sprintf("Generated <info>%d</info> suggestions", $n));

@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Records implements ControllerProviderInterface
 {
-
     /**
      * {@inheritDoc}
      */
@@ -171,27 +170,27 @@ class Records implements ControllerProviderInterface
             "desc"          => $app['twig']->render('prod/preview/caption.html.twig', array(
                 'record'        => $record,
                 'highlight'     => $query,
-                'searchEngine'  => $searchEngine
+                'searchEngine'  => $searchEngine,
             )),
             "html_preview"  => $app['twig']->render('common/preview.html.twig', array(
-                'record'        => $record
+                'record'        => $record,
             )),
             "others"        => $app['twig']->render('prod/preview/appears_in.html.twig', array(
                 'parents'       => $record->get_grouping_parents(),
-                'baskets'       => $record->get_container_baskets($app['EM'], $app['authentication']->getUser())
+                'baskets'       => $record->get_container_baskets($app['EM'], $app['authentication']->getUser()),
             )),
             "current"       => $train,
             "history"       => $app['twig']->render('prod/preview/short_history.html.twig', array(
-                'record'        => $record
+                'record'        => $record,
             )),
             "popularity"    => $app['twig']->render('prod/preview/popularity.html.twig', array(
-                'record'        => $record
+                'record'        => $record,
             )),
             "tools"         => $app['twig']->render('prod/preview/tools.html.twig', array(
-                'record'        => $record
+                'record'        => $record,
             )),
             "pos"           => $record->get_number(),
-            "title"         => str_replace(array('[[em]]', '[[/em]]'), array('<em>', '</em>'), $record->get_title($query, $searchEngine))
+            "title"         => str_replace(array('[[em]]', '[[/em]]'), array('<em>', '</em>'), $record->get_title($query, $searchEngine)),
         ));
     }
 
@@ -205,7 +204,7 @@ class Records implements ControllerProviderInterface
     public function doDeleteRecords(Application $app, Request $request)
     {
         $records = RecordsRequest::fromRequest($app, $request, !!$request->request->get('del_children'), array(
-            'candeleterecord'
+            'candeleterecord',
         ));
 
         $basketElementsRepository = $app['EM']->getRepository('\Entities\BasketElement');
@@ -231,7 +230,6 @@ class Records implements ControllerProviderInterface
                 $deleted[] = $record->get_serialize_key();
                 $record->delete();
             } catch (\Exception $e) {
-
             }
         }
 
@@ -250,11 +248,11 @@ class Records implements ControllerProviderInterface
     public function whatCanIDelete(Application $app, Request $request)
     {
         $records = RecordsRequest::fromRequest($app, $request, !!$request->request->get('del_children'), array(
-            'candeleterecord'
+            'candeleterecord',
         ));
 
         return $app['twig']->render('prod/actions/delete_records_confirm.html.twig', array(
-            'records'   => $records
+            'records'   => $records,
         ));
     }
 

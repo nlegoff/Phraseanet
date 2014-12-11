@@ -11,7 +11,6 @@
 
 interface module_report_dashboard_componentInterface
 {
-
     public function process();
 
     public function getDash();

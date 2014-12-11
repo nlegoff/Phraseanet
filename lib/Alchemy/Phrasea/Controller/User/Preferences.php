@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Preferences implements ControllerProviderInterface
 {
-
     /**
      * {@inheritDoc}
      */
@@ -82,7 +81,7 @@ class Preferences implements ControllerProviderInterface
         $msg = _('Error while saving preference');
 
         if ($prop && $value) {
-            $app['session']->set('phraseanet.' . $prop, $value);
+            $app['session']->set('phraseanet.'.$prop, $value);
             $success = true;
             $msg = _('Preference saved !');
         }

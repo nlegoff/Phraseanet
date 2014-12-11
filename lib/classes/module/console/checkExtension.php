@@ -24,7 +24,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class module_console_checkExtension extends Command
 {
-
     public function __construct($name = null)
     {
         parent::__construct($name);
@@ -40,7 +39,7 @@ class module_console_checkExtension extends Command
 
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
-        if ( ! extension_loaded('phrasea2')) {
+        if (! extension_loaded('phrasea2')) {
             $output->writeln("<error>Missing Extension php-phrasea.</error>");
 
             return 1;
@@ -58,9 +57,7 @@ class module_console_checkExtension extends Command
 
         $output->writeln(
             sprintf(
-                "\nWill do the check with user <info>%s</info> (%s)\n"
-                , $TestUser->get_display_name()
-                , $TestUser->get_email()
+                "\nWill do the check with user <info>%s</info> (%s)\n", $TestUser->get_display_name(), $TestUser->get_email()
             )
         );
 
@@ -142,7 +139,7 @@ class module_console_checkExtension extends Command
                 $tcoll[] = 0 + $coll["base_id"];
             }
             if (sizeof($tcoll) > 0) {
-                $kbase = "S" . $phbase["sbas_id"];
+                $kbase = "S".$phbase["sbas_id"];
                 $tbases[$kbase] = array();
                 $tbases[$kbase]["sbas_id"] = $phbase["sbas_id"];
                 $tbases[$kbase]["searchcoll"] = $tcoll;
@@ -160,25 +157,16 @@ class module_console_checkExtension extends Command
 
         $nbanswers = 0;
         foreach ($tbases as $kb => $base) {
-            $tbases[$kb]["results"] = NULL;
+            $tbases[$kb]["results"] = null;
 
             $ret = phrasea_query2(
-                $phSession["session_id"]
-                , $base["sbas_id"]
-                , $base["searchcoll"]
-                , $base["arrayq"]
-                , $this->container['phraseanet.configuration']['main']['key']
-                , $usrId
-                , false
-                , PHRASEA_MULTIDOC_DOCONLY
-                , ''
-                , array()
+                $phSession["session_id"], $base["sbas_id"], $base["searchcoll"], $base["arrayq"], $this->container['phraseanet.configuration']['main']['key'], $usrId, false, PHRASEA_MULTIDOC_DOCONLY, '', array()
             );
 
             if ($ret) {
-                $output->writeln("<info>Succes ! </info> got result on sbas_id " . $base["sbas_id"]);
+                $output->writeln("<info>Succes ! </info> got result on sbas_id ".$base["sbas_id"]);
             } else {
-                $output->writeln("<error>Failed ! </error> No results on sbas_id " . $base["sbas_id"]);
+                $output->writeln("<error>Failed ! </error> No results on sbas_id ".$base["sbas_id"]);
 
                 return 1;
             }
@@ -247,17 +235,17 @@ class module_console_checkExtension extends Command
 
             $ret = phrasea_public_query(
                 $tbases                         // array of sbas with colls and query
-                , PHRASEA_MULTIDOC_DOCONLY      // mode
-                , ''                            // sortfield
-                , array()                       // search business fields
-                , ''                            // lng for stemmed search
-                , 0                             // offset for first answer (start=0)
-                , 5                             // nbr of answers
-                , true                          // verbose output (chrono, sql...)
+, PHRASEA_MULTIDOC_DOCONLY      // mode
+, ''                            // sortfield
+, array()                       // search business fields
+, ''                            // lng for stemmed search
+, 0                             // offset for first answer (start=0)
+, 5                             // nbr of answers
+, true                          // verbose output (chrono, sql...)
             );
 
             if (is_array($ret) && array_key_exists("results", $ret) && is_array($ret["results"])) {
-                $output->writeln( sprintf("<info>Succes ! </info> returned %d answers", count($ret["results"])) );
+                $output->writeln(sprintf("<info>Succes ! </info> returned %d answers", count($ret["results"])));
             } else {
                 $output->writeln("<error>Failed ! </error>");
 
@@ -271,22 +259,20 @@ class module_console_checkExtension extends Command
 
                 $h = phrasea_highlight(
                     $sbid                       // sbas_id
-                    , $rid                      // record_id
-                    , $q                        // query parsed
-                    , ""                        // lng for stemmed
-                    , false                     // verbose output (chrono, sql...)
+, $rid                      // record_id
+, $q                        // query parsed
+, ""                        // lng for stemmed
+, false                     // verbose output (chrono, sql...)
                     );
 
                 $output->writeln(sprintf("\n-- phrasea_highlight(%d, %d,...) --", $sbid, $rid));
 
-                if(is_array($h) && array_key_exists("results", $h) && is_array($h["results"])
-                    && count($h["results"])==1
-                    && array_key_exists("sbid", $h["results"][0]) && $h["results"][0]["sbid"]==$sbid
-                    && array_key_exists("rid", $h["results"][0]) && $h["results"][0]["rid"]==$rid
-                    && array_key_exists("spots", $h["results"][0]) && is_array($h["results"][0]["spots"]) )
-                {
-
-                    $output->writeln( sprintf("<info>Succes ! </info> sbid=%d, rid=%d (%d spots)",
+                if (is_array($h) && array_key_exists("results", $h) && is_array($h["results"])
+                    && count($h["results"]) == 1
+                    && array_key_exists("sbid", $h["results"][0]) && $h["results"][0]["sbid"] == $sbid
+                    && array_key_exists("rid", $h["results"][0]) && $h["results"][0]["rid"] == $rid
+                    && array_key_exists("spots", $h["results"][0]) && is_array($h["results"][0]["spots"])) {
+                    $output->writeln(sprintf("<info>Succes ! </info> sbid=%d, rid=%d (%d spots)",
                         $sbid,
                             $h["results"][0]["rid"],
                         count($h["results"][0]["spots"]))
@@ -297,7 +283,6 @@ class module_console_checkExtension extends Command
                     return 1;
                 }
             }
-
         } // disconnected mode
 
         return 0;

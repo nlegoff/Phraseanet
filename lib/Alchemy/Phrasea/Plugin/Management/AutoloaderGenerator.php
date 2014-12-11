@@ -42,9 +42,9 @@ class AutoloaderGenerator
 EOF;
 
         foreach ($manifests as $manifest) {
-            $filepath = $this->pluginDirectory . DIRECTORY_SEPARATOR . $manifest->getName() . DIRECTORY_SEPARATOR . 'less' . DIRECTORY_SEPARATOR . 'login.less';
+            $filepath = $this->pluginDirectory.DIRECTORY_SEPARATOR.$manifest->getName().DIRECTORY_SEPARATOR.'less'.DIRECTORY_SEPARATOR.'login.less';
             if (is_file($filepath)) {
-                $relativePath = $manifest->getName() . DIRECTORY_SEPARATOR . 'less' . DIRECTORY_SEPARATOR . 'login.less';
+                $relativePath = $manifest->getName().DIRECTORY_SEPARATOR.'less'.DIRECTORY_SEPARATOR.'login.less';
                 $buffer .= <<<EOF
 
     @import "$relativePath";
@@ -62,9 +62,9 @@ EOF;
 EOF;
 
         foreach ($manifests as $manifest) {
-            $filepath = $this->pluginDirectory . DIRECTORY_SEPARATOR . $manifest->getName() . DIRECTORY_SEPARATOR . 'less' . DIRECTORY_SEPARATOR . 'account.less';
+            $filepath = $this->pluginDirectory.DIRECTORY_SEPARATOR.$manifest->getName().DIRECTORY_SEPARATOR.'less'.DIRECTORY_SEPARATOR.'account.less';
             if (is_file($filepath)) {
-                $relativePath = $manifest->getName() . DIRECTORY_SEPARATOR . 'less' . DIRECTORY_SEPARATOR . 'account.less';
+                $relativePath = $manifest->getName().DIRECTORY_SEPARATOR.'less'.DIRECTORY_SEPARATOR.'account.less';
                 $buffer .= <<<EOF
 
     @import "$relativePath";
@@ -77,7 +77,7 @@ EOF;
 
     private function doWrite($file, $data)
     {
-        if (false === file_put_contents($this->pluginDirectory . DIRECTORY_SEPARATOR . $file, $data)) {
+        if (false === file_put_contents($this->pluginDirectory.DIRECTORY_SEPARATOR.$file, $data)) {
             throw new RegistrationFailureException(sprintf('Failed to write %s', $file));
         }
 
@@ -96,7 +96,7 @@ return call_user_func(function () {
 EOF;
 
         foreach ($manifests as $manifest) {
-            $autoloader = '/' . $manifest->getName() . DIRECTORY_SEPARATOR . "vendor" . DIRECTORY_SEPARATOR . "autoload.php";
+            $autoloader = '/'.$manifest->getName().DIRECTORY_SEPARATOR."vendor".DIRECTORY_SEPARATOR."autoload.php";
             $buffer .= <<<EOF
 
     require __DIR__ . '$autoloader';
@@ -195,10 +195,10 @@ return array(
 EOF;
 
         foreach ($manifests as $manifest) {
-            $namespace = $this->quote('plugin-' . $manifest->getName());
-            $path = DIRECTORY_SEPARATOR . $manifest->getName() . DIRECTORY_SEPARATOR . 'views';
+            $namespace = $this->quote('plugin-'.$manifest->getName());
+            $path = DIRECTORY_SEPARATOR.$manifest->getName().DIRECTORY_SEPARATOR.'views';
 
-            if (is_dir($this->pluginDirectory . $path)) {
+            if (is_dir($this->pluginDirectory.$path)) {
                 $path = $this->quote($path);
                 $buffer .= <<<EOF
     $namespace => __DIR__ . $path,
@@ -206,7 +206,7 @@ EOF;
             }
 
             foreach ($manifest->getTwigPaths() as $path) {
-                $path = $this->quote(DIRECTORY_SEPARATOR . $manifest->getName() . DIRECTORY_SEPARATOR . $path);
+                $path = $this->quote(DIRECTORY_SEPARATOR.$manifest->getName().DIRECTORY_SEPARATOR.$path);
                 $buffer .= <<<EOF
     __DIR__ . $path,
 EOF;

@@ -14,7 +14,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class BasketElementRepository extends EntityRepository
 {
-
     public function findUserElement($element_id, \User_Adapter $user)
     {
         $dql = 'SELECT e
@@ -29,7 +28,7 @@ class BasketElementRepository extends EntityRepository
         $params = array(
             'usr_id'      => $user->get_id(),
             'same_usr_id' => $user->get_id(),
-            'element_id'  => $element_id
+            'element_id'  => $element_id,
         );
 
         $query = $this->_em->createQuery($dql);
@@ -57,7 +56,7 @@ class BasketElementRepository extends EntityRepository
 
         $params = array(
             'sbas_id'   => $record->get_sbas_id(),
-            'record_id' => $record->get_record_id()
+            'record_id' => $record->get_record_id(),
         );
 
         $query = $this->_em->createQuery($dql);
@@ -106,7 +105,7 @@ class BasketElementRepository extends EntityRepository
         $params = array(
             'sbas_id'   => $record->get_sbas_id(),
             'record_id' => $record->get_record_id(),
-            'usr_id'    => $user->get_id()
+            'usr_id'    => $user->get_id(),
         );
 
         $query = $this->_em->createQuery($dql);
@@ -129,7 +128,7 @@ class BasketElementRepository extends EntityRepository
         $params = array(
             'sbas_id'   => $record->get_sbas_id(),
             'record_id' => $record->get_record_id(),
-            'usr_id'    => $user->get_id()
+            'usr_id'    => $user->get_id(),
         );
 
         $query = $this->_em->createQuery($dql);

@@ -85,9 +85,7 @@ class Bridge_Api_Flickr_Container implements Bridge_Api_ContainerInterface
     public function get_url()
     {
         return sprintf(
-                'https://secure.flickr.com/photos/%s/sets/%s'
-                , $this->user_id
-                , $this->entry['id']
+                'https://secure.flickr.com/photos/%s/sets/%s', $this->user_id, $this->entry['id']
         );
     }
 
@@ -148,6 +146,6 @@ class Bridge_Api_Flickr_Container implements Bridge_Api_ContainerInterface
 
     public function is_private()
     {
-        return null;
+        return;
     }
 }

@@ -45,7 +45,6 @@ class Step31 implements DatasUpgraderInterface
                 $records = $this->getNullUUIDs($databox);
 
                 foreach ($records as $record) {
-
                     $this->updateRecordUUID($databox, $record);
                 }
             } while (count($records) > 0);
@@ -119,7 +118,7 @@ class Step31 implements DatasUpgraderInterface
      */
     protected function updateRecordUUID(\databox $databox, array $record)
     {
-        $pathfile = \p4string::addEndSlash($record['path']) . $record['file'];
+        $pathfile = \p4string::addEndSlash($record['path']).$record['file'];
 
         $uuid = \uuid::generate_v4();
         try {

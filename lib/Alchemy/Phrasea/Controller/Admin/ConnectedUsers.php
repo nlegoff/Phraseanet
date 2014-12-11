@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ConnectedUsers implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -63,9 +62,9 @@ class ConnectedUsers implements ControllerProviderInterface
                 $regionName = isset($region['name']) ? $region['name'] : null;
 
                 if (null !== $city) {
-                    $info = $city . ($countryName ? ' (' . $countryName . ')' : null);
+                    $info = $city.($countryName ? ' ('.$countryName.')' : null);
                 } elseif (null !== $regionName) {
-                    $info = $regionName . ($countryName ? ' (' . $countryName . ')' : null);
+                    $info = $regionName.($countryName ? ' ('.$countryName.')' : null);
                 } elseif (null !== $countryName) {
                     $info = $countryName;
                 } else {
@@ -93,7 +92,7 @@ class ConnectedUsers implements ControllerProviderInterface
                 '6' => 0,
                 '7' => 0,
                 '8' => 0,
-            )
+            ),
         );
 
         foreach ($result as $session) {

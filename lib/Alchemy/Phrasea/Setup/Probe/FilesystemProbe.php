@@ -20,10 +20,10 @@ class FilesystemProbe extends FilesystemRequirements implements ProbeInterface
     {
         parent::__construct();
 
-        $baseDir = realpath(__DIR__ . '/../../../../../');
+        $baseDir = realpath(__DIR__.'/../../../../../');
 
         $paths = array(
-            $baseDir . '/config/configuration.yml',
+            $baseDir.'/config/configuration.yml',
         );
 
         foreach ($paths as $path) {

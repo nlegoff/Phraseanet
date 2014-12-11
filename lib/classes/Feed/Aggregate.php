@@ -25,7 +25,7 @@ class Feed_Aggregate extends Feed_Abstract implements Feed_Interface
      */
     protected $feeds;
 
-    public function __construct(Application $app, Array $feeds)
+    public function __construct(Application $app, array $feeds)
     {
         $this->title = 'AGGREGGATE';
         $this->subtitle = 'AGREGGATE SUBTITLE';
@@ -88,9 +88,9 @@ class Feed_Aggregate extends Feed_Abstract implements Feed_Interface
 
         $sql = 'SELECT id, feed_id
             FROM feed_entries
-            WHERE feed_id IN (' . implode(', ', array_keys($this->feeds)) . ')
+            WHERE feed_id IN ('.implode(', ', array_keys($this->feeds)).')
             ORDER BY id DESC
-            LIMIT ' . $offset_start . ', ' . $how_many;
+            LIMIT '.$offset_start.', '.$how_many;
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
         $stmt->execute();
@@ -118,7 +118,7 @@ class Feed_Aggregate extends Feed_Abstract implements Feed_Interface
         $sql = 'SELECT count(id) as number
             FROM feed_entries
             WHERE feed_id
-              IN (' . implode(', ', array_keys($this->feeds)) . ') ';
+              IN ('.implode(', ', array_keys($this->feeds)).') ';
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -140,33 +140,21 @@ class Feed_Aggregate extends Feed_Abstract implements Feed_Interface
         switch ($format) {
             case self::FORMAT_ATOM:
                 return new Feed_Link(
-                        sprintf('%s/feeds/aggregated/atom/%s'
-                            , rtrim($registry->get('GV_ServerName'), '/')
-                            , ($page ? '?page=' . $page : '')
-                        )
-                        , sprintf('%s - %s', $this->get_title(), 'Atom')
-                        , 'application/atom+xml'
+                        sprintf('%s/feeds/aggregated/atom/%s', rtrim($registry->get('GV_ServerName'), '/'), ($page ? '?page='.$page : '')
+                        ), sprintf('%s - %s', $this->get_title(), 'Atom'), 'application/atom+xml'
                 );
                 break;
             case self::FORMAT_COOLIRIS:
                 return new Feed_Link(
-                        sprintf('%s/feeds/cooliris/%s'
-                            , rtrim($registry->get('GV_ServerName'), '/')
-                            , ($page ? '?page=' . $page : '')
-                        )
-                        , sprintf('%s - %s', $this->get_title(), 'RSS')
-                        , 'application/rss+xml'
+                        sprintf('%s/feeds/cooliris/%s', rtrim($registry->get('GV_ServerName'), '/'), ($page ? '?page='.$page : '')
+                        ), sprintf('%s - %s', $this->get_title(), 'RSS'), 'application/rss+xml'
                 );
                 break;
             default:
             case self::FORMAT_RSS:
                 return new Feed_Link(
-                        sprintf('%s/feeds/aggregated/rss/%s'
-                            , rtrim($registry->get('GV_ServerName'), '/')
-                            , ($page ? '?page=' . $page : '')
-                        )
-                        , sprintf('%s - %s', $this->get_title(), 'RSS')
-                        , 'application/rss+xml'
+                        sprintf('%s/feeds/aggregated/rss/%s', rtrim($registry->get('GV_ServerName'), '/'), ($page ? '?page='.$page : '')
+                        ), sprintf('%s - %s', $this->get_title(), 'RSS'), 'application/rss+xml'
                 );
                 break;
         }
@@ -196,7 +184,7 @@ class Feed_Aggregate extends Feed_Abstract implements Feed_Interface
                 ':token'      => $token
                 , ':feed_id'    => null
                 , ':usr_id'     => $user->get_id()
-                , ':aggregated' => '1'
+                , ':aggregated' => '1',
             );
 
             $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -236,24 +224,14 @@ class Feed_Aggregate extends Feed_Abstract implements Feed_Interface
         switch ($format) {
             case self::FORMAT_ATOM:
                 return new Feed_Link(
-                        sprintf('%s/feeds/userfeed/aggregated/%s/atom/%s'
-                            , rtrim($registry->get('GV_ServerName'), '/')
-                            , $this->get_token($user, $renew_token)
-                            , ($page ? '?page=' . $page : '')
-                        )
-                        , sprintf('%s - %s', $this->get_title(), 'Atom')
-                        , 'application/atom+xml'
+                        sprintf('%s/feeds/userfeed/aggregated/%s/atom/%s', rtrim($registry->get('GV_ServerName'), '/'), $this->get_token($user, $renew_token), ($page ? '?page='.$page : '')
+                        ), sprintf('%s - %s', $this->get_title(), 'Atom'), 'application/atom+xml'
                 );
                 break;
             case self::FORMAT_RSS:
                 return new Feed_Link(
-                        sprintf('%s/feeds/userfeed/aggregated/%s/rss/%s'
-                            , rtrim($registry->get('GV_ServerName'), '/')
-                            , $this->get_token($user, $renew_token)
-                            , ($page ? '?page=' . $page : '')
-                        )
-                        , sprintf('%s - %s', $this->get_title(), 'RSS')
-                        , 'application/rss+xml'
+                        sprintf('%s/feeds/userfeed/aggregated/%s/rss/%s', rtrim($registry->get('GV_ServerName'), '/'), $this->get_token($user, $renew_token), ($page ? '?page='.$page : '')
+                        ), sprintf('%s - %s', $this->get_title(), 'RSS'), 'application/rss+xml'
                 );
                 break;
         }

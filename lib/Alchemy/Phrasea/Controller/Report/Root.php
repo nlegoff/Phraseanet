@@ -83,7 +83,7 @@ class Root implements ControllerProviderInterface
             $dashboard->execute();
 
             return $app->json(array('html' => $app['twig']->render('report/ajax_dashboard_content_child.html.twig', array(
-                'dashboard' => $dashboard
+                'dashboard' => $dashboard,
             ))));
         }
 
@@ -93,13 +93,13 @@ class Root implements ControllerProviderInterface
                 $granted[$collection->get_sbas_id()] = array(
                     'id' => $collection->get_sbas_id(),
                     'name' => $collection->get_databox()->get_viewname(),
-                    'collections' => array()
+                    'collections' => array(),
                 );
             }
             $granted[$collection->get_sbas_id()]['collections'][] = array(
                 'id' => $collection->get_coll_id(),
                 'base_id' => $collection->get_base_id(),
-                'name' => $collection->get_name()
+                'name' => $collection->get_name(),
             );
         }
 
@@ -113,7 +113,7 @@ class Root implements ControllerProviderInterface
             'anonymous'     => $app['phraseanet.registry']->get('GV_anonymousReport'),
             'g_anal'        => $app['phraseanet.registry']->get('GV_googleAnalytics'),
             'ajax'          => false,
-            'ajax_chart'    => false
+            'ajax_chart'    => false,
         ));
     }
 
@@ -130,11 +130,11 @@ class Root implements ControllerProviderInterface
         $popbases = $request->request->get('popbases', array());
 
         if ('' === $dmin = $request->request->get('dmin', '')) {
-            $dmin = date('Y') . '-' . date('m') . '-01';
+            $dmin = date('Y').'-'.date('m').'-01';
         }
 
         if ('' === $dmax = $request->request->get('dmax', '')) {
-            $dmax = date('Y') . '-' . date('m') . '-' . date('d');
+            $dmax = date('Y').'-'.date('m').'-'.date('d');
         }
 
         $dmin = \DateTime::createFromFormat('Y-m-d H:i:s', sprintf('%s 00:00:00', $dmin));
@@ -151,7 +151,7 @@ class Root implements ControllerProviderInterface
                 $liste = '';
             }
             $selection[$exp[0]][] = $exp[1];
-            $liste .= (empty($liste) ? '' : ',') . $exp[1];
+            $liste .= (empty($liste) ? '' : ',').$exp[1];
             $id_sbas = $exp[0];
             $i ++;
         }
@@ -192,7 +192,7 @@ class Root implements ControllerProviderInterface
             'fonction'  => array(_('report::fonction'), 1, 1, 1, 1),
             'activite'  => array(_('report::activite'), 1, 1, 1, 1),
             'pays'      => array(_('report::pays'), 1, 1, 1, 1),
-            'societe'   => array(_('report::societe'), 1, 1, 1, 1)
+            'societe'   => array(_('report::societe'), 1, 1, 1, 1),
         );
 
         if ($request->request->get('printcsv') == 'on') {
@@ -217,7 +217,7 @@ class Root implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             )),
             'display_nav' => $report['display_nav'], // do we display the prev and next button ?
             'next'        => $report['next_page'], //Number of the next page
@@ -225,7 +225,7 @@ class Root implements ControllerProviderInterface
             'page'        => $report['page'], //The current page
             'filter'      => ((sizeof($report['filter']) > 0) ? serialize($report['filter']) : ''), //the serialized filters
             'col'         => $report['active_column'], //all the columns where a filter is applied
-            'limit'       => $report['nb_record']
+            'limit'       => $report['nb_record'],
         ));
     }
 
@@ -253,7 +253,7 @@ class Root implements ControllerProviderInterface
             'fonction'  => array(_('report:: fonction'), 1, 1, 1, 1),
             'activite'  => array(_('report:: activite'), 1, 1, 1, 1),
             'pays'      => array(_('report:: pays'), 1, 1, 1, 1),
-            'societe'   => array(_('report:: societe'), 1, 1, 1, 1)
+            'societe'   => array(_('report:: societe'), 1, 1, 1, 1),
         );
 
         if ($request->request->get('printcsv') == 'on') {
@@ -278,7 +278,7 @@ class Root implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             )),
             'display_nav' => $report['display_nav'], // do we display the prev and next button ?
             'next'        => $report['next_page'], //Number of the next page
@@ -286,7 +286,7 @@ class Root implements ControllerProviderInterface
             'page'        => $report['page'], //The current page
             'filter'      => ((sizeof($report['filter']) > 0) ? serialize($report['filter']) : ''), //the serialized filters
             'col'         => $report['active_column'], //all the columns where a filter is applied
-            'limit'       => $report['nb_record']
+            'limit'       => $report['nb_record'],
         ));
     }
 
@@ -299,7 +299,6 @@ class Root implements ControllerProviderInterface
      */
     public function doReportDownloads(Application $app, Request $request)
     {
-
         // no_// no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
 
 
@@ -318,7 +317,7 @@ class Root implements ControllerProviderInterface
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
 
         foreach (\module_report::getPreff($app, $request->request->get('sbasid')) as $field) {
-//            $conf_pref[strtolower($field)] = array($field, 0, 0, 0, 0);
+            //            $conf_pref[strtolower($field)] = array($field, 0, 0, 0, 0);
             $conf_pref[$field] = array($field, 0, 0, 0, 0);
         }
 
@@ -334,7 +333,7 @@ class Root implements ControllerProviderInterface
             'fonction'  => array(_('report:: fonction'), 1, 1, 1, 1),
             'activite'  => array(_('report:: activite'), 1, 1, 1, 1),
             'pays'      => array(_('report:: pays'), 1, 1, 1, 1),
-            'societe'   => array(_('report:: societe'), 1, 1, 1, 1)
+            'societe'   => array(_('report:: societe'), 1, 1, 1, 1),
         ), $conf_pref);
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
@@ -349,7 +348,6 @@ class Root implements ControllerProviderInterface
 
             $r = $this->getCSVResponse($app, $download, 'download');
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s) %s\n\n", __FILE__, __LINE__, var_export($r, true)), FILE_APPEND);
-
             return $r;
         }
 
@@ -360,13 +358,11 @@ class Root implements ControllerProviderInterface
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
 
         if ($report instanceof Response) {
-// no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
-
+            // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
             return $report;
         }
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
-
         return $app->json(array(
                 'rs'          =>  $app['twig']->render('report/ajax_data_content.html.twig', array(
                 'result'      => isset($report['report']) ? $report['report'] : $report,
@@ -374,7 +370,7 @@ class Root implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             )),
             'display_nav' => $report['display_nav'], // do we display the prev and next button ?
             'next'        => $report['next_page'], //Number of the next page
@@ -382,7 +378,7 @@ class Root implements ControllerProviderInterface
             'page'        => $report['page'], //The current page
             'filter'      => ((sizeof($report['filter']) > 0) ? serialize($report['filter']) : ''), //the serialized filters
             'col'         => $report['active_column'], //all the columns where a filter is applied
-            'limit'       => $report['nb_record']
+            'limit'       => $report['nb_record'],
         ));
     }
 
@@ -406,7 +402,7 @@ class Root implements ControllerProviderInterface
         $conf_pref = array();
 
         foreach (\module_report::getPreff($app, $request->request->get('sbasid')) as $field) {
-//            $conf_pref[strtolower($field)] = array($field, 0, 0, 0, 0);
+            //            $conf_pref[strtolower($field)] = array($field, 0, 0, 0, 0);
             $conf_pref[$field] = array($field, 0, 0, 0, 0);
         }
 
@@ -416,7 +412,7 @@ class Root implements ControllerProviderInterface
             'final'             => array(_('phraseanet:: sous definition'), 1, 0, 1, 1),
             'file'              => array(_('report:: fichier'), 1, 0, 0, 1),
             'mime'              => array(_('report:: type'), 1, 0, 1, 1),
-            'size'              => array(_('report:: taille'), 1, 0, 1, 1)
+            'size'              => array(_('report:: taille'), 1, 0, 1, 1),
         ), $conf_pref);
 
         if ($request->request->get('printcsv') == 'on') {
@@ -428,7 +424,6 @@ class Root implements ControllerProviderInterface
             $r = $this->getCSVResponse($app, $document, 'documents');
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s) %s\n\n", __FILE__, __LINE__, var_export($r, true)), FILE_APPEND);
-
             return $r;
         }
 
@@ -445,7 +440,7 @@ class Root implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => true
+                'is_doc'      => true,
             )),
             'display_nav' => $report['display_nav'], // do we display the prev and next button ?
             'next'        => $report['next_page'], //Number of the next page
@@ -453,7 +448,7 @@ class Root implements ControllerProviderInterface
             'page'        => $report['page'], //The current page
             'filter'      => ((sizeof($report['filter']) > 0) ? serialize($report['filter']) : ''), //the serialized filters
             'col'         => $report['active_column'], //all the columns where a filter is applied
-            'limit'       => $report['nb_record']
+            'limit'       => $report['nb_record'],
         ));
     }
 
@@ -477,28 +472,28 @@ class Root implements ControllerProviderInterface
         $conf_nav = array(
             'nav'       => array(_('report:: navigateur'), 0, 1, 0, 0),
             'nb'        => array(_('report:: nombre'), 0, 0, 0, 0),
-            'pourcent'  => array(_('report:: pourcentage'), 0, 0, 0, 0)
+            'pourcent'  => array(_('report:: pourcentage'), 0, 0, 0, 0),
         );
 
         $conf_combo = array(
             'combo'     => array(_('report:: navigateurs et plateforme'), 0, 0, 0, 0),
             'nb'        => array(_('report:: nombre'), 0, 0, 0, 0),
-            'pourcent'  => array(_('report:: pourcentage'), 0, 0, 0, 0)
+            'pourcent'  => array(_('report:: pourcentage'), 0, 0, 0, 0),
         );
         $conf_os = array(
             'os'        => array(_('report:: plateforme'), 0, 0, 0, 0),
             'nb'        => array(_('report:: nombre'), 0, 0, 0, 0),
-            'pourcent'  => array(_('report:: pourcentage'), 0, 0, 0, 0)
+            'pourcent'  => array(_('report:: pourcentage'), 0, 0, 0, 0),
         );
         $conf_res = array(
             'res'       => array(_('report:: resolution'), 0, 0, 0, 0),
             'nb'        => array(_('report:: nombre'), 0, 0, 0, 0),
-            'pourcent'  => array(_('report:: pourcentage'), 0, 0, 0, 0)
+            'pourcent'  => array(_('report:: pourcentage'), 0, 0, 0, 0),
         );
         $conf_mod = array(
             'appli'     => array(_('report:: module'), 0, 0, 0, 0),
             'nb'        => array(_('report:: nombre'), 0, 0, 0, 0),
-            'pourcent'  => array(_('report:: pourcentage'), 0, 0, 0, 0)
+            'pourcent'  => array(_('report:: pourcentage'), 0, 0, 0, 0),
         );
 
         $report = array(
@@ -506,7 +501,7 @@ class Root implements ControllerProviderInterface
             'os'    => $nav->buildTabOs($conf_os),
             'res'   => $nav->buildTabRes($conf_res),
             'mod'   => $nav->buildTabModule($conf_mod),
-            'combo' => $nav->buildTabCombo($conf_combo)
+            'combo' => $nav->buildTabCombo($conf_combo),
         );
 
         if ($request->request->get('printcsv') == 'on') {
@@ -538,7 +533,6 @@ class Root implements ControllerProviderInterface
                 $app['csv.exporter']->export('php://output', $result);
             });
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
-
             return $response;
         }
 
@@ -549,10 +543,10 @@ class Root implements ControllerProviderInterface
                 'is_nav'      => true,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             )),
             'display_nav' => false,
-            'title'       => false
+            'title'       => false,
         ));
     }
 
@@ -597,7 +591,7 @@ class Root implements ControllerProviderInterface
         //display content of a table column when user click on it
         if ($request->request->get('conf') == 'on') {
             return $app->json(array('liste' => $app['twig']->render('report/listColumn.html.twig', array(
-                'conf'  => $base_conf
+                'conf'  => $base_conf,
             )), 'title' => _('configuration')));
         }
 
@@ -624,7 +618,7 @@ class Root implements ControllerProviderInterface
             if ($request->request->get('liste') == 'on') {
                 return $app->json(array('diag'  => $app['twig']->render('report/colFilter.html.twig', array(
                     'result' => $report->colFilter($field),
-                    'field'  => $field
+                    'field'  => $field,
                 )), 'title'  => sprintf(_('filtrer les resultats sur la colonne %s'), $field)));
             }
 
@@ -653,8 +647,7 @@ class Root implements ControllerProviderInterface
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
 
         if ('' !== $groupby = $request->request->get('groupby', '')) {
-
-// no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
+            // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
 
             $report->setConfig(false);
             $groupby = current(explode(' ', $groupby));
@@ -668,7 +661,6 @@ class Root implements ControllerProviderInterface
             }
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
-
             return $app->json(array(
                 'rs' => $app['twig']->render('report/ajax_data_content.html.twig', array(
                     'result'      => isset($reportArray['report']) ? $reportArray['report'] : $reportArray,
@@ -676,10 +668,10 @@ class Root implements ControllerProviderInterface
                     'is_nav'      => false,
                     'is_groupby'  => true,
                     'is_plot'     => false,
-                    'is_doc'      => false
+                    'is_doc'      => false,
                 )),
                 'display_nav' => false,
-                'title'       => _(sprintf('Groupement des resultats sur le champ %s',  $groupField))
+                'title'       => _(sprintf('Groupement des resultats sur le champ %s',  $groupField)),
             ));
         }
 
@@ -704,7 +696,6 @@ class Root implements ControllerProviderInterface
         }
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
-
         return $reportArray;
     }
 
@@ -739,9 +730,10 @@ class Root implements ControllerProviderInterface
             // restrict fields to the displayed ones
             //    return array_map("strip_tags", array_intersect_key($row, $report->getDisplay()));
             $ret = array();
-            foreach($headers as $f) {
+            foreach ($headers as $f) {
                 $ret[$f] = array_key_exists($f, $row) ? strip_tags($row[$f]) : '';
             }
+
             return $ret;
         });
 

@@ -16,16 +16,15 @@
  */
 abstract class task_appboxAbstract extends task_abstract
 {
-
     abstract protected function retrieveContent(appbox $appbox);
 
-    abstract protected function processOneContent(appbox $appbox, Array $row);
+    abstract protected function processOneContent(appbox $appbox, array $row);
 
-    abstract protected function postProcessOneContent(appbox $appbox, Array $row);
+    abstract protected function postProcessOneContent(appbox $appbox, array $row);
 
     protected function run2()
     {
-        $this->running = TRUE;
+        $this->running = true;
         while ($this->running) {
             try {
                 $conn = connection::getPDOConnection($this->dependencyContainer);
@@ -44,7 +43,7 @@ abstract class task_appboxAbstract extends task_abstract
                 } else {
                     // runner = manual : can't restart so simply quit
                 }
-                $this->running = FALSE;
+                $this->running = false;
 
                 return;
             }
@@ -61,7 +60,7 @@ abstract class task_appboxAbstract extends task_abstract
                 $duration = time();
             } catch (\Exception $e) {
                 // failed sql, simply return
-                $this->running = FALSE;
+                $this->running = false;
 
                 return;
             }
@@ -85,18 +84,18 @@ abstract class task_appboxAbstract extends task_abstract
                     case self::STATE_MAXRECSDONE:
                         if ($this->getRunner() == self::RUNNER_SCHEDULER) {
                             $this->setState(self::STATE_TORESTART);
-                            $this->running = FALSE;
+                            $this->running = false;
                         }
                         break;
 
                     case self::STATE_TOSTOP:
                         $this->setState(self::STATE_TOSTOP);
-                        $this->running = FALSE;
+                        $this->running = false;
                         break;
 
                     case self::STATE_TODELETE: // formal 'suicidable'
                         $this->setState(self::STATE_TODELETE);
-                        $this->running = FALSE;
+                        $this->running = false;
                         break;
                 }
             } // if(row)
@@ -126,7 +125,7 @@ abstract class task_appboxAbstract extends task_abstract
             // process the records
             $ret = $this->processLoop($appbox, $rs);
         } catch (\Exception $e) {
-            $this->log('Error  : ' . $e->getMessage());
+            $this->log('Error  : '.$e->getMessage());
         }
 
         return $ret;

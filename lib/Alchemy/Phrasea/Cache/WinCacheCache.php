@@ -20,7 +20,6 @@ use Doctrine\Common\Cache\WincacheCache as DoctrineWinCache;
  */
 class WinCacheCache extends DoctrineWinCache implements Cache
 {
-
     /**
      * {@inheritdoc}
      */
@@ -50,7 +49,7 @@ class WinCacheCache extends DoctrineWinCache implements Cache
      */
     public function get($key)
     {
-        if ( ! $this->contains($key)) {
+        if (! $this->contains($key)) {
             throw new Exception('Unable to retrieve the value');
         }
 

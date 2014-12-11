@@ -48,7 +48,7 @@ class ApacheMode extends AbstractServerMode implements ModeInterface
             }
 
             $final[] = array(
-                'directory' => $this->sanitizePath(realpath($entry['directory']))
+                'directory' => $this->sanitizePath(realpath($entry['directory'])),
             );
         }
 
@@ -65,7 +65,7 @@ class ApacheMode extends AbstractServerMode implements ModeInterface
         $output .= "  <Files *>\n";
         $output .= "      XSendFile on\n";
         foreach ($this->mapping as $entry) {
-            $output .= '      XSendFilePath  ' .  $entry['directory'] . "\n";
+            $output .= '      XSendFilePath  '.$entry['directory']."\n";
         }
         $output .= "  </Files>\n";
         $output .= "</IfModule>\n";

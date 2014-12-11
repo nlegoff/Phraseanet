@@ -210,7 +210,7 @@ class databox_field implements cache_cacheableInterface
         }
 
         foreach (array('en', 'fr', 'de', 'nl') as $code) {
-            $this->labels[$code] = $row['label_' . $code];
+            $this->labels[$code] = $row['label_'.$code];
         }
 
         $this->name = $row['name'];
@@ -221,13 +221,13 @@ class databox_field implements cache_cacheableInterface
         $this->Business = (Boolean) $row['business'];
         $this->report = (Boolean) $row['report'];
         $this->position = (Int) $row['sorter'];
-        $this->type = $row['type'] ? : self::TYPE_STRING;
+        $this->type = $row['type'] ?: self::TYPE_STRING;
         $this->tbranch = $row['tbranch'];
         $this->VocabularyType = $row['VocabularyControlType'];
         $this->VocabularyRestriction = !!$row['RestrictToVocabularyControl'];
 
         if ($row['dces_element']) {
-            $dc_class = 'databox_Field_DCES_' . $row['dces_element'];
+            $dc_class = 'databox_Field_DCES_'.$row['dces_element'];
             $this->dces_element = new $dc_class();
         }
 
@@ -277,9 +277,9 @@ class databox_field implements cache_cacheableInterface
      */
     public static function get_instance(Application $app, databox $databox, $id)
     {
-        $cache_key = 'field_' . $id;
-        $instance_id = $databox->get_sbas_id() . '_' . $id;
-        if ( ! isset(self::$_instance[$instance_id]) || (self::$_instance[$instance_id] instanceof self) === false) {
+        $cache_key = 'field_'.$id;
+        $instance_id = $databox->get_sbas_id().'_'.$id;
+        if (! isset(self::$_instance[$instance_id]) || (self::$_instance[$instance_id] instanceof self) === false) {
             try {
                 self::$_instance[$instance_id] = $databox->get_data_from_cache($cache_key);
             } catch (\Exception $e) {
@@ -344,7 +344,7 @@ class databox_field implements cache_cacheableInterface
         $xp_struct = $this->databox->get_xpath_structure();
 
         $nodes = $xp_struct->query(
-            '/record/description/*[@meta_id=' . $this->id . ']'
+            '/record/description/*[@meta_id='.$this->id.']'
         );
 
         foreach ($nodes as $node) {
@@ -408,7 +408,7 @@ class databox_field implements cache_cacheableInterface
             ':label_en'              => isset($this->labels['en']) ? $this->labels['en'] : null,
             ':label_fr'              => isset($this->labels['fr']) ? $this->labels['fr'] : null,
             ':label_de'              => isset($this->labels['de']) ? $this->labels['de'] : null,
-            ':label_nl'              => isset($this->labels['nl']) ? $this->labels['nl'] : null
+            ':label_nl'              => isset($this->labels['nl']) ? $this->labels['nl'] : null,
         );
 
         $stmt = $connbas->prepare($sql);
@@ -424,7 +424,7 @@ class databox_field implements cache_cacheableInterface
         $xp_struct = $this->databox->get_xpath_structure();
 
         $nodes = $xp_struct->query(
-            '/record/description/*[@meta_id=' . $this->id . ']'
+            '/record/description/*[@meta_id='.$this->id.']'
         );
 
         if ($nodes->length == 0) {
@@ -539,19 +539,17 @@ class databox_field implements cache_cacheableInterface
         $tagName = str_replace('/rdf:rdf/rdf:description/', '', $tagName);
 
         if (trim($tagName) === '') {
-
             $tag = new Alchemy\Phrasea\Metadata\Tag\Nosource();
         } elseif (strpos($tagName, 'Phraseanet:') === 0) {
-
             $tagName = str_replace('Phraseanet:', '', $tagName);
 
             $tagName = explode('-', $tagName);
             $tagName = array_map('ucfirst', $tagName);
             $tagName = implode('', $tagName);
 
-            $classname = '\\Alchemy\\Phrasea\\Metadata\\Tag\\' . $tagName;
+            $classname = '\\Alchemy\\Phrasea\\Metadata\\Tag\\'.$tagName;
 
-            if ( ! class_exists($classname)) {
+            if (! class_exists($classname)) {
                 if ($throwException) {
                     throw new Exception_Databox_metadataDescriptionNotFound(sprintf("tagname %s not found", $tagName));
                 } else {
@@ -613,7 +611,7 @@ class databox_field implements cache_cacheableInterface
 
             $stmt = $connbas->prepare($sql);
             $stmt->execute(array(
-                ':dces_element' => $DCES_element->get_label()
+                ':dces_element' => $DCES_element->get_label(),
             ));
             $stmt->closeCursor();
         }
@@ -623,8 +621,7 @@ class databox_field implements cache_cacheableInterface
 
         $stmt = $connbas->prepare($sql);
         $stmt->execute(array(
-            ':dces_element' => $DCES_element ? $DCES_element->get_label() : null
-            , ':id'           => $this->id
+            ':dces_element' => $DCES_element ? $DCES_element->get_label() : null, ':id'           => $this->id,
         ));
         $stmt->closeCursor();
         $this->dces_element = $DCES_element;
@@ -1017,8 +1014,9 @@ class databox_field implements cache_cacheableInterface
     {
         $vars = array();
         foreach ($this as $key => $value) {
-            if (in_array($key, array('databox', 'app', 'Vocabulary')))
+            if (in_array($key, array('databox', 'app', 'Vocabulary'))) {
                 continue;
+            }
             $vars[] = $key;
         }
 
@@ -1033,7 +1031,7 @@ class databox_field implements cache_cacheableInterface
      */
     public function get_cache_key($option = null)
     {
-        return 'field_' . $this->get_id() . ($option ? $option . '_' : '');
+        return 'field_'.$this->get_id().($option ? $option.'_' : '');
     }
 
     /**
@@ -1076,7 +1074,6 @@ class databox_field implements cache_cacheableInterface
         try {
             $this->Vocabulary = Vocabulary\Controller::get($this->app, $this->VocabularyType);
         } catch (\InvalidArgumentException $e) {
-
         }
     }
 }

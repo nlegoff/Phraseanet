@@ -19,7 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 interface DatasUpgraderInterface
 {
-
     /**
      * Executes the upgrade
      */

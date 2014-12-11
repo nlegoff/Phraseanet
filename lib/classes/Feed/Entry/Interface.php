@@ -19,7 +19,6 @@ use Alchemy\Phrasea\Application;
  */
 interface Feed_Entry_Interface
 {
-
     public function __construct(Application $app, Feed_Adapter $feed, $id);
 
     public function get_feed();
@@ -52,8 +51,7 @@ interface Feed_Entry_Interface
 
     public function delete();
 
-    public static function create(Application $app, Feed_Adapter $feed
-    , Feed_Publisher_Adapter $publisher, $title, $subtitle, $author_name, $author_mail);
+    public static function create(Application $app, Feed_Adapter $feed, Feed_Publisher_Adapter $publisher, $title, $subtitle, $author_name, $author_mail);
 
     public static function load_from_id(Application $app, $id);
 }

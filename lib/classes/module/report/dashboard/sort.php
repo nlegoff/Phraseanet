@@ -100,11 +100,13 @@ class module_report_dashboard_sort implements module_report_dashboard_componentI
         foreach ($args as $n => $field) {
             if (is_string($field)) { // = clef
                 $tmp = array();
-                foreach ($data as $key => $row)
+                foreach ($data as $key => $row) {
                     $tmp[$key] = $row[$field];
+                }
                 $args[$n] = &$tmp;
-            } else
+            } else {
                 $args[$n] = &$field;
+            }
         }
         $args[] = &$data;
 
@@ -129,7 +131,7 @@ class module_report_dashboard_sort implements module_report_dashboard_componentI
 
     public function getTop($nbtop)
     {
-        if ( ! is_int($nbtop)) {
+        if (! is_int($nbtop)) {
             return array();
         }
 
@@ -140,10 +142,11 @@ class module_report_dashboard_sort implements module_report_dashboard_componentI
                 $i = 0;
                 $tmp[$k] = array();
                 foreach ($v as $a) {
-                    if ($i < $nbtop)
+                    if ($i < $nbtop) {
                         array_push($tmp[$k], $a);
-                    else
+                    } else {
                         break;
+                    }
                     $i ++;
                 }
             }

@@ -100,8 +100,9 @@ abstract class Bridge_Api_AbstractCollection
      */
     public function set_current_page($current_page)
     {
-        if ($current_page > 0)
+        if ($current_page > 0) {
             $this->current_page = (int) $current_page;
+        }
 
         return $this;
     }
@@ -122,8 +123,9 @@ abstract class Bridge_Api_AbstractCollection
      */
     public function set_total_page($total_page)
     {
-        if ($total_page > 0)
+        if ($total_page > 0) {
             $this->total_page = (int) $total_page;
+        }
 
         return $this;
     }

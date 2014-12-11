@@ -18,5 +18,4 @@ class common extends AbstractCharset
     U+FF10..U+FF19->0..9, U+FF21..U+FF3A->a..z, U+FF41..U+FF5A->a..z, 0..9,
     A..Z->a..z, a..z
 ';
-
 }

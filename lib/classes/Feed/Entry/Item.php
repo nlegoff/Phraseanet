@@ -86,7 +86,6 @@ class Feed_Entry_Item implements Feed_Entry_ItemInterface, cache_cacheableInterf
 
             return $this;
         } catch (\Exception $e) {
-
         }
 
         $sql = 'SELECT id, sbas_id, record_id, ord
@@ -97,8 +96,9 @@ class Feed_Entry_Item implements Feed_Entry_ItemInterface, cache_cacheableInterf
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new Exception_Feed_ItemNotFound();
+        }
 
         $this->record = $this->appbox->get_databox($row['sbas_id'])
             ->get_record($row['record_id']);
@@ -107,7 +107,7 @@ class Feed_Entry_Item implements Feed_Entry_ItemInterface, cache_cacheableInterf
         $datas = array(
             'record_id' => $this->record->get_record_id()
             , 'sbas_id'   => $this->record->get_sbas_id()
-            , 'ord'       => $this->ord
+            , 'ord'       => $this->ord,
         );
 
         $this->set_data_to_cache($datas);
@@ -223,7 +223,7 @@ class Feed_Entry_Item implements Feed_Entry_ItemInterface, cache_cacheableInterf
             ':entry_id'  => $entry->get_id()
             , ':sbas_id'   => $record->get_sbas_id()
             , ':record_id' => $record->get_record_id()
-            , ':ord'       => $sorter
+            , ':ord'       => $sorter,
         );
 
         $stmt = $appbox->get_connection()->prepare($sql);
@@ -257,7 +257,7 @@ class Feed_Entry_Item implements Feed_Entry_ItemInterface, cache_cacheableInterf
                 INNER JOIN feeds AS f ON (f.id = en.feed_id)
                 WHERE f.public = 1 AND f.base_id IS null
                 ORDER BY en.updated_on DESC
-                LIMIT ' . ((integer) $nbItems * $execution) .','. (integer) $nbItems;
+                LIMIT '.((integer) $nbItems * $execution).','.(integer) $nbItems;
 
             $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
             $stmt->execute();
@@ -274,34 +274,34 @@ class Feed_Entry_Item implements Feed_Entry_ItemInterface, cache_cacheableInterf
                 }
 
                 if (!isset($items[$row['item']])) {
-                     try {
-                         $item = new self($app['phraseanet.appbox'], $entries[$row['entry']], $row['item']);
-                         $record = $item->get_record();
-                     } catch (NotFoundHttpException $e) {
-                         $sql = 'DELETE FROM feed_entry_elements WHERE id = :id';
-                         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
-                         $stmt->execute(array(':id' => $row['item']));
-                         $stmt->closeCursor();
+                    try {
+                        $item = new self($app['phraseanet.appbox'], $entries[$row['entry']], $row['item']);
+                        $record = $item->get_record();
+                    } catch (NotFoundHttpException $e) {
+                        $sql = 'DELETE FROM feed_entry_elements WHERE id = :id';
+                        $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
+                        $stmt->execute(array(':id' => $row['item']));
+                        $stmt->closeCursor();
 
-                         continue;
-                     } catch (\Exception_Record_AdapterNotFound $e) {
-                         $sql = 'DELETE FROM feed_entry_elements WHERE id = :id';
-                         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
-                         $stmt->execute(array(':id' => $row['item']));
-                         $stmt->closeCursor();
+                        continue;
+                    } catch (\Exception_Record_AdapterNotFound $e) {
+                        $sql = 'DELETE FROM feed_entry_elements WHERE id = :id';
+                        $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
+                        $stmt->execute(array(':id' => $row['item']));
+                        $stmt->closeCursor();
 
-                         continue;
-                     }
+                        continue;
+                    }
 
-                     if (null !== $preview = $record->get_subdef('preview')) {
-                         if (null !== $permalink = $preview->get_permalink()) {
+                    if (null !== $preview = $record->get_subdef('preview')) {
+                        if (null !== $permalink = $preview->get_permalink()) {
                             $items[$row['item']] = $item;
 
-                             if (count($items) >= $nbItems) {
-                                 break;
-                             }
-                         }
-                     }
+                            if (count($items) >= $nbItems) {
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -313,7 +313,7 @@ class Feed_Entry_Item implements Feed_Entry_ItemInterface, cache_cacheableInterf
 
     public function get_cache_key($option = null)
     {
-        return 'feedentryitem_' . $this->get_id() . '_' . ($option ? '_' . $option : '');
+        return 'feedentryitem_'.$this->get_id().'_'.($option ? '_'.$option : '');
     }
 
     public function get_data_from_cache($option = null)

@@ -19,5 +19,4 @@ class tamil extends AbstractCharset
     U+0B9A, U+0B9C, U+0B9E, U+0B9F, U+0BA3, U+0BA4, U+0BA8..U+0BAA, U+0BAE..U+0BB9,
     U+0BE6..U+0BEF
 ';
-
 }

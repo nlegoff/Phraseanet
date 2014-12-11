@@ -384,7 +384,7 @@ class PhraseaEngine implements SearchEngineInterface
         }
 
         if ($this->options->getRecordType()) {
-            $query .= ' AND recordtype=' . $this->options->getRecordType();
+            $query .= ' AND recordtype='.$this->options->getRecordType();
         }
 
         $sql = 'SELECT query, query_time, duration, total FROM cache WHERE session_id = :ses_id';
@@ -444,7 +444,6 @@ class PhraseaEngine implements SearchEngineInterface
                                 $resultNumber
                 ));
             } catch (\Exception $e) {
-
             }
             $resultNumber++;
         }
@@ -483,12 +482,12 @@ class PhraseaEngine implements SearchEngineInterface
         if ($this->qp && isset($this->qp['main'])) {
             $proposals = self::proposalsToHTML($this->qp['main']->proposals);
             if (trim($proposals) !== '') {
-                return "<div style='height:0px; overflow:hidden'>" . $this->qp['main']->proposals["QRY"]
-                    . "</div><div class='proposals'>" . $proposals . "</div>";
+                return "<div style='height:0px; overflow:hidden'>".$this->qp['main']->proposals["QRY"]
+                    ."</div><div class='proposals'>".$proposals."</div>";
             }
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -505,18 +504,18 @@ class PhraseaEngine implements SearchEngineInterface
             if ((int) (count($proposals["BASES"]) > 1) && count($zbase["TERMS"]) > 0) {
                 $style = $b ? 'style="margin-top:0px;"' : '';
                 $b = false;
-                $html .= "<h1 $style>" . sprintf(_('reponses::propositions pour la base %s'), $zbase["NAME"]) . "</h1>";
+                $html .= "<h1 $style>".sprintf(_('reponses::propositions pour la base %s'), $zbase["NAME"])."</h1>";
             }
             $t = true;
             foreach ($zbase["TERMS"] as $path => $props) {
                 $style = $t ? 'style="margin-top:0px;"' : '';
                 $t = false;
-                $html .= "<h2 $style>" . sprintf(_('reponses::propositions pour le terme %s'), $props["TERM"]) . "</h2>";
+                $html .= "<h2 $style>".sprintf(_('reponses::propositions pour le terme %s'), $props["TERM"])."</h2>";
                 $html .= $props["HTML"];
             }
         }
 
-        return $html ;
+        return $html;
     }
 
     /**
@@ -560,7 +559,7 @@ class PhraseaEngine implements SearchEngineInterface
                     $sort = '-';
                     break;
             }
-            $sort .= '0' . $this->options->getSortBy();
+            $sort .= '0'.$this->options->getSortBy();
         }
 
         foreach ($this->queries as $sbas_id => $qry) {
@@ -574,17 +573,7 @@ class PhraseaEngine implements SearchEngineInterface
             }
 
             $results = phrasea_query2(
-                    $this->app['session']->get('phrasea_session_id')
-                    , $sbas_id
-                    , $this->colls[$sbas_id]
-                    , $this->arrayq[$sbas_id]
-                    , $this->app['phraseanet.configuration']['main']['key']
-                    , $this->app['session']->get('usr_id')
-                    , false
-                    , $this->options->getSearchType() == SearchEngineOptions::RECORD_GROUPING ? PHRASEA_MULTIDOC_REGONLY : PHRASEA_MULTIDOC_DOCONLY
-                    , $sort
-                    , $BF
-                    , $this->options->isStemmed() ? $this->options->getLocale() : null
+                    $this->app['session']->get('phrasea_session_id'), $sbas_id, $this->colls[$sbas_id], $this->arrayq[$sbas_id], $this->app['phraseanet.configuration']['main']['key'], $this->app['session']->get('usr_id'), false, $this->options->getSearchType() == SearchEngineOptions::RECORD_GROUPING ? PHRASEA_MULTIDOC_REGONLY : PHRASEA_MULTIDOC_DOCONLY, $sort, $BF, $this->options->isStemmed() ? $this->options->getLocale() : null
             );
 
             if ($results) {
@@ -695,7 +684,7 @@ class PhraseaEngine implements SearchEngineInterface
 
                 for ($i = 4; ($i <= 32); $i++) {
                     if (!isset($status[$i])) {
-                        $requestStat = 'x' . $requestStat;
+                        $requestStat = 'x'.$requestStat;
                         continue;
                     }
                     $val = 'x';
@@ -706,26 +695,26 @@ class PhraseaEngine implements SearchEngineInterface
                             $val = '1';
                         }
                     }
-                    $requestStat = $val . $requestStat;
+                    $requestStat = $val.$requestStat;
                 }
 
                 $requestStat = ltrim($requestStat, 'x');
 
                 if ($requestStat !== '') {
-                    $this->queries[$sbas] .= ' AND (recordstatus=' . $requestStat . ')';
+                    $this->queries[$sbas] .= ' AND (recordstatus='.$requestStat.')';
                 }
             }
             if ($this->options->getFields()) {
-                $this->queries[$sbas] .= ' IN (' . implode(' OR ', array_map(function (\databox_field $field) {
+                $this->queries[$sbas] .= ' IN ('.implode(' OR ', array_map(function (\databox_field $field) {
                                             return $field->get_name();
-                                        }, $this->options->getFields())) . ')';
+                                        }, $this->options->getFields())).')';
             }
             if (($this->options->getMinDate() || $this->options->getMaxDate()) && $this->options->getDateFields()) {
                 if ($this->options->getMinDate()) {
-                    $this->queries[$sbas] .= ' AND ( ' . implode(' >= ' . $this->options->getMinDate()->format('Y-m-d') . ' OR  ', array_map(function (\databox_field $field) { return $field->get_name(); }, $this->options->getDateFields())) . ' >= ' . $this->options->getMinDate()->format('Y-m-d') . ' ) ';
+                    $this->queries[$sbas] .= ' AND ( '.implode(' >= '.$this->options->getMinDate()->format('Y-m-d').' OR  ', array_map(function (\databox_field $field) { return $field->get_name(); }, $this->options->getDateFields())).' >= '.$this->options->getMinDate()->format('Y-m-d').' ) ';
                 }
                 if ($this->options->getMaxDate()) {
-                    $this->queries[$sbas] .= ' AND ( ' . implode(' <= ' . $this->options->getMaxDate()->format('Y-m-d') . ' OR  ', array_map(function (\databox_field $field) { return $field->get_name(); }, $this->options->getDateFields())) . ' <= ' . $this->options->getMaxDate()->format('Y-m-d') . ' ) ';
+                    $this->queries[$sbas] .= ' AND ( '.implode(' <= '.$this->options->getMaxDate()->format('Y-m-d').' OR  ', array_map(function (\databox_field $field) { return $field->get_name(); }, $this->options->getDateFields())).' <= '.$this->options->getMaxDate()->format('Y-m-d').' ) ';
                 }
             }
         }
@@ -835,5 +824,4 @@ class PhraseaEngine implements SearchEngineInterface
 
         return $this;
     }
-
 }

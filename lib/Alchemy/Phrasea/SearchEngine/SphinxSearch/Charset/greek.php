@@ -72,5 +72,4 @@ class greek extends AbstractCharset
     U+03C3..U+03C9, U+03C2, U+03D9, U+03DB, U+03DD, U+03DF, U+03E1, U+03E3, U+03E5,
     U+03E7, U+03E9, U+03EB, U+03ED, U+03EF, U+03F3, U+03F8, U+03FB
 ';
-
 }

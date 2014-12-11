@@ -75,8 +75,9 @@ class Bridge_Api
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new Bridge_Exception_ApiNotFound('Api Not Found');
+        }
 
         $this->connector = self::get_connector_by_name($this->app, $row['name']);
         $this->disable_time = $row['disable_time'] ? new DateTime($row['disable_time']) : null;
@@ -203,7 +204,7 @@ class Bridge_Api
      * @param  array                $datas
      * @return Bridge_Api_Interface
      */
-    public function update_element($object, $object_id, Array $datas)
+    public function update_element($object, $object_id, array $datas)
     {
         $action = function (Bridge_Api $obj) use ($object, $object_id, $datas) {
                 return $obj->get_connector()->update_element($object, $object_id, $datas);
@@ -409,7 +410,7 @@ class Bridge_Api
         $params = array(
             ':time'   => $value
             , ':id'     => $this->id
-            , ':update' => $this->updated_on->format(DATE_ISO8601)
+            , ':update' => $this->updated_on->format(DATE_ISO8601),
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -426,8 +427,9 @@ class Bridge_Api
      */
     protected function execute_action(Closure $action)
     {
-        if ($this->is_disabled())
+        if ($this->is_disabled()) {
             throw new Bridge_Exception_ApiDisabled($this);
+        }
 
         $n = 0;
         do {
@@ -452,7 +454,7 @@ class Bridge_Api
             $n ++;
         } while ($n <= 2 && $e instanceof Bridge_Exception_ActionAuthNeedReconnect);
 
-        return null;
+        return;
     }
 
     /**
@@ -486,14 +488,14 @@ class Bridge_Api
     public static function get_connector_by_name(Application $app, $name)
     {
         $name = ucfirst(strtolower($name));
-        $classname = 'Bridge_Api_' . $name;
+        $classname = 'Bridge_Api_'.$name;
 
-        if ( ! class_exists($classname)) {
-            throw new Bridge_Exception_ApiConnectorNotFound($name . ' connector not found');
+        if (! class_exists($classname)) {
+            throw new Bridge_Exception_ApiConnectorNotFound($name.' connector not found');
         }
 
-        $auth_classname = 'Bridge_Api_Auth_' . $classname::AUTH_TYPE;
-        $auth = new $auth_classname;
+        $auth_classname = 'Bridge_Api_Auth_'.$classname::AUTH_TYPE;
+        $auth = new $auth_classname();
 
         return new $classname($app['url_generator'], $app['phraseanet.registry'], $auth);
     }
@@ -508,8 +510,9 @@ class Bridge_Api
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
-            throw new Bridge_Exception_ApiNotFound('Unknown api name ' . $name);
+        if (! $row) {
+            throw new Bridge_Exception_ApiNotFound('Unknown api name '.$name);
+        }
 
         return new self($app, $row['id']);
     }
@@ -533,7 +536,6 @@ class Bridge_Api
             try {
                 $results[] = new Bridge_Api($app, $row['id']);
             } catch (\Exception $e) {
-
             }
         }
 

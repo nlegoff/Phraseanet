@@ -13,18 +13,18 @@ $groups = array(
         '//include/jslibs/jquery.contextmenu_scroll.js',
         '//assets/jquery.cookie/jquery.cookie.js',
         '//include/jquery.common.js',
-        '//skins/account/account.js'
+        '//skins/account/account.js',
     ),
     'authentication_css' => array(
         '//assets/normalize-css/normalize.css',
         '//skins/build/login.css',
         '//assets/font-awesome/css/font-awesome.css',
-        '//assets/jquery.ui/themes/base/jquery.ui.autocomplete.css'
+        '//assets/jquery.ui/themes/base/jquery.ui.autocomplete.css',
     ),
     'authentication' => array(
         '//assets/modernizr/modernizr.js',
         '//assets/requirejs/require.js',
-        '//scripts/apps/login/home/config.js'
+        '//scripts/apps/login/home/config.js',
     ),
     'client' => array(
         '//include/jslibs/swfobject/swfobject.js'
@@ -39,7 +39,7 @@ $groups = array(
         , '//include/jquery.tooltip.js'
         , '//include/jquery.p4.preview.js'
         , '//include/jquery.image_enhancer.js'
-        , '//include/jslibs/jquery.contextmenu_scroll.js'),
+        , '//include/jslibs/jquery.contextmenu_scroll.js', ),
     'admin' => array(
         '//assets/modernizr/modernizr.js'
         , '//assets/underscore-amd/underscore.js'
@@ -56,7 +56,7 @@ $groups = array(
         , '//include/jslibs/jquery.contextmenu_scroll.js'
         , '//assets/blueimp-load-image/js/load-image.js'
         , '//assets/jquery-file-upload/js/jquery.iframe-transport.js'
-        , '//assets/jquery-file-upload/js/jquery.fileupload.js'
+        , '//assets/jquery-file-upload/js/jquery.fileupload.js',
     ),
     'report' => array(
          '//include/jslibs/jquery-ui-1.10.3/jquery-ui-i18n.js'
@@ -67,10 +67,10 @@ $groups = array(
         , '//include/jslibs/jquery.print.js'
         , '//include/jslibs/jquery.cluetip.js'
         , '//include/jquery.nicoslider.js'
-        , '//skins/report/report.js'
+        , '//skins/report/report.js',
     ),
     'modalBox' => array(
-         '//include/jslibs/jquery-ui-1.10.3/jquery-ui-i18n.js'
+         '//include/jslibs/jquery-ui-1.10.3/jquery-ui-i18n.js',
     ),
     'prod' => array(
         '//include/jslibs/swfobject/swfobject.js'
@@ -111,7 +111,7 @@ $groups = array(
         , '//include/jquery.image_enhancer.js'
         , '//include/jslibs/jquery.contextmenu_scroll.js'
         , '//include/jslibs/jquery-treeview/jquery.treeview.js'
-        , '//include/jslibs/jquery-treeview/jquery.treeview.async.js'),
+        , '//include/jslibs/jquery-treeview/jquery.treeview.async.js', ),
     'thesaurus' => array(
          '//assets/jquery.cookie/jquery.cookie.js'
         , '//include/jslibs/jquery.contextmenu_scroll.js'
@@ -119,7 +119,7 @@ $groups = array(
         , '//skins/thesaurus/win.js'
         , '//skins/thesaurus/xmlhttp.js'
         , '//skins/thesaurus/thesaurus.js'
-        , '//skins/thesaurus/sprintf.js'
+        , '//skins/thesaurus/sprintf.js',
     ),
     'lightbox' => array(
          '//include/jslibs/jquery.mousewheel.js'
@@ -131,7 +131,7 @@ $groups = array(
         , '//include/jquery.common.js'
         , '//skins/prod/jquery.Dialog.js'
         , '//skins/lightbox/jquery.lightbox.js'
-        , '//include/jslibs/flowplayer/flowplayer-3.2.13.min.js'
+        , '//include/jslibs/flowplayer/flowplayer-3.2.13.min.js',
     ),
     'lightboxie6' => array(
          '//include/jslibs/jquery.mousewheel.js'
@@ -143,12 +143,12 @@ $groups = array(
         , '//include/jquery.common.js'
         , '//skins/prod/jquery.Dialog.js'
         , '//skins/lightbox/jquery.lightbox.ie6.js'
-        , '//include/jslibs/flowplayer/flowplayer-3.2.13.min.js'
+        , '//include/jslibs/flowplayer/flowplayer-3.2.13.min.js',
     ),
     'uploadflash' => array(
         '//include/jslibs/SWFUpload/swfupload.js'
-        , '//include/jslibs/SWFUpload/plugins/swfupload.queue.js'
-    )
+        , '//include/jslibs/SWFUpload/plugins/swfupload.queue.js',
+    ),
 );
 
 return $groups;

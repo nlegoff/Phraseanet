@@ -25,5 +25,4 @@ class hebrew extends AbstractCharset
     U+FB47->U+05E7, U+FB48->U+05E8, U+FB49->U+05E9, U+FB4A->U+05EA, U+FB4B->U+05D5,
     U+FB4C->U+05D1, U+FB4D->U+05DB, U+FB4E->U+05E4, U+FB4F->U+05D0, U+05D0..U+05F2
 ';
-
 }

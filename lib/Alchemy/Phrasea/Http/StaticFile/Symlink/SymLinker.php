@@ -11,10 +11,8 @@
 
 namespace Alchemy\Phrasea\Http\StaticFile\Symlink;
 
-use Alchemy\Phrasea\Exception\InvalidArgumentException;
 use Silex\Application;
 use Symfony\Component\Filesystem\Filesystem;
-use Guzzle\Http\Url;
 
 /**
  * Create & retrieve symlinks
@@ -35,7 +33,7 @@ class SymLinker
             $app['phraseanet.thumb-symlinker-encoder'],
             $app['filesystem'],
             $app['phraseanet.registry'],
-            isset($app['phraseanet.configuration']['static-file']['symlink-directory']) ? $app['phraseanet.configuration']['static-file']['symlink-directory'] : $app['root.path'] . '/tmp/symlinks'
+            isset($app['phraseanet.configuration']['static-file']['symlink-directory']) ? $app['phraseanet.configuration']['static-file']['symlink-directory'] : $app['root.path'].'/tmp/symlinks'
         );
     }
 
@@ -58,7 +56,7 @@ class SymLinker
 
     public function symlink($pathFile)
     {
-        $this->fs->symlink($pathFile, $this->getSymlinkPath($pathFile)) ;
+        $this->fs->symlink($pathFile, $this->getSymlinkPath($pathFile));
     }
 
     public function getSymlink($pathFile)

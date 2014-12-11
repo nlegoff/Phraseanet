@@ -18,10 +18,9 @@ namespace Alchemy\Phrasea\Helper;
  */
 class Prod extends Helper
 {
-
     public function get_search_datas()
     {
-        $searchData = array('bases' => array(), 'dates' => array(), 'fields' => array(), 'sort' => array(),);
+        $searchData = array('bases' => array(), 'dates' => array(), 'fields' => array(), 'sort' => array());
 
         $bases = $fields = $dates = $sort = array();
 
@@ -97,6 +96,6 @@ class Prod extends Helper
 
     public function getRandom()
     {
-        return md5(time() . mt_rand(100000, 999999));
+        return md5(time().mt_rand(100000, 999999));
     }
 }

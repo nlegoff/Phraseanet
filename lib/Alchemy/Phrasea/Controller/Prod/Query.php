@@ -25,7 +25,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Query implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -135,44 +134,48 @@ class Query implements ControllerProviderInterface
         $string = '';
 
         if ($npages > 1) {
-
             $d2top = ($npages - $page);
             $d2bottom = $page;
 
             if (min($d2top, $d2bottom) < 4) {
                 if ($d2bottom < 4) {
                     for ($i = 1; ($i <= 4 && (($i <= $npages) === true)); $i++) {
-                        if ($i == $page)
-                            $string .= '<input onkeypress="if(event.keyCode == 13 && !isNaN(parseInt(this.value)))gotopage(parseInt(this.value))" type="text" value="' . $i . '" size="' . (strlen((string) $i)) . '" class="btn btn-mini" />';
-                        else
-                            $string .= "<a onclick='gotopage(" . $i . ");return false;' class='btn btn-primary btn-mini'>" . $i . "</a>";
+                        if ($i == $page) {
+                            $string .= '<input onkeypress="if(event.keyCode == 13 && !isNaN(parseInt(this.value)))gotopage(parseInt(this.value))" type="text" value="'.$i.'" size="'.(strlen((string) $i)).'" class="btn btn-mini" />';
+                        } else {
+                            $string .= "<a onclick='gotopage(".$i.");return false;' class='btn btn-primary btn-mini'>".$i."</a>";
+                        }
                     }
-                    if ($npages > 4)
-                        $string .= "<a onclick='gotopage(" . ($npages) . ");return false;' class='btn btn-primary btn-mini'>&gt;&gt;</a>";
+                    if ($npages > 4) {
+                        $string .= "<a onclick='gotopage(".($npages).");return false;' class='btn btn-primary btn-mini'>&gt;&gt;</a>";
+                    }
                 } else {
                     $start = $npages - 4;
-                    if (($start) > 0)
+                    if (($start) > 0) {
                         $string .= "<a onclick='gotopage(1);return false;' class='btn btn-primary btn-mini'>&lt;&lt;</a>";
-                    else
+                    } else {
                         $start = 1;
+                    }
                     for ($i = ($start); $i <= $npages; $i++) {
-                        if ($i == $page)
-                            $string .= '<input onkeypress="if(event.keyCode == 13 && !isNaN(parseInt(this.value)))gotopage(parseInt(this.value))" type="text" value="' . $i . '" size="' . (strlen((string) $i)) . '" class="btn btn-mini" />';
-                        else
-                            $string .= "<a onclick='gotopage(" . $i . ");return false;' class='btn btn-primary btn-mini'>" . $i . "</a>";
+                        if ($i == $page) {
+                            $string .= '<input onkeypress="if(event.keyCode == 13 && !isNaN(parseInt(this.value)))gotopage(parseInt(this.value))" type="text" value="'.$i.'" size="'.(strlen((string) $i)).'" class="btn btn-mini" />';
+                        } else {
+                            $string .= "<a onclick='gotopage(".$i.");return false;' class='btn btn-primary btn-mini'>".$i."</a>";
+                        }
                     }
                 }
             } else {
                 $string .= "<a onclick='gotopage(1);return false;' class='btn btn-primary btn-mini'>&lt;&lt;</a>";
 
                 for ($i = ($page - 2); $i <= ($page + 2); $i++) {
-                    if ($i == $page)
-                        $string .= '<input onkeypress="if(event.keyCode == 13 && !isNaN(parseInt(this.value)))gotopage(parseInt(this.value))" type="text" value="' . $i . '" size="' . (strlen((string) $i)) . '" class="btn btn-mini" />';
-                    else
-                        $string .= "<a onclick='gotopage(" . $i . ");return false;' class='btn btn-primary btn-mini'>" . $i . "</a>";
+                    if ($i == $page) {
+                        $string .= '<input onkeypress="if(event.keyCode == 13 && !isNaN(parseInt(this.value)))gotopage(parseInt(this.value))" type="text" value="'.$i.'" size="'.(strlen((string) $i)).'" class="btn btn-mini" />';
+                    } else {
+                        $string .= "<a onclick='gotopage(".$i.");return false;' class='btn btn-primary btn-mini'>".$i."</a>";
+                    }
                 }
 
-                $string .= "<a onclick='gotopage(" . ($npages) . ");return false;' class='btn btn-primary btn-mini'>&gt;&gt;</a>";
+                $string .= "<a onclick='gotopage(".($npages).");return false;' class='btn btn-primary btn-mini'>&gt;&gt;</a>";
             }
         }
         $string .= '<div style="display:none;"><div id="NEXT_PAGE"></div><div id="PREV_PAGE"></div></div>';
@@ -188,10 +191,10 @@ class Query implements ControllerProviderInterface
         }
 
         $explain .= " </b></span>";
-        $explain .= '<br><div>' . $result->getDuration() . ' s</div>dans index ' . $result->getIndexes();
+        $explain .= '<br><div>'.$result->getDuration().' s</div>dans index '.$result->getIndexes();
         $explain .= "</div>";
 
-        $infoResult = '<a href="#" class="infoDialog" infos="' . str_replace('"', '&quot;', $explain) . '">' . sprintf(_('reponses:: %d reponses'), $result->getTotal()) . '</a> | ' . sprintf(_('reponses:: %s documents selectionnes'), '<span id="nbrecsel"></span>');
+        $infoResult = '<a href="#" class="infoDialog" infos="'.str_replace('"', '&quot;', $explain).'">'.sprintf(_('reponses:: %d reponses'), $result->getTotal()).'</a> | '.sprintf(_('reponses:: %s documents selectionnes'), '<span id="nbrecsel"></span>');
 
         $json['infos'] = $infoResult;
         $json['navigation'] = $string;
@@ -224,7 +227,7 @@ class Query implements ControllerProviderInterface
             'results'         => $result,
             'highlight'       => $result->getQuery(),
             'searchEngine'    => $app['phraseanet.SE'],
-            'suggestions'     => $prop
+            'suggestions'     => $prop,
             )
         );
 
@@ -266,8 +269,8 @@ class Query implements ControllerProviderInterface
         return $app->json(array(
             'current' => $app['twig']->render('prod/preview/result_train.html.twig', array(
                 'records'  => $record->get_train($pos, $query, $app['phraseanet.SE']),
-                'selected' => $pos
-            ))
+                'selected' => $pos,
+            )),
         ));
     }
 
@@ -284,7 +287,7 @@ class Query implements ControllerProviderInterface
 
         return new Response($app['twig']->render('prod/preview/reg_train.html.twig', array(
             'container_records' => $record->get_container()->get_children(),
-            'record'            => $record
+            'record'            => $record,
         )));
     }
 

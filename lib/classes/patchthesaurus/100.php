@@ -16,7 +16,6 @@
  */
 class patchthesaurus_100
 {
-
     public function patch($version, &$domct, &$domth, connection_pdo &$connbas)
     {
         if ($version == "") {
@@ -59,21 +58,25 @@ class patchthesaurus_100
         $sy->setAttribute("lng", $v = $tenode->getAttribute("lng"));
         $sy->setAttribute("v", $v = $tenode->getAttribute("v"));
         $sy->setAttribute("w", $unicode->remove_indexer_chars($v));
-        if (($k = $tenode->getAttribute("k")) != "")
+        if (($k = $tenode->getAttribute("k")) != "") {
             $sy->setAttribute("k", $k);
+        }
         $tenode->removeAttribute("lng");
         $tenode->removeAttribute("v");
         $tenode->removeAttribute("w");
         $tenode->removeAttribute("k");
-        if ($tenode->getAttribute("nextid") == "")
+        if ($tenode->getAttribute("nextid") == "") {
             $tenode->setAttribute("nextid", "0");
+        }
         // $tenode->setAttribute("id", "0.".$tenode->getAttribute("id"));
         $todel = array();
         for ($n = $tenode->firstChild; $n; $n = $n->nextSibling) {
-            if ($n->nodeName == "ta")
+            if ($n->nodeName == "ta") {
                 $todel[] = $n;
-            if ($n->nodeName == "te")
+            }
+            if ($n->nodeName == "te") {
                 $this->fixThesaurus2($domth, $n, $depth + 1);
+            }
         }
         foreach ($todel as $n) {
             $n->parentNode->removeChild($n);

@@ -48,8 +48,9 @@ class module_report_filter
 
     public function addFilter($field, $operator, $value)
     {
-        if ($this->checkSameFilter($field, $operator, $value))
+        if ($this->checkSameFilter($field, $operator, $value)) {
             $this->tab_filter[] = array('f' => $field, 'o' => $operator, 'v' => $value);
+        }
     }
 
     public function getPostingFilter()
@@ -72,15 +73,17 @@ class module_report_filter
 
         if (sizeof($this->tab_filter) > 0) {
             foreach ($this->tab_filter as $key => $filter) {
-                if (empty($filter['v']))
+                if (empty($filter['v'])) {
                     $value = _('report:: non-renseigne');
-                else
+                } else {
                     $value = $filter['v'];
+                }
 
-                if (array_key_exists($filter['f'], $trans))
+                if (array_key_exists($filter['f'], $trans)) {
                     $field = _($trans[$filter['f']]);
-                else
+                } else {
                     $field = $filter['f'];
+                }
 
                 if ($filter['f'] == 'appli') {
                     $value = implode(' ', phrasea::modulesName(@unserialize($value)));
@@ -98,8 +101,9 @@ class module_report_filter
     public function removeFilter($field)
     {
         foreach ($this->tab_filter as $key => $value) {
-            if ($value['f'] == $field)
+            if ($value['f'] == $field) {
                 unset($this->tab_filter[$key]);
+            }
         }
     }
 

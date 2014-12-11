@@ -17,5 +17,4 @@ class thai extends AbstractCharset
     # Thai
     U+0E01..U+0E30, U+0E32, U+0E33, U+0E40..U+0E46, U+0E50..U+0E5B
 ';
-
 }

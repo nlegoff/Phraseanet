@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Notifications implements ControllerProviderInterface
 {
-
     /**
      * {@inheritDoc}
      */

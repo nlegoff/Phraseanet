@@ -27,8 +27,8 @@ class MailSuccessAccessRequest extends AbstractMailWithLink
     public function getMessage()
     {
         return _('login::register:email: Voici un compte rendu du traitement de vos demandes d\'acces :')
-            . "\n"
-            . $this->message;
+            ."\n"
+            .$this->message;
     }
 
     /**

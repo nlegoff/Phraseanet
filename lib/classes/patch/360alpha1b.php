@@ -62,7 +62,6 @@ class patch_360alpha1b implements patchInterface
             $stmt->execute();
             $stmt->closeCursor();
         } catch (\PDOException $e) {
-
         }
 
         return true;

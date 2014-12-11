@@ -11,7 +11,7 @@ class Bridge_Api_ContainerCollectionTest extends PHPUnit_Framework_TestCase
         $i = 0;
         while ($i < 5) {
             $container = $this->getMock("Bridge_Api_ContainerInterface");
-            $collection->add_element(new $container);
+            $collection->add_element(new $container());
             $i ++;
         }
         $this->assertEquals(5, sizeof($collection->get_elements()));

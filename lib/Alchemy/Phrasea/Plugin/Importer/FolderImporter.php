@@ -35,7 +35,6 @@ class FolderImporter implements ImporterInterface
             try {
                 $this->fs->remove($target);
             } catch (FsException $e) {
-
             }
 
             throw new ImportFailureException(sprintf('Unable to import from `%s` to `%s`', $source, $target), $e->getCode(), $e);

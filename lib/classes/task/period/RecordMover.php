@@ -48,16 +48,16 @@ class task_period_RecordMover extends task_appboxAbstract
         if ($dom->loadXML($oldxml)) {
             $xmlchanged = false;
             foreach (array(
-            'str:period'
-            , 'boo:logsql'
+            'str:period', 'boo:logsql',
             ) as $pname) {
                 $ptype = substr($pname, 0, 3);
                 $pname = substr($pname, 4);
                 $pvalue = $parm2[$pname];
                 if (($ns = $dom->getElementsByTagName($pname)->item(0))) {
                     // field did exists, remove thevalue
-                    while (($n = $ns->firstChild))
+                    while (($n = $ns->firstChild)) {
                         $ns->removeChild($n);
+                    }
                 } else {
                     // field did not exists, create it
                     $ns = $dom->documentElement->appendChild($dom->createElement($pname));
@@ -135,6 +135,7 @@ class task_period_RecordMover extends task_appboxAbstract
 
         </style>
         <?php
+
     }
 
     /**
@@ -144,7 +145,8 @@ class task_period_RecordMover extends task_appboxAbstract
     {
         ?>
         <script type="text/javascript">
-            function taskFillGraphic_<?php echo(get_class($this));?>(xml)
+            function taskFillGraphic_<?php echo(get_class($this));
+        ?>(xml)
             {
                 $("#sqlu").text("");
                 $("#sqls").text("");
@@ -160,10 +162,12 @@ class task_period_RecordMover extends task_appboxAbstract
 
                     var data = {};
                     data["ACT"] = "CALCTEST";
-                    data["taskid"]=<?php echo $this->getID(); ?>;
+                    data["taskid"]=<?php echo $this->getID();
+        ?>;
                     data["cls"]="RecordMover";
                     data["xml"] = xml;
-                    $.ajax({ url: "/admin/task-manager/task/<?php echo $this->getID(); ?>/facility/"
+                    $.ajax({ url: "/admin/task-manager/task/<?php echo $this->getID();
+        ?>/facility/"
                         , data: data
                         , dataType:'json'
                         , type:"POST"
@@ -202,10 +206,12 @@ class task_period_RecordMover extends task_appboxAbstract
 
                             var data = {};
                             data["ACT"] = "PLAYTEST";
-                            data["taskid"]=<?php echo $this->getID(); ?>;
+                            data["taskid"]=<?php echo $this->getID();
+        ?>;
                             data["cls"]="RecordMover";
                             data["xml"] = xml;
-                            $.ajax({ url: "/admin/task-manager/task/<?php echo $this->getID(); ?>/facility/"
+                            $.ajax({ url: "/admin/task-manager/task/<?php echo $this->getID();
+        ?>/facility/"
                                 , data: data
                                 , dataType:'json'
                                 , type:"POST"
@@ -248,7 +254,9 @@ class task_period_RecordMover extends task_appboxAbstract
                     })( jQuery );
 
                     var limits = {
-                        'period':{'min':<?php echo self::MINPERIOD; ?>, 'max':<?php echo self::MAXPERIOD; ?>},
+                        'period':{'min':<?php echo self::MINPERIOD;
+        ?>, 'max':<?php echo self::MAXPERIOD;
+        ?>},
                         'delay':{min:0}
                     } ;
                     $(".formElem").change(function () {
@@ -272,6 +280,7 @@ class task_period_RecordMover extends task_appboxAbstract
 
         </script>
         <?php
+
     }
 
     /**
@@ -332,7 +341,6 @@ class task_period_RecordMover extends task_appboxAbstract
         $logsql = (int) ($this->sxTaskSettings->logsql) > 0;
 
         foreach ($this->sxTaskSettings->tasks->task as $sxtask) {
-
             if (!$this->running) {
                 break;
             }
@@ -344,9 +352,7 @@ class task_period_RecordMover extends task_appboxAbstract
             }
 
             if ($logsql) {
-                $this->log(sprintf("playing task '%s' on base '%s'"
-                        , $task['name']
-                        , $task['basename'] ? $task['basename'] : '<unknown>'), self::LOG_INFO);
+                $this->log(sprintf("playing task '%s' on base '%s'", $task['name'], $task['basename'] ? $task['basename'] : '<unknown>'), self::LOG_INFO);
             }
 
             try {
@@ -359,7 +365,6 @@ class task_period_RecordMover extends task_appboxAbstract
             $stmt = $connbas->prepare($task['sql']['real']['sql']);
             if ($stmt->execute(array())) {
                 while ($this->running && ($row = $stmt->fetch(PDO::FETCH_ASSOC)) !== FALSE) {
-
                     $tmp = array('sbas_id'   => $task['sbas_id'], 'record_id' => $row['record_id'], 'action'    => $task['action']);
 
                     $rec = new record_adapter($this->dependencyContainer, $task['sbas_id'], $row['record_id']);
@@ -401,7 +406,7 @@ class task_period_RecordMover extends task_appboxAbstract
      * @param  array                    $row
      * @return \task_period_RecordMover
      */
-    protected function processOneContent(appbox $appbox, Array $row)
+    protected function processOneContent(appbox $appbox, array $row)
     {
         $logsql = (int) ($this->sxTaskSettings->logsql) > 0;
         $databox = $this->dependencyContainer['phraseanet.appbox']->get_databox($row['sbas_id']);
@@ -465,7 +470,7 @@ class task_period_RecordMover extends task_appboxAbstract
      * @param  array                    $row
      * @return \task_period_RecordMover
      */
-    protected function postProcessOneContent(appbox $appbox, Array $row)
+    protected function postProcessOneContent(appbox $appbox, array $row)
     {
         return $this;
     }
@@ -508,12 +513,12 @@ class task_period_RecordMover extends task_appboxAbstract
                     $ret['deletechildren'] = (int) ($sxtask['deletechildren']);
                     break;
                 default:
-                    $ret['err'] = "bad action '" . $ret['action'] . "'";
+                    $ret['err'] = "bad action '".$ret['action']."'";
                     $ret['err_htmlencoded'] = htmlentities($ret['err']);
                     break;
             }
         } catch (\Exception $e) {
-            $ret['err'] = "bad sbas '" . $sbas_id . "'";
+            $ret['err'] = "bad sbas '".$sbas_id."'";
             $ret['err_htmlencoded'] = htmlentities($ret['err']);
         }
 
@@ -536,7 +541,7 @@ class task_period_RecordMover extends task_appboxAbstract
         //
         // set coll_id ?
         if (($x = (int) ($sxtask->to->coll['id'])) > 0) {
-            $tws[] = 'coll_id!=' . $x;
+            $tws[] = 'coll_id!='.$x;
         }
 
         // set status ?
@@ -547,13 +552,11 @@ class task_period_RecordMover extends task_appboxAbstract
         $ma = str_replace(' ', '0', ltrim(str_replace(array('x', '0'), array(' ', '1'), $x)));
 
         if ($mx && $ma) {
-            $tws[] = '((status ^ 0b' . $mx . ') & 0b' . $ma . ')!=0';
-        }
-        elseif ($mx) {
-            $tws[] = '(status ^ 0b' . $mx . ')!=0';
-        }
-        elseif ($ma) {
-            $tws[] = '(status & 0b' . $ma . ')!=0';
+            $tws[] = '((status ^ 0b'.$mx.') & 0b'.$ma.')!=0';
+        } elseif ($mx) {
+            $tws[] = '(status ^ 0b'.$mx.')!=0';
+        } elseif ($ma) {
+            $tws[] = '(status & 0b'.$ma.')!=0';
         }
 
         // compute the 'where' clause
@@ -562,21 +565,20 @@ class task_period_RecordMover extends task_appboxAbstract
         // ... complete the where to buid the TEST
         if (count($tws) == 1) {
             $tw[] = $tws[0];
-        }
-        elseif (count($tws) > 1) {
-            $tw[] = '(' . implode(') OR (', $tws) . ')';
+        } elseif (count($tws) > 1) {
+            $tw[] = '('.implode(') OR (', $tws).')';
         }
 
         // build the TEST sql (select)
-        $sql_test = 'SELECT record_id FROM record' . $join;
+        $sql_test = 'SELECT record_id FROM record'.$join;
         if (count($tw) > 0) {
-            $sql_test .= ' WHERE ' . ((count($tw) == 1) ? $tw[0] : '(' . implode(') AND (', $tw) . ')');
+            $sql_test .= ' WHERE '.((count($tw) == 1) ? $tw[0] : '('.implode(') AND (', $tw).')');
         }
 
         // build the real sql (select)
-        $sql = 'SELECT record_id FROM record' . $join;
+        $sql = 'SELECT record_id FROM record'.$join;
         if (count($tw) > 0) {
-            $sql .= ' WHERE ' . ((count($tw) == 1) ? $tw[0] : '(' . implode(') AND (', $tw) . ')');
+            $sql .= ' WHERE '.((count($tw) == 1) ? $tw[0] : '('.implode(') AND (', $tw).')');
         }
 
         $ret = array(
@@ -588,8 +590,8 @@ class task_period_RecordMover extends task_appboxAbstract
                 'sql'             => $sql_test,
                 'sql_htmlencoded' => htmlentities($sql_test),
                 'result'          => NULL,
-                'err'             => NULL
-            )
+                'err'             => NULL,
+            ),
         );
 
         if ($playTest) {
@@ -613,15 +615,15 @@ class task_period_RecordMover extends task_appboxAbstract
         list($tw, $join) = $this->calcWhere($sbas_id, $sxtask);
 
         // build the TEST sql (select)
-        $sql_test = 'SELECT record_id FROM record' . $join;
+        $sql_test = 'SELECT record_id FROM record'.$join;
         if (count($tw) > 0) {
-            $sql_test .= ' WHERE ' . ((count($tw) == 1) ? $tw[0] : '(' . implode(') AND (', $tw) . ')');
+            $sql_test .= ' WHERE '.((count($tw) == 1) ? $tw[0] : '('.implode(') AND (', $tw).')');
         }
 
         // build the real sql (select)
-        $sql = 'SELECT record_id FROM record' . $join;
+        $sql = 'SELECT record_id FROM record'.$join;
         if (count($tw) > 0) {
-            $sql .= ' WHERE ' . ((count($tw) == 1) ? $tw[0] : '(' . implode(') AND (', $tw) . ')');
+            $sql .= ' WHERE '.((count($tw) == 1) ? $tw[0] : '('.implode(') AND (', $tw).')');
         }
 
         $ret = array(
@@ -633,8 +635,8 @@ class task_period_RecordMover extends task_appboxAbstract
                 'sql'             => $sql_test,
                 'sql_htmlencoded' => htmlentities($sql_test),
                 'result'          => NULL,
-                'err'             => NULL
-            )
+                'err'             => NULL,
+            ),
         );
 
         if ($playTest) {
@@ -679,12 +681,12 @@ class task_period_RecordMover extends task_appboxAbstract
             $ijoin++;
             $comp = strtoupper($x['compare']);
             if (in_array($comp, array('<', '>', '<=', '>=', '=', '!='))) {
-                $s = 'p' . $ijoin . '.name=' . $connbas->quote($x['field']) . ' AND p' . $ijoin . '.value' . $comp
-                    . '' . $connbas->quote($x['value']) . '';
+                $s = 'p'.$ijoin.'.name='.$connbas->quote($x['field']).' AND p'.$ijoin.'.value'.$comp
+                    .''.$connbas->quote($x['value']).'';
 //                $s = 'p' . $ijoin . '.name=? AND p' . $ijoin . '.value' . $comp . '?';
 
                 $tw[] = $s;
-                $join .= ' INNER JOIN prop AS p' . $ijoin . ' USING(record_id)';
+                $join .= ' INNER JOIN prop AS p'.$ijoin.' USING(record_id)';
             } else {
                 // bad comparison operator
             }
@@ -693,39 +695,38 @@ class task_period_RecordMover extends task_appboxAbstract
         // criteria <date direction ="XXX" field="YYY" delta="Z" />
         foreach ($sxtask->from->date as $x) {
             $ijoin++;
-            $s = 'p' . $ijoin . '.name=\'' . $x['field'] . '\' AND NOW()';
+            $s = 'p'.$ijoin.'.name=\''.$x['field'].'\' AND NOW()';
             $s .= strtoupper($x['direction']) == 'BEFORE' ? '<' : '>=';
             $delta = (int) ($x['delta']);
             if ($delta > 0) {
-                $s .= '(p' . $ijoin . '.value+INTERVAL ' . $delta . ' DAY)';
-            }
-            elseif ($delta < 0) {
-                $s .= '(p' . $ijoin . '.value-INTERVAL ' . -$delta . ' DAY)';
-            }
-            else {
-                $s .= 'p' . $ijoin . '.value';
+                $s .= '(p'.$ijoin.'.value+INTERVAL '.$delta.' DAY)';
+            } elseif ($delta < 0) {
+                $s .= '(p'.$ijoin.'.value-INTERVAL '.-$delta.' DAY)';
+            } else {
+                $s .= 'p'.$ijoin.'.value';
             }
 
             $tw[] = $s;
-            $join .= ' INNER JOIN prop AS p' . $ijoin . ' USING(record_id)';
+            $join .= ' INNER JOIN prop AS p'.$ijoin.' USING(record_id)';
         }
 
         // criteria <coll compare="OP" id="X,Y,Z" />
         if (($x = $sxtask->from->coll) !== NULL) {
             $tcoll = explode(',', $x['id']);
-            foreach ($tcoll as $i => $c)
+            foreach ($tcoll as $i => $c) {
                 $tcoll[$i] = (int) $c;
+            }
             if ($x['compare'] == '=') {
                 if (count($tcoll) == 1) {
-                    $tw[] = 'coll_id = ' . $tcoll[0];
+                    $tw[] = 'coll_id = '.$tcoll[0];
                 } else {
-                    $tw[] = 'coll_id IN(' . implode(',', $tcoll) . ')';
+                    $tw[] = 'coll_id IN('.implode(',', $tcoll).')';
                 }
             } elseif ($x['compare'] == '!=') {
                 if (count($tcoll) == 1) {
-                    $tw[] = 'coll_id != ' . $tcoll[0];
+                    $tw[] = 'coll_id != '.$tcoll[0];
                 } else {
-                    $tw[] = 'coll_id NOT IN(' . implode(',', $tcoll) . ')';
+                    $tw[] = 'coll_id NOT IN('.implode(',', $tcoll).')';
                 }
             } else {
                 // bad operator
@@ -740,11 +741,11 @@ class task_period_RecordMover extends task_appboxAbstract
         $ma = str_replace(' ', '0', ltrim(str_replace(array('x', '0'), array(' ', '1'), $x)));
 
         if ($mx && $ma) {
-            $tw[] = '((status ^ 0b'. $mx . ') & 0b'. $ma . ')=0';
+            $tw[] = '((status ^ 0b'.$mx.') & 0b'.$ma.')=0';
         } elseif ($mx) {
-            $tw[] = '(status ^ 0b' . $mx . ')=0';
+            $tw[] = '(status ^ 0b'.$mx.')=0';
         } elseif ($ma) {
-            $tw[] = '(status & 0b' . $ma . ")=0";
+            $tw[] = '(status & 0b'.$ma.")=0";
         }
 
         return array($tw, $join);
@@ -762,9 +763,9 @@ class task_period_RecordMover extends task_appboxAbstract
         $connbas = connection::getPDOConnection($this->dependencyContainer, $sbas_id);
         $result = array('rids' => array(), 'err' => '', 'n'   => null);
 
-        $result['n'] = $connbas->query('SELECT COUNT(*) AS n FROM (' . $sql . ') AS x')->fetchColumn();
+        $result['n'] = $connbas->query('SELECT COUNT(*) AS n FROM ('.$sql.') AS x')->fetchColumn();
 
-        $stmt = $connbas->prepare('SELECT record_id FROM (' . $sql . ') AS x LIMIT 10');
+        $stmt = $connbas->prepare('SELECT record_id FROM ('.$sql.') AS x LIMIT 10');
         if ($stmt->execute(array())) {
             while (($row = $stmt->fetch(PDO::FETCH_ASSOC))) {
                 $result['rids'][] = $row['record_id'];
@@ -829,7 +830,7 @@ class task_period_RecordMover extends task_appboxAbstract
 
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
         <tasksettings>
-            <period>". min(max($period, self::MINPERIOD), self::MAXPERIOD) ."</period>
+            <period>".min(max($period, self::MINPERIOD), self::MAXPERIOD)."</period>
             <logsql>0</logsql>
             <!--
             <tasks>

@@ -17,5 +17,4 @@
  */
 class Exception_Upload_FileTooBig extends Exception
 {
-
 }

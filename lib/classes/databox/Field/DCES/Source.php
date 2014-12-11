@@ -38,5 +38,4 @@ class databox_Field_DCES_Source extends databox_Field_DCESAbstract
      * @var string
      */
     protected $URI = 'http://dublincore.org/documents/dces/#source';
-
 }

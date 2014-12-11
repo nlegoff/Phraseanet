@@ -8,6 +8,6 @@ class SystemRequirementsTest extends RequirementsTestCase
 {
     protected function provideRequirements()
     {
-        return new SystemRequirements;
+        return new SystemRequirements();
     }
 }

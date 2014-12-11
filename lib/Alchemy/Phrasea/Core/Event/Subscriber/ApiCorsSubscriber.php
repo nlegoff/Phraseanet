@@ -67,13 +67,13 @@ class ApiCorsSubscriber implements EventSubscriberInterface
         }
 
         $options = array_merge(array(
-            'allow_credentials'=> false,
-            'allow_origin'=> array(),
-            'allow_headers'=> array(),
-            'allow_methods'=> array(),
-            'expose_headers'=> array(),
-            'max_age'=> 0,
-            'hosts'=> array(),
+            'allow_credentials' => false,
+            'allow_origin' => array(),
+            'allow_headers' => array(),
+            'allow_methods' => array(),
+            'expose_headers' => array(),
+            'max_age' => 0,
+            'hosts' => array(),
         ), $this->app['phraseanet.configuration']['api_cors']);
 
         // skip if the host is not matching

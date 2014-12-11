@@ -158,7 +158,6 @@ class task_period_cindexer extends task_abstract
         return($dom->saveXML());
     }
 
-
     /**
      *
      * @return void
@@ -168,7 +167,8 @@ class task_period_cindexer extends task_abstract
         ?>
         <script type="text/javascript">
 
-            function taskFillGraphic_<?php echo(get_class($this));?>(xml)
+            function taskFillGraphic_<?php echo(get_class($this));
+        ?>(xml)
             {
                 if (xml) {
                     xml = $.parseXML(xml);
@@ -237,7 +237,8 @@ class task_period_cindexer extends task_abstract
 
             $(document).ready(function () {
                 $("#graphicForm *").change(function () {
-                    taskFillGraphic_<?php echo(get_class($this));?>(null);
+                    taskFillGraphic_<?php echo(get_class($this));
+        ?>(null);
                 });
             });
 
@@ -396,7 +397,7 @@ class task_period_cindexer extends task_abstract
             $nullfile = '/dev/null';
         }
 
-        if ( ! file_exists($cmd) || ! is_executable($cmd)) {
+        if (! file_exists($cmd) || ! is_executable($cmd)) {
             $this->setState(self::STATE_STOPPED);
             $this->log(sprintf('File \'%s\' does not exists', $cmd));
             throw new Exception('cindexer executable not found', self::ERR_EXECUTABLE_NOT_FOUND);
@@ -407,48 +408,48 @@ class task_period_cindexer extends task_abstract
         $args = array();
         $args_nopwd = array();
         if ($this->host) {
-            $args[] = '-h=' . $this->host;
-            $args_nopwd[] = '-h=' . $this->host;
+            $args[] = '-h='.$this->host;
+            $args_nopwd[] = '-h='.$this->host;
         }
         if ($this->port) {
-            $args[] = '-P=' . $this->port;
-            $args_nopwd[] = '-P=' . $this->port;
+            $args[] = '-P='.$this->port;
+            $args_nopwd[] = '-P='.$this->port;
         }
         if ($this->base) {
-            $args[] = '-b=' . $this->base;
-            $args_nopwd[] = '-b=' . $this->base;
+            $args[] = '-b='.$this->base;
+            $args_nopwd[] = '-b='.$this->base;
         }
         if ($this->user) {
-            $args[] = '-u=' . $this->user;
-            $args_nopwd[] = '-u=' . $this->user;
+            $args[] = '-u='.$this->user;
+            $args_nopwd[] = '-u='.$this->user;
         }
         if ($this->password) {
-            $args[] = '-p=' . $this->password;
+            $args[] = '-p='.$this->password;
             $args_nopwd[] = '-p=xxxxxxx';
         }
         if ($this->socket) {
-            $args[] = '--socket=' . $this->socket;
-            $args_nopwd[] = '--socket=' . $this->socket;
+            $args[] = '--socket='.$this->socket;
+            $args_nopwd[] = '--socket='.$this->socket;
         }
 
         $args[] = '-o';
         $args_nopwd[] = '-o';
 
         if ($this->charset) {
-            $args[] = '--default-character-set=' . $this->charset;
-            $args_nopwd[] = '--default-character-set=' . $this->charset;
+            $args[] = '--default-character-set='.$this->charset;
+            $args_nopwd[] = '--default-character-set='.$this->charset;
         }
         if ($this->stem) {
-            $args[] = '--stem=' . $this->stem;
-            $args_nopwd[] = '--stem=' . $this->stem;
+            $args[] = '--stem='.$this->stem;
+            $args_nopwd[] = '--stem='.$this->stem;
         }
         if ($this->sortempty) {
-            $args[] = '--sort-empty=' . $this->sortempty;
-            $args_nopwd[] = '--sort-empty=' . $this->sortempty;
+            $args[] = '--sort-empty='.$this->sortempty;
+            $args_nopwd[] = '--sort-empty='.$this->sortempty;
         }
         if ($this->debugmask > 0) {
-            $args[] = '-d=' . $this->debugmask;
-            $args_nopwd[] = '-d=' . $this->debugmask;
+            $args[] = '-d='.$this->debugmask;
+            $args_nopwd[] = '-d='.$this->debugmask;
         }
         if ($this->nolog) {
             $args[] = '-n';
@@ -459,10 +460,10 @@ class task_period_cindexer extends task_abstract
             $args_nopwd[] = '--run';
         }
 
-        $logdir = $this->dependencyContainer['root.path'] . '/logs/';
+        $logdir = $this->dependencyContainer['root.path'].'/logs/';
 
-        $this->new_status = NULL; // new status to set at the end
-        $this->exception = NULL; // exception to throw at the end
+        $this->new_status = null; // new status to set at the end
+        $this->exception = null; // exception to throw at the end
 
         $this->log(sprintf("running cindexer with method %s", $this->method));
         switch ($this->method) {
@@ -503,7 +504,7 @@ class task_period_cindexer extends task_abstract
 
         $process = proc_open($execmd, $descriptors, $pipes, dirname($cmd), null, array('bypass_shell' => true));
 
-        $pid = NULL;
+        $pid = null;
         if (is_resource($process)) {
             $proc_status = proc_get_status($process);
             if ($proc_status['running']) {
@@ -511,15 +512,15 @@ class task_period_cindexer extends task_abstract
             }
         }
         $qsent = '';
-        $timetokill = NULL;
-        $sock = NULL;
+        $timetokill = null;
+        $sock = null;
 
         $this->running = true;
 
         while ($this->running) {
             if ($this->getState() == self::STATE_TOSTOP && $this->socket > 0) {
                 // must quit task, so send 'Q' to port 127.0.0.1:XXXX to cindexer
-                if ( ! $qsent && (($sock = socket_create(AF_INET, SOCK_STREAM, 0)) !== false)) {
+                if (! $qsent && (($sock = socket_create(AF_INET, SOCK_STREAM, 0)) !== false)) {
                     if (socket_connect($sock, '127.0.0.1', $this->socket) === true) {
                         socket_write($sock, 'Q', 1);
                         socket_write($sock, "\r\n", strlen("\r\n"));
@@ -530,7 +531,7 @@ class task_period_cindexer extends task_abstract
                         $timetokill = time() + 10;
                     } else {
                         socket_close($sock);
-                        $sock = NULL;
+                        $sock = null;
                     }
                 }
             }
@@ -568,7 +569,7 @@ class task_period_cindexer extends task_abstract
 
         if ($sock) {
             socket_close($sock);
-            $sock = NULL;
+            $sock = null;
         }
 
         foreach (array_keys($pipes) as $offset) {
@@ -600,10 +601,10 @@ class task_period_cindexer extends task_abstract
             // parent
             $this->running = true;
 
-            $sigsent = NULL;
+            $sigsent = null;
             while ($this->running) {
                 // is the cindexer alive ?
-                if ( ! posix_kill($pid, 0)) {
+                if (! posix_kill($pid, 0)) {
                     // dead...
                     if ($sigsent === NULL) {
                         // but it's not my fault
@@ -620,7 +621,7 @@ class task_period_cindexer extends task_abstract
                     sleep(2);
                 }
 
-                $status = NULL;
+                $status = null;
                 if (pcntl_wait($status, WNOHANG) == $pid) {
                     // child (indexer) has exited
                     if ($sigsent == SIGINT) {
@@ -661,12 +662,12 @@ class task_period_cindexer extends task_abstract
         $database = $config['main']['database'];
 
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<tasksettings>\n"
-            ."<host>" . $database['host'] . "</host><port>"
-            . $database['port'] . "</port><base>"
-            . $database['dbname'] . "</base><user>"
-            . $database['user'] . "</user><password>"
-            . $database['password'] . "</password><socket>25200</socket>"
-            . "<use_sbas>1</use_sbas><nolog>0</nolog><clng></clng>"
-            . "<winsvc_run>0</winsvc_run><charset>utf8</charset></tasksettings>";
+            ."<host>".$database['host']."</host><port>"
+            .$database['port']."</port><base>"
+            .$database['dbname']."</base><user>"
+            .$database['user']."</user><password>"
+            .$database['password']."</password><socket>25200</socket>"
+            ."<use_sbas>1</use_sbas><nolog>0</nolog><clng></clng>"
+            ."<winsvc_run>0</winsvc_run><charset>utf8</charset></tasksettings>";
     }
 }

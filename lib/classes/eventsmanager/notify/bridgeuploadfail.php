@@ -49,7 +49,7 @@ class eventsmanager_notify_bridgeuploadfail extends eventsmanager_notifyAbstract
             , 'reason'     => ''
             , 'account_id' => null
             , 'base_id'    => null
-            , 'record_id'  => null
+            , 'record_id'  => null,
         );
 
         $params = array_merge($default, $params);
@@ -82,7 +82,6 @@ class eventsmanager_notify_bridgeuploadfail extends eventsmanager_notifyAbstract
         $mailed = false;
 
         if ($this->shouldSendNotificationFor($params['usr_id'])) {
-
             $readyToSend = false;
             try {
                 $user = User_Adapter::getInstance($params['usr_id'], $this->app);
@@ -90,7 +89,6 @@ class eventsmanager_notify_bridgeuploadfail extends eventsmanager_notifyAbstract
                 $receiver = Receiver::fromUser($user);
                 $readyToSend = true;
             } catch (\Exception $e) {
-
             }
 
             if ($readyToSend) {
@@ -131,9 +129,8 @@ class eventsmanager_notify_bridgeuploadfail extends eventsmanager_notifyAbstract
         }
 
         $ret = array(
-            'text'  => sprintf("L'upload concernant le record %s sur le comptre %s a echoue pour les raisons suivantes : %s"
-                , $record->get_title(), $account->get_api()->get_connector()->get_name(), $reason)
-            , 'class' => ''
+            'text'  => sprintf("L'upload concernant le record %s sur le comptre %s a echoue pour les raisons suivantes : %s", $record->get_title(), $account->get_api()->get_connector()->get_name(), $reason)
+            , 'class' => '',
         );
 
         return $ret;
@@ -155,7 +152,7 @@ class eventsmanager_notify_bridgeuploadfail extends eventsmanager_notifyAbstract
     public function get_description()
     {
         return _('Recevoir des notifications lorsqu\'un'
-                . ' upload echoue sur un bridge');
+                .' upload echoue sur un bridge');
     }
 
     /**

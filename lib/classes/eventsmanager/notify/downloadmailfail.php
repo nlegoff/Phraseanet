@@ -49,7 +49,7 @@ class eventsmanager_notify_downloadmailfail extends eventsmanager_notifyAbstract
             , 'lst'    => ''
             , 'ssttid' => ''
             , 'dest'   => ''
-            , 'reason' => ''
+            , 'reason' => '',
         );
 
         $params = array_merge($default, $params);
@@ -89,11 +89,12 @@ class eventsmanager_notify_downloadmailfail extends eventsmanager_notifyAbstract
 
             $from = array(
                 'email' => $this->app['phraseanet.registry']->get('GV_defaulmailsenderaddr'),
-                'name'  => $this->app['phraseanet.registry']->get('GV_homeTitle')
+                'name'  => $this->app['phraseanet.registry']->get('GV_homeTitle'),
             );
 
-            if (parent::email())
+            if (parent::email()) {
                 $mailed = true;
+            }
         }
 
         $this->broker->notify($params['usr_id'], __CLASS__, $datas, $mailed);
@@ -125,14 +126,12 @@ class eventsmanager_notify_downloadmailfail extends eventsmanager_notifyAbstract
         }
 
         $text = sprintf(
-            _("The delivery to %s failed for the following reason : %s")
-            , $dest
-            , $reason
+            _("The delivery to %s failed for the following reason : %s"), $dest, $reason
         );
 
         $ret = array(
             'text'  => $text
-            , 'class' => ''
+            , 'class' => '',
         );
 
         return $ret;

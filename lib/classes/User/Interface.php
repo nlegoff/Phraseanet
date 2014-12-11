@@ -19,7 +19,6 @@ use Alchemy\Phrasea\Application;
  */
 interface User_Interface
 {
-
     public function get_id();
 
     public function __construct($id, Application $app);

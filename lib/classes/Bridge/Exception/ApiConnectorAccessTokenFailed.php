@@ -17,5 +17,4 @@
  */
 class Bridge_Exception_ApiConnectorAccessTokenFailed extends Bridge_Exception
 {
-
 }

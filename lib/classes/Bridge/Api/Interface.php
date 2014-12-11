@@ -132,7 +132,7 @@ interface Bridge_Api_Interface
 
     public function list_containers($type, $offset_start = 0, $quantity = 10);
 
-    public function update_element($object, $object_id, Array $datas);
+    public function update_element($object, $object_id, array $datas);
 
     public function create_container($container_type, Request $request);
 
@@ -166,11 +166,11 @@ interface Bridge_Api_Interface
      *
      * @return array
      */
-    public function check_upload_constraints(Array $datas, record_adapter $record);
+    public function check_upload_constraints(array $datas, record_adapter $record);
 
     public function get_upload_datas(Request $request, record_adapter $record);
 
     public function get_update_datas(Request $request);
 
-    public function check_update_constraints(Array $datas);
+    public function check_update_constraints(array $datas);
 }

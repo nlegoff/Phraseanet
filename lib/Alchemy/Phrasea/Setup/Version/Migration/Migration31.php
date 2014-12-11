@@ -24,19 +24,19 @@ class Migration31 implements MigrationInterface
 
     public function migrate()
     {
-        if (!file_exists(__DIR__ . '/../../../../../../config/_GV.php')
-            || !file_exists(__DIR__ . '/../../../../../../lib/conf.d/_GV_template.inc')) {
+        if (!file_exists(__DIR__.'/../../../../../../config/_GV.php')
+            || !file_exists(__DIR__.'/../../../../../../lib/conf.d/_GV_template.inc')) {
             throw new \LogicException('Required config files not found');
         }
 
         // required to load GV template
         $app = $this->app;
 
-        require __DIR__ . '/../../../../../../config/_GV.php';
-        $GV = require __DIR__ . '/../../../../../../lib/conf.d/_GV_template.inc';
+        require __DIR__.'/../../../../../../config/_GV.php';
+        $GV = require __DIR__.'/../../../../../../lib/conf.d/_GV_template.inc';
 
         $retrieve_old_credentials = function () {
-                require __DIR__ . '/../../../../../../config/connexion.inc';
+                require __DIR__.'/../../../../../../config/connexion.inc';
 
                 return array(
                     'hostname' => $hostname,
@@ -49,7 +49,7 @@ class Migration31 implements MigrationInterface
 
         $params = $retrieve_old_credentials();
 
-        $dsn = 'mysql:dbname=' . $params['dbname'] . ';host=' . $params['hostname'] . ';port=' . $params['port'] . ';';
+        $dsn = 'mysql:dbname='.$params['dbname'].';host='.$params['hostname'].';port='.$params['port'].';';
         $connection = new \PDO($dsn, $params['user'], $params['password']);
 
         $connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
@@ -75,11 +75,10 @@ class Migration31 implements MigrationInterface
 
         foreach ($GV as $section => $datas_section) {
             foreach ($datas_section['vars'] as $datas) {
-
-                eval('$test = defined("' . $datas["name"] . '");');
+                eval('$test = defined("'.$datas["name"].'");');
 
                 if ($test) {
-                    eval('$val = ' . $datas["name"] . ';');
+                    eval('$val = '.$datas["name"].';');
                 } elseif (isset($datas['default'])) {
                     $val = $datas['default'];
                 } else {
@@ -129,14 +128,14 @@ class Migration31 implements MigrationInterface
 
         $stmt->closeCursor();
 
-        rename(__DIR__ . '/../../../../../../config/_GV.php', __DIR__ . '/../../../../../../config/_GV.php.old');
+        rename(__DIR__.'/../../../../../../config/_GV.php', __DIR__.'/../../../../../../config/_GV.php.old');
 
         $servername = '';
         if (defined('GV_ServerName')) {
             $servername = GV_ServerName;
         }
 
-        file_put_contents(__DIR__ . '/../../../../../../config/config.inc', "<?php\n\$servername = \"" . str_replace('"', '\"', $servername) . "\";\n");
+        file_put_contents(__DIR__.'/../../../../../../config/config.inc', "<?php\n\$servername = \"".str_replace('"', '\"', $servername)."\";\n");
 
         return;
     }

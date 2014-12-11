@@ -59,8 +59,7 @@ class Term
      */
     public function __construct($value, $context = null, ControlProvider\ControlProviderInterface $type = null, $id = null)
     {
-
-        if ( ! assert(is_scalar($value))) {
+        if (! assert(is_scalar($value))) {
             throw new \Exception('A Term value should be scalar');
         }
 

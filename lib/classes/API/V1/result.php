@@ -99,7 +99,7 @@ class API_V1_result
     public function set_datas(array $datas)
     {
         if (count($datas) === 0) {
-            $datas = new stdClass ();
+            $datas = new stdClass();
         }
         $this->response = $datas;
 
@@ -128,16 +128,16 @@ class API_V1_result
                 'api_version'   => $this->api_version
                 , 'request'       => sprintf('%s %s',
                     $this->request->getMethod(),
-                    $this->request->getBasePath() . $this->request->getPathInfo()
+                    $this->request->getBasePath().$this->request->getPathInfo()
                 )
                 , 'response_time' => $this->response_time
                 , 'http_code'     => $this->http_code
                 , 'error_type'    => $this->error_type
                 , 'error_message' => $this->error_message
                 , 'error_details' => $this->error_details
-                , 'charset'       => 'UTF-8'
+                , 'charset'       => 'UTF-8',
             )
-            , 'response'      => $this->response
+            , 'response'      => $this->response,
         );
 
         $this->app['dispatcher']->dispatch(PhraseaEvents::API_RESULT, new ApiResultEvent());
@@ -168,7 +168,7 @@ class API_V1_result
             case self::FORMAT_JSONP:
             case self::FORMAT_JSONP_EXTENDED:
                 $callback = trim($this->request->get('callback'));
-                $return_value = $callback . '(' . \p4string::jsonencode($ret) . ')';
+                $return_value = $callback.'('.\p4string::jsonencode($ret).')';
                 break;
         }
 

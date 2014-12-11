@@ -34,7 +34,7 @@ class module_report_nav extends module_report
         'record_id' => 'log_docs.record_id',
         'final'     => 'log_docs.final',
         'comment'   => 'log_docs.comment',
-        'size'      => 'subdef.size'
+        'size'      => 'subdef.size',
     );
 
     /**
@@ -48,7 +48,7 @@ class module_report_nav extends module_report
      */
     public function __construct(Application $app, $arg1, $arg2, $sbas_id, $collist)
     {
-//        parent::__construct($app, $arg1, $arg2, $sbas_id, $collist);
+        //        parent::__construct($app, $arg1, $arg2, $sbas_id, $collist);
         parent::__construct($app, $arg1, $arg2, $sbas_id, "");
     }
 
@@ -63,7 +63,7 @@ class module_report_nav extends module_report
         $sql = '
             SELECT COUNT(log.id) AS total
                 FROM log FORCE INDEX (date_site)
-                WHERE ' . $report_filter['sql'] . ' AND nav != "" AND !ISNULL(usrid)';
+                WHERE '.$report_filter['sql'].' AND nav != "" AND !ISNULL(usrid)';
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $sql), FILE_APPEND);
 
@@ -112,9 +112,9 @@ class module_report_nav extends module_report
         $params = array_merge(array(), $report_filter['params']);
 
         $sql = '
-            SELECT nav, SUM(1) AS nb, ROUND((SUM(1) / ' . $this->total_pourcent . ' * 100), 1) AS pourcent
+            SELECT nav, SUM(1) AS nb, ROUND((SUM(1) / '.$this->total_pourcent.' * 100), 1) AS pourcent
                 FROM log FORCE INDEX (date_site, nav)
-                WHERE ' . $report_filter['sql'] . ' AND nav != "" AND !ISNULL(usrid)
+                WHERE '.$report_filter['sql'].' AND nav != "" AND !ISNULL(usrid)
             GROUP BY nav
             ORDER BY nb DESC';
 
@@ -132,7 +132,7 @@ class module_report_nav extends module_report
 
         foreach ($rs as $row) {
             foreach ($this->champ as $key => $value) {
-                $this->result[$i][$value] = ($value == 'pourcent') ? $row[$value] . '%' : $row[$value];
+                $this->result[$i][$value] = ($value == 'pourcent') ? $row[$value].'%' : $row[$value];
             }
             $this->report['value'][] = $row['nb'];
             $this->report['legend'][] = $row['nav'];
@@ -169,10 +169,10 @@ class module_report_nav extends module_report
         $params = array_merge(array(), $report_filter['params']);
 
         $sql = '
-            SELECT os, COUNT(os) AS nb, ROUND((COUNT(os)/' . $this->total_pourcent . '*100),1) AS pourcent
+            SELECT os, COUNT(os) AS nb, ROUND((COUNT(os)/'.$this->total_pourcent.'*100),1) AS pourcent
 
                 FROM log FORCE INDEX (date_site, os)
-                WHERE '. $report_filter['sql'] . ' AND os != "" AND !ISNULL(usrid)
+                WHERE '.$report_filter['sql'].' AND os != "" AND !ISNULL(usrid)
 
             GROUP BY os
             ORDER BY nb DESC';
@@ -191,7 +191,7 @@ class module_report_nav extends module_report
 
         foreach ($rs as $row) {
             foreach ($this->champ as $key => $value) {
-                $this->result[$i][$value] = ($value == 'pourcent') ? $row[$value] . '%' : $row[$value];
+                $this->result[$i][$value] = ($value == 'pourcent') ? $row[$value].'%' : $row[$value];
             }
             $i ++;
             $this->report['value'][] = $row['nb'];
@@ -227,10 +227,10 @@ class module_report_nav extends module_report
         $params = array_merge(array(), $report_filter['params']);
 
         $sql = '
-            SELECT res, COUNT(res) AS nb, ROUND((COUNT(res)/ ' . $this->total_pourcent . '*100),1) AS pourcent
+            SELECT res, COUNT(res) AS nb, ROUND((COUNT(res)/ '.$this->total_pourcent.'*100),1) AS pourcent
 
                 FROM log FORCE INDEX (date_site, res)
-                WHERE '. $report_filter['sql'] . ' AND res != "" AND !ISNULL(usrid)
+                WHERE '.$report_filter['sql'].' AND res != "" AND !ISNULL(usrid)
 
             GROUP BY res
             ORDER BY nb DESC
@@ -251,7 +251,7 @@ class module_report_nav extends module_report
         foreach ($rs as $row) {
             foreach ($this->champ as $key => $value) {
                 $this->result[$i][$value] = ($value == 'pourcent') ?
-                    $row[$value] . '%' : $row[$value];
+                    $row[$value].'%' : $row[$value];
             }
             $i ++;
             $this->report['value'][] = $row['nb'];
@@ -287,11 +287,11 @@ class module_report_nav extends module_report
         $params = array_merge(array(), $report_filter['params']);
 
         $sql = "
-            SELECT tt.combo, COUNT( tt.combo ) AS nb, ROUND((COUNT(tt.combo)/" . $this->total_pourcent . "*100), 1) AS pourcent
+            SELECT tt.combo, COUNT( tt.combo ) AS nb, ROUND((COUNT(tt.combo)/".$this->total_pourcent."*100), 1) AS pourcent
             FROM (
                 SELECT CONCAT( nav, '-', os ) AS combo
                 FROM log FORCE INDEX (date_site, os_nav)
-                WHERE ". $report_filter['sql'] ."  AND nav != '' AND os != '' AND !ISNULL(usrid)
+                WHERE ".$report_filter['sql']."  AND nav != '' AND os != '' AND !ISNULL(usrid)
             ) AS tt
             GROUP BY tt.combo
             ORDER BY nb DESC
@@ -312,7 +312,7 @@ class module_report_nav extends module_report
         foreach ($rs as $row) {
             foreach ($this->champ as $key => $value) {
                 $this->result[$i][$value] = ($value == 'pourcent') ?
-                    $row[$value] . '%' : $row[$value];
+                    $row[$value].'%' : $row[$value];
             }
             $i ++;
             $this->report['value'][] = $row['nb'];
@@ -352,7 +352,7 @@ class module_report_nav extends module_report
         $sql = '
             SELECT appli
                 FROM log FORCE INDEX (date_site, appli)
-                WHERE ' . $report_filter['sql'] . ' AND appli != \'a:0:{}\' AND !ISNULL(usrid)
+                WHERE '.$report_filter['sql'].' AND appli != \'a:0:{}\' AND !ISNULL(usrid)
             GROUP BY appli';
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $sql), FILE_APPEND);
@@ -366,16 +366,18 @@ class module_report_nav extends module_report
 
         foreach ($rs as $row) {
             $applis = false;
-            if (($applis = @unserialize($row['appli'])) !== false)
+            if (($applis = @unserialize($row['appli'])) !== false) {
                 array_push($x, phrasea::modulesName($applis));
-            else
+            } else {
                 array_push($x, 'NULL');
+            }
         }
         foreach ($x as $key => $tab_value) {
             if (is_array($tab_value)) {
                 foreach ($tab_value as $key2 => $value) {
-                    if ( ! isset($tab_appli[$value]))
+                    if (! isset($tab_appli[$value])) {
                         $tab_appli[$value] = 0;
+                    }
                     $tab_appli[$value] ++;
                 }
             }
@@ -391,7 +393,7 @@ class module_report_nav extends module_report
                 $this->result[] = array(
                     'appli'    => $appli,
                     'nb'       => $nb,
-                    'pourcent' => $pourcent . '%'
+                    'pourcent' => $pourcent.'%',
                 );
             }
             $this->report['value'][] = $nb;
@@ -415,15 +417,15 @@ class module_report_nav extends module_report
         $this->title = sprintf(_('report:: Information sur les utilisateurs correspondant a %s'), $val);
 
         if ($on) {
-            if ( ! empty($req)) {
+            if (! empty($req)) {
                 $stmt = $this->app['phraseanet.appbox']->get_databox($this->sbas_id)->get_connection()->prepare($req);
                 $stmt->execute($params);
                 $rsu = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 $stmt->closeCursor();
 
                 foreach ($rsu as $row_user) {
-                    $filter_id_apbox[] = "usr_id = " . (int) $row_user['usrid'];
-                    $filter_id_datbox[] = "log.usrid = " . (int) $row_user['usrid'];
+                    $filter_id_apbox[] = "usr_id = ".(int) $row_user['usrid'];
+                    $filter_id_datbox[] = "log.usrid = ".(int) $row_user['usrid'];
                 }
                 $filter_id_apbox = implode(' OR ', $filter_id_apbox);
                 $filter_id_datbox = implode(' OR ', $filter_id_datbox);
@@ -436,7 +438,7 @@ class module_report_nav extends module_report
                     usr_mail as mail,
                     adresse, tel
                 FROM usr
-                WHERE $on = :value " . (('' !== $filter_id_apbox) ? "AND (" . $filter_id_apbox . ")" : '');
+                WHERE $on = :value ".(('' !== $filter_id_apbox) ? "AND (".$filter_id_apbox.")" : '');
         } else {
             $sql = '
                 SELECT
@@ -461,8 +463,9 @@ class module_report_nav extends module_report
         $this->setDisplay($tab);
 
         foreach ($rs as $row) {
-            foreach ($row as $fieldname => $value)
+            foreach ($row as $fieldname => $value) {
                 $row[$fieldname] = $value ? $value : _('report:: non-renseigne');
+            }
             $this->result[] = $row;
         }
         if ($on == false) {
@@ -508,7 +511,7 @@ class module_report_nav extends module_report
             'date',
             'type',
             'titre',
-            'taille'
+            'taille',
         );
 
         $document = $record->get_subdef('document');
@@ -517,14 +520,13 @@ class module_report_nav extends module_report
 
         $x = $record->get_thumbnail();
         $this->result[] = array(
-            'photo'     =>
-            "<img style='width:" . $x->get_width() . "px;height:" . $x->get_height() . "px;'
-                        src='" . (string) $x->get_url() . "'>"
+            'photo'     => "<img style='width:".$x->get_width()."px;height:".$x->get_height()."px;'
+                        src='".(string) $x->get_url()."'>"
             , 'record_id' => $record->get_record_id()
             , 'date'      => $this->app['date-formatter']->getPrettyString($document->get_creation_date())
             , 'type'      => $document->get_mime()
             , 'titre'     => $record->get_title()
-            , 'taille'    => $document->get_size()
+            , 'taille'    => $document->get_size(),
         );
 
         $this->setDisplayNav();
@@ -549,7 +551,7 @@ class module_report_nav extends module_report
                 SELECT DISTINCT (log.id), version
                 FROM log FORCE INDEX (date_site, nav, version)
                 WHERE nav = :browser
-                AND ". $report_filter['sql'] . "
+                AND ".$report_filter['sql']."
             ) AS tt
             GROUP BY version
             ORDER BY nb DESC";

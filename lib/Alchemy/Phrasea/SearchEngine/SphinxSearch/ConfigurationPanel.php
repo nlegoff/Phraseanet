@@ -117,13 +117,13 @@ class ConfigurationPanel extends AbstractConfigurationPanel
         $this->charsets = array();
 
         $finder = new Finder();
-        $finder->in(__DIR__ . '/Charset/')->files()->name('*.php');
+        $finder->in(__DIR__.'/Charset/')->files()->name('*.php');
 
         foreach ($finder as $file) {
             $name = substr($file->getFilename(), 0, -4);
-            $classname = __NAMESPACE__ . '\\Charset\\' . $name;
+            $classname = __NAMESPACE__.'\\Charset\\'.$name;
             if (class_exists($classname)) {
-                $this->charsets[$name] = new $classname;
+                $this->charsets[$name] = new $classname();
             }
         }
 
@@ -149,7 +149,7 @@ class ConfigurationPanel extends AbstractConfigurationPanel
 
         $charsets = '';
         foreach ($options['charset_tables'] as $charset) {
-            $classname = __NAMESPACE__ . '\\Charset\\' . $charset;
+            $classname = __NAMESPACE__.'\\Charset\\'.$charset;
             if (class_exists($classname)) {
                 $charset_table = new $classname();
                 $charsets .= $charset_table->get_table();
@@ -168,20 +168,21 @@ class ConfigurationPanel extends AbstractConfigurationPanel
                 unset($charsets[$i]);
                 continue;
             }
-            if ($last_detect === true && substr(trim($charsets[$i]), (strlen(trim($charsets[$i])) - 1), 1) !== ',')
-                $charsets[$i] = rtrim($charsets[$i]) . ', ';
-            $charsets[$i] = "  " . $charsets[$i] . " \\\n";
+            if ($last_detect === true && substr(trim($charsets[$i]), (strlen(trim($charsets[$i])) - 1), 1) !== ',') {
+                $charsets[$i] = rtrim($charsets[$i]).', ';
+            }
+            $charsets[$i] = "  ".$charsets[$i]." \\\n";
             $last_detect = true;
         }
 
-        $charsets = "\\\n" . implode('', $charsets);
+        $charsets = "\\\n".implode('', $charsets);
 
         $charset_abstract = '
 
     docinfo               = extern
     charset_type          = utf-8
 
-    charset_table         = ' . $charsets . '
+    charset_table         = '.$charsets.'
 
     # minimum indexed word length
     # default is 1 (index everything)
@@ -205,20 +206,19 @@ class ConfigurationPanel extends AbstractConfigurationPanel
     ';
 
         foreach ($databoxes as $databox) {
-
             $index_crc = $this->searchEngine->CRCdatabox($databox);
 
             $date_selects = $date_left_joins = $date_fields = array();
             foreach ($configuration['date_fields'] as $name) {
                 $field = $databox->get_meta_structure()->get_element_by_name($name);
 
-                $date_fields[] = self::DATE_FIELD_PREFIX . $name;
+                $date_fields[] = self::DATE_FIELD_PREFIX.$name;
 
                 if ($field instanceof \databox_field) {
-                    $date_selects[] = ", UNIX_TIMESTAMP(d" . $field->get_id() . ".value) as " . self::DATE_FIELD_PREFIX . $name;
-                    $date_left_joins[] = "    LEFT JOIN metadatas d" . $field->get_id() . " ON (d" . $field->get_id() . ".record_id = r.record_id AND d" . $field->get_id() . ".meta_struct_id = " . $field->get_id() . ")";
+                    $date_selects[] = ", UNIX_TIMESTAMP(d".$field->get_id().".value) as ".self::DATE_FIELD_PREFIX.$name;
+                    $date_left_joins[] = "    LEFT JOIN metadatas d".$field->get_id()." ON (d".$field->get_id().".record_id = r.record_id AND d".$field->get_id().".meta_struct_id = ".$field->get_id().")";
                 } else {
-                    $date_selects[] = ", null as " . $name;
+                    $date_selects[] = ", null as ".$name;
                 }
             }
 
@@ -226,21 +226,21 @@ class ConfigurationPanel extends AbstractConfigurationPanel
 
 
 #------------------------------------------------------------------------------
-# *****************  ' . $databox->get_dbname() . '
+# *****************  '.$databox->get_dbname().'
 #------------------------------------------------------------------------------
 
 
   #--------------------------------------
   ### Sources Abstract
 
-  source database_cfg' . $index_crc . '
+  source database_cfg'.$index_crc.'
   {
     type                  = mysql
-    sql_host              = ' . $databox->get_host() . '
-    sql_user              = ' . $databox->get_user() . '
+    sql_host              = '.$databox->get_host().'
+    sql_user              = '.$databox->get_user().'
     sql_pass              =
-    sql_db                = ' . $databox->get_dbname() . '
-    sql_port              = ' . $databox->get_port() . '
+    sql_db                = '.$databox->get_dbname().'
+    sql_port              = '.$databox->get_port().'
 
     # We retrieve datas in UTF-8
     sql_query_pre = SET character_set_results = "utf8", character_set_client = "utf8", \
@@ -251,7 +251,7 @@ class ConfigurationPanel extends AbstractConfigurationPanel
 
   #--------------------------------------
   ### Suggestions Sources
-  source src_suggest' . $index_crc . ' : database_cfg' . $index_crc . '
+  source src_suggest'.$index_crc.' : database_cfg'.$index_crc.'
   {
     sql_query             = SELECT id, keyword, trigrams, freq, LENGTH(keyword) AS len FROM suggest
 
@@ -260,34 +260,34 @@ class ConfigurationPanel extends AbstractConfigurationPanel
     sql_attr_string       = keyword
   }
 
-  index suggest' . $index_crc . '
+  index suggest'.$index_crc.'
   {
-    source                = src_suggest' . $index_crc . '
-    path                  = /var/sphinx/datas/suggest_' . $index_crc . '
+    source                = src_suggest'.$index_crc.'
+    path                  = /var/sphinx/datas/suggest_'.$index_crc.'
 
-' . $charset_abstract . '
+'.$charset_abstract.'
   }
 
   #--------------------------------------
   ### Metadatas Sources
-  source src_metadatas' . $index_crc . ' : database_cfg' . $index_crc . '
+  source src_metadatas'.$index_crc.' : database_cfg'.$index_crc.'
   {
     sql_query             = \
       SELECT m.id, m.meta_struct_id, m.record_id, m.value, \
-        ' . $databox->get_sbas_id() . ' as sbas_id, s.id, \
-        CRC32(CONCAT_WS("_", ' . $databox->get_sbas_id() . ', s.id)) as crc_struct_id, \
-        CONCAT_WS("_", ' . $databox->get_sbas_id() . ', s.id) as struct_id, \
+        '.$databox->get_sbas_id().' as sbas_id, s.id, \
+        CRC32(CONCAT_WS("_", '.$databox->get_sbas_id().', s.id)) as crc_struct_id, \
+        CONCAT_WS("_", '.$databox->get_sbas_id().', s.id) as struct_id, \
         r.parent_record_id, \
-        CRC32(CONCAT_WS("_", ' . $databox->get_sbas_id() . ', r.coll_id)) as crc_sbas_coll, \
-        CRC32(CONCAT_WS("_", ' . $databox->get_sbas_id() . ', r.record_id)) as crc_sbas_record, \
-        CONCAT_WS("_", ' . $databox->get_sbas_id() . ', r.coll_id) as sbas_coll, \
+        CRC32(CONCAT_WS("_", '.$databox->get_sbas_id().', r.coll_id)) as crc_sbas_coll, \
+        CRC32(CONCAT_WS("_", '.$databox->get_sbas_id().', r.record_id)) as crc_sbas_record, \
+        CONCAT_WS("_", '.$databox->get_sbas_id().', r.coll_id) as sbas_coll, \
         CRC32(r.type) as crc_type, r.coll_id, \
         UNIX_TIMESTAMP(credate) as created_on, 0 as deleted, \
         CRC32(CONCAT_WS("_", r.coll_id, s.business)) as crc_coll_business, \
         s.business \
-        ' . implode(" \\\n", $date_selects) . ' \
+        '.implode(" \\\n", $date_selects).' \
       FROM (metadatas m, metadatas_structure s, record r) \
-          ' . implode(" \\\n", $date_left_joins) . ' \
+          '.implode(" \\\n", $date_left_joins).' \
       WHERE m.record_id = r.record_id AND m.meta_struct_id = s.id \
         AND s.indexable = "1"
 
@@ -306,13 +306,13 @@ class ConfigurationPanel extends AbstractConfigurationPanel
     sql_attr_timestamp    = created_on
 ';
             foreach ($date_fields as $date_field) {
-                $conf.= "    sql_attr_timestamp    = $date_field\n";
+                $conf .= "    sql_attr_timestamp    = $date_field\n";
             }
 
             $conf .= '
 
     sql_attr_multi        = uint status from query; SELECT m.id as id, \
-      CRC32(CONCAT_WS("_", ' . $databox->get_sbas_id() . ', s.name)) as name \
+      CRC32(CONCAT_WS("_", '.$databox->get_sbas_id().', s.name)) as name \
       FROM metadatas m, status s \
       WHERE s.record_id = m.record_id AND s.value = 1 \
       ORDER BY m.id ASC
@@ -325,21 +325,21 @@ class ConfigurationPanel extends AbstractConfigurationPanel
   #--------------------------------------
   ### Metadatas Index
 
-  index metadatas' . $index_crc . ' : suggest' . $index_crc . '
+  index metadatas'.$index_crc.' : suggest'.$index_crc.'
   {
-    source                = src_metadatas' . $index_crc . '
-    path                  = /var/sphinx/datas/metadatas_' . $index_crc . '
+    source                = src_metadatas'.$index_crc.'
+    path                  = /var/sphinx/datas/metadatas_'.$index_crc.'
 
   }
 
   #--------------------------------------
   ### Metadatas Index Stemmed
 
-  index metadatas' . $index_crc . '_stemmed_fr : suggest' . $index_crc . '
+  index metadatas'.$index_crc.'_stemmed_fr : suggest'.$index_crc.'
   {
-    source                = src_metadatas' . $index_crc . '
+    source                = src_metadatas'.$index_crc.'
 
-    path                  = /var/sphinx/datas/metadatas_' . $index_crc . '_stemmed_fr
+    path                  = /var/sphinx/datas/metadatas_'.$index_crc.'_stemmed_fr
 
     morphology            = libstemmer_fr
 
@@ -355,33 +355,33 @@ class ConfigurationPanel extends AbstractConfigurationPanel
     index_exact_words     = 1
   }
 
-  index metadatas' . $index_crc . '_stemmed_en : metadatas' . $index_crc . '_stemmed_fr
+  index metadatas'.$index_crc.'_stemmed_en : metadatas'.$index_crc.'_stemmed_fr
   {
-    path                  = /var/sphinx/datas/metadatas_' . $index_crc . '_stemmed_en
+    path                  = /var/sphinx/datas/metadatas_'.$index_crc.'_stemmed_en
     morphology            = libstemmer_en
   }
 
-  index metadatas' . $index_crc . '_stemmed_nl : metadatas' . $index_crc . '_stemmed_fr
+  index metadatas'.$index_crc.'_stemmed_nl : metadatas'.$index_crc.'_stemmed_fr
   {
-    path                  = /var/sphinx/datas/metadatas_' . $index_crc . '_stemmed_nl
+    path                  = /var/sphinx/datas/metadatas_'.$index_crc.'_stemmed_nl
     morphology            = libstemmer_nl
   }
 
-  index metadatas' . $index_crc . '_stemmed_de : metadatas' . $index_crc . '_stemmed_fr
+  index metadatas'.$index_crc.'_stemmed_de : metadatas'.$index_crc.'_stemmed_fr
   {
-    path                  = /var/sphinx/datas/metadatas_' . $index_crc . '_stemmed_de
+    path                  = /var/sphinx/datas/metadatas_'.$index_crc.'_stemmed_de
     morphology            = libstemmer_de
   }
 
   #--------------------------------------
   ### METAS_REALTIME Index
 
-  index metas_realtime' . $index_crc . '
+  index metas_realtime'.$index_crc.'
   {
     type                  = rt
-    path                  = /var/sphinx/datas/metas_realtime_' . $index_crc . '
+    path                  = /var/sphinx/datas/metas_realtime_'.$index_crc.'
 
-' . $charset_abstract . '
+'.$charset_abstract.'
 
     rt_field              = value
     rt_field              = meta_struct_id
@@ -400,54 +400,54 @@ class ConfigurationPanel extends AbstractConfigurationPanel
 ';
 
             foreach ($date_fields as $date_field) {
-                $conf.= "    rt_attr_timestamp     = $date_field\n";
+                $conf .= "    rt_attr_timestamp     = $date_field\n";
             }
 
             $conf .= '    rt_attr_multi         = status
   }
 
-  index metas_realtime_stemmed_fr_' . $index_crc . ' : metas_realtime' . $index_crc . '
+  index metas_realtime_stemmed_fr_'.$index_crc.' : metas_realtime'.$index_crc.'
   {
     type                  = rt
     morphology            = libstemmer_fr
     min_stemming_len      = 1
     index_exact_words     = 1
-    path                  = /var/sphinx/datas/metas_realtime_stemmed_fr_' . $index_crc . '
+    path                  = /var/sphinx/datas/metas_realtime_stemmed_fr_'.$index_crc.'
   }
 
-  index metas_realtime_stemmed_en_' . $index_crc . ' : metas_realtime_stemmed_fr_' . $index_crc . '
+  index metas_realtime_stemmed_en_'.$index_crc.' : metas_realtime_stemmed_fr_'.$index_crc.'
   {
     morphology            = libstemmer_en
-    path                  = /var/sphinx/datas/metas_realtime_stemmed_en_' . $index_crc . '
+    path                  = /var/sphinx/datas/metas_realtime_stemmed_en_'.$index_crc.'
   }
 
-  index metas_realtime_stemmed_de_' . $index_crc . ' : metas_realtime_stemmed_fr_' . $index_crc . '
+  index metas_realtime_stemmed_de_'.$index_crc.' : metas_realtime_stemmed_fr_'.$index_crc.'
   {
     morphology            = libstemmer_de
-    path                  = /var/sphinx/datas/metas_realtime_stemmed_de_' . $index_crc . '
+    path                  = /var/sphinx/datas/metas_realtime_stemmed_de_'.$index_crc.'
   }
 
-  index metas_realtime_stemmed_nl_' . $index_crc . ' : metas_realtime_stemmed_fr_' . $index_crc . '
+  index metas_realtime_stemmed_nl_'.$index_crc.' : metas_realtime_stemmed_fr_'.$index_crc.'
   {
     morphology            = libstemmer_nl
-    path                  = /var/sphinx/datas/metas_realtime_stemmed_nl_' . $index_crc . '
+    path                  = /var/sphinx/datas/metas_realtime_stemmed_nl_'.$index_crc.'
   }
 
   #--------------------------------------
   ### All documents Index (give the last 1000 records added, etc...)
 
-  source src_documents' . $index_crc . ' : database_cfg' . $index_crc . '
+  source src_documents'.$index_crc.' : database_cfg'.$index_crc.'
   {
     sql_query             = \
-        SELECT r.record_id as id, r.record_id, r.parent_record_id, ' . $databox->get_sbas_id() . ' as sbas_id, \
-            CRC32(CONCAT_WS("_", ' . $databox->get_sbas_id() . ', r.coll_id)) as crc_sbas_coll, \
-            CRC32(CONCAT_WS("_", ' . $databox->get_sbas_id() . ', r.record_id)) as crc_sbas_record, \
-            CONCAT_WS("_", ' . $databox->get_sbas_id() . ' , r.coll_id) as sbas_coll, \
+        SELECT r.record_id as id, r.record_id, r.parent_record_id, '.$databox->get_sbas_id().' as sbas_id, \
+            CRC32(CONCAT_WS("_", '.$databox->get_sbas_id().', r.coll_id)) as crc_sbas_coll, \
+            CRC32(CONCAT_WS("_", '.$databox->get_sbas_id().', r.record_id)) as crc_sbas_record, \
+            CONCAT_WS("_", '.$databox->get_sbas_id().' , r.coll_id) as sbas_coll, \
             CRC32(r.type) as crc_type, r.coll_id, \
             UNIX_TIMESTAMP(r.credate) as created_on, 0 as deleted \
-            ' . implode(" \\\n", $date_selects) . ' \
+            '.implode(" \\\n", $date_selects).' \
         FROM (record r) \
-        ' . implode(" \\\n", $date_left_joins) . ' \
+        '.implode(" \\\n", $date_left_joins).' \
         WHERE 1
 
     # documents can be filtered / sorted on each sql_attr
@@ -462,13 +462,13 @@ class ConfigurationPanel extends AbstractConfigurationPanel
     sql_attr_timestamp    = created_on
 ';
             foreach ($date_fields as $date_field) {
-                $conf.= "    sql_attr_timestamp    = $date_field\n";
+                $conf .= "    sql_attr_timestamp    = $date_field\n";
             }
 
             $conf .= '
 
     sql_attr_multi        = uint status from query; SELECT r.record_id as id, \
-      CRC32(CONCAT_WS("_", ' . $databox->get_sbas_id() . ', s.name)) as name \
+      CRC32(CONCAT_WS("_", '.$databox->get_sbas_id().', s.name)) as name \
       FROM record r, status s \
       WHERE s.record_id = r.record_id AND s.value = 1 \
       ORDER BY r.record_id ASC
@@ -486,17 +486,17 @@ class ConfigurationPanel extends AbstractConfigurationPanel
   #--------------------------------------
   ### All documents Index
 
-  index documents' . $index_crc . '  : suggest' . $index_crc . '
+  index documents'.$index_crc.'  : suggest'.$index_crc.'
   {
-    source                = src_documents' . $index_crc . '
-    path                  = /var/sphinx/datas/documents_' . $index_crc . '
+    source                = src_documents'.$index_crc.'
+    path                  = /var/sphinx/datas/documents_'.$index_crc.'
 
     morphology            = none
   }
 
-  index documents' . $index_crc . '_stemmed_fr : documents' . $index_crc . '
+  index documents'.$index_crc.'_stemmed_fr : documents'.$index_crc.'
   {
-    path                  = /var/sphinx/datas/documents_' . $index_crc . '_stemmed_fr
+    path                  = /var/sphinx/datas/documents_'.$index_crc.'_stemmed_fr
 
     morphology            = libstemmer_fr
 
@@ -512,33 +512,33 @@ class ConfigurationPanel extends AbstractConfigurationPanel
     index_exact_words     = 1
   }
 
-  index documents' . $index_crc . '_stemmed_en : documents' . $index_crc . '
+  index documents'.$index_crc.'_stemmed_en : documents'.$index_crc.'
   {
-    path                  = /var/sphinx/datas/documents_' . $index_crc . '_stemmed_en
+    path                  = /var/sphinx/datas/documents_'.$index_crc.'_stemmed_en
     morphology            = libstemmer_en
   }
 
-  index documents' . $index_crc . '_stemmed_de : documents' . $index_crc . '
+  index documents'.$index_crc.'_stemmed_de : documents'.$index_crc.'
   {
-    path                  = /var/sphinx/datas/documents_' . $index_crc . '_stemmed_de
+    path                  = /var/sphinx/datas/documents_'.$index_crc.'_stemmed_de
     morphology            = libstemmer_de
   }
 
-  index documents' . $index_crc . '_stemmed_nl : documents' . $index_crc . '
+  index documents'.$index_crc.'_stemmed_nl : documents'.$index_crc.'
   {
-    path                  = /var/sphinx/datas/documents_' . $index_crc . '_stemmed_nl
+    path                  = /var/sphinx/datas/documents_'.$index_crc.'_stemmed_nl
     morphology            = libstemmer_nl
   }
 
   #--------------------------------------
   ### DOCS_REALTIME Index
 
-  index docs_realtime' . $index_crc . '
+  index docs_realtime'.$index_crc.'
   {
     type                  = rt
-    path                  = /var/sphinx/datas/docs_realtime_' . $index_crc . '
+    path                  = /var/sphinx/datas/docs_realtime_'.$index_crc.'
 
-    ' . $charset_abstract . '
+    '.$charset_abstract.'
 
     rt_field              = value
     rt_attr_uint          = record_id
@@ -553,47 +553,47 @@ class ConfigurationPanel extends AbstractConfigurationPanel
 ';
 
             foreach ($date_fields as $date_field) {
-                $conf.= "    rt_attr_timestamp    = $date_field\n";
+                $conf .= "    rt_attr_timestamp    = $date_field\n";
             }
 
             $conf .= '    rt_attr_multi         = status
   }
 
-  index docs_realtime_stemmed_fr_' . $index_crc . ' : docs_realtime' . $index_crc . '
+  index docs_realtime_stemmed_fr_'.$index_crc.' : docs_realtime'.$index_crc.'
   {
     type                  = rt
     morphology            = libstemmer_fr
     min_stemming_len      = 1
     index_exact_words     = 1
-    path                  = /var/sphinx/datas/docs_realtime_stemmed_fr_' . $index_crc . '
+    path                  = /var/sphinx/datas/docs_realtime_stemmed_fr_'.$index_crc.'
   }
 
-  index docs_realtime_stemmed_en_' . $index_crc . ' : docs_realtime_stemmed_fr_' . $index_crc . '
+  index docs_realtime_stemmed_en_'.$index_crc.' : docs_realtime_stemmed_fr_'.$index_crc.'
   {
     morphology            = libstemmer_en
-    path                  = /var/sphinx/datas/docs_realtime_stemmed_en_' . $index_crc . '
+    path                  = /var/sphinx/datas/docs_realtime_stemmed_en_'.$index_crc.'
   }
 
-  index docs_realtime_stemmed_de_' . $index_crc . ' : docs_realtime_stemmed_fr_' . $index_crc . '
+  index docs_realtime_stemmed_de_'.$index_crc.' : docs_realtime_stemmed_fr_'.$index_crc.'
   {
     morphology            = libstemmer_de
-    path                  = /var/sphinx/datas/docs_realtime_stemmed_de_' . $index_crc . '
+    path                  = /var/sphinx/datas/docs_realtime_stemmed_de_'.$index_crc.'
   }
 
-  index docs_realtime_stemmed_nl_' . $index_crc . ' : docs_realtime_stemmed_fr_' . $index_crc . '
+  index docs_realtime_stemmed_nl_'.$index_crc.' : docs_realtime_stemmed_fr_'.$index_crc.'
   {
     morphology            = libstemmer_nl
-    path                  = /var/sphinx/datas/docs_realtime_stemmed_nl_' . $index_crc . '
+    path                  = /var/sphinx/datas/docs_realtime_stemmed_nl_'.$index_crc.'
   }
 
 #------------------------------------------------------------------------------
-# *****************  End configuration for ' . $databox->get_dbname() . '
+# *****************  End configuration for '.$databox->get_dbname().'
 #------------------------------------------------------------------------------
 
 ';
         }
 
-        $conf .='
+        $conf .= '
 
 #******************************************************************************
 #******************  Sphinx Indexer Configuration  ****************************

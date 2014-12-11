@@ -37,7 +37,7 @@ class BytesConverter extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'bytesTo*' => new \Twig_Filter_Method($this, 'bytes2Filter')
+            'bytesTo*' => new \Twig_Filter_Method($this, 'bytes2Filter'),
         );
     }
 
@@ -47,7 +47,7 @@ class BytesConverter extends \Twig_Extension
         $unit = array_keys($this->unit);
 
         if ($bytes <= 0) {
-            return '0 ' . $unit[0];
+            return '0 '.$unit[0];
         }
 
         if ($suffix == '') {
@@ -55,18 +55,18 @@ class BytesConverter extends \Twig_Extension
         }
 
         if (array_search($suffix, array_merge($auto, $unit)) === false) {
-            throw new \Exception('Sorry, you have to specify a legal Byte value or "Human" for automatic. Legal options are: Human, ' . implode(', ', $unit));
+            throw new \Exception('Sorry, you have to specify a legal Byte value or "Human" for automatic. Legal options are: Human, '.implode(', ', $unit));
         }
 
         switch ($suffix) {
             case '':
             case 'Human':
             case 'Auto':
-                return round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), $precision) . ' ' . $unit[$i];
+                return round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), $precision).' '.$unit[$i];
             default:
                 $i = array_search($suffix, $unit);
 
-                return round($bytes / pow(1024, $i), $precision) . ' ' . $unit[$i];
+                return round($bytes / pow(1024, $i), $precision).' '.$unit[$i];
         }
     }
 }

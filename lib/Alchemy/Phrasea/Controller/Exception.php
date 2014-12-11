@@ -18,5 +18,4 @@ namespace Alchemy\Phrasea\Controller;
  */
 class Exception extends \Exception
 {
-
 }

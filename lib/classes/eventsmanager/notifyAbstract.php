@@ -6,7 +6,6 @@ abstract class eventsmanager_notifyAbstract extends eventsmanager_eventAbstract
 
     public function fire($event, $params, &$object)
     {
-
     }
 
     abstract public function datas($datas, $unread);

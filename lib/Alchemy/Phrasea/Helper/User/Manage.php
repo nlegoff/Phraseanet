@@ -58,15 +58,16 @@ class Manage extends Helper
             , 'last_model'   => $this->request->get('last_model')
             , 'srt'          => $request->get("srt", \User_Query::SORT_CREATIONDATE)
             , 'ord'          => $request->get("ord", \User_Query::ORD_DESC)
-            , 'offset_start' => 0
+            , 'offset_start' => 0,
         );
 
         $query = new \User_Query($this->app);
 
-        if (is_array($this->query_parms['base_id']))
+        if (is_array($this->query_parms['base_id'])) {
             $query->on_base_ids($this->query_parms['base_id']);
-        elseif (is_array($this->query_parms['sbas_id']))
+        } elseif (is_array($this->query_parms['sbas_id'])) {
             $query->on_sbas_ids($this->query_parms['sbas_id']);
+        }
 
         $this->results = $query->sort_by($this->query_parms["srt"], $this->query_parms["ord"])
             ->like($this->query_parms['like_field'], $this->query_parms['like_value'])
@@ -98,15 +99,16 @@ class Manage extends Helper
             , 'srt'          => $this->request->get("srt", \User_Query::SORT_CREATIONDATE)
             , 'ord'          => $this->request->get("ord", \User_Query::ORD_DESC)
             , 'per_page'     => $results_quantity
-            , 'offset_start' => $offset_start
+            , 'offset_start' => $offset_start,
         );
 
         $query = new \User_Query($this->app);
 
-        if (is_array($this->query_parms['base_id']))
+        if (is_array($this->query_parms['base_id'])) {
             $query->on_base_ids($this->query_parms['base_id']);
-        elseif (is_array($this->query_parms['sbas_id']))
+        } elseif (is_array($this->query_parms['sbas_id'])) {
             $query->on_sbas_ids($this->query_parms['sbas_id']);
+        }
 
         $this->results = $query->sort_by($this->query_parms["srt"], $this->query_parms["ord"])
             ->like($this->query_parms['like_field'], $this->query_parms['like_value'])
@@ -132,8 +134,9 @@ class Manage extends Helper
         }
 
         foreach ($this->query_parms as $k => $v) {
-            if (is_null($v))
+            if (is_null($v)) {
                 $this->query_parms[$k] = false;
+            }
         }
 
         $query = new \User_Query($this->app);
@@ -146,7 +149,7 @@ class Manage extends Helper
             'parm'              => $this->query_parms,
             'invite_user'       => $invite,
             'autoregister_user' => $autoregister,
-            'templates'         => $templates
+            'templates'         => $templates,
         );
     }
 
@@ -154,7 +157,7 @@ class Manage extends Helper
     {
         $email = $this->request->get('value');
 
-        if ( ! \Swift_Validate::email($email)) {
+        if (! \Swift_Validate::email($email)) {
             throw new \Exception_InvalidArgument(_('Invalid mail address'));
         }
 
@@ -177,7 +180,6 @@ class Manage extends Helper
             try {
                 $receiver = Receiver::fromUser($createdUser);
             } catch (InvalidArgumentException $e) {
-
             }
 
             if ($sendCredentials) {

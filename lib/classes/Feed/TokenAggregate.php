@@ -20,7 +20,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class Feed_TokenAggregate extends Feed_Token
 {
-
     /**
      *
      * @param  Application         $app
@@ -29,12 +28,11 @@ class Feed_TokenAggregate extends Feed_Token
      */
     public function __construct(Application $app, $token)
     {
-
         $sql = 'SELECT usr_id FROM feed_tokens
             WHERE aggregated = "1" AND token = :token';
 
         $params = array(
-            ':token' => $token
+            ':token' => $token,
         );
 
         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -42,8 +40,9 @@ class Feed_TokenAggregate extends Feed_Token
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new NotFoundHttpException('Feed not found.');
+        }
 
         $this->usr_id = $row['usr_id'];
         $this->app = $app;

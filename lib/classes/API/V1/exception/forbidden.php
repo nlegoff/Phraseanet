@@ -18,5 +18,4 @@
 class API_V1_exception_forbidden extends API_V1_exception_abstract
 {
     protected static $details = 'Access to the requested ressource is forbidden';
-
 }

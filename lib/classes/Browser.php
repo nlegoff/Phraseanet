@@ -250,7 +250,7 @@ class Browser
      */
     public function isBrowser($browserName)
     {
-        return( 0 == strcasecmp($this->_browser_name, trim($browserName)));
+        return(0 == strcasecmp($this->_browser_name, trim($browserName)));
     }
 
     /**
@@ -359,7 +359,7 @@ class Browser
      */
     public function getExtendedVersion()
     {
-        return $this->getVersion() . ($this->isChromeFrame() ? ' ChromeFrame' : '');
+        return $this->getVersion().($this->isChromeFrame() ? ' ChromeFrame' : '');
     }
 
     public function getScreenSize()
@@ -495,7 +495,6 @@ class Browser
      */
     protected function checkChromeFrame()
     {
-
         $this->_chrome_frame = false;
         if (preg_match('/chromeframe/i', $this->_agent)) {
             $this->_chrome_frame = true;
@@ -694,7 +693,6 @@ class Browser
      */
     protected function checkBrowserInternetExplorer()
     {
-
         // Test for v1 - v1.5 IE
         if (stripos($this->_agent, 'microsoft internet explorer') !== false) {
             $this->setBrowser(self::BROWSER_IE);
@@ -707,7 +705,7 @@ class Browser
             return true;
         }
         // Test for versions > 1.5
-        else if (stripos($this->_agent, 'msie') !== false && stripos($this->_agent, 'opera') === false) {
+        elseif (stripos($this->_agent, 'msie') !== false && stripos($this->_agent, 'opera') === false) {
             // See if the browser is the odd MSN Explorer
             if (stripos($this->_agent, 'msnb') !== false) {
                 $aresult = explode(' ', stristr(str_replace(';', '; ', $this->_agent), 'MSN'));
@@ -723,7 +721,7 @@ class Browser
             return true;
         }
         // Test for Pocket IE
-        else if (stripos($this->_agent, 'mspie') !== false || stripos($this->_agent, 'pocket') !== false) {
+        elseif (stripos($this->_agent, 'mspie') !== false || stripos($this->_agent, 'pocket') !== false) {
             $aresult = explode(' ', stristr($this->_agent, 'mspie'));
             $this->setPlatform(self::PLATFORM_WINDOWS_CE);
             $this->setBrowser(self::BROWSER_POCKET_IE);
@@ -1302,27 +1300,33 @@ class Browser
         if (in_array($this->_browser_name, array('Opera', 'Internet Explorer', 'Firefox', 'Iceweasel', 'Safari', 'Chrome', 'iPhone', 'iPod'))) {
             switch ($this->_browser_name) {
                 case 'Opera':
-                    if ($this->_version >= 10)
+                    if ($this->_version >= 10) {
                         $this->_is_new_generation = true;
+                    }
                     break;
                 case 'Internet Explorer':
-                    if ($this->_version >= 7)
+                    if ($this->_version >= 7) {
                         $this->_is_new_generation = true;
-                    if ($this->_chrome_frame === true && $this->_chrome_frame_version >= 6)
+                    }
+                    if ($this->_chrome_frame === true && $this->_chrome_frame_version >= 6) {
                         $this->_is_new_generation = true;
+                    }
                     break;
                 case 'Firefox':
                 case 'Iceweasel':
-                    if ($this->_version >= 3)
+                    if ($this->_version >= 3) {
                         $this->_is_new_generation = true;
+                    }
                     break;
                 case 'Safari':
-                    if ($this->_version >= 4)
+                    if ($this->_version >= 4) {
                         $this->_is_new_generation = true;
+                    }
                     break;
                 case 'Chrome':
-                    if ($this->_version >= 4)
+                    if ($this->_version >= 4) {
                         $this->_is_new_generation = true;
+                    }
                     break;
                 case 'iPhone':
                 case 'iPod':
@@ -1340,27 +1344,33 @@ class Browser
         if (in_array($this->_browser_name, array('Opera', 'Internet Explorer', 'Firefox', 'Iceweasel', 'Safari', 'Chrome', 'iPhone', 'iPod'))) {
             switch ($this->_browser_name) {
                 case 'Opera':
-                    if ($this->_version >= 10)
+                    if ($this->_version >= 10) {
                         $this->_is_html5 = true;
+                    }
                     break;
                 case 'Internet Explorer':
-                    if ($this->_version >= 9)
+                    if ($this->_version >= 9) {
                         $this->_is_html5 = true;
-                    if ($this->_chrome_frame === true && $this->_chrome_frame_version >= 6)
+                    }
+                    if ($this->_chrome_frame === true && $this->_chrome_frame_version >= 6) {
                         $this->_is_html5 = true;
+                    }
                     break;
                 case 'Firefox':
                 case 'Iceweasel':
-                    if ($this->_version >= 4)
+                    if ($this->_version >= 4) {
                         $this->_is_html5 = true;
+                    }
                     break;
                 case 'Safari':
-                    if ($this->_version >= 5)
+                    if ($this->_version >= 5) {
                         $this->_is_html5 = true;
+                    }
                     break;
                 case 'Chrome':
-                    if ($this->_version >= 9)
+                    if ($this->_version >= 9) {
                         $this->_is_html5 = true;
+                    }
                     break;
                 case 'iPhone':
                 case 'iPod':
@@ -1379,21 +1389,25 @@ class Browser
 
         switch ($this->_browser_name) {
             case 'Opera':
-                if ($this->_version < 10)
+                if ($this->_version < 10) {
                     $this->_is_old = true;
+                }
                 break;
             case 'Firefox':
             case 'Iceweasel':
-                if ($this->_version < 3)
+                if ($this->_version < 3) {
                     $this->_is_old = true;
+                }
                 break;
             case 'Safari':
-                if ($this->_version < 5)
+                if ($this->_version < 5) {
                     $this->_is_old = true;
+                }
                 break;
             case 'Chrome':
-                if (version_compare($this->_version, 5, '<'))
+                if (version_compare($this->_version, 5, '<')) {
                     $this->_is_old = true;
+                }
                 break;
             case 'iPhone':
             case 'iPod':
@@ -1407,11 +1421,12 @@ class Browser
      */
     protected function checkIP()
     {
-        if (getenv("HTTP_CLIENT_IP"))
+        if (getenv("HTTP_CLIENT_IP")) {
             $this->_ip = getenv("HTTP_CLIENT_IP");
-        elseif (getenv("HTTP_X_FORWARDED_FOR"))
+        } elseif (getenv("HTTP_X_FORWARDED_FOR")) {
             $this->_ip = getenv("HTTP_X_FORWARDED_FOR");
-        else
+        } else {
             $this->_ip = getenv("REMOTE_ADDR");
+        }
     }
 }

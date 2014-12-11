@@ -19,5 +19,4 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class Bridge_Exception_ApiNotFound extends NotFoundHttpException
 {
-
 }

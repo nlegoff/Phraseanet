@@ -53,7 +53,6 @@ class registry implements registryInterface
             $this->cache->save('GV_ServerName', $config['main']['servername']);
             $this->cache->save('GV_debug', $app['debug']);
 
-
             if (isset($config['main']['key'])) {
                 $this->cache->save('GV_sit', $config['main']['key']);
             }
@@ -80,7 +79,6 @@ class registry implements registryInterface
                 $stmt->closeCursor();
                 $loaded = true;
             } catch (\Exception $e) {
-
             }
             foreach ($rs as $row) {
                 if (in_array($row['key'], array('GV_ServerName', 'GV_sit', 'GV_debug'))) {
@@ -112,8 +110,9 @@ class registry implements registryInterface
 
                 $this->cache->save($row['key'], $value);
             }
-            if ($loaded === true)
+            if ($loaded === true) {
                 $this->cache->save('registry_loaded', true);
+            }
         }
 
         return $this;
@@ -128,8 +127,9 @@ class registry implements registryInterface
      */
     public function get($key, $defaultvalue = null)
     {
-        if (!$this->cache->contains($key))
+        if (!$this->cache->contains($key)) {
             $this->load();
+        }
 
         if (!$this->cache->contains($key) && !is_null($defaultvalue)) {
             return $defaultvalue;

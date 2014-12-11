@@ -44,8 +44,9 @@ class API_OAuth2_AuthCode
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new NotFoundHttpException('Code not found');
+        }
 
         $this->account_id = (int) $row['api_account_id'];
         $this->redirect_uri = $row['redirect_uri'];
@@ -66,8 +67,9 @@ class API_OAuth2_AuthCode
      */
     public function get_account()
     {
-        if ( ! $this->account)
+        if (! $this->account) {
             $this->account = new API_OAuth2_Account($this->app, $this->account_id);
+        }
 
         return $this->account;
     }
@@ -171,7 +173,6 @@ class API_OAuth2_AuthCode
      */
     public static function create(Application $app, API_OAuth2_Account $account, $code, $expires)
     {
-
         $sql = 'INSERT INTO api_oauth_codes (code, api_account_id, expires)
             VALUES (:code, :account_id, FROM_UNIXTIME(:expires))';
 
@@ -180,7 +181,7 @@ class API_OAuth2_AuthCode
         $params = array(
             ":code"       => $code,
             ":account_id" => $account->get_id(),
-            ":expires"    => $expires
+            ":expires"    => $expires,
         );
         $stmt->execute($params);
         $stmt->closeCursor();

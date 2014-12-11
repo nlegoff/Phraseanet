@@ -24,7 +24,7 @@ class module_report_connexion extends module_report
         'site'        => 'log.site',
         'sit_session' => 'log.sit_session',
         'appli'       => 'log.appli',
-        'ip'          => 'log.ip'
+        'ip'          => 'log.ip',
     );
 
     /**
@@ -38,7 +38,7 @@ class module_report_connexion extends module_report
      */
     public function __construct(Application $app, $arg1, $arg2, $sbas_id, $collist)
     {
-    //    parent::__construct($app, $arg1, $arg2, $sbas_id, $collist);
+        //    parent::__construct($app, $arg1, $arg2, $sbas_id, $collist);
         parent::__construct($app, $arg1, $arg2, $sbas_id, "");
         $this->title = _('report::Connexions');
     }
@@ -78,12 +78,13 @@ class module_report_connexion extends module_report
 
         foreach ($rs as $row) {
             $value = $row['val'];
-            if ($field == "appli")
+            if ($field == "appli") {
                 $caption = implode(' ', phrasea::modulesName(@unserialize($value)));
-            elseif ($field == 'ddate')
+            } elseif ($field == 'ddate') {
                 $caption = $this->app['date-formatter']->getPrettyString(new DateTime($value));
-            else
+            } else {
                 $caption = $row['val'];
+            }
             $ret[] = array('val'   => $caption, 'value' => $value);
         }
 
@@ -106,8 +107,8 @@ class module_report_connexion extends module_report
             }
 
             foreach ($this->champ as $key => $value) {
-                if ( ! isset($row[$value])) {
-                    $this->result[$i][$value] = '<i>' . _('report:: non-renseigne') . '</i>';
+                if (! isset($row[$value])) {
+                    $this->result[$i][$value] = '<i>'._('report:: non-renseigne').'</i>';
                     continue;
                 }
 
@@ -115,12 +116,12 @@ class module_report_connexion extends module_report
                     $applis = false;
                     if (($applis = @unserialize($row[$value])) !== false) {
                         if (empty($applis)) {
-                            $this->result[$i][$value] = '<i>' . _('report:: non-renseigne') . '</i>';
+                            $this->result[$i][$value] = '<i>'._('report:: non-renseigne').'</i>';
                         } else {
                             $this->result[$i][$value] = implode(' ', phrasea::modulesName($applis));
                         }
                     } else {
-                        $this->result[$i][$value] = '<i>' . _('report:: non-renseigne') . '</i>';
+                        $this->result[$i][$value] = '<i>'._('report:: non-renseigne').'</i>';
                     }
                 } elseif ($value == 'ddate') {
                     $this->result[$i][$value] = $this->pretty_string ?
@@ -141,12 +142,12 @@ class module_report_connexion extends module_report
         $datefilter = module_report_sqlfilter::constructDateFilter($dmin, $dmax);
 
         $params = array_merge(array(
-                ':site_id' => $app['phraseanet.configuration']['main']['key']
+                ':site_id' => $app['phraseanet.configuration']['main']['key'],
             ),
             $datefilter['params']
         );
 
-        $finalfilter = $datefilter['sql'] . ' AND ';
+        $finalfilter = $datefilter['sql'].' AND ';
         $finalfilter .= 'log_date.site = :site_id';
 /*
         $sql = "SELECT COUNT(DISTINCT(log_date.id)) as nb
@@ -155,8 +156,8 @@ class module_report_connexion extends module_report
                 WHERE " . $finalfilter;
 */
         $sql = "SELECT COUNT(DISTINCT(log_date.id)) as nb\n"
-            . " FROM log as log_date FORCE INDEX (date_site)\n"
-            . " WHERE " . $finalfilter . "\n";
+            ." FROM log as log_date FORCE INDEX (date_site)\n"
+            ." WHERE ".$finalfilter."\n";
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $sql), FILE_APPEND);
 

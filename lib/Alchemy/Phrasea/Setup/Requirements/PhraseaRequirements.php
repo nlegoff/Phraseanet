@@ -39,8 +39,8 @@ class PhraseaRequirements extends RequirementCollection implements RequirementIn
             );
             $this->addRequirement(
                 true === $infos['temp_writable'],
-                'phrasea extension should be able to write in its temporary directory (current is ' . $infos['temp_dir'] . ')',
-                'Change directory <strong>' . $infos['temp_dir'] . '</strong> mode so phrasea extension could write to it'
+                'phrasea extension should be able to write in its temporary directory (current is '.$infos['temp_dir'].')',
+                'Change directory <strong>'.$infos['temp_dir'].'</strong> mode so phrasea extension could write to it'
             );
         }
 
@@ -49,7 +49,7 @@ class PhraseaRequirements extends RequirementCollection implements RequirementIn
 
         if (null !== $indexer) {
             $output = null;
-            exec($indexer . ' --version', $output);
+            exec($indexer.' --version', $output);
             $data = sscanf($output[0], 'phraseanet_indexer version %d.%d.%d.%d');
             $version = sprintf('%d.%d.%d.%d', $data[0], $data[1], $data[2], $data[3]);
 

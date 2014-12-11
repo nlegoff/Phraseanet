@@ -15,7 +15,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class UsrListRepository extends EntityRepository
 {
-
     /**
      * Get all lists readable for a given User
      *
@@ -53,7 +52,7 @@ class UsrListRepository extends EntityRepository
             throw new NotFoundHttpException(_('List is not found'));
         }
 
-        if ( ! $list->hasAccess($user, $app)) {
+        if (! $list->hasAccess($user, $app)) {
             throw new AccessDeniedHttpException(_('You have not access to this list'));
         }
 
@@ -75,7 +74,7 @@ class UsrListRepository extends EntityRepository
 
         $params = array(
             'usr_id' => $user->get_id(),
-            'name'   => $name . '%'
+            'name'   => $name.'%',
         );
 
         $query = $this->_em->createQuery($dql);

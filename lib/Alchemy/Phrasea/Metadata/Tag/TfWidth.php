@@ -16,5 +16,4 @@ class TfWidth extends AbstractTag
     protected $Type = '';
     protected $Writable = false;
     protected $Description = 'The width of the file (if available)';
-
 }

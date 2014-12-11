@@ -21,11 +21,11 @@ class Firewall
     {
         if (!$this->app['phraseanet.configuration-tester']->isInstalled()) {
             $this->app->abort(302, 'Phraseanet is not installed', array(
-                'X-Phraseanet-Redirect' => $this->app->path('setup')
+                'X-Phraseanet-Redirect' => $this->app->path('setup'),
             ));
         }
 
-        return null;
+        return;
     }
 
     public function requireAdmin()
@@ -106,7 +106,7 @@ class Firewall
     {
         $params = array();
         if (null !== $request) {
-            $params['redirect'] = '..' . $request->getPathInfo().'?'.$request->getQueryString();
+            $params['redirect'] = '..'.$request->getPathInfo().'?'.$request->getQueryString();
         }
         if (!$this->app['authentication']->isAuthenticated()) {
             return new RedirectResponse($this->app->path('homepage', $params));

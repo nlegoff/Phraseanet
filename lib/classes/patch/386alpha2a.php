@@ -61,8 +61,8 @@ class patch_386alpha2a implements patchInterface
                     array(
                         'domain' => '*.cooliris.com',
                         'secure' => 'false',
-                    )
-                )
+                    ),
+                ),
             );
         }
 

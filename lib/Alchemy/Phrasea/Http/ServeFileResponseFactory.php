@@ -47,7 +47,7 @@ class ServeFileResponseFactory implements DeliverDataInterface
         }
 
         if (null !== $mimeType) {
-             $response->headers->set('Content-Type', $mimeType);
+            $response->headers->set('Content-Type', $mimeType);
         }
 
         return $response;

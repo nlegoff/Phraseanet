@@ -17,5 +17,4 @@
  */
 class Exception_Upload_Error extends Exception
 {
-
 }

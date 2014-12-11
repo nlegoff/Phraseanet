@@ -63,11 +63,11 @@ class patch_370alpha6a implements patchInterface
         $xpath = new DOMXpath($DOM);
 
         foreach ($xpath->query('/record/subdefs/subdefgroup[@name="video"]/subdef[@name="preview"]/acodec') as $node) {
-                $node->nodeValue = 'libvo_aacenc';
+            $node->nodeValue = 'libvo_aacenc';
         }
 
         foreach ($xpath->query('/record/subdefs/subdefgroup[@name="video"]/subdef[@name="preview"]/vcodec') as $node) {
-                $node->nodeValue = 'libx264';
+            $node->nodeValue = 'libx264';
         }
 
         $databox->saveStructure($DOM);
@@ -75,13 +75,10 @@ class patch_370alpha6a implements patchInterface
         $subdefgroups = $databox->get_subdef_structure();
 
         foreach ($subdefgroups as $groupname => $subdefs) {
-
             foreach ($subdefs as $name => $subdef) {
-
                 $this->addScreenDeviceOption($subdefgroups, $subdef, $groupname);
 
                 if (in_array($name, array('preview', 'thumbnail'))) {
-
                     if ($name == 'thumbnail' || $subdef->getSubdefType()->getType() != \Alchemy\Phrasea\Media\Subdef\Subdef::TYPE_VIDEO) {
                         $this->addMobileSubdefImage($subdefgroups, $subdef, $groupname);
                     } else {
@@ -122,7 +119,7 @@ class patch_370alpha6a implements patchInterface
     {
         $newSubdefOptionsWebM = $newSubdefOptionsOgg = $newSubdefOptionsX264 = array(
             'path'      => $baseSubdef->get_path(),
-            'mediatype' => \Alchemy\Phrasea\Media\Subdef\Subdef::TYPE_VIDEO
+            'mediatype' => \Alchemy\Phrasea\Media\Subdef\Subdef::TYPE_VIDEO,
         );
 
         $options = array(
@@ -151,9 +148,9 @@ class patch_370alpha6a implements patchInterface
         $newSubdefOptionsX264['acodec'] = 'libvo_aacenc';
         $newSubdefOptionsX264['vcodec'] = 'libx264';
 
-        $root->set_subdef($groupname, $baseSubdef->get_name() . '_mobile_webM', $baseSubdef->get_class(), false, $newSubdefOptionsWebM, array());
-        $root->set_subdef($groupname, $baseSubdef->get_name() . '_mobile_OGG', $baseSubdef->get_class(), false, $newSubdefOptionsOgg, array());
-        $root->set_subdef($groupname, $baseSubdef->get_name() . '_mobile_X264', $baseSubdef->get_class(), false, $newSubdefOptionsX264, array());
+        $root->set_subdef($groupname, $baseSubdef->get_name().'_mobile_webM', $baseSubdef->get_class(), false, $newSubdefOptionsWebM, array());
+        $root->set_subdef($groupname, $baseSubdef->get_name().'_mobile_OGG', $baseSubdef->get_class(), false, $newSubdefOptionsOgg, array());
+        $root->set_subdef($groupname, $baseSubdef->get_name().'_mobile_X264', $baseSubdef->get_class(), false, $newSubdefOptionsX264, array());
     }
 
     protected function addMobileSubdefImage($root, $baseSubdef, $groupname)
@@ -170,7 +167,7 @@ class patch_370alpha6a implements patchInterface
 
         $optionMobile['devices'] = array(databox_subdef::DEVICE_HANDHELD);
 
-        $root->set_subdef($groupname, $baseSubdef->get_name() . '_mobile', $baseSubdef->get_class(), false, $optionMobile, array());
+        $root->set_subdef($groupname, $baseSubdef->get_name().'_mobile', $baseSubdef->get_class(), false, $optionMobile, array());
     }
 
     protected function addHtml5Video($root, $baseSubdef, $groupname)
@@ -178,7 +175,7 @@ class patch_370alpha6a implements patchInterface
         $newSubdefOptionsWebM = $newSubdefOptionsOgg = array(
             'path'      => $baseSubdef->get_path(),
             'mediatype' => \Alchemy\Phrasea\Media\Subdef\Subdef::TYPE_VIDEO,
-            'devices' => array(\databox_subdef::DEVICE_SCREEN)
+            'devices' => array(\databox_subdef::DEVICE_SCREEN),
         );
 
         foreach ($baseSubdef->getOptions() as $optionname => $option) {
@@ -192,7 +189,7 @@ class patch_370alpha6a implements patchInterface
         $newSubdefOptionsOgg['vcodec'] = 'libtheora';
         $newSubdefOptionsOgg['acodec'] = 'libvorbis';
 
-        $root->set_subdef($groupname, $baseSubdef->get_name() . '_webM', $baseSubdef->get_class(), false, $newSubdefOptionsWebM, array());
-        $root->set_subdef($groupname, $baseSubdef->get_name() . '_OGG', $baseSubdef->get_class(), false, $newSubdefOptionsOgg, array());
+        $root->set_subdef($groupname, $baseSubdef->get_name().'_webM', $baseSubdef->get_class(), false, $newSubdefOptionsWebM, array());
+        $root->set_subdef($groupname, $baseSubdef->get_name().'_OGG', $baseSubdef->get_class(), false, $newSubdefOptionsOgg, array());
     }
 }

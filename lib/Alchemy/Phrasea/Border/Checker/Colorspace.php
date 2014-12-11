@@ -25,7 +25,7 @@ class Colorspace extends AbstractChecker
 
     public function __construct(Application $app, array $options)
     {
-        if ( ! isset($options['colorspaces'])) {
+        if (! isset($options['colorspaces'])) {
             throw new \InvalidArgumentException('Missing "colorspaces" options');
         }
 

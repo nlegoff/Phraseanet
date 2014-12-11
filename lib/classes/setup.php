@@ -26,7 +26,7 @@ class setup
 {
     public static function create_global_values(Application $app, $datas = array())
     {
-        $GV = require(__DIR__ . "/../../lib/conf.d/_GV_template.inc");
+        $GV = require __DIR__."/../../lib/conf.d/_GV_template.inc";
 
         $debug = $log_errors = false;
         $vars = array();
@@ -39,10 +39,11 @@ class setup
                 if (isset($datas[$variable['name']]) === false) {
                     if (isset($variable['default'])) {
                         if ($variable['type'] === 'boolean') {
-                            if ($variable['default'] === true)
+                            if ($variable['default'] === true) {
                                 $datas[$variable['name']] = '1';
-                            else
+                            } else {
                                 $datas[$variable['name']] = '0';
+                            }
                         } else {
                             $datas[$variable['name']] = $variable['default'];
                         }
@@ -68,8 +69,9 @@ class setup
                         }
                         break;
                     case \registry::TYPE_ENUM_MULTI:
-                        if (!isset($datas[$variable['name']]))
+                        if (!isset($datas[$variable['name']])) {
                             $datas[$variable['name']] = null;
+                        }
                         $datas[$variable['name']] = ($datas[$variable['name']]);
                         break;
                     case \registry::TYPE_BOOLEAN:
@@ -83,8 +85,9 @@ class setup
                         break;
                 }
 
-                if (isset($variable['required']) && $variable['required'] === true && trim($datas[$variable['name']]) === '')
+                if (isset($variable['required']) && $variable['required'] === true && trim($datas[$variable['name']]) === '') {
                     $variable['error'] = 'required';
+                }
 
                 if (isset($variable['end_slash'])) {
                     if ($variable['end_slash'] === true) {
@@ -95,13 +98,16 @@ class setup
                     }
                 }
 
-                if ($variable['name'] === 'GV_debug' && $datas[$variable['name']] === '1')
+                if ($variable['name'] === 'GV_debug' && $datas[$variable['name']] === '1') {
                     $debug = true;
-                if ($variable['name'] === 'GV_log_errors' && $datas[$variable['name']] === '1')
+                }
+                if ($variable['name'] === 'GV_log_errors' && $datas[$variable['name']] === '1') {
                     $log_errors = true;
+                }
 
-                if ($variable['type'] !== 'integer' && $variable['type'] !== 'boolean')
+                if ($variable['type'] !== 'integer' && $variable['type'] !== 'boolean') {
                     $datas[$variable['name']] = $datas[$variable['name']];
+                }
 
                 $vars[$variable['name']] = array('value' => $datas[$variable['name']], 'type'  => $type);
             }
@@ -129,51 +135,51 @@ class setup
         return array(
             'php' => array(
                 'name'               => 'PHP CLI',
-                'binary'             => $phpFinder->find()
+                'binary'             => $phpFinder->find(),
             ),
             'phraseanet_indexer' => array(
                 'name'    => 'Indexeur Phrasea',
-                'binary'  => $finder->find('phraseanet_indexer')
+                'binary'  => $finder->find('phraseanet_indexer'),
             ),
             'convert' => array(
                 'name'      => 'ImageMagick (convert)',
-                'binary'    => $finder->find('convert')
+                'binary'    => $finder->find('convert'),
             ),
             'composite' => array(
                 'name'    => 'ImageMagick (composite)',
-                'binary'  => $finder->find('composite')
+                'binary'  => $finder->find('composite'),
             ),
             'pdf2swf' => array(
                 'name'    => 'PDF 2 SWF',
-                'binary'  => $finder->find('pdf2swf')
+                'binary'  => $finder->find('pdf2swf'),
             ),
             'unoconv' => array(
                 'name'       => 'Unoconv',
-                'binary'     => $finder->find('unoconv')
+                'binary'     => $finder->find('unoconv'),
             ),
             'swfextract' => array(
                 'name'      => 'SWFextract',
-                'binary'    => $finder->find('swfextract')
+                'binary'    => $finder->find('swfextract'),
             ),
             'swfrender' => array(
                 'name'   => 'SWFrender',
-                'binary' => $finder->find('swfrender')
+                'binary' => $finder->find('swfrender'),
             ),
             'MP4Box' => array(
                 'name'   => 'MP4Box',
-                'binary' => $finder->find('MP4Box')
+                'binary' => $finder->find('MP4Box'),
             ),
             'xpdf'   => array(
                 'name'   => 'XPDF',
-                'binary' => $finder->find('xpdf')
+                'binary' => $finder->find('xpdf'),
             ),
             'ffmpeg' => array(
                 'name'   => 'FFmpeg',
-                'binary' => $finder->find('ffmpeg')
+                'binary' => $finder->find('ffmpeg'),
             ),
             'recess' => array(
                 'name'   => 'Recesss',
-                'binary' => $finder->find('recess')
+                'binary' => $finder->find('recess'),
             ),
         );
     }

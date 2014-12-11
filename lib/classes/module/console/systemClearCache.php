@@ -22,7 +22,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class module_console_systemClearCache extends Command
 {
-
     public function __construct($name = null)
     {
         parent::__construct($name);
@@ -40,11 +39,11 @@ class module_console_systemClearCache extends Command
             ->exclude('.git')
             ->exclude('.svn')
             ->in(array(
-                $this->container['root.path'] . '/tmp/cache_minify/',
-                $this->container['root.path'] . '/tmp/cache_twig/',
-                $this->container['root.path'] . '/tmp/cache/profiler/',
-                $this->container['root.path'] . '/tmp/doctrine/',
-                $this->container['root.path'] . '/tmp/serializer/',
+                $this->container['root.path'].'/tmp/cache_minify/',
+                $this->container['root.path'].'/tmp/cache_twig/',
+                $this->container['root.path'].'/tmp/cache/profiler/',
+                $this->container['root.path'].'/tmp/doctrine/',
+                $this->container['root.path'].'/tmp/serializer/',
             ));
 
         $filesystem = new Filesystem();

@@ -18,7 +18,6 @@ use Silex\ServiceProviderInterface;
 
 class ConfigurationTesterServiceProvider implements ServiceProviderInterface
 {
-
     public function register(SilexApplication $app)
     {
         $app['phraseanet.configuration-tester'] = $app->share(function (Application $app) {

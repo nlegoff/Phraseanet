@@ -23,8 +23,9 @@ abstract class AbstractCharset
 
     public function get_table()
     {
-        if (is_null($this->table))
+        if (is_null($this->table)) {
             throw new Exception('Invalid charsetTable object');
+        }
 
         return $this->table;
     }

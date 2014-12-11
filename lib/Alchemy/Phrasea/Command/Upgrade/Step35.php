@@ -38,7 +38,6 @@ class Step35 implements DatasUpgraderInterface
     public function execute(InputInterface $input, OutputInterface $output)
     {
         foreach ($this->app['phraseanet.appbox']->get_databoxes() as $databox) {
-
             foreach ($databox->get_meta_structure()->get_elements() as $databox_field) {
                 if ($databox_field->is_on_error()) {
                     throw new \Exception(sprintf("Databox description field %s is on error, please fix it before continue</error>", $databox_field->get_name()));
@@ -147,7 +146,6 @@ class Step35 implements DatasUpgraderInterface
                     }
 
                     if ($databox_field->is_multi()) {
-
                         $new_value = \caption_field::get_multi_values($value, $databox_field->get_separator());
                         if (isset($datas[$databox_field->get_id()])) {
                             $value = array_unique(array_merge($datas[$databox_field->get_id()], $new_value));
@@ -157,7 +155,7 @@ class Step35 implements DatasUpgraderInterface
                     } else {
                         $new_value = $value;
                         if (isset($datas[$databox_field->get_id()])) {
-                            $value = $datas[$databox_field->get_id()] . ' ' . $new_value;
+                            $value = $datas[$databox_field->get_id()].' '.$new_value;
                         } else {
                             $value = $new_value;
                         }
@@ -174,14 +172,14 @@ class Step35 implements DatasUpgraderInterface
                     $metadatas[] = array(
                         'meta_struct_id' => $meta_struct_id
                         , 'meta_id'        => null
-                        , 'value'          => $value
+                        , 'value'          => $value,
                     );
                 }
             } else {
                 $metadatas[] = array(
                     'meta_struct_id' => $meta_struct_id
                     , 'meta_id'        => null
-                    , 'value'          => $values
+                    , 'value'          => $values,
                 );
             }
         }
@@ -288,7 +286,6 @@ class Step35 implements DatasUpgraderInterface
             $stmt->execute();
             $stmt->closeCursor();
         } catch (\Exception $e) {
-
         }
     }
 }

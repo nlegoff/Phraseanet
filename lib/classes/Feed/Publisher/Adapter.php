@@ -86,7 +86,6 @@ class Feed_Publisher_Adapter implements Feed_Publisher_Interface, cache_cacheabl
 
             return $this;
         } catch (\Exception $e) {
-
         }
 
         $sql = 'SELECT id, usr_id, owner, created_on, added_by
@@ -96,8 +95,9 @@ class Feed_Publisher_Adapter implements Feed_Publisher_Interface, cache_cacheabl
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new Exception_Feed_PublisherNotFound('Publisher is not Found');
+        }
 
         $this->user = User_Adapter::getInstance($row['usr_id'], $this->app);
         $this->owner = ! ! $row['owner'];
@@ -108,7 +108,7 @@ class Feed_Publisher_Adapter implements Feed_Publisher_Interface, cache_cacheabl
             'usr_id'          => $this->user->get_id()
             , 'owner'           => $this->owner
             , 'created_on'      => $this->created_on
-            , 'added_by_usr_id' => $this->added_by->get_id()
+            , 'added_by_usr_id' => $this->added_by->get_id(),
         );
 
         $this->set_data_to_cache($datas);
@@ -192,7 +192,7 @@ class Feed_Publisher_Adapter implements Feed_Publisher_Interface, cache_cacheabl
             ':usr_id'   => $user->get_id()
             , ':feed_id'  => $feed->get_id()
             , ':owner'    => $owner ? '1' : null
-            , ':added_by' => $owner ? $user->get_id() : $app['authentication']->getUser()->get_id()
+            , ':added_by' => $owner ? $user->get_id() : $app['authentication']->getUser()->get_id(),
         );
         $stmt->execute($params);
         $id = $app['phraseanet.appbox']->get_connection()->lastInsertId();
@@ -220,7 +220,7 @@ class Feed_Publisher_Adapter implements Feed_Publisher_Interface, cache_cacheabl
 
     public function get_cache_key($option = null)
     {
-        return 'feedpublisher_' . $this->get_id() . '_' . ($option ? '_' . $option : '');
+        return 'feedpublisher_'.$this->get_id().'_'.($option ? '_'.$option : '');
     }
 
     public function get_data_from_cache($option = null)

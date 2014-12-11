@@ -280,6 +280,6 @@ class BasketElement
             }
         }
 
-        throw new \Exception('There is no such participant ' . $user->get_email());
+        throw new \Exception('There is no such participant '.$user->get_email());
     }
 }

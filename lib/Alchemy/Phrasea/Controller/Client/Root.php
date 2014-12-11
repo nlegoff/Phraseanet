@@ -164,7 +164,7 @@ class Root implements ControllerProviderInterface
 
         $searchData = $result->getResults();
 
-        if (count($searchData) === 0 ) {
+        if (count($searchData) === 0) {
             return new Response($app['twig']->render("client/help.html.twig"));
         }
 
@@ -211,7 +211,7 @@ class Root implements ControllerProviderInterface
                 'is_image'          => $isImage,
                 'is_document'       => $isDocument,
                 'can_download'      => $canDownload,
-                'can_add_to_basket' => $app['authentication']->getUser()->ACL()->has_right_on_base($record->get_base_id(), 'canputinalbum')
+                'can_add_to_basket' => $app['authentication']->getUser()->ACL()->has_right_on_base($record->get_base_id(), 'canputinalbum'),
             );
         }
 
@@ -317,7 +317,7 @@ class Root implements ControllerProviderInterface
             'basket_status'     => null !== $app['authentication']->getUser()->getPrefs('client_basket_status') ? $app['authentication']->getUser()->getPrefs('client_basket_status') : "1",
             'mod_pres'          => null !== $app['authentication']->getUser()->getPrefs('client_view') ? $app['authentication']->getUser()->getPrefs('client_view') : '',
             'start_page'        => $app['authentication']->getUser()->getPrefs('start_page'),
-            'start_page_query'  => null !== $app['authentication']->getUser()->getPrefs('start_page_query') ? $app['authentication']->getUser()->getPrefs('start_page_query') : ''
+            'start_page_query'  => null !== $app['authentication']->getUser()->getPrefs('start_page_query') ? $app['authentication']->getUser()->getPrefs('start_page_query') : '',
         )));
     }
 
@@ -335,7 +335,7 @@ class Root implements ControllerProviderInterface
             array('w'        => '6', 'h'        => '3', 'name'      => '6*3', 'selected'        => '1'),
             array('w'        => '8', 'h'        => '4', 'name'      => '8*4', 'selected'        => '0'),
             array('w'        => '1', 'h'        => '10', 'name'     => 'list*10', 'selected'    => '0'),
-            array('w'        => '1', 'h'        => '100', 'name'    => 'list*100', 'selected'   => '0')
+            array('w'        => '1', 'h'        => '100', 'name'    => 'list*100', 'selected'   => '0'),
         );
     }
 
@@ -376,7 +376,7 @@ class Root implements ControllerProviderInterface
         $tong = array(
             $app['phraseanet.registry']->get('GV_ong_search')    => 1,
             $app['phraseanet.registry']->get('GV_ong_advsearch') => 2,
-            $app['phraseanet.registry']->get('GV_ong_topics')    => 3
+            $app['phraseanet.registry']->get('GV_ong_topics')    => 3,
         );
 
         unset($tong[0]);
@@ -398,7 +398,7 @@ class Root implements ControllerProviderInterface
      */
     private function getCssFile(Application $app)
     {
-        $cssPath = __DIR__ . '/../../../../../www/skins/client/';
+        $cssPath = __DIR__.'/../../../../../www/skins/client/';
 
         $css = array();
         $cssFile = $app['authentication']->getUser()->getPrefs('client_css');
@@ -446,10 +446,10 @@ class Root implements ControllerProviderInterface
             foreach ($opAdv as $opId => $op) {
                 if (isset($queryAdv[$opId]) && ($advancedQuery = trim($queryAdv[$opId]) !== '')) {
                     if ($query === $clientQuery) {
-                        $query = '(' . $clientQuery . ')';
+                        $query = '('.$clientQuery.')';
                     }
 
-                    $query .= ' ' . $op . ' (' . $advancedQuery . ')';
+                    $query .= ' '.$op.' ('.$advancedQuery.')';
                 }
             }
         }
@@ -530,7 +530,7 @@ class Root implements ControllerProviderInterface
     {
         return $app['twig']->render('client/home_inter_pub_basket.html.twig', array(
             'feeds'         => \Feed_Collection::load($app, $app['authentication']->getUser()),
-            'image_size'    => (int) $app['authentication']->getUser()->getPrefs('images_size')
+            'image_size'    => (int) $app['authentication']->getUser()->getPrefs('images_size'),
         ));
     }
 

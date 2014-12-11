@@ -63,7 +63,7 @@ class Apache extends AbstractServerMode implements H264Interface
     public function getUrl($pathfile)
     {
         if (!is_file($pathfile)) {
-            return null;
+            return;
         }
         $pathfile = realpath($pathfile);
 
@@ -102,8 +102,8 @@ class Apache extends AbstractServerMode implements H264Interface
         $path = substr($pathfile, strlen($entry['directory']));
 
         $hexTime = dechex(time() + 3600);
-        $token = md5($entry['passphrase'] . $path . $hexTime);
+        $token = md5($entry['passphrase'].$path.$hexTime);
 
-        return Url::factory($entry['mount-point'] .'/'. $token . "/" . $hexTime . $path);
+        return Url::factory($entry['mount-point'].'/'.$token."/".$hexTime.$path);
     }
 }

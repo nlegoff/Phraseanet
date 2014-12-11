@@ -42,15 +42,15 @@ class cache_databox
         $last_update = null;
 
         try {
-            $last_update = $app['phraseanet.appbox']->get_data_from_cache('memcached_update_' . $sbas_id);
+            $last_update = $app['phraseanet.appbox']->get_data_from_cache('memcached_update_'.$sbas_id);
         } catch (\Exception $e) {
-
         }
 
-        if ($last_update)
+        if ($last_update) {
             $last_update = new \DateTime($last_update);
-        else
+        } else {
             $last_update = new \DateTime('-10 years');
+        }
 
         if ($date <= $last_update) {
             self::$refreshing = false;
@@ -69,21 +69,21 @@ class cache_databox
         foreach ($rs as $row) {
             switch ($row['type']) {
                 case 'record':
-                    $key = 'record_' . $sbas_id . '_' . $row['value'];
+                    $key = 'record_'.$sbas_id.'_'.$row['value'];
                     $databox->delete_data_from_cache($key);
-                    $key = 'record_' . $sbas_id . '_' . $row['value'] . '_' . \record_adapter::CACHE_SUBDEFS;
+                    $key = 'record_'.$sbas_id.'_'.$row['value'].'_'.\record_adapter::CACHE_SUBDEFS;
                     $databox->delete_data_from_cache($key);
-                    $key = 'record_' . $sbas_id . '_' . $row['value'] . '_' . \record_adapter::CACHE_GROUPING;
+                    $key = 'record_'.$sbas_id.'_'.$row['value'].'_'.\record_adapter::CACHE_GROUPING;
                     $databox->delete_data_from_cache($key);
-                    $key = 'record_' . $sbas_id . '_' . $row['value'] . '_' . \record_adapter::CACHE_MIME;
+                    $key = 'record_'.$sbas_id.'_'.$row['value'].'_'.\record_adapter::CACHE_MIME;
                     $databox->delete_data_from_cache($key);
-                    $key = 'record_' . $sbas_id . '_' . $row['value'] . '_' . \record_adapter::CACHE_ORIGINAL_NAME;
+                    $key = 'record_'.$sbas_id.'_'.$row['value'].'_'.\record_adapter::CACHE_ORIGINAL_NAME;
                     $databox->delete_data_from_cache($key);
-                    $key = 'record_' . $sbas_id . '_' . $row['value'] . '_' . \record_adapter::CACHE_SHA256;
+                    $key = 'record_'.$sbas_id.'_'.$row['value'].'_'.\record_adapter::CACHE_SHA256;
                     $databox->delete_data_from_cache($key);
-                    $key = 'record_' . $sbas_id . '_' . $row['value'] . '_' . \record_adapter::CACHE_STATUS;
+                    $key = 'record_'.$sbas_id.'_'.$row['value'].'_'.\record_adapter::CACHE_STATUS;
                     $databox->delete_data_from_cache($key);
-                    $key = 'record_' . $sbas_id . '_' . $row['value'] . '_' . \record_adapter::CACHE_TECHNICAL_DATAS;
+                    $key = 'record_'.$sbas_id.'_'.$row['value'].'_'.\record_adapter::CACHE_TECHNICAL_DATAS;
                     $databox->delete_data_from_cache($key);
 
                     $sql = 'DELETE FROM memcached
@@ -91,7 +91,7 @@ class cache_databox
 
                     $params = array(
                         ':site_id' => $app['phraseanet.registry']->get('GV_ServerName')
-                        , ':value'   => $row['value']
+                        , ':value'   => $row['value'],
                     );
 
                     $stmt = $connsbas->prepare($sql);
@@ -115,7 +115,7 @@ class cache_databox
 
                     $params = array(
                         ':site_id' => $app['phraseanet.registry']->get('GV_ServerName')
-                        , ':value'   => $row['value']
+                        , ':value'   => $row['value'],
                     );
 
                     $stmt = $connsbas->prepare($sql);
@@ -128,7 +128,7 @@ class cache_databox
         $date = new \DateTime();
         $now = $date->format(DATE_ISO8601);
 
-        $app['phraseanet.appbox']->set_data_to_cache($now, 'memcached_update_' . $sbas_id);
+        $app['phraseanet.appbox']->set_data_to_cache($now, 'memcached_update_'.$sbas_id);
 
         $conn = \connection::getPDOConnection($app);
 
@@ -150,7 +150,6 @@ class cache_databox
      */
     public static function update(Application $app, $sbas_id, $type, $value = '')
     {
-
         $connbas = \connection::getPDOConnection($app, $sbas_id);
 
         $sql = 'SELECT distinct site_id as site_id

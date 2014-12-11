@@ -73,7 +73,7 @@ class patch_380alpha13a implements patchInterface
         $stmt = $appbox->get_connection()->prepare($sql);
         foreach ($toRemove as $registryKey) {
             $stmt->execute(array(
-                ':k' => $registryKey
+                ':k' => $registryKey,
             ));
         }
         $stmt->closeCursor();

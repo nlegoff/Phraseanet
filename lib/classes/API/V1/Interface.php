@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 interface API_V1_Interface
 {
-
     public function get_version();
 
     /**

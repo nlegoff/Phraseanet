@@ -58,7 +58,7 @@ class patch_360alpha1a implements patchInterface
         $tables = array('StoryWZ', 'ValidationDatas', 'ValidationParticipants', 'ValidationSessions', 'BasketElements', 'Baskets');
 
         foreach ($tables as $table) {
-            $sql = 'DELETE FROM ' . $table;
+            $sql = 'DELETE FROM '.$table;
             $stmt = $appbox->get_connection()->prepare($sql);
             $stmt->execute();
             $stmt->closeCursor();
@@ -78,7 +78,7 @@ class patch_360alpha1a implements patchInterface
         $current = array();
 
         foreach ($rs_s as $row_story) {
-            $serial = $row_story['sbas_id'] . '_' . $row_story['usr_id'] . '_' . $row_story['record_id'];
+            $serial = $row_story['sbas_id'].'_'.$row_story['usr_id'].'_'.$row_story['record_id'];
 
             if (isset($current[$serial])) {
                 $stories[] = $row_story;
@@ -96,7 +96,7 @@ class patch_360alpha1a implements patchInterface
             $params = array(
                 ':usr_id'    => $row['usr_id'],
                 ':sbas_id'   => $row['sbas_id'],
-                ':record_id' => $row['record_id']
+                ':record_id' => $row['record_id'],
             );
             $stmt->execute($params);
         }
@@ -149,7 +149,7 @@ class patch_360alpha1a implements patchInterface
             $current = array();
 
             foreach ($rs_be as $row_sselcont) {
-                $serial = $row_sselcont['sbas_id'] . '_' . $row_sselcont['record_id'];
+                $serial = $row_sselcont['sbas_id'].'_'.$row_sselcont['record_id'];
 
                 if (isset($current[$serial])) {
                     $sselcont_ids[] = $row_sselcont['sselcont_id'];

@@ -125,7 +125,6 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Unoconv\UnoconvServiceProvider;
 use XPDF\PdfToText;
 use XPDF\XPDFServiceProvider;
-
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -164,7 +163,7 @@ class Application extends SilexApplication
 
         error_reporting(-1);
 
-        $this['root.path'] = realpath(__DIR__ . '/../../..');
+        $this['root.path'] = realpath(__DIR__.'/../../..');
         $this->environment = $environment;
 
         mb_internal_encoding("UTF-8");
@@ -182,14 +181,14 @@ class Application extends SilexApplication
 
         if ($this['debug'] === true) {
             ini_set('log_errors', 'on');
-            ini_set('error_log', $this['root.path'] . '/logs/php_error.log');
+            ini_set('error_log', $this['root.path'].'/logs/php_error.log');
         }
 
         $this->register(new AuthenticationManagerServiceProvider());
         $this->register(new BorderManagerServiceProvider());
         $this->register(new BrowserServiceProvider());
         $this->register(new ConfigurationServiceProvider());
-        $this->register(new ConfigurationTesterServiceProvider);
+        $this->register(new ConfigurationTesterServiceProvider());
         $this->register(new CSVServiceProvider());
         $this->register(new RegistrationServiceProvider());
         $this->register(new CacheServiceProvider());
@@ -271,7 +270,7 @@ class Application extends SilexApplication
         $this->register(new SearchEngineServiceProvider());
         $this->register(new SessionServiceProvider(), array(
             'session.test' => $this->getEnvironment() === static::ENV_TEST,
-            'session.storage.options' => array('cookie_lifetime' => 0)
+            'session.storage.options' => array('cookie_lifetime' => 0),
         ));
         $this['session.storage.test'] = $this->share(function ($app) {
             return new MockArraySessionStorage();
@@ -284,9 +283,9 @@ class Application extends SilexApplication
         $this->register(new TokensServiceProvider());
         $this->register(new TwigServiceProvider(), array(
             'twig.options' => array(
-                'cache'           => $this['root.path'] . '/tmp/cache_twig/',
+                'cache'           => $this['root.path'].'/tmp/cache_twig/',
             ),
-            'twig.form.templates' => array('login/common/form_div_layout.html.twig')
+            'twig.form.templates' => array('login/common/form_div_layout.html.twig'),
         ));
         $this->register(new FormServiceProvider());
 
@@ -413,7 +412,7 @@ class Application extends SilexApplication
         $this->mount('/lightbox/', new Lightbox());
 
         $app['plugins.directory'] = $app->share(function () {
-            $dir = __DIR__ . '/../../../plugins';
+            $dir = __DIR__.'/../../../plugins';
 
             if (is_dir($dir)) {
                 return realpath($dir);
@@ -429,7 +428,7 @@ class Application extends SilexApplication
     public function loadPlugins()
     {
         call_user_func(function ($app) {
-            require $app['plugins.directory'] . '/services.php';
+            require $app['plugins.directory'].'/services.php';
         }, $this);
     }
 
@@ -535,19 +534,19 @@ class Application extends SilexApplication
     {
         $this['twig'] = $this->share(
             $this->extend('twig', function ($twig, $app) {
-                $paths = require $app['plugins.directory'] . '/twig-paths.php';
+                $paths = require $app['plugins.directory'].'/twig-paths.php';
 
                 if ($app['browser']->isTablet() || $app['browser']->isMobile()) {
-                    $paths[] = $app['root.path'] . '/config/templates/mobile';
-                    $paths[] = $app['root.path'] . '/templates/mobile';
-                    $paths['phraseanet'] = $app['root.path'] . '/config/templates/mobile';
-                    $paths['phraseanet'] = $app['root.path'] . '/templates/mobile';
+                    $paths[] = $app['root.path'].'/config/templates/mobile';
+                    $paths[] = $app['root.path'].'/templates/mobile';
+                    $paths['phraseanet'] = $app['root.path'].'/config/templates/mobile';
+                    $paths['phraseanet'] = $app['root.path'].'/templates/mobile';
                 }
 
-                $paths[] = $app['root.path'] . '/config/templates/web';
-                $paths[] = $app['root.path'] . '/templates/web';
-                $paths['phraseanet'] = $app['root.path'] . '/config/templates/web';
-                $paths['phraseanet'] = $app['root.path'] . '/templates/web';
+                $paths[] = $app['root.path'].'/config/templates/web';
+                $paths[] = $app['root.path'].'/templates/web';
+                $paths['phraseanet'] = $app['root.path'].'/config/templates/web';
+                $paths['phraseanet'] = $app['root.path'].'/templates/web';
 
                 foreach ($paths as $namespace => $path) {
                     if (!is_int($namespace)) {
@@ -599,25 +598,23 @@ class Application extends SilexApplication
 
                 $twig->addFilter(new \Twig_SimpleFilter('highlight', function (\Twig_Environment $twig, $string) {
                     return str_replace(array('[[em]]', '[[/em]]'), array('<em>', '</em>'), $string);
-                }, array('needs_environment' => true,'is_safe' => array('html'))));
+                }, array('needs_environment' => true, 'is_safe' => array('html'))));
 
                 $twig->addFilter(new \Twig_SimpleFilter('linkify', function (\Twig_Environment $twig, $string) {
                     return preg_replace(
-                        "(([^']{1})((https?|file):((/{2,4})|(\\{2,4}))[\w:#%/;$()~_?/\-=\\\.&]*)([^']{1}))"
-                        , '$1 $2 <a title="' . _('Open the URL in a new window') . '" class="ui-icon ui-icon-extlink" href="$2" style="display:inline;padding:2px 5px;margin:0 4px 0 2px;" target="_blank"> &nbsp;</a>$7'
-                        , $string
+                        "(([^']{1})((https?|file):((/{2,4})|(\\{2,4}))[\w:#%/;$()~_?/\-=\\\.&]*)([^']{1}))", '$1 $2 <a title="'._('Open the URL in a new window').'" class="ui-icon ui-icon-extlink" href="$2" style="display:inline;padding:2px 5px;margin:0 4px 0 2px;" target="_blank"> &nbsp;</a>$7', $string
                     );
                 }, array('needs_environment' => true, 'is_safe' => array('html'))));
 
                 $twig->addFilter(new \Twig_SimpleFilter('bounce', function (\Twig_Environment $twig, $fieldValue, $fieldName, $searchRequest, $sbasId) {
                         // bounce value if it is present in thesaurus as well
-                    return "<a class=\"bounce\" onclick=\"bounce('"  .$sbasId . "','"
-                            . str_replace("'", "\\'",$searchRequest)
-                            . "', '"
-                            . str_replace("'", "\\'", $fieldName)
-                            . "');return(false);\">"
-                            . $fieldValue
-                            . "</a>";
+                    return "<a class=\"bounce\" onclick=\"bounce('".$sbasId."','"
+                            .str_replace("'", "\\'", $searchRequest)
+                            ."', '"
+                            .str_replace("'", "\\'", $fieldName)
+                            ."');return(false);\">"
+                            .$fieldValue
+                            ."</a>";
 
                 }, array('needs_environment' => true, 'is_safe' => array('html'))));
 
@@ -689,7 +686,7 @@ class Application extends SilexApplication
             return $this['session']->remove('unlock_account_data');
         }
 
-        return null;
+        return;
     }
 
     /**

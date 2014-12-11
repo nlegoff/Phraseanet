@@ -21,7 +21,7 @@ class SystemRequirements extends RequirementCollection implements RequirementInt
     {
         $installedPhpVersion = phpversion();
 
-        $baseDir = realpath(__DIR__ . '/../../../../../');
+        $baseDir = realpath(__DIR__.'/../../../../../');
 
         $this->setName('System');
 
@@ -43,7 +43,7 @@ class SystemRequirements extends RequirementCollection implements RequirementInt
         $this->addRequirement(
             is_dir($baseDir.'/vendor/composer'),
             'Vendor libraries must be installed',
-            'Vendor libraries are missing. Install composer following instructions from <a href="http://getcomposer.org/">http://getcomposer.org/</a>. ' .
+            'Vendor libraries are missing. Install composer following instructions from <a href="http://getcomposer.org/">http://getcomposer.org/</a>. '.
                 'Then run "<strong>php composer.phar install</strong>" to install them.'
         );
 

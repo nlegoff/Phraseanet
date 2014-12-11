@@ -150,7 +150,7 @@ class SearchEngineOptions
      * @param  array               $collection An array of collection
      * @return SearchEngineOptions
      */
-    public function allowBusinessFieldsOn(Array $collection)
+    public function allowBusinessFieldsOn(array $collection)
     {
         $this->business_fields = $collection;
 
@@ -260,7 +260,7 @@ class SearchEngineOptions
      * @param  array               $collections An array of collection
      * @return SearchEngineOptions
      */
-    public function onCollections(Array $collections)
+    public function onCollections(array $collections)
     {
         $this->collections = $collections;
 
@@ -298,7 +298,7 @@ class SearchEngineOptions
      *
      * @param array $fields An array of Databox fields
      */
-    public function setFields(Array $fields)
+    public function setFields(array $fields)
     {
         $this->fields = $fields;
 
@@ -319,7 +319,7 @@ class SearchEngineOptions
      * @param  array               $status
      * @return SearchEngineOptions
      */
-    public function setStatus(Array $status)
+    public function setStatus(array $status)
     {
         $tmp = array();
         foreach ($status as $n => $options) {
@@ -449,7 +449,7 @@ class SearchEngineOptions
      * @param  array               $fields
      * @return SearchEngineOptions
      */
-    public function setDateFields(Array $fields)
+    public function setDateFields(array $fields)
     {
         $this->date_fields = $fields;
 
@@ -478,7 +478,7 @@ class SearchEngineOptions
             }
             if (in_array($key, array('date_fields', 'fields'))) {
                 $value = array_map(function (\databox_field $field) {
-                            return $field->get_databox()->get_sbas_id() . '_' . $field->get_id();
+                            return $field->get_databox()->get_sbas_id().'_'.$field->get_id();
                         }, $value);
             }
             if (in_array($key, array('collections', 'business_fields'))) {
@@ -515,7 +515,6 @@ class SearchEngineOptions
         $options->disallowBusinessFields();
 
         foreach ($serialized as $key => $value) {
-
             switch (true) {
                 case is_null($value):
                     $value = null;
@@ -537,6 +536,7 @@ class SearchEngineOptions
                                 $data = explode('_', $serialized);
 
                                 return \databox_field::get_instance($app, $app['phraseanet.appbox']->get_databox($data[0]), $data[1]);
+
                                 return \collection::get_from_base_id($app, $base_id);
                             }, $value);
                     break;
@@ -628,7 +628,7 @@ class SearchEngineOptions
                 try {
                     return \collection::get_from_base_id($app, $base_id);
                 } catch (\Exception_Databox_CollectionNotFound $e) {
-                    return null;
+                    return;
                 }
 
             }, $request->get('bases'));
@@ -690,10 +690,10 @@ class SearchEngineOptions
 
         $min_date = $max_date = null;
         if ($request->get('date_min')) {
-            $min_date = \DateTime::createFromFormat('Y/m/d H:i:s', $request->get('date_min') . ' 00:00:00');
+            $min_date = \DateTime::createFromFormat('Y/m/d H:i:s', $request->get('date_min').' 00:00:00');
         }
         if ($request->get('date_max')) {
-            $max_date = \DateTime::createFromFormat('Y/m/d H:i:s', $request->get('date_max') . ' 23:59:59');
+            $max_date = \DateTime::createFromFormat('Y/m/d H:i:s', $request->get('date_max').' 23:59:59');
         }
 
         $options->setMinDate($min_date);

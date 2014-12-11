@@ -62,7 +62,7 @@ class set_export extends set_abstract
 
             /* @var $repository \Repositories\BasketRepository */
             $Basket = $repository->findUserBasket($this->app, $sstid, $app['authentication']->getUser(), false);
-            $this->exportName = str_replace(array(' ', '\\', '/'), '_', $Basket->getName()) . "_" . date("Y-n-d");
+            $this->exportName = str_replace(array(' ', '\\', '/'), '_', $Basket->getName())."_".date("Y-n-d");
 
             foreach ($Basket->getElements() as $basket_element) {
                 /* @var $basket_element \Entities\BasketElement */
@@ -89,14 +89,15 @@ class set_export extends set_abstract
                 $remain_hd[$base_id] = $current_element->get_remain_hd();
             }
         } else {
-            $this->exportName = "Export_" . date("Y-n-d") . '_' . mt_rand(100, 999);
+            $this->exportName = "Export_".date("Y-n-d").'_'.mt_rand(100, 999);
 
             $tmp_lst = explode(';', $lst);
             $n = 1;
             foreach ($tmp_lst as $basrec) {
                 $basrec = explode('_', $basrec);
-                if (count($basrec) != 2)
+                if (count($basrec) != 2) {
                     continue;
+                }
 
                 try {
                     $record = new record_adapter($this->app, $basrec[0], $basrec[1]);
@@ -122,7 +123,7 @@ class set_export extends set_abstract
                                 $app,
                                 $child_basrec->get_sbas_id(),
                                 $record_id,
-                                $record->get_title(null, null, true) . '_' . $n,
+                                $record->get_title(null, null, true).'_'.$n,
                                 $remain_hd[$base_id]
                         );
 
@@ -141,7 +142,7 @@ class set_export extends set_abstract
                     }
 
                     $current_element =
-                        $download_list[$basrec[0] . '_' . $basrec[1]] =
+                        $download_list[$basrec[0].'_'.$basrec[1]] =
                         new record_exportElement(
                             $app,
                             $record->get_sbas_id(),
@@ -178,7 +179,7 @@ class set_export extends set_abstract
                         'size'      => 0,
                         'total'     => 0,
                         'available' => 0,
-                        'refused'   => array()
+                        'refused'   => array(),
                     );
                 }
 
@@ -199,7 +200,7 @@ class set_export extends set_abstract
                     $display_orderable[$name] = array(
                         'total'     => 0,
                         'available' => 0,
-                        'refused'   => array()
+                        'refused'   => array(),
                     );
                 }
 
@@ -242,7 +243,7 @@ class set_export extends set_abstract
                       ON ( activeFTP=1
                         AND usr.usr_id=basusr.usr_id
                         AND (basusr.base_id=
-                        '" . implode("' OR basusr.base_id='", $lst_base_id) . "'
+                        '".implode("' OR basusr.base_id='", $lst_base_id)."'
                             )
                          )
                       )
@@ -256,7 +257,7 @@ class set_export extends set_abstract
                     ON ( activeFTP=1 AND usr.usr_id=basusr.usr_id
                       AND usr.usr_id = :usr_id
                         AND (basusr.base_id=
-                        '" . implode("' OR basusr.base_id='", $lst_base_id) . "'
+                        '".implode("' OR basusr.base_id='", $lst_base_id)."'
                           )
                         )
                       )
@@ -272,11 +273,11 @@ class set_export extends set_abstract
                 'pwdFTP'          => '',
                 'ssl'             => '0',
                 'destFTP'         => '',
-                'prefixFTPfolder' => 'Export_' . date("Y-m-d_H.i.s"),
+                'prefixFTPfolder' => 'Export_'.date("Y-m-d_H.i.s"),
                 'passifFTP'       => false,
                 'retryFTP'        => 5,
                 'mailFTP'         => '',
-                'sendermail'      => $app['authentication']->getUser()->get_email()
+                'sendermail'      => $app['authentication']->getUser()->get_email(),
             );
 
             $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -293,14 +294,13 @@ class set_export extends set_abstract
                     'pwdFTP'          => $row['pwdFTP'],
                     'ssl'             => $row['sslFTP'],
                     'destFTP'         => $row['destFTP'],
-                    'prefixFTPfolder' =>
-                    (strlen(trim($row['prefixFTPfolder'])) > 0 ?
+                    'prefixFTPfolder' => (strlen(trim($row['prefixFTPfolder'])) > 0 ?
                         trim($row['prefixFTPfolder']) :
-                        'Export_' . date("Y-m-d_H.i.s")),
+                        'Export_'.date("Y-m-d_H.i.s")),
                     'passifFTP'       => ($row['passifFTP'] > 0),
                     'retryFTP'        => $row['retryFTP'],
                     'mailFTP'         => $row['usr_mail'],
-                    'sendermail'      => $app['authentication']->getUser()->get_email()
+                    'sendermail'      => $app['authentication']->getUser()->get_email(),
                 );
             }
 
@@ -402,7 +402,7 @@ class set_export extends set_abstract
      *
      * @return Array
      */
-    public function prepare_export(User_Adapter $user, Filesystem $filesystem, Array $subdefs, $rename_title, $includeBusinessFields)
+    public function prepare_export(User_Adapter $user, Filesystem $filesystem, array $subdefs, $rename_title, $includeBusinessFields)
     {
         if (!is_array($subdefs)) {
             throw new Exception('No subdefs given');
@@ -428,7 +428,7 @@ class set_export extends set_abstract
                 'record_id'     => $download_element->get_record_id(),
                 'original_name' => '',
                 'export_name'   => '',
-                'subdefs'       => array()
+                'subdefs'       => array(),
             );
 
             $rename_done = false;
@@ -491,22 +491,22 @@ class set_export extends set_abstract
                     case 'thumbnail':
                         $tmp_pathfile = array(
                             'path'         => $sd[$name]->get_path()
-                            , 'file'         => $sd[$name]->get_file()
+                            , 'file'         => $sd[$name]->get_file(),
                         );
                         $subdef_export = true;
                         $subdef_alive = true;
                         break;
                     case 'document':
                         $subdef_export = true;
-                        $path = \recordutils_image::stamp($this->app , $sd[$name]);
+                        $path = \recordutils_image::stamp($this->app, $sd[$name]);
                         $tmp_pathfile = array(
                             'path' => $sd[$name]->get_path()
-                            , 'file' => $sd[$name]->get_file()
+                            , 'file' => $sd[$name]->get_file(),
                         );
                         if (file_exists($path)) {
                             $tmp_pathfile = array(
                                 'path'        => dirname($path)
-                                , 'file'        => basename($path)
+                                , 'file'        => basename($path),
                             );
                             $subdef_alive = true;
                         }
@@ -517,7 +517,7 @@ class set_export extends set_abstract
 
                         $tmp_pathfile = array(
                             'path' => $sd[$name]->get_path()
-                            , 'file' => $sd[$name]->get_file()
+                            , 'file' => $sd[$name]->get_file(),
                         );
                         if (!$user->ACL()->has_right_on_base($download_element->get_base_id(), "nowatermark")
                             && !$user->ACL()->has_preview_grant($download_element)
@@ -526,7 +526,7 @@ class set_export extends set_abstract
                             if (file_exists($path)) {
                                 $tmp_pathfile = array(
                                     'path'        => dirname($path)
-                                    , 'file'        => basename($path)
+                                    , 'file'        => basename($path),
                                 );
                                 $subdef_alive = true;
                             }
@@ -562,10 +562,10 @@ class set_export extends set_abstract
                         case 'document':
                         case 'preview':
                         case 'thumbnail':
-                            $infos = pathinfo(p4string::addEndSlash($tmp_pathfile["path"]) .
+                            $infos = pathinfo(p4string::addEndSlash($tmp_pathfile["path"]).
                                 $tmp_pathfile["file"]);
 
-                            $files[$id]["subdefs"][$name]["ajout"] = $name == 'document' ? '' : "_" . $name;
+                            $files[$id]["subdefs"][$name]["ajout"] = $name == 'document' ? '' : "_".$name;
                             $files[$id]["subdefs"][$name]["path"] = $tmp_pathfile["path"];
                             $files[$id]["subdefs"][$name]["file"] = $tmp_pathfile["file"];
                             $files[$id]["subdefs"][$name]["label"] = $properties['label'];
@@ -596,20 +596,22 @@ class set_export extends set_abstract
             $name = $files[$id]["export_name"];
 
             $start_length = mb_strlen($name);
-            if ($start_length > $max_length)
+            if ($start_length > $max_length) {
                 $name = mb_substr($name, 0, $max_length);
+            }
 
             $n = 1;
 
             while (in_array(mb_strtolower($name), $file_names)) {
                 $n++;
-                $suffix = "-" . $n; // pour diese si besoin
+                $suffix = "-".$n; // pour diese si besoin
                 $max_length = 31 - $sizeMaxExt - $sizeMaxAjout - mb_strlen($suffix);
                 $name = mb_strtolower($files[$id]["export_name"]);
-                if ($start_length > $max_length)
-                    $name = mb_substr($name, 0, $max_length) . $suffix;
-                else
-                    $name = $name . $suffix;
+                if ($start_length > $max_length) {
+                    $name = mb_substr($name, 0, $max_length).$suffix;
+                } else {
+                    $name = $name.$suffix;
+                }
             }
             $file_names[] = mb_strtolower($name);
             $files[$id]["export_name"] = $name;
@@ -623,13 +625,14 @@ class set_export extends set_abstract
             $good_keys = array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
                 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3',
-                '4', '5', '6', '7', '8', '9', '-', '_', '.', '#');
+                '4', '5', '6', '7', '8', '9', '-', '_', '.', '#', );
 
             while (isset($name[$i])) {
-                if (!in_array(mb_strtolower($name[$i]), $good_keys))
+                if (!in_array(mb_strtolower($name[$i]), $good_keys)) {
                     $tmp_name .= '_';
-                else
+                } else {
                     $tmp_name .= $name[$i];
+                }
 
                 $tmp_name = str_replace('__', '_', $tmp_name);
 
@@ -638,46 +641,46 @@ class set_export extends set_abstract
             $files[$id]["export_name"] = $tmp_name;
 
             if (in_array('caption', $subdefs)) {
-                $caption_dir = $this->app['root.path'] . '/tmp/desc_tmp/'
-                    . time() . $this->app['authentication']->getUser()->get_id() . '/';
+                $caption_dir = $this->app['root.path'].'/tmp/desc_tmp/'
+                    .time().$this->app['authentication']->getUser()->get_id().'/';
 
                 $filesystem->mkdir($caption_dir, 0750);
 
                 $desc = $download_element->get_caption()->serialize(\caption_record::SERIALIZE_XML, $BF);
 
                 $file = $files[$id]["export_name"]
-                    . $files[$id]["subdefs"]['caption']["ajout"] . '.'
-                    . $files[$id]["subdefs"]['caption']["exportExt"];
+                    .$files[$id]["subdefs"]['caption']["ajout"].'.'
+                    .$files[$id]["subdefs"]['caption']["exportExt"];
 
                 $path = $caption_dir;
 
-                file_put_contents($path . $file, $desc);
+                file_put_contents($path.$file, $desc);
 
                 $files[$id]["subdefs"]['caption']["path"] = $path;
                 $files[$id]["subdefs"]['caption']["file"] = $file;
-                $files[$id]["subdefs"]['caption']["size"] = filesize($path . $file);
+                $files[$id]["subdefs"]['caption']["size"] = filesize($path.$file);
                 $files[$id]["subdefs"]['caption']['businessfields'] = $BF ? '1' : '0';
             }
 
             if (in_array('caption-yaml', $subdefs)) {
-                $caption_dir = $this->app['root.path'] . '/tmp/desc_tmp/'
-                    . time() . $this->app['authentication']->getUser()->get_id() . '/';
+                $caption_dir = $this->app['root.path'].'/tmp/desc_tmp/'
+                    .time().$this->app['authentication']->getUser()->get_id().'/';
 
                 $filesystem->mkdir($caption_dir, 0750);
 
                 $desc = $download_element->get_caption()->serialize(\caption_record::SERIALIZE_YAML, $BF);
 
                 $file = $files[$id]["export_name"]
-                    . $files[$id]["subdefs"]['caption-yaml']["ajout"] . '.'
-                    . $files[$id]["subdefs"]['caption-yaml']["exportExt"];
+                    .$files[$id]["subdefs"]['caption-yaml']["ajout"].'.'
+                    .$files[$id]["subdefs"]['caption-yaml']["exportExt"];
 
                 $path = $caption_dir;
 
-                file_put_contents($path . $file, $desc);
+                file_put_contents($path.$file, $desc);
 
                 $files[$id]["subdefs"]['caption-yaml']["path"] = $path;
                 $files[$id]["subdefs"]['caption-yaml']["file"] = $file;
-                $files[$id]["subdefs"]['caption-yaml']["size"] = filesize($path . $file);
+                $files[$id]["subdefs"]['caption-yaml']["size"] = filesize($path.$file);
                 $files[$id]["subdefs"]['caption-yaml']['businessfields'] = $BF ? '1' : '0';
             }
         }
@@ -686,7 +689,7 @@ class set_export extends set_abstract
             'files' => $files,
             'names' => $file_names,
             'size'  => $size,
-            'count' => $n_files
+            'count' => $n_files,
         );
 
         return $this->list;
@@ -701,7 +704,7 @@ class set_export extends set_abstract
      *
      * @return string
      */
-    public static function build_zip(Application $app, $token, Array $list, $zipFile)
+    public static function build_zip(Application $app, $token, array $list, $zipFile)
     {
         $zip = new ZipArchiveImproved();
 
@@ -723,12 +726,12 @@ class set_export extends set_abstract
         foreach ($files as $record) {
             if (isset($record["subdefs"])) {
                 foreach ($record["subdefs"] as $o => $obj) {
-                    $path = p4string::addEndSlash($obj["path"]) . $obj["file"];
+                    $path = p4string::addEndSlash($obj["path"]).$obj["file"];
                     if (is_file($path)) {
                         $name = $obj["folder"]
-                            . $record["export_name"]
-                            . $obj["ajout"]
-                            . '.' . $obj["exportExt"];
+                            .$record["export_name"]
+                            .$obj["ajout"]
+                            .'.'.$obj["exportExt"];
 
                         $name = $app['unicode']->remove_diacritics($name);
 
@@ -768,12 +771,12 @@ class set_export extends set_abstract
      *
      * @return Void
      */
-    public static function log_download(Application $app, Array $list, $type, $anonymous = false, $comment = '')
+    public static function log_download(Application $app, array $list, $type, $anonymous = false, $comment = '')
     {
         $tmplog = array();
         $files = $list['files'];
 
-        $event_name = in_array($type, array(Session_Logger::EVENT_EXPORTMAIL,Session_Logger::EVENT_EXPORTDOWNLOAD)) ? $type : Session_Logger::EVENT_EXPORTDOWNLOAD;
+        $event_name = in_array($type, array(Session_Logger::EVENT_EXPORTMAIL, Session_Logger::EVENT_EXPORTDOWNLOAD)) ? $type : Session_Logger::EVENT_EXPORTDOWNLOAD;
 
         foreach ($files as $record) {
             foreach ($record["subdefs"] as $o => $obj) {
@@ -812,7 +815,7 @@ class set_export extends set_abstract
                     $params = array(
                         ':remain_dl' => $app['authentication']->getUser()->ACL()->remaining_download($base_id)
                         , ':base_id' => $base_id
-                        , ':usr_id'  => $app['authentication']->getUser()->get_id()
+                        , ':usr_id'  => $app['authentication']->getUser()->get_id(),
                     );
 
                     $stmt->execute($params);

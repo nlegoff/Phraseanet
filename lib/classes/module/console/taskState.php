@@ -36,7 +36,7 @@ class module_console_taskState extends Command
         \task_abstract::STATE_TOSTART   => 14,
         \task_abstract::STATE_TORESTART => 15,
         \task_abstract::STATE_STOPPED   => 11,
-        \task_abstract::STATE_TODELETE  => 16
+        \task_abstract::STATE_TODELETE  => 16,
     );
 
     public function __construct($name = null)
@@ -48,11 +48,7 @@ class module_console_taskState extends Command
         $this->setDescription('Returns a Phraseanet task state given its id');
 
         $this->addOption(
-            'short'
-            , NULL
-            , InputOption::VALUE_NONE
-            , 'print short result, ie: <info>stopped()</info> | <info>started(12345)</info> | <info>tostop(12345)</info> | <info>...</info>'
-            , NULL
+            'short', null, InputOption::VALUE_NONE, 'print short result, ie: <info>stopped()</info> | <info>started(12345)</info> | <info>tostop(12345)</info> | <info>...</info>', null
         );
 
         return $this;
@@ -73,10 +69,10 @@ class module_console_taskState extends Command
 
         $task_manager = $this->container['task-manager'];
 
-        $taskPID = $taskState = NULL;
+        $taskPID = $taskState = null;
         $exitCode = 0;
 
-        $task = NULL;
+        $task = null;
         try {
             $task = $task_manager->getTask($task_id);
             $taskPID = $task->getPID();
@@ -96,10 +92,7 @@ class module_console_taskState extends Command
         } else {
             if ($taskPID !== NULL) {
                 $output->writeln(sprintf(
-                        'Task %d is %s on pid %d'
-                        , $task_id
-                        , $taskState
-                        , $taskPID
+                        'Task %d is %s on pid %d', $task_id, $taskState, $taskPID
                     ));
             } else {
                 $output->writeln(sprintf('Task %d is %s', $task_id, $taskState));

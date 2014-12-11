@@ -21,7 +21,6 @@ use Symfony\Component\Finder\Finder;
 
 class TaskManager implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -49,7 +48,7 @@ class TaskManager implements ControllerProviderInterface
 
             return $app['twig']->render($template, array(
                 'task_manager'  => $app['task-manager'],
-                'scheduler_key' => \phrasea::scheduler_key($app)
+                'scheduler_key' => \phrasea::scheduler_key($app),
             ));
         })->bind('admin_tasks_list');
 
@@ -84,14 +83,13 @@ class TaskManager implements ControllerProviderInterface
 
                 return $app->json(array('success' => true));
             } catch (\Exception $e) {
-
             }
 
             return $app->json(array('success' => false));
         })->bind('admin_tasks_scheduler_stop');
 
         $controllers->get('/scheduler/log', function (Application $app, Request $request) {
-            $logdir = $app['root.path'] . '/logs/';
+            $logdir = $app['root.path'].'/logs/';
 
             $rname = '/scheduler((\.log)|(-.*\.log))$/';
 
@@ -115,8 +113,7 @@ class TaskManager implements ControllerProviderInterface
             return $app->stream(function () use ($finder, $app) {
                 foreach ($finder->getIterator() as $file) {
                     printf("<h4>%s\n", $file->getRealPath());
-                    printf("&nbsp;<a href=\"".$app->path('admin_tasks_scheduler_log', array('clr' => $file->getFilename()))."\">%s</a>"
-                        , _('Clear')
+                    printf("&nbsp;<a href=\"".$app->path('admin_tasks_scheduler_log', array('clr' => $file->getFilename()))."\">%s</a>", _('Clear')
                     );
                     print("</h4>\n<pre>\n");
                     print(htmlentities(file_get_contents($file->getRealPath())));
@@ -129,9 +126,9 @@ class TaskManager implements ControllerProviderInterface
         })->bind('admin_tasks_scheduler_log');
 
         $controllers->get('/task/{id}/log', function (Application $app, Request $request, $id) {
-            $logdir = $app['root.path'] . '/logs/';
+            $logdir = $app['root.path'].'/logs/';
 
-            $rname = '/task_' . $id . '((\.log)|(-.*\.log))$/';
+            $rname = '/task_'.$id.'((\.log)|(-.*\.log))$/';
 
             $finder = new Finder();
             $finder
@@ -153,10 +150,7 @@ class TaskManager implements ControllerProviderInterface
             return $app->stream(function () use ($finder, $id) {
                 foreach ($finder->getIterator() as $file) {
                     printf("<h4>%s\n", $file->getRealPath());
-                    printf("&nbsp;<a href=\"/admin/task-manager/task/%s/log?clr=%s\">%s</a>"
-                        , $id
-                        , urlencode($file->getFilename())
-                        , _('Clear')
+                    printf("&nbsp;<a href=\"/admin/task-manager/task/%s/log?clr=%s\">%s</a>", $id, urlencode($file->getFilename()), _('Clear')
                     );
                     print("</h4>\n<pre>\n");
                     print(htmlentities(file_get_contents($file->getRealPath())));
@@ -176,7 +170,6 @@ class TaskManager implements ControllerProviderInterface
 
                 return $app->redirectPath('admin_tasks_list');
             } catch (\Exception $e) {
-
                 /**
                  * todo : add a message back
                  */
@@ -196,7 +189,6 @@ class TaskManager implements ControllerProviderInterface
                     $ret = true;
                 }
             } catch (\Exception $e) {
-
             }
 
             return $app->json($ret);
@@ -217,7 +209,6 @@ class TaskManager implements ControllerProviderInterface
 
                 $ret = true;
             } catch (\Exception $e) {
-
             }
 
             return $app->json($ret);
@@ -317,7 +308,7 @@ class TaskManager implements ControllerProviderInterface
 
             return $app['twig']->render($template, array(
                     'task' => $task,
-                    'view' => 'XML'
+                    'view' => 'XML',
                 ));
         })->bind('admin_tasks_task_show');
 

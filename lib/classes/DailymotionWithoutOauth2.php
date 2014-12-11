@@ -12,7 +12,6 @@
  */
 class DailymotionWithoutOauth2 extends Dailymotion
 {
-
     /**
      * Call a remote method.
      *
@@ -30,8 +29,7 @@ class DailymotionWithoutOauth2 extends Dailymotion
     public function call($method, $args = array(), $access_token = null)
     {
         $headers = array('Content-Type: application/json');
-        $payload = json_encode(array
-            (
+        $payload = json_encode(array(
             'call' => $method,
             'args' => $args,
             ));
@@ -40,7 +38,6 @@ class DailymotionWithoutOauth2 extends Dailymotion
         try {
             $result = json_decode($this->oauthRequest($this->apiEndpointUrl, $payload, $access_token, $headers, $status_code), true);
         } catch (DailymotionAuthException $e) {
-
             if ($e->error === 'invalid_token') {
                 throw new Bridge_Exception_ActionAuthNeedReconnect();
             } else {
@@ -48,10 +45,10 @@ class DailymotionWithoutOauth2 extends Dailymotion
             }
         }
 
-        if ( ! isset($result)) {
+        if (! isset($result)) {
             throw new DailymotionApiException('Invalid API server response.');
         } elseif ($status_code !== 200) {
-            throw new DailymotionApiException('Unknown error: ' . $status_code, $status_code);
+            throw new DailymotionApiException('Unknown error: '.$status_code, $status_code);
         } elseif (is_array($result) && isset($result['error'])) {
             $message = isset($result['error']['message']) ? $result['error']['message'] : null;
             $code = isset($result['error']['code']) ? $result['error']['code'] : null;
@@ -60,7 +57,7 @@ class DailymotionWithoutOauth2 extends Dailymotion
             } else {
                 throw new DailymotionApiException($message, $code);
             }
-        } elseif ( ! isset($result['result'])) {
+        } elseif (! isset($result['result'])) {
             throw new DailymotionApiException("Invalid API server response: no `result' key found.");
         }
 
@@ -80,7 +77,7 @@ class DailymotionWithoutOauth2 extends Dailymotion
         $result = $this->call('file.upload', array(), $oauth_token);
         $timeout = $this->timeout;
         $this->timeout = null;
-        $result = json_decode($this->httpRequest($result['upload_url'], array('file' => '@' . $filePath)), true);
+        $result = json_decode($this->httpRequest($result['upload_url'], array('file' => '@'.$filePath)), true);
         $this->timeout = $timeout;
 
         return $result['url'];

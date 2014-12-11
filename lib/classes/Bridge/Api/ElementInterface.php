@@ -17,7 +17,6 @@
  */
 interface Bridge_Api_ElementInterface
 {
-
     /**
      * @return int
      */

@@ -19,7 +19,6 @@ use Doctrine\ORM\EntityManager;
  */
 interface CheckerInterface
 {
-
     /**
      * Checks constraints on the file
      *

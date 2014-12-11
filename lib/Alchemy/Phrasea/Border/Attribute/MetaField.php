@@ -90,7 +90,7 @@ class MetaField implements AttributeInterface
         return serialize(array(
             'id'      => $this->databox_field->get_id(),
             'sbas_id' => $this->databox_field->get_databox()->get_sbas_id(),
-            'value'   => $this->value
+            'value'   => $this->value,
         ));
     }
 

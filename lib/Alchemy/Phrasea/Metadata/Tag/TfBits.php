@@ -16,5 +16,4 @@ class TfBits extends AbstractTag
     protected $Type = '';
     protected $Writable = false;
     protected $Description = 'The color depth of the file (if available)';
-
 }

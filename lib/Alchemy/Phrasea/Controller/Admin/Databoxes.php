@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Databoxes implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -123,8 +122,7 @@ class Databoxes implements ControllerProviderInterface
         $createBase = $mountBase = false;
 
         $sbasIds = array_merge(
-            array_keys($app['authentication']->getUser()->ACL()->get_granted_sbas(array('bas_manage')))
-            , array_keys($app['authentication']->getUser()->ACL()->get_granted_sbas(array('bas_modify_struct')))
+            array_keys($app['authentication']->getUser()->ACL()->get_granted_sbas(array('bas_manage'))), array_keys($app['authentication']->getUser()->ACL()->get_granted_sbas(array('bas_modify_struct')))
         );
 
         $sbas = array();
@@ -133,7 +131,7 @@ class Databoxes implements ControllerProviderInterface
                 'version'     => 'unknown',
                 'image'       => '/skins/icons/db-remove.png',
                 'server_info' => '',
-                'name'        => _('Unreachable server')
+                'name'        => _('Unreachable server'),
             );
 
             try {
@@ -143,10 +141,9 @@ class Databoxes implements ControllerProviderInterface
                     'version'     => $databox->get_version(),
                     'image'       => '/skins/icons/foldph20close_0.gif',
                     'server_info' => $databox->get_connection()->server_info(),
-                    'name'        => \phrasea::sbas_labels($sbasId, $app)
+                    'name'        => \phrasea::sbas_labels($sbasId, $app),
                 );
             } catch (\Exception $e) {
-
             }
         }
 
@@ -183,7 +180,7 @@ class Databoxes implements ControllerProviderInterface
         $upgrader = new \Setup_Upgrade($app);
 
         return $app['twig']->render('admin/databases.html.twig', array(
-            'files'             => new \DirectoryIterator($app['root.path'] . '/lib/conf.d/data_templates'),
+            'files'             => new \DirectoryIterator($app['root.path'].'/lib/conf.d/data_templates'),
             'sbas'              => $sbas,
             'error_msg'         => $errorMsg,
             'recommendations'   => $upgrader->getRecommendations(),
@@ -211,7 +208,6 @@ class Databoxes implements ControllerProviderInterface
         }
 
         if ((null === $request->request->get('new_settings')) && (null !== $dataTemplate = $request->request->get('new_data_template'))) {
-
             $configuration = $app['phraseanet.configuration'];
             $connexion = $configuration['main']['database'];
 
@@ -220,7 +216,7 @@ class Databoxes implements ControllerProviderInterface
             $user = $connexion['user'];
             $password = $connexion['password'];
 
-            $dataTemplate = new \SplFileInfo($app['root.path'] . '/lib/conf.d/data_templates/' . $dataTemplate . '.xml');
+            $dataTemplate = new \SplFileInfo($app['root.path'].'/lib/conf.d/data_templates/'.$dataTemplate.'.xml');
 
             try {
                 $connbas = new \connection_pdo('databox_creation', $hostname, $port, $user, $password, $dbName, array(), $app['debug']);
@@ -246,9 +242,8 @@ class Databoxes implements ControllerProviderInterface
             && (null !== $userDb = $request->request->get('new_user'))
             && (null !== $passwordDb = $request->request->get('new_password'))
             && (null !== $dataTemplate = $request->request->get('new_data_template'))) {
-
             try {
-                $data_template = new \SplFileInfo($app['root.path'] . '/lib/conf.d/data_templates/' . $dataTemplate . '.xml');
+                $data_template = new \SplFileInfo($app['root.path'].'/lib/conf.d/data_templates/'.$dataTemplate.'.xml');
                 $connbas = new \connection_pdo('databox_creation', $hostname, $port, $userDb, $passwordDb, $dbName, array(), $app['debug']);
                 try {
                     $base = \databox::create($app, $connbas, $data_template, $app['phraseanet.registry']);
@@ -310,7 +305,6 @@ class Databoxes implements ControllerProviderInterface
             && (null !== $port = $request->request->get('new_port'))
             && (null !== $userDb = $request->request->get('new_user'))
             && (null !== $passwordDb = $request->request->get('new_password'))) {
-
             try {
                 $app['phraseanet.appbox']->get_connection()->beginTransaction();
                 $base = \databox::mount($app, $hostname, $port, $userDb, $passwordDb, $dbName, $app['phraseanet.registry']);

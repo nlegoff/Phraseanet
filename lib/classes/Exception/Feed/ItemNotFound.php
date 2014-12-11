@@ -19,5 +19,4 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class Exception_Feed_ItemNotFound extends NotFoundHttpException
 {
-
 }

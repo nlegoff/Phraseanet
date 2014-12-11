@@ -152,7 +152,7 @@ class API_OAuth2_Account
 
         $params = array(
             ':revoked'   => ($boolean ? '1' : '0')
-            , 'account_id' => $this->id
+            , 'account_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -194,8 +194,9 @@ class API_OAuth2_Account
      */
     public function get_application()
     {
-        if ( ! $this->application)
+        if (! $this->application) {
             $this->application = new API_OAuth2_Application($this->app, $this->application_id);
+        }
 
         return $this->application;
     }
@@ -236,7 +237,7 @@ class API_OAuth2_Account
             , ':application_id' => $application->get_id()
             , ':api_version'    => API_OAuth2_Adapter::API_VERSION
             , ':revoked'        => 0
-            , ':created'        => $datetime->format("Y-m-d H:i:s")
+            , ':created'        => $datetime->format("Y-m-d H:i:s"),
         );
 
         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -255,7 +256,7 @@ class API_OAuth2_Account
 
         $params = array(
             ":usr_id"         => $user->get_id(),
-            ":application_id" => $application->get_id()
+            ":application_id" => $application->get_id(),
         );
 
         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);

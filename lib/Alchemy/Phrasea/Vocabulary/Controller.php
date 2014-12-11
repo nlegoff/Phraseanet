@@ -36,9 +36,9 @@ class Controller
      */
     public static function get(Application $app, $type)
     {
-        $classname = __NAMESPACE__ . '\\ControlProvider\\' . $type . 'Provider';
+        $classname = __NAMESPACE__.'\\ControlProvider\\'.$type.'Provider';
 
-        if ( ! class_exists($classname)) {
+        if (! class_exists($classname)) {
             throw new \InvalidArgumentException('Vocabulary type not found');
         }
 
@@ -53,7 +53,7 @@ class Controller
     public static function getAvailable(Application $app)
     {
         return array(
-            new ControlProvider\UserProvider($app)
+            new ControlProvider\UserProvider($app),
         );
     }
 }

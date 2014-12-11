@@ -11,7 +11,6 @@
 
 class task_period_apibridge extends task_appboxAbstract
 {
-
     /**
      * Return the name of the task
      * @return string
@@ -43,12 +42,12 @@ class task_period_apibridge extends task_appboxAbstract
         $n = 1;
 
         foreach ($status as $stat) {
-            $params[':status' . $n] = $stat;
+            $params[':status'.$n] = $stat;
             $n ++;
         }
 
         $sql = 'SELECT id, account_id FROM bridge_elements'
-            . ' WHERE (status = ' . implode(' OR status = ', array_keys($params)) . ')';
+            .' WHERE (status = '.implode(' OR status = ', array_keys($params)).')';
 
         $stmt = $appbox->get_connection()->prepare($sql);
         $stmt->execute($params);
@@ -64,13 +63,13 @@ class task_period_apibridge extends task_appboxAbstract
      * @param  array                 $row
      * @return task_period_apibridge
      */
-    protected function processOneContent(appbox $appbox, Array $row)
+    protected function processOneContent(appbox $appbox, array $row)
     {
         try {
             $account = Bridge_Account::load_account($this->dependencyContainer, $row['account_id']);
             $element = new Bridge_Element($this->dependencyContainer, $account, $row['id']);
 
-            $this->log("process " . $element->get_id() . " with status " . $element->get_status());
+            $this->log("process ".$element->get_id()." with status ".$element->get_status());
 
             if ($element->get_status() == Bridge_Element::STATUS_PENDING) {
                 $this->upload_element($element);
@@ -82,7 +81,7 @@ class task_period_apibridge extends task_appboxAbstract
 
             $params = array(
                 ':status' => Bridge_Element::STATUS_ERROR
-                , ':id'     => $row['id']
+                , ':id'     => $row['id'],
             );
 
             $stmt = $appbox->get_connection()->prepare($sql);
@@ -99,7 +98,7 @@ class task_period_apibridge extends task_appboxAbstract
      * @param  array                 $row
      * @return task_period_apibridge
      */
-    protected function postProcessOneContent(appbox $appbox, Array $row)
+    protected function postProcessOneContent(appbox $appbox, array $row)
     {
         return $this;
     }
@@ -118,7 +117,7 @@ class task_period_apibridge extends task_appboxAbstract
             $dist_id = $account->get_api()->upload($element->get_record(), $element->get_datas());
             $element->set_uploaded_on(new DateTime());
         } catch (\Exception $e) {
-            $this->log('Error while uploading : ' . $e->getMessage());
+            $this->log('Error while uploading : '.$e->getMessage());
             $element->set_status(Bridge_Element::STATUS_ERROR);
         }
         $element->set_dist_id($dist_id);
@@ -143,7 +142,7 @@ class task_period_apibridge extends task_appboxAbstract
 
         if ($status) {
             $element->set_status($status);
-            $this->log('updating status for : ' . $element->get_id() . " to " . $status);
+            $this->log('updating status for : '.$element->get_id()." to ".$status);
         }
         $element->set_connector_status($connector_status);
 
@@ -159,7 +158,7 @@ class task_period_apibridge extends task_appboxAbstract
                     , 'reason'     => $error_message
                     , 'account_id' => $account->get_id()
                     , 'sbas_id'    => $element->get_record()->get_sbas_id()
-                    , 'record_id'  => $element->get_record()->get_record_id()
+                    , 'record_id'  => $element->get_record()->get_record_id(),
                 );
                 $this->dependencyContainer['events-manager']->trigger('__BRIDGE_UPLOAD_FAIL__', $params);
 

@@ -23,8 +23,8 @@ class RegenerateSqliteDb extends Command
     {
         $fs = new Filesystem();
 
-        $source = __DIR__ . '/../../../../../tests/db-ref.sqlite';
-        $target = __DIR__ . '/../../../../../tests/db-ref.sqlite.bkp';
+        $source = __DIR__.'/../../../../../tests/db-ref.sqlite';
+        $target = __DIR__.'/../../../../../tests/db-ref.sqlite.bkp';
 
         $fs->rename($source, $target);
 
@@ -32,7 +32,7 @@ class RegenerateSqliteDb extends Command
             $dbParams = $this->container['phraseanet.configuration']->getTestConnectionParameters();
             $dbParams['path'] = $source;
 
-            $config = Setup::createYAMLMetadataConfiguration(array(__DIR__ . '/../../../../conf.d/Doctrine'), true);
+            $config = Setup::createYAMLMetadataConfiguration(array(__DIR__.'/../../../../conf.d/Doctrine'), true);
             $em = EntityManager::create($dbParams, $config);
 
             $metadatas = $em->getMetadataFactory()->getAllMetadata();

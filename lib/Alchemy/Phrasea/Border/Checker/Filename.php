@@ -30,7 +30,7 @@ class Filename extends AbstractChecker
      */
     public function __construct(Application $app, array $options = array())
     {
-        if ( ! isset($options['sensitive'])) {
+        if (! isset($options['sensitive'])) {
             $options['sensitive'] = false;
         }
 

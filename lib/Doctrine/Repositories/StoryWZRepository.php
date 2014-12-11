@@ -15,7 +15,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class StoryWZRepository extends EntityRepository
 {
-
     public function findByUser(Application $app, \User_Adapter $user, $sort)
     {
         $dql = 'SELECT s FROM Entities\StoryWZ s WHERE s.usr_id = :usr_id ';

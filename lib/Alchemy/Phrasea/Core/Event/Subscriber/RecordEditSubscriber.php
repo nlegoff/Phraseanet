@@ -16,7 +16,6 @@ use Alchemy\Phrasea\Core\PhraseaEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Alchemy\Phrasea\Metadata\Tag\TfEditdate;
 
-
 class RecordEditSubscriber implements EventSubscriberInterface
 {
     public function onEdit(RecordEdit $event)
@@ -50,7 +49,6 @@ class RecordEditSubscriber implements EventSubscriberInterface
         $this->updateEditField($record, $field);
     }
 
-
     private function updateEditField($record, $editField)
     {
         $fields = $record->get_caption()->get_fields(array($editField->get_name()), true);
@@ -69,7 +67,7 @@ class RecordEditSubscriber implements EventSubscriberInterface
                 'meta_struct_id' => $editField->get_id(),
                 'meta_id'        => $metaId,
                 'value'          => $date->format('Y-m-d H:i:s'),
-            )
+            ),
         ), true);
     }
 

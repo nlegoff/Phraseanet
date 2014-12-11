@@ -78,7 +78,7 @@ class Bridge_AccountSettings
         $params = array(
             ':value'      => $value
             , ':account_id' => $this->account->get_id()
-            , ':key'        => $key
+            , ':key'        => $key,
         );
 
         $stmt = $this->appbox->get_connection()->prepare($sql);

@@ -40,11 +40,7 @@ class module_console_schedulerState extends Command
         $this->setDescription('Returns Phraseanet scheduler status');
 
         $this->addOption(
-            'short'
-            , NULL
-            , InputOption::VALUE_NONE
-            , 'print short result, ie: <info>stopped()</info> | <info>started(12345)</info> | <info>tostop(12345)</info> | <info>stopping(12345)</info>'
-            , NULL
+            'short', null, InputOption::VALUE_NONE, 'print short result, ie: <info>stopped()</info> | <info>started(12345)</info> | <info>tostop(12345)</info> | <info>stopping(12345)</info>', null
         );
 
         return $this;
@@ -70,9 +66,7 @@ class module_console_schedulerState extends Command
         } else {
             if ($state['pid'] != NULL) {
                 $output->writeln(sprintf(
-                        'Scheduler is %s on pid %d'
-                        , $state['status']
-                        , $state['pid']
+                        'Scheduler is %s on pid %d', $state['status'], $state['pid']
                     ));
             } else {
                 $output->writeln(sprintf('Scheduler is %s', $state['status']));

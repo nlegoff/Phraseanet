@@ -17,5 +17,4 @@
  */
 class Bridge_Exception_ActionMandatoryField extends Bridge_Exception
 {
-
 }

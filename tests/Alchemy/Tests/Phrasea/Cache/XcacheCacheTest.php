@@ -17,7 +17,7 @@ class XcacheCacheTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Xcache not loaded');
         }
 
-        $this->object = new XcacheCache;
+        $this->object = new XcacheCache();
     }
 
     public function testIsServer()

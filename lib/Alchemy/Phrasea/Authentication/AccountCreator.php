@@ -75,7 +75,7 @@ class AccountCreator
         }
 
         while (false !== \User_Adapter::get_usr_id_from_login($app, $login)) {
-            $login = $id . '#' . $n;
+            $login = $id.'#'.$n;
             $n++;
         }
 

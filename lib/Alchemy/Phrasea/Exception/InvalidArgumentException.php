@@ -13,5 +13,4 @@ namespace Alchemy\Phrasea\Exception;
 
 class InvalidArgumentException extends \InvalidArgumentException implements Exception
 {
-
 }

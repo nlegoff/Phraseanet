@@ -82,7 +82,6 @@ class task_period_ftp extends task_appboxAbstract
         return($dom->saveXML());
     }
 
-
     /**
      *
      * @return void
@@ -91,7 +90,8 @@ class task_period_ftp extends task_appboxAbstract
     {
         ?>
         <script type="text/javascript">
-            function taskFillGraphic_<?php echo(get_class($this));?>(xml)
+            function taskFillGraphic_<?php echo(get_class($this));
+        ?>(xml)
             {
                 if (xml) {
                     xml = $.parseXML(xml);
@@ -108,7 +108,9 @@ class task_period_ftp extends task_appboxAbstract
 
             $(document).ready(function () {
                 var limits = {
-                    'period' :{'min':<?php echo self::MINPERIOD; ?>, 'max':<?php echo self::MAXPERIOD; ?>}
+                    'period' :{'min':<?php echo self::MINPERIOD;
+        ?>, 'max':<?php echo self::MAXPERIOD;
+        ?>}
                 } ;
                 $(".formElem").change(function () {
                     fieldname = $(this).attr("name");
@@ -172,13 +174,7 @@ class task_period_ftp extends task_appboxAbstract
         $request = http_request::getInstance();
 
         $parm = $request->get_parms(
-            'xml'
-            , 'name'
-            , 'active'
-            , 'proxy'
-            , 'proxyport'
-            , 'period'
-            , 'debug'
+            'xml', 'name', 'active', 'proxy', 'proxyport', 'period', 'debug'
         );
 
         if ($parm["xml"] === null) {
@@ -187,9 +183,7 @@ class task_period_ftp extends task_appboxAbstract
             if ((@$domTaskSettings->loadXML($taskrow["settings"])) != FALSE) {
                 $xmlchanged = false;
                 foreach (array(
-                'proxy'
-                , 'proxyport'
-                , 'period'
+                'proxy', 'proxyport', 'period',
                 ) as $f) {
                     if ($parm[$f] !== NULL) {
                         if (($ns = $domTaskSettings->getElementsByTagName($f)->item(0)) != NULL) {
@@ -221,15 +215,15 @@ class task_period_ftp extends task_appboxAbstract
         $sql = "";
         $params = array(':task_id' => $taskid);
         if ($parm["xml"] !== NULL) {
-            $sql .= ( $sql ? " ," : "") . "settings = :settings";
+            $sql .= ($sql ? " ," : "")."settings = :settings";
             $params[':settings'] = $parm['xml'];
         }
         if ($parm["name"] !== NULL) {
-            $sql .= ( $sql ? " ," : "") . "name = :name";
+            $sql .= ($sql ? " ," : "")."name = :name";
             $params[':name'] = $parm['name'];
         }
         if ($parm["active"] !== NULL) {
-            $sql .= ( $sql ? " ," : "") . "active = :active";
+            $sql .= ($sql ? " ," : "")."active = :active";
             $params[':active'] = $parm['active'];
         }
 
@@ -318,7 +312,7 @@ class task_period_ftp extends task_appboxAbstract
         return $ftp_exports;
     }
 
-    protected function processOneContent(appbox $appbox, Array $ftp_export)
+    protected function processOneContent(appbox $appbox, array $ftp_export)
     {
         $conn = $appbox->get_connection();
 
@@ -332,25 +326,20 @@ class task_period_ftp extends task_appboxAbstract
         $ftp_user_pass = $ftp_export["pwd"];
         $usr_id = (int) $ftp_export["usr_id"];
 
-        $ftpLog = $ftp_user_name . "@" . p4string::addEndSlash($ftp_server) . $ftp_export["destfolder"];
+        $ftpLog = $ftp_user_name."@".p4string::addEndSlash($ftp_server).$ftp_export["destfolder"];
 
         if ($ftp_export["crash"] == 0) {
             $line = sprintf(
-                _('task::ftp:Etat d\'envoi FTP vers le serveur' .
-                    ' "%1$s" avec le compte "%2$s" et pour destination le dossier : "%3$s"') . PHP_EOL
-                , $ftp_server
-                , $ftp_user_name
-                , $ftp_export["destfolder"]
+                _('task::ftp:Etat d\'envoi FTP vers le serveur'.
+                    ' "%1$s" avec le compte "%2$s" et pour destination le dossier : "%3$s"').PHP_EOL, $ftp_server, $ftp_user_name, $ftp_export["destfolder"]
             );
             $state .= $line;
             $this->logger->addDebug($line);
         }
 
         $state .= $line = sprintf(
-                _("task::ftp:TENTATIVE no %s, %s")
-                , $ftp_export["crash"] + 1
-                , "  (" . date('r') . ")"
-            ) . PHP_EOL;
+                _("task::ftp:TENTATIVE no %s, %s"), $ftp_export["crash"] + 1, "  (".date('r').")"
+            ).PHP_EOL;
 
         $this->logger->addDebug($line);
 
@@ -370,7 +359,7 @@ class task_period_ftp extends task_appboxAbstract
             if (trim($ftp_export["destfolder"]) != '') {
                 try {
                     $ftp_client->chdir($ftp_export["destfolder"]);
-                    $ftp_export["destfolder"] = '/' . $ftp_export["destfolder"];
+                    $ftp_export["destfolder"] = '/'.$ftp_export["destfolder"];
                 } catch (\Exception $e) {
                     $this->logger->addDebug($e->getMessage());
                 }
@@ -386,7 +375,7 @@ class task_period_ftp extends task_appboxAbstract
                 }
                 try {
                     $new_dir = $ftp_client->add_end_slash($ftp_export["destfolder"])
-                        . $ftp_export["foldertocreate"];
+                        .$ftp_export["foldertocreate"];
                     $ftp_client->chdir($new_dir);
                 } catch (\Exception $e) {
                     $this->logger->addDebug($e->getMessage());
@@ -422,14 +411,14 @@ class task_period_ftp extends task_appboxAbstract
                     if ($subdef == 'caption') {
                         $desc = $record->get_caption()->serialize(\caption_record::SERIALIZE_XML, $file["businessfields"]);
 
-                        $localfile = $this->dependencyContainer['root.path'] . '/tmp/' . md5($desc . time() . mt_rand());
+                        $localfile = $this->dependencyContainer['root.path'].'/tmp/'.md5($desc.time().mt_rand());
                         if (file_put_contents($localfile, $desc) === false) {
                             throw new Exception('Impossible de creer un fichier temporaire');
                         }
                     } elseif ($subdef == 'caption-yaml') {
                         $desc = $record->get_caption()->serialize(\caption_record::SERIALIZE_YAML, $file["businessfields"]);
 
-                        $localfile = $this->dependencyContainer['root.path'] . '/tmp/' . md5($desc . time() . mt_rand());
+                        $localfile = $this->dependencyContainer['root.path'].'/tmp/'.md5($desc.time().mt_rand());
                         if (file_put_contents($localfile, $desc) === false) {
                             throw new Exception('Impossible de creer un fichier temporaire');
                         }
@@ -446,7 +435,7 @@ class task_period_ftp extends task_appboxAbstract
                         }
                     }
 
-                    $current_folder = p4string::delEndSlash(str_replace('//', '/', $basefolder . $file['folder']));
+                    $current_folder = p4string::delEndSlash(str_replace('//', '/', $basefolder.$file['folder']));
 
                     if ($ftp_client->pwd() != $current_folder) {
                         try {
@@ -460,7 +449,7 @@ class task_period_ftp extends task_appboxAbstract
 
                     $obj[] = array(
                         "name"     => $subdef, "size"     => filesize($localfile),
-                        "shortXml" => ($sdcaption ? $sdcaption : '')
+                        "shortXml" => ($sdcaption ? $sdcaption : ''),
                     );
 
                     if ($subdef == 'caption') {
@@ -468,23 +457,21 @@ class task_period_ftp extends task_appboxAbstract
                     }
 
                     $sql = "UPDATE ftp_export_elements"
-                        . " SET done='1', error='0' WHERE id = :file_id";
+                        ." SET done='1', error='0' WHERE id = :file_id";
                     $stmt = $conn->prepare($sql);
                     $stmt->execute(array(':file_id' => $file['id']));
                     $stmt->closeCursor();
                     $this->logexport($record, $obj, $ftpLog);
                 } catch (\Exception $e) {
-                    $state .= $line = sprintf(_('task::ftp:File "%1$s" (record %2$s) de la base "%3$s"' .
-                                ' (Export du Document) : Transfert cancelled (le document n\'existe plus)')
-                            , basename($localfile), $record_id
-                            , phrasea::sbas_labels(phrasea::sbasFromBas($this->dependencyContainer, $base_id), $this->dependencyContainer)) . "\n<br/>";
+                    $state .= $line = sprintf(_('task::ftp:File "%1$s" (record %2$s) de la base "%3$s"'.
+                                ' (Export du Document) : Transfert cancelled (le document n\'existe plus)'), basename($localfile), $record_id, phrasea::sbas_labels(phrasea::sbasFromBas($this->dependencyContainer, $base_id), $this->dependencyContainer))."\n<br/>";
 
                     $this->logger->addDebug($line);
 
                     $done = $file['error'];
 
                     $sql = "UPDATE ftp_export_elements"
-                        . " SET done = :done, error='1' WHERE id = :file_id";
+                        ." SET done = :done, error='1' WHERE id = :file_id";
                     $stmt = $conn->prepare($sql);
                     $stmt->execute(array(':done'    => $done, ':file_id' => $file['id']));
                     $stmt->closeCursor();
@@ -498,16 +485,16 @@ class task_period_ftp extends task_appboxAbstract
                 $remote_file = $date->format('U');
 
                 $sql = 'SELECT filename, folder'
-                    . ' FROM ftp_export_elements'
-                    . ' WHERE ftp_export_id = :ftp_export_id'
-                    . ' AND error = "0" AND done="1"';
+                    .' FROM ftp_export_elements'
+                    .' WHERE ftp_export_id = :ftp_export_id'
+                    .' AND error = "0" AND done="1"';
 
                 $stmt = $conn->prepare($sql);
                 $stmt->execute(array(':ftp_export_id' => $id));
                 $rs = $stmt->fetchAll(\PDO::FETCH_ASSOC);
                 $stmt->closeCursor();
 
-                $buffer = '#transfert finished ' . $date->format(DATE_ATOM) . "\n\n";
+                $buffer = '#transfert finished '.$date->format(DATE_ATOM)."\n\n";
 
                 foreach ($rs as $row) {
                     $filename = $row['filename'];
@@ -515,14 +502,14 @@ class task_period_ftp extends task_appboxAbstract
 
                     $root = $ftp_export['foldertocreate'];
 
-                    $buffer .= $root . '/' . $folder . $filename . "\n";
+                    $buffer .= $root.'/'.$folder.$filename."\n";
                 }
 
-                $tmpfile = $this->dependencyContainer['root.path'] . '/tmp/tmpftpbuffer' . $date->format('U') . '.txt';
+                $tmpfile = $this->dependencyContainer['root.path'].'/tmp/tmpftpbuffer'.$date->format('U').'.txt';
 
                 file_put_contents($tmpfile, $buffer);
 
-                $remotefile = $date->format('U') . '-transfert.log';
+                $remotefile = $date->format('U').'-transfert.log';
 
                 $ftp_client->chdir($ftp_export["destfolder"]);
 
@@ -534,12 +521,12 @@ class task_period_ftp extends task_appboxAbstract
             $ftp_client->close();
             unset($ftp_client);
         } catch (\Exception $e) {
-            $state .= $line = $e . "\n";
+            $state .= $line = $e."\n";
 
             $this->logger->addDebug($line);
 
             $sql = "UPDATE ftp_export SET crash=crash+1,date=now()"
-                . " WHERE id = :export_id";
+                ." WHERE id = :export_id";
             $stmt = $conn->prepare($sql);
             $stmt->execute(array(':export_id' => $ftp_export['id']));
             $stmt->closeCursor();
@@ -549,7 +536,7 @@ class task_period_ftp extends task_appboxAbstract
         $this->finalize($appbox, $id);
     }
 
-    protected function postProcessOneContent(appbox $appbox, Array $row)
+    protected function postProcessOneContent(appbox $appbox, array $row)
     {
         return $this;
     }
@@ -572,7 +559,7 @@ class task_period_ftp extends task_appboxAbstract
         }
 
         $sql = 'SELECT count(id) as total, sum(error) as errors, sum(done) as done'
-            . ' FROM ftp_export_elements WHERE ftp_export_id = :export_id';
+            .' FROM ftp_export_elements WHERE ftp_export_id = :export_id';
         $stmt = $conn->prepare($sql);
         $stmt->execute(array(':export_id' => $id));
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -610,7 +597,7 @@ class task_period_ftp extends task_appboxAbstract
         $conn = $appbox->get_connection();
 
         $sql = 'SELECT filename, base_id, record_id, subdef, error, done'
-            . ' FROM ftp_export_elements WHERE ftp_export_id = :export_id';
+            .' FROM ftp_export_elements WHERE ftp_export_id = :export_id';
 
         $transferts = array();
 
@@ -624,22 +611,16 @@ class task_period_ftp extends task_appboxAbstract
         foreach ($rs as $row) {
             if ($row['error'] == '0' && $row['done'] == '1') {
                 $transferts[] =
-                    ' - ' . sprintf(_('task::ftp:Record %1$s - %2$s de la base (%3$s - %4$s) - %5$s')
-                        , $row["record_id"], $row["filename"]
-                        , phrasea::sbas_labels(phrasea::sbasFromBas($this->dependencyContainer, $row["base_id"]), $this->dependencyContainer)
-                        , phrasea::bas_labels($row['base_id'], $this->dependencyContainer), $row['subdef']) . ' : ' . _('Transfert OK');
+                    ' - '.sprintf(_('task::ftp:Record %1$s - %2$s de la base (%3$s - %4$s) - %5$s'), $row["record_id"], $row["filename"], phrasea::sbas_labels(phrasea::sbasFromBas($this->dependencyContainer, $row["base_id"]), $this->dependencyContainer), phrasea::bas_labels($row['base_id'], $this->dependencyContainer), $row['subdef']).' : '._('Transfert OK');
             } else {
                 $transferts[] =
-                    ' - ' . sprintf(_('task::ftp:Record %1$s - %2$s de la base (%3$s - %4$s) - %5$s')
-                        , $row["record_id"], $row["filename"]
-                        , phrasea::sbas_labels(phrasea::sbasFromBas($this->dependencyContainer, $row["base_id"]), $this->dependencyContainer), phrasea::bas_labels($row['base_id'], $this->dependencyContainer)
-                        , $row['subdef']) . ' : ' . _('Transfert Annule');
+                    ' - '.sprintf(_('task::ftp:Record %1$s - %2$s de la base (%3$s - %4$s) - %5$s'), $row["record_id"], $row["filename"], phrasea::sbas_labels(phrasea::sbasFromBas($this->dependencyContainer, $row["base_id"]), $this->dependencyContainer), phrasea::bas_labels($row['base_id'], $this->dependencyContainer), $row['subdef']).' : '._('Transfert Annule');
                 $transfert_status = _('task::ftp:Certains documents n\'ont pas pu etre tranferes');
             }
         }
 
         $sql = 'SELECT addr, crash, nbretry, sendermail, mail, text_mail_sender, text_mail_receiver'
-            . ' FROM ftp_export WHERE id = :export_id';
+            .' FROM ftp_export WHERE id = :export_id';
 
         $stmt = $conn->prepare($sql);
         $stmt->execute(array(':export_id' => $id));
@@ -661,20 +642,19 @@ class task_period_ftp extends task_appboxAbstract
         }
 
         $message = "\n\n----------------------------------------\n\n";
-        $message =  $connection_status . "\n";
-        $message .= $transfert_status . "\n";
-        $message .= _("task::ftp:Details des fichiers") . "\n\n";
+        $message =  $connection_status."\n";
+        $message .= $transfert_status."\n";
+        $message .= _("task::ftp:Details des fichiers")."\n\n";
 
         $message .= implode("\n", $transferts);
 
-        $sender_message = $text_mail_sender . $message;
-        $receiver_message = $text_mail_receiver . $message;
+        $sender_message = $text_mail_sender.$message;
+        $receiver_message = $text_mail_receiver.$message;
 
         $sender = null;
         try {
             $sender = new Receiver(null, $sendermail);
         } catch (InvalidArgumentException $e) {
-
         }
 
         if ($sender) {
@@ -687,7 +667,6 @@ class task_period_ftp extends task_appboxAbstract
         try {
             $receiver = new Receiver(null, $receveirmail);
         } catch (InvalidArgumentException $e) {
-
         }
 
         if ($receiver) {

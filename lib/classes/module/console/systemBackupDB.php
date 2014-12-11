@@ -23,14 +23,12 @@ use Symfony\Component\Process\Process;
 
 class module_console_systemBackupDB extends Command
 {
-
     public function __construct($name = null)
     {
         parent::__construct($name);
 
         $dir = sprintf(
-            '%s/config/'
-            , dirname(dirname(dirname(dirname(__DIR__))))
+            '%s/config/', dirname(dirname(dirname(dirname(__DIR__))))
         );
 
         $this
@@ -62,10 +60,7 @@ class module_console_systemBackupDB extends Command
         $date_obj = new DateTime();
 
         $filename = sprintf(
-            '%s%s_%s.sql'
-            , p4string::addEndSlash($input->getArgument('directory'))
-            , $base->get_dbname()
-            , $date_obj->format('Y_m_d_H_i_s')
+            '%s%s_%s.sql', p4string::addEndSlash($input->getArgument('directory')), $base->get_dbname(), $date_obj->format('Y_m_d_H_i_s')
         );
 
         $command = sprintf(
@@ -88,7 +83,7 @@ class module_console_systemBackupDB extends Command
 
         $output->write(sprintf('Generating <info>%s</info> ... ', $filename));
 
-        $command .= ' > ' . escapeshellarg($filename);
+        $command .= ' > '.escapeshellarg($filename);
 
         $process = new Process($command);
         $process->setTimeout((int) $input->getOption('timeout'));

@@ -16,7 +16,6 @@ use Silex\ServiceProviderInterface;
 
 class BrowserServiceProvider implements ServiceProviderInterface
 {
-
     public function register(Application $app)
     {
         $app['browser'] = $app->share(function ($app) {

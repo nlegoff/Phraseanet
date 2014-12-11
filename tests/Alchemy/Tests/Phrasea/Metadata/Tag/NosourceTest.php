@@ -12,7 +12,7 @@ class NosourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testObject()
     {
-        $object = new Nosource;
+        $object = new Nosource();
 
         $this->assertInstanceOf('\\PHPExiftool\\Driver\\TagInterface', $object);
         $this->assertInternalType('string', $object->getDescription());

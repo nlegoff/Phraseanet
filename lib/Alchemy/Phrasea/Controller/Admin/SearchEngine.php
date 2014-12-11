@@ -23,7 +23,6 @@ use Silex\ControllerProviderInterface;
  */
 class SearchEngine implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -57,5 +56,4 @@ class SearchEngine implements ControllerProviderInterface
     {
         return sprintf('%s::%s', __CLASS__, $method);
     }
-
 }

@@ -213,18 +213,18 @@ class SphinxSearchEngine implements SearchEngineInterface
 
         for ($i = 4; $i < 32; $i++) {
             if ($binStatus[$i]) {
-                $status[] = sprintf("%u", crc32($record->get_databox()->get_sbas_id() . '_' . $i));
+                $status[] = sprintf("%u", crc32($record->get_databox()->get_sbas_id().'_'.$i));
             }
         }
 
         $sql_date_fields = $this->getSqlDateFields($record);
 
         $indexes = array(
-            "metas_realtime" . $this->CRCdatabox($record->get_databox()),
-            "metas_realtime_stemmed_fr_" . $this->CRCdatabox($record->get_databox()),
-            "metas_realtime_stemmed_nl_" . $this->CRCdatabox($record->get_databox()),
-            "metas_realtime_stemmed_de_" . $this->CRCdatabox($record->get_databox()),
-            "metas_realtime_stemmed_en_" . $this->CRCdatabox($record->get_databox()),
+            "metas_realtime".$this->CRCdatabox($record->get_databox()),
+            "metas_realtime_stemmed_fr_".$this->CRCdatabox($record->get_databox()),
+            "metas_realtime_stemmed_nl_".$this->CRCdatabox($record->get_databox()),
+            "metas_realtime_stemmed_de_".$this->CRCdatabox($record->get_databox()),
+            "metas_realtime_stemmed_en_".$this->CRCdatabox($record->get_databox()),
         );
 
         foreach ($record->get_caption()->get_fields(null, true) as $field) {
@@ -239,53 +239,53 @@ class SphinxSearchEngine implements SearchEngineInterface
             foreach ($field->get_values() as $value) {
                 foreach ($indexes as $index) {
                     $this->rt_conn->exec("REPLACE INTO "
-                            . $index . " VALUES (
-                        '" . $value->getId() . "'
-                        ,'" . str_replace("'", "\'", $value->getValue()) . "'
-                        ,'" . $value->getDatabox_field()->get_id() . "'
-                        ," . $record->get_record_id() . "
-                        ," . $record->get_sbas_id() . "
-                        ," . $record->get_collection()->get_coll_id() . "
-                        ," . (int) $record->is_grouping() . "
-                        ," . sprintf("%u", crc32($record->get_sbas_id() . '_' . $value->getDatabox_field()->get_id())) . "
-                        ," . sprintf("%u", crc32($record->get_sbas_id() . '_' . $record->get_collection()->get_coll_id())) . "
-                        ," . sprintf("%u", crc32($record->get_sbas_id() . '_' . $record->get_record_id())) . "
-                        ," . sprintf("%u", crc32($record->get_type())) . "
+                            .$index." VALUES (
+                        '".$value->getId()."'
+                        ,'".str_replace("'", "\'", $value->getValue())."'
+                        ,'".$value->getDatabox_field()->get_id()."'
+                        ,".$record->get_record_id()."
+                        ,".$record->get_sbas_id()."
+                        ,".$record->get_collection()->get_coll_id()."
+                        ,".(int) $record->is_grouping()."
+                        ,".sprintf("%u", crc32($record->get_sbas_id().'_'.$value->getDatabox_field()->get_id()))."
+                        ,".sprintf("%u", crc32($record->get_sbas_id().'_'.$record->get_collection()->get_coll_id()))."
+                        ,".sprintf("%u", crc32($record->get_sbas_id().'_'.$record->get_record_id()))."
+                        ,".sprintf("%u", crc32($record->get_type()))."
                         ,0
-                        ," . (int) $value->getDatabox_field()->isBusiness() . "
-                        ," . sprintf("%u", crc32($record->get_collection()->get_coll_id() . '_' . (int) $value->getDatabox_field()->isBusiness())) . "
-                        ," . $record->get_creation_date()->format('U') . "
-                        " . $sql_date_fields . "
-                        ,(" . implode(',', $status) . ")
+                        ,".(int) $value->getDatabox_field()->isBusiness()."
+                        ,".sprintf("%u", crc32($record->get_collection()->get_coll_id().'_'.(int) $value->getDatabox_field()->isBusiness()))."
+                        ,".$record->get_creation_date()->format('U')."
+                        ".$sql_date_fields."
+                        ,(".implode(',', $status).")
                         )");
                 }
             }
         }
 
         $indexes = array(
-            "docs_realtime" . $this->CRCdatabox($record->get_databox()),
-            "docs_realtime_stemmed_fr_" . $this->CRCdatabox($record->get_databox()),
-            "docs_realtime_stemmed_nl_" . $this->CRCdatabox($record->get_databox()),
-            "docs_realtime_stemmed_en_" . $this->CRCdatabox($record->get_databox()),
-            "docs_realtime_stemmed_de_" . $this->CRCdatabox($record->get_databox()),
+            "docs_realtime".$this->CRCdatabox($record->get_databox()),
+            "docs_realtime_stemmed_fr_".$this->CRCdatabox($record->get_databox()),
+            "docs_realtime_stemmed_nl_".$this->CRCdatabox($record->get_databox()),
+            "docs_realtime_stemmed_en_".$this->CRCdatabox($record->get_databox()),
+            "docs_realtime_stemmed_de_".$this->CRCdatabox($record->get_databox()),
         );
 
         foreach ($indexes as $index) {
             $this->rt_conn->exec("REPLACE INTO "
-                    . $index . " VALUES (
-                '" . $record->get_record_id() . "'
-                ,'" . str_replace("'", "\'", implode(' ', $all_datas)) . "'
-                ," . $record->get_record_id() . "
-                ," . $record->get_sbas_id() . "
-                ," . $record->get_collection()->get_coll_id() . "
-                ," . (int) $record->is_grouping() . "
-                ," . sprintf("%u", crc32($record->get_sbas_id() . '_' . $record->get_collection()->get_coll_id())) . "
-                ," . sprintf("%u", crc32($record->get_sbas_id() . '_' . $record->get_record_id())) . "
-                ," . sprintf("%u", crc32($record->get_type())) . "
+                    .$index." VALUES (
+                '".$record->get_record_id()."'
+                ,'".str_replace("'", "\'", implode(' ', $all_datas))."'
+                ,".$record->get_record_id()."
+                ,".$record->get_sbas_id()."
+                ,".$record->get_collection()->get_coll_id()."
+                ,".(int) $record->is_grouping()."
+                ,".sprintf("%u", crc32($record->get_sbas_id().'_'.$record->get_collection()->get_coll_id()))."
+                ,".sprintf("%u", crc32($record->get_sbas_id().'_'.$record->get_record_id()))."
+                ,".sprintf("%u", crc32($record->get_type()))."
                 ,0
-                ," . $record->get_creation_date()->format('U') . "
-                " . $sql_date_fields . "
-                ,(" . implode(',', $status) . ")
+                ,".$record->get_creation_date()->format('U')."
+                ".$sql_date_fields."
+                ,(".implode(',', $status).")
             )");
         }
 
@@ -303,47 +303,45 @@ class SphinxSearchEngine implements SearchEngineInterface
 
         $CRCdatabox = $this->CRCdatabox($record->get_databox());
         $indexes = array(
-            "metadatas" . $CRCdatabox,
-            "metadatas" . $CRCdatabox . "_stemmed_en",
-            "metadatas" . $CRCdatabox . "_stemmed_fr",
-            "metadatas" . $CRCdatabox . "_stemmed_de",
-            "metadatas" . $CRCdatabox . "_stemmed_nl",
+            "metadatas".$CRCdatabox,
+            "metadatas".$CRCdatabox."_stemmed_en",
+            "metadatas".$CRCdatabox."_stemmed_fr",
+            "metadatas".$CRCdatabox."_stemmed_de",
+            "metadatas".$CRCdatabox."_stemmed_nl",
         );
         $RTindexes = array(
-            "metas_realtime" . $CRCdatabox,
-            "metas_realtime_stemmed_fr_" . $CRCdatabox,
-            "metas_realtime_stemmed_en_" . $CRCdatabox,
-            "metas_realtime_stemmed_nl_" . $CRCdatabox,
-            "metas_realtime_stemmed_de_" . $CRCdatabox,
+            "metas_realtime".$CRCdatabox,
+            "metas_realtime_stemmed_fr_".$CRCdatabox,
+            "metas_realtime_stemmed_en_".$CRCdatabox,
+            "metas_realtime_stemmed_nl_".$CRCdatabox,
+            "metas_realtime_stemmed_de_".$CRCdatabox,
         );
 
         foreach ($record->get_caption()->get_fields(null, true) as $field) {
-
             foreach ($field->get_values() as $value) {
-
                 foreach ($indexes as $index) {
                     $this->sphinx->UpdateAttributes($index, array("deleted"), array($value->getId() => array(1)));
                 }
 
                 foreach ($RTindexes as $index) {
-                    $this->rt_conn->exec("DELETE FROM " . $index . " WHERE id = " . $value->getId());
+                    $this->rt_conn->exec("DELETE FROM ".$index." WHERE id = ".$value->getId());
                 }
             }
         }
 
         $indexes = array(
-            "documents" . $CRCdatabox,
-            "documents" . $CRCdatabox . "_stemmed_fr",
-            "documents" . $CRCdatabox . "_stemmed_en",
-            "documents" . $CRCdatabox . "_stemmed_de",
-            "documents" . $CRCdatabox . "_stemmed_nl"
+            "documents".$CRCdatabox,
+            "documents".$CRCdatabox."_stemmed_fr",
+            "documents".$CRCdatabox."_stemmed_en",
+            "documents".$CRCdatabox."_stemmed_de",
+            "documents".$CRCdatabox."_stemmed_nl",
         );
         $RTindexes = array(
-            "docs_realtime" . $CRCdatabox,
-            "docs_realtime_stemmed_fr_" . $CRCdatabox,
-            "docs_realtime_stemmed_en_" . $CRCdatabox,
-            "docs_realtime_stemmed_nl_" . $CRCdatabox,
-            "docs_realtime_stemmed_de_" . $CRCdatabox,
+            "docs_realtime".$CRCdatabox,
+            "docs_realtime_stemmed_fr_".$CRCdatabox,
+            "docs_realtime_stemmed_en_".$CRCdatabox,
+            "docs_realtime_stemmed_nl_".$CRCdatabox,
+            "docs_realtime_stemmed_de_".$CRCdatabox,
         );
 
         foreach ($indexes as $index) {
@@ -351,7 +349,7 @@ class SphinxSearchEngine implements SearchEngineInterface
         }
 
         foreach ($RTindexes as $index) {
-            $this->rt_conn->exec("DELETE FROM " . $index . " WHERE id = " . $record->get_record_id());
+            $this->rt_conn->exec("DELETE FROM ".$index." WHERE id = ".$record->get_record_id());
         }
 
         return $this;
@@ -506,7 +504,6 @@ class SphinxSearchEngine implements SearchEngineInterface
 
                         $results->add($record);
                     } catch (\Exception $e) {
-
                     }
                     $resultOffset++;
                 }
@@ -577,9 +574,7 @@ class SphinxSearchEngine implements SearchEngineInterface
     {
         return sprintf("%u", crc32(
                 str_replace(
-                        array('.', '%')
-                        , '_'
-                        , sprintf('%s_%s_%s_%s', $databox->get_host(), $databox->get_port(), $databox->get_user(), $databox->get_dbname())
+                        array('.', '%'), '_', sprintf('%s_%s_%s_%s', $databox->get_host(), $databox->get_port(), $databox->get_user(), $databox->get_dbname())
                 )
         ));
     }
@@ -599,7 +594,7 @@ class SphinxSearchEngine implements SearchEngineInterface
         $filters = array();
 
         foreach ($options->getCollections() as $collection) {
-            $filters[] = sprintf("%u", crc32($collection->get_databox()->get_sbas_id() . '_' . $collection->get_coll_id()));
+            $filters[] = sprintf("%u", crc32($collection->get_databox()->get_sbas_id().'_'.$collection->get_coll_id()));
         }
 
         $this->sphinx->SetFilter('crc_sbas_coll', $filters);
@@ -611,30 +606,27 @@ class SphinxSearchEngine implements SearchEngineInterface
             foreach (array_unique(array_map(function (\databox_field $field) {
                                 return $field->get_name();
                             }, $options->getDateFields())) as $field) {
-
                 $min = $options->getMinDate() ? $options->getMinDate()->format('U') : 0;
                 $max = $options->getMaxDate() ? $options->getMaxDate()->format('U') : pow(2, 32);
-                $this->sphinx->SetFilterRange(ConfigurationPanel::DATE_FIELD_PREFIX . $field, $min, $max);
+                $this->sphinx->SetFilterRange(ConfigurationPanel::DATE_FIELD_PREFIX.$field, $min, $max);
             }
         }
 
         if ($options->getFields()) {
-
             $filters = array();
             foreach ($options->getFields() as $field) {
-                $filters[] = sprintf("%u", crc32($field->get_databox()->get_sbas_id() . '_' . $field->get_id()));
+                $filters[] = sprintf("%u", crc32($field->get_databox()->get_sbas_id().'_'.$field->get_id()));
             }
 
             $this->sphinx->SetFilter('crc_struct_id', $filters);
         }
 
         if ($options->getBusinessFieldsOn()) {
-
             $crc_coll_business = array();
 
             foreach ($options->getBusinessFieldsOn() as $collection) {
-                $crc_coll_business[] = sprintf("%u", crc32($collection->get_coll_id() . '_1'));
-                $crc_coll_business[] = sprintf("%u", crc32($collection->get_coll_id() . '_0'));
+                $crc_coll_business[] = sprintf("%u", crc32($collection->get_coll_id().'_1'));
+                $crc_coll_business[] = sprintf("%u", crc32($collection->get_coll_id().'_0'));
             }
 
             $non_business = array();
@@ -649,7 +641,7 @@ class SphinxSearchEngine implements SearchEngineInterface
             }
 
             foreach ($non_business as $collection) {
-                $crc_coll_business[] = sprintf("%u", crc32($collection->get_coll_id() . '_0'));
+                $crc_coll_business[] = sprintf("%u", crc32($collection->get_coll_id().'_0'));
             }
 
             $this->sphinx->SetFilter('crc_coll_business', $crc_coll_business);
@@ -663,11 +655,13 @@ class SphinxSearchEngine implements SearchEngineInterface
         $status_opts = $options->getStatus();
         foreach ($options->getDataboxes() as $databox) {
             foreach ($databox->get_statusbits() as $n => $status) {
-                if (!array_key_exists($n, $status_opts))
+                if (!array_key_exists($n, $status_opts)) {
                     continue;
-                if (!array_key_exists($databox->get_sbas_id(), $status_opts[$n]))
+                }
+                if (!array_key_exists($databox->get_sbas_id(), $status_opts[$n])) {
                     continue;
-                $crc = sprintf("%u", crc32($databox->get_sbas_id() . '_' . $n));
+                }
+                $crc = sprintf("%u", crc32($databox->get_sbas_id().'_'.$n));
                 $this->sphinx->SetFilter('status', array($crc), ($status_opts[$n][$databox->get_sbas_id()] == '0'));
             }
         }
@@ -693,10 +687,10 @@ class SphinxSearchEngine implements SearchEngineInterface
                 break;
             case SearchEngineOptions::SORT_RELEVANCE:
             default:
-                $sort = '@relevance ' . $order . ', created_on ' . $order;
+                $sort = '@relevance '.$order.', created_on '.$order;
                 break;
             case SearchEngineOptions::SORT_CREATED_ON:
-                $sort = 'created_on ' . $order;
+                $sort = 'created_on '.$order;
                 break;
         }
 
@@ -712,7 +706,6 @@ class SphinxSearchEngine implements SearchEngineInterface
         $sql_fields = array();
 
         foreach ($configuration['date_fields'] as $field_name) {
-
             try {
                 $value = $record->get_caption()->get_field($field_name)->get_serialized_values();
             } catch (\Exception $e) {
@@ -724,10 +717,10 @@ class SphinxSearchEngine implements SearchEngineInterface
                 $value = $date->format('U');
             }
 
-            $sql_fields[] = $value ? : '-1';
+            $sql_fields[] = $value ?: '-1';
         }
 
-        return ($sql_fields ? ', ' : '') . implode(',', $sql_fields);
+        return ($sql_fields ? ', ' : '').implode(',', $sql_fields);
     }
 
     /**
@@ -776,7 +769,6 @@ class SphinxSearchEngine implements SearchEngineInterface
                 $dictionnary = enchant_broker_request_dict($broker, $this->options->getLocale());
 
                 foreach ($words as $word) {
-
                     if (enchant_dict_check($dictionnary, $word) == false) {
                         $suggs = array_merge(enchant_dict_suggest($dictionnary, $word));
                     }
@@ -817,7 +809,6 @@ class SphinxSearchEngine implements SearchEngineInterface
             $results = $this->sphinx->Query($alt_query, $this->getQueryIndex($alt_query));
             if ($results !== false && isset($results['total_found'])) {
                 if ($results['total_found'] > 0) {
-
                     $max_results = max($max_results, (int) $results['total_found']);
                     $suggestions[] = new SearchEngineSuggestion($query, $alt_query, (int) $results['total_found']);
                 }
@@ -848,11 +839,11 @@ class SphinxSearchEngine implements SearchEngineInterface
 
     private function BuildTrigrams($keyword)
     {
-        $t = "__" . $keyword . "__";
+        $t = "__".$keyword."__";
 
         $trigrams = "";
         for ($i = 0; $i < strlen($t) - 2; $i++) {
-            $trigrams .= substr($t, $i, 3) . " ";
+            $trigrams .= substr($t, $i, 3)." ";
         }
 
         return $trigrams;
@@ -876,7 +867,7 @@ class SphinxSearchEngine implements SearchEngineInterface
         $indexes = array();
 
         foreach ($this->options->getDataboxes() as $databox) {
-            $indexes[] = 'suggest' . $this->CRCdatabox($databox);
+            $indexes[] = 'suggest'.$this->CRCdatabox($databox);
         }
 
         $index = implode(',', $indexes);
@@ -911,19 +902,19 @@ class SphinxSearchEngine implements SearchEngineInterface
         if (count($index_keys) > 0) {
             if ($this->options->getFields() || $this->options->getBusinessFieldsOn()) {
                 if ($query !== '' && $this->options->isStemmed() && $this->options->getLocale()) {
-                    $index = 'metadatas' . implode('_stemmed_' . $this->options->getLocale() . ', metadatas', $index_keys) . '_stemmed_' . $this->options->getLocale();
-                    $index .= ', metas_realtime_stemmed_' . $this->options->getLocale() . '_' . implode(', metas_realtime_stemmed_' . $this->options->getLocale() . '_', $index_keys);
+                    $index = 'metadatas'.implode('_stemmed_'.$this->options->getLocale().', metadatas', $index_keys).'_stemmed_'.$this->options->getLocale();
+                    $index .= ', metas_realtime_stemmed_'.$this->options->getLocale().'_'.implode(', metas_realtime_stemmed_'.$this->options->getLocale().'_', $index_keys);
                 } else {
-                    $index = 'metadatas' . implode(',metadatas', $index_keys);
-                    $index .= ', metas_realtime' . implode(', metas_realtime', $index_keys);
+                    $index = 'metadatas'.implode(',metadatas', $index_keys);
+                    $index .= ', metas_realtime'.implode(', metas_realtime', $index_keys);
                 }
             } else {
                 if ($query !== '' && $this->options->isStemmed() && $this->options->getLocale()) {
-                    $index = 'documents' . implode('_stemmed_' . $this->options->getLocale() . ', documents', $index_keys) . '_stemmed_' . $this->options->getLocale();
-                    $index .= ', docs_realtime_stemmed_' . $this->options->getLocale() . '_' . implode(', docs_realtime_stemmed_' . $this->options->getLocale() . '_', $index_keys);
+                    $index = 'documents'.implode('_stemmed_'.$this->options->getLocale().', documents', $index_keys).'_stemmed_'.$this->options->getLocale();
+                    $index .= ', docs_realtime_stemmed_'.$this->options->getLocale().'_'.implode(', docs_realtime_stemmed_'.$this->options->getLocale().'_', $index_keys);
                 } else {
-                    $index = 'documents' . implode(', documents', $index_keys);
-                    $index .= ', docs_realtime' . implode(', docs_realtime', $index_keys);
+                    $index = 'documents'.implode(', documents', $index_keys);
+                    $index .= ', docs_realtime'.implode(', docs_realtime', $index_keys);
                 }
             }
         }
@@ -954,7 +945,7 @@ class SphinxSearchEngine implements SearchEngineInterface
                 continue;
             }
             if (mb_substr($query, ($pos - 1), 1) !== ' ') {
-                $query = mb_substr($query, 0, ($pos)) . ' ' . mb_substr($query, $pos + 1);
+                $query = mb_substr($query, 0, ($pos)).' '.mb_substr($query, $pos + 1);
             }
         }
 
@@ -977,8 +968,8 @@ class SphinxSearchEngine implements SearchEngineInterface
         foreach ($databoxes as $databox) {
             $tmp_file = tempnam(sys_get_temp_dir(), 'sphinx_sugg');
 
-            $cmd = $indexer . ' --config ' . $configuration . ' metadatas' . $this->CRCdatabox($databox)
-                    . '  --buildstops ' . $tmp_file . ' 1000000 --buildfreqs';
+            $cmd = $indexer.' --config '.$configuration.' metadatas'.$this->CRCdatabox($databox)
+                    .'  --buildstops '.$tmp_file.' 1000000 --buildfreqs';
             $process = new Process($cmd);
             $process->run();
 
@@ -1010,7 +1001,7 @@ class SphinxSearchEngine implements SearchEngineInterface
                 continue;
             }
 
-            list ( $keyword, $freq ) = explode(" ", trim($line));
+            list($keyword, $freq) = explode(" ", trim($line));
 
             if ($freq < $threshold || strstr($keyword, "_") !== false || strstr($keyword, "'") !== false) {
                 continue;
@@ -1030,10 +1021,10 @@ class SphinxSearchEngine implements SearchEngineInterface
         }
 
         if ($out) {
-            return "INSERT INTO suggest VALUES " . implode(",\n", $out) . ";";
+            return "INSERT INTO suggest VALUES ".implode(",\n", $out).";";
         }
 
-        return null;
+        return;
     }
 
     /**

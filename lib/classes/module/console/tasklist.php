@@ -22,7 +22,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class module_console_tasklist extends Command
 {
-
     public function __construct($name = null)
     {
         parent::__construct($name);
@@ -58,7 +57,7 @@ class module_console_tasklist extends Command
 
     protected function printTask(task_abstract $task, OutputInterface $output)
     {
-        $message = $task->getID() . "\t" . ($task->getState() ) . "\t" . $task->getTitle();
+        $message = $task->getID()."\t".($task->getState())."\t".$task->getTitle();
         $output->writeln($message);
 
         return $this;

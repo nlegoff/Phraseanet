@@ -16,5 +16,4 @@ class TfChannels extends AbstractTag
     protected $Type = '';
     protected $Writable = false;
     protected $Description = 'The number of color channels in the file (if available)';
-
 }

@@ -2,7 +2,6 @@
 
 class p4field
 {
-
     public static function isyes($v)
     {
         $v = mb_strtolower(trim($v));

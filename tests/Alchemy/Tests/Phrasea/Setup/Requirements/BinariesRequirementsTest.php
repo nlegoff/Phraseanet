@@ -8,6 +8,6 @@ class BinariesRequirementsTest extends RequirementsTestCase
 {
     protected function provideRequirements()
     {
-        return new BinariesRequirements;
+        return new BinariesRequirements();
     }
 }

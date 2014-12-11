@@ -62,15 +62,12 @@ class Oauth2 implements ControllerProviderInterface
             $template = "api/auth/end_user_authorization.html.twig";
 
             $custom_template = sprintf(
-                "%s/config/templates/web/api/auth/end_user_authorization/%s.html.twig"
-                , $app['root.path']
-                , $client->get_id()
+                "%s/config/templates/web/api/auth/end_user_authorization/%s.html.twig", $app['root.path'], $client->get_id()
             );
 
             if (file_exists($custom_template)) {
                 $template = sprintf(
-                    'api/auth/end_user_authorization/%s.html.twig'
-                    , $client->get_id()
+                    'api/auth/end_user_authorization/%s.html.twig', $client->get_id()
                 );
             }
 
@@ -80,7 +77,6 @@ class Oauth2 implements ControllerProviderInterface
                         $usr_id = $app['auth.native']->getUsrId($request->get("login"), $request->get("password"), $request);
 
                         if (null === $usr_id) {
-
                             return $app->redirectPath('oauth2_authorize', array_merge(array('error' => 'login'), $params));
                         }
                     } catch (RequireCaptchaException $e) {
@@ -157,7 +153,7 @@ class Oauth2 implements ControllerProviderInterface
          *  Token endpoint - used to exchange an authorization grant for an access token.
          */
         $controllers->post('/token', function (\Silex\Application $app, Request $request) {
-            if ( ! $request->isSecure()) {
+            if (! $request->isSecure()) {
                 throw new HttpException(400, 'This route requires the use of the https scheme', null, array('content-type' => 'application/json'));
             }
 

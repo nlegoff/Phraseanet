@@ -72,7 +72,7 @@ class API_OAuth2_Form_DevAppDesktop
         $this->callback = API_OAuth2_Application::NATIVE_APP_REDIRECT_URI;
         $this->type = API_OAuth2_Application::DESKTOP_TYPE;
 
-        $this->urlwebsite = $this->scheme_website . $this->website;
+        $this->urlwebsite = $this->scheme_website.$this->website;
 
         return $this;
     }

@@ -17,5 +17,4 @@
  */
 class Bridge_Exception_ContainerUnknown extends Bridge_Exception
 {
-
 }

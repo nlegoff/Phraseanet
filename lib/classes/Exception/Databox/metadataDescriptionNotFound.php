@@ -19,5 +19,4 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class Exception_Databox_metadataDescriptionNotFound extends NotFoundHttpException
 {
-
 }

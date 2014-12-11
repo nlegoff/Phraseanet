@@ -22,10 +22,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Subdefs implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
-
         $controllers = $app['controllers_factory'];
 
         $app['firewall']->addMandatoryAuthentication($controllers);
@@ -40,7 +38,7 @@ class Subdefs implements ControllerProviderInterface
 
             return $app['twig']->render('admin/subdefs.html.twig', array(
                 'databox' => $databox,
-                'subdefs' => $databox->get_subdef_structure()
+                'subdefs' => $databox->get_subdef_structure(),
             ));
         })
             ->bind('admin_subdefs_subdef')
@@ -55,21 +53,20 @@ class Subdefs implements ControllerProviderInterface
 
             $add_subdef = array('class' => null, 'name'  => null, 'group' => null);
             foreach ($add_subdef as $k => $v) {
-                if (!isset($toadd_subdef[$k]) || trim($toadd_subdef[$k]) === '')
+                if (!isset($toadd_subdef[$k]) || trim($toadd_subdef[$k]) === '') {
                     unset($add_subdef[$k]);
-                else
+                } else {
                     $add_subdef[$k] = $toadd_subdef[$k];
+                }
             }
 
             if ($delete_subdef) {
-
                 $delete_subef = explode('_', $delete_subdef, 2);
                 $group = $delete_subef[0];
                 $name = $delete_subef[1];
                 $subdefs = $databox->get_subdef_structure();
                 $subdefs->delete_subdef($group, $name);
             } elseif (count($add_subdef) === 3) {
-
                 $subdefs = $databox->get_subdef_structure();
 
                 $group = $add_subdef['group'];
@@ -78,11 +75,9 @@ class Subdefs implements ControllerProviderInterface
 
                 $subdefs->add_subdef($group, $name, $class);
             } else {
-
                 $subdefs = $databox->get_subdef_structure();
 
                 foreach ($Parmsubdefs as $post_sub) {
-
                     $options = array();
 
                     $post_sub_ex = explode('_', $post_sub, 2);
@@ -90,13 +85,13 @@ class Subdefs implements ControllerProviderInterface
                     $group = $post_sub_ex[0];
                     $name = $post_sub_ex[1];
 
-                    $class = $request->request->get($post_sub . '_class');
-                    $downloadable = $request->request->get($post_sub . '_downloadable');
+                    $class = $request->request->get($post_sub.'_class');
+                    $downloadable = $request->request->get($post_sub.'_downloadable');
 
                     $defaults = array('path', 'meta', 'mediatype');
 
                     foreach ($defaults as $def) {
-                        $parm_loc = $request->request->get($post_sub . '_' . $def);
+                        $parm_loc = $request->request->get($post_sub.'_'.$def);
 
                         if ($def == 'meta' && !$parm_loc) {
                             $parm_loc = "no";
@@ -105,11 +100,10 @@ class Subdefs implements ControllerProviderInterface
                         $options[$def] = $parm_loc;
                     }
 
-                    $mediatype = $request->request->get($post_sub . '_mediatype');
-                    $media = $request->request->get($post_sub . '_' . $mediatype, array());
+                    $mediatype = $request->request->get($post_sub.'_mediatype');
+                    $media = $request->request->get($post_sub.'_'.$mediatype, array());
 
                     foreach ($media as $option => $value) {
-
                         if ($option == 'resolution' && $mediatype == 'image') {
                             $option = 'dpi';
                         }
@@ -117,7 +111,7 @@ class Subdefs implements ControllerProviderInterface
                         $options[$option] = $value;
                     }
 
-                    $labels = $request->request->get($post_sub . '_label', array());
+                    $labels = $request->request->get($post_sub.'_label', array());
 
                     $subdefs->set_subdef($group, $name, $class, $downloadable, $options, $labels);
                 }

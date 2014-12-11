@@ -28,7 +28,7 @@ class module_report_validate extends module_report
         'record_id' => 'd.record_id',
         'final'     => 'd.final',
         'comment'   => 'd.comment',
-        'size'      => 's.size'
+        'size'      => 's.size',
     );
 
     /**
@@ -82,7 +82,6 @@ class module_report_validate extends module_report
                     $user = User_Adapter::getInstance($value, $this->app);
                     $caption = $user->get_display_name();
                 } catch (\Exception $e) {
-
                 }
             } elseif ($field == 'date') {
                 $caption = $this->app['date-formatter']->getPrettyString(new DateTime($value));
@@ -101,8 +100,9 @@ class module_report_validate extends module_report
         $i = 0;
 
         foreach ($rs as $row) {
-            if ($i >= $this->nb_record)
+            if ($i >= $this->nb_record) {
                 break;
+            }
             foreach ($this->champ as $key => $value) {
                 if ($row[$value]) {
                     if ($value == 'date') {
@@ -111,13 +111,14 @@ class module_report_validate extends module_report
                             $row[$value];
                     } elseif ($value == 'size') {
                         $this->result[$i][$value] = p4string::format_octets($row[$value]);
-                    } else
+                    } else {
                         $this->result[$i][$value] = $row[$value];
+                    }
                 } else {
                     if ($value == 'comment') {
                         $this->result[$i][$value] = '&nbsp;';
                     } else {
-                        $this->result[$i][$value] = '<i>' . _('report:: non-renseigne') . '</i>';
+                        $this->result[$i][$value] = '<i>'._('report:: non-renseigne').'</i>';
                     }
                 }
             }

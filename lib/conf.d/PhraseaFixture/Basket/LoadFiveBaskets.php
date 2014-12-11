@@ -32,7 +32,7 @@ class LoadFiveBaskets extends \PhraseaFixture\AbstractWZ implements FixtureInter
         for ($i = 0; $i < 5; $i ++) {
             $basket = new \Entities\Basket();
 
-            $basket->setName('test ' . $i);
+            $basket->setName('test '.$i);
             $basket->setDescription('description');
 
             if (null === $this->user) {

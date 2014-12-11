@@ -57,8 +57,9 @@ class databox_descriptionStructure implements IteratorAggregate, Countable
      */
     public function remove_element(databox_field $field)
     {
-        if (isset($this->elements[$field->get_id()]))
+        if (isset($this->elements[$field->get_id()])) {
             unset($this->elements[$field->get_id()]);
+        }
 
         return $this;
     }
@@ -79,8 +80,9 @@ class databox_descriptionStructure implements IteratorAggregate, Countable
      */
     public function get_element($id)
     {
-        if ( ! isset($this->elements[$id]))
-            throw new Exception_Databox_FieldNotFound ();
+        if (! isset($this->elements[$id])) {
+            throw new Exception_Databox_FieldNotFound();
+        }
 
         return $this->elements[$id];
     }
@@ -106,7 +108,7 @@ class databox_descriptionStructure implements IteratorAggregate, Countable
             }
         }
 
-        return null;
+        return;
     }
 
     public function get_dces_field($label)
@@ -119,7 +121,7 @@ class databox_descriptionStructure implements IteratorAggregate, Countable
             }
         }
 
-        return null;
+        return;
     }
 
     /**

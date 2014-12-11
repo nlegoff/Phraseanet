@@ -24,7 +24,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  */
 class Datafiles extends AbstractDelivery
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -60,7 +59,7 @@ class Datafiles extends AbstractDelivery
                 }
 
                 if (!$record->has_subdef($subdef) || !$record->get_subdef($subdef)->is_physically_present()) {
-                    throw new NotFoundHttpException;
+                    throw new NotFoundHttpException();
                 }
 
                 if (!$app['authentication']->getUser()->ACL()->has_access_to_subdef($record, $subdef)) {

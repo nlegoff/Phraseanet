@@ -22,7 +22,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class module_console_schedulerStop extends Command
 {
-
     public function __construct($name = null)
     {
         parent::__construct($name);

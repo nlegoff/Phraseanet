@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class TOU implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -89,7 +88,6 @@ class TOU implements ControllerProviderInterface
 
             $ret['success'] = true;
         } catch (\Exception $e) {
-
         }
 
         return $app->json($ret);
@@ -123,7 +121,7 @@ class TOU implements ControllerProviderInterface
 
         return new Response($app['twig']->render('/prod/TOU.html.twig', array(
             'TOUs'        => $data,
-            'local_title' => _('Terms of use')
+            'local_title' => _('Terms of use'),
         )));
     }
 

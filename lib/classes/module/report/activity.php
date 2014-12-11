@@ -38,7 +38,7 @@ class module_report_activity extends module_report
         'record_id' => 'log_docs.record_id',
         'final'     => 'log_docs.final',
         'comment'   => 'log_docs.comment',
-        'size'      => 'subdef.size'
+        'size'      => 'subdef.size',
     );
 
     public function __construct(Application $app, $arg1, $arg2, $sbas_id, $collist)
@@ -103,7 +103,7 @@ class module_report_activity extends module_report
         $sql = "
             SELECT CAST(DATE_FORMAT(log.date, '%k') AS UNSIGNED) AS heures, COUNT(id) AS nb
                 FROM log FORCE INDEX (date_site)
-                WHERE (" . $filter['sql'] . ") AND !ISNULL(usrid)
+                WHERE (".$filter['sql'].") AND !ISNULL(usrid)
             GROUP BY heures;";
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $sql), FILE_APPEND);
@@ -141,7 +141,6 @@ class module_report_activity extends module_report
         return $this->report;
     }
 
-
     // ================== Site activity : Top questions (le second radio ...) ================
     /**
      * get the most asked question
@@ -164,16 +163,16 @@ class module_report_activity extends module_report
                 SELECT TRIM(log_search.search) AS search, COUNT(log_search.id) AS nb, ROUND(avg(results)) AS nb_rep
                 FROM (log_search)
                     INNER JOIN log FORCE INDEX (date_site) ON (log_search.log_id = log.id)
-                WHERE (" . $filter['sql'] . ") AND !ISNULL(usrid)
-                AND log_search.search != 'all' " .
-            ($no_answer ? ' AND log_search.results = 0 ' : '') . "
+                WHERE (".$filter['sql'].") AND !ISNULL(usrid)
+                AND log_search.search != 'all' ".
+            ($no_answer ? ' AND log_search.results = 0 ' : '')."
 
             GROUP BY search
             ORDER BY nb DESC";
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $sql), FILE_APPEND);
 
-        $sql .= !$no_answer ? ' LIMIT ' . $this->nb_top : '';
+        $sql .= !$no_answer ? ' LIMIT '.$this->nb_top : '';
 
         $stmt = $sqlBuilder->getConnBas()->prepare($sql);
         $stmt->execute($params);
@@ -291,7 +290,7 @@ class module_report_activity extends module_report
                 FROM (log_docs)
                     INNER JOIN log FORCE INDEX (date_site) ON (log.id = log_docs.log_id)
                     LEFT JOIN record ON (log_docs.record_id = record.record_id)
-                WHERE (" . $filter['sql'] . ") AND !ISNULL(usrid)
+                WHERE (".$filter['sql'].") AND !ISNULL(usrid)
                     AND (log_docs.action =  'download' OR log_docs.action =  'mail')
                     AND (log_docs.final = 'preview' OR log_docs.final = 'document')
             ) AS tt
@@ -321,7 +320,7 @@ class module_report_activity extends module_report
                     'ddate'    => $date,
                     'document' => 0,
                     'preview'  => 0,
-                    'total'    => 0
+                    'total'    => 0,
                 );
                 $last_date = $date;
             }
@@ -344,14 +343,14 @@ class module_report_activity extends module_report
 
         if ($sqlBuilder->getTotalRows() > 0) {
             $this->result[$nb_row]['ddate'] = '<b>TOTAL</b>';
-            $this->result[$nb_row]['document'] = '<b>' . $total['tot_doc'] . '</b>';
-            $this->result[$nb_row]['preview'] = '<b>' . $total['tot_prev'] . '</b>';
-            $this->result[$nb_row]['total'] = '<b>' . $total['tot_dl'] . '</b>';
+            $this->result[$nb_row]['document'] = '<b>'.$total['tot_doc'].'</b>';
+            $this->result[$nb_row]['preview'] = '<b>'.$total['tot_prev'].'</b>';
+            $this->result[$nb_row]['total'] = '<b>'.$total['tot_dl'].'</b>';
         }
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, var_export($this->result, true)), FILE_APPEND);
-        foreach($this->result as $k=>$row) {
+        foreach ($this->result as $k => $row) {
             $_row = array();
-            foreach((array) $tab as $k2=>$f) {
+            foreach ((array) $tab as $k2 => $f) {
                 $_row[$k2] = array_key_exists($k2, $row) ? $row[$k2] : '';
             }
             $this->result[$k] = $_row;
@@ -387,7 +386,7 @@ class module_report_activity extends module_report
             SELECT COUNT(id) AS connexion, log.user, log.usrid
                 FROM log FORCE INDEX (date_site)
                 WHERE log.user != 'API'
-                AND (" . $filter['sql'] . ") AND !ISNULL(usrid)
+                AND (".$filter['sql'].") AND !ISNULL(usrid)
             GROUP BY usrid
             ORDER BY connexion DESC ";
 
@@ -398,7 +397,7 @@ class module_report_activity extends module_report
         $sqlBuilder->setTotalrows($stmt->rowCount());
         $stmt->closeCursor();
 
-        $this->enable_limit ? $this->req .= " LIMIT 0," . $this->nb_record : "";
+        $this->enable_limit ? $this->req .= " LIMIT 0,".$this->nb_record : "";
 
         $stmt = $sqlBuilder->getConnBas()->prepare($this->req);
         $stmt->execute($params);
@@ -420,22 +419,24 @@ class module_report_activity extends module_report
         foreach ($rs as $row) {
             foreach ($this->champ as $key => $value) {
                 $this->result[$i][$value] = empty($row[$value]) ?
-                    "<i>" . _('report:: non-renseigne') . "</i>" : $row[$value];
+                    "<i>"._('report:: non-renseigne')."</i>" : $row[$value];
 
-                if ($value == 'connexion')
+                if ($value == 'connexion') {
                     $total_connexion += $row['connexion'];
+                }
             }
             $this->result[$i]['usrid'] = $row['usrid'];
             $i ++;
-            if ($i >= $this->nb_record)
+            if ($i >= $this->nb_record) {
                 break;
+            }
         }
 
         $this->total = $i ++;
 
         if ($this->total > 0) {
             $this->result[$i]['usrid'] = 0;
-            $this->result[$i]['connexion'] = '<b>' . $total_connexion . '</b>';
+            $this->result[$i]['connexion'] = '<b>'.$total_connexion.'</b>';
             $this->result[$i][$on] = '<b>TOTAL</b>';
         }
         //calculate prev and next page
@@ -470,11 +471,11 @@ class module_report_activity extends module_report
         $params = array_merge(array(), $filter['params']);
 
         $sql = "
-                SELECT TRIM(" . $on . ") AS " . $on . ", SUM(1) AS nb, log_docs.final, log.usrid
+                SELECT TRIM(".$on.") AS ".$on.", SUM(1) AS nb, log_docs.final, log.usrid
                 FROM log_docs
                     INNER JOIN log FORCE INDEX (date_site) ON (log.id = log_docs.log_id)
                     LEFT JOIN record ON (record.record_id = log_docs.record_id)
-                WHERE (" . $filter['sql'] . ") AND !ISNULL(usrid)
+                WHERE (".$filter['sql'].") AND !ISNULL(usrid)
                 AND (log_docs.action = 'download' OR log_docs.action = 'mail')
                 AND (log_docs.final = 'preview' OR log_docs.final = 'document')
                 GROUP BY usrid";
@@ -515,9 +516,9 @@ class module_report_activity extends module_report
             //doc info
             if ($row['final'] == 'document' &&
                 ! is_null($user) && ! is_null($row['usrid'])) {
-                $this->result[$i]['nbdoc'] = ( ! is_null($row['nb']) ? $row['nb'] : 0);
+                $this->result[$i]['nbdoc'] = (! is_null($row['nb']) ? $row['nb'] : 0);
                 $this->result[$i]['user'] = empty($row[$on]) ?
-                    "<i>" . _('report:: non-renseigne') . "</i>" : $row[$on];
+                    "<i>"._('report:: non-renseigne')."</i>" : $row[$on];
                 $total['nbdoc'] += $this->result[$i]['nbdoc'];
                 $this->result[$i]['usrid'] = $row['usrid'];
             }
@@ -525,12 +526,11 @@ class module_report_activity extends module_report
             if (($row['final'] == 'preview') &&
                 ! is_null($user) &&
                 ! is_null($row['usrid'])) {
-
-                $this->result[$i]['nbprev'] += ( ! is_null($row['nb']) ? $row['nb'] : 0);
+                $this->result[$i]['nbprev'] += (! is_null($row['nb']) ? $row['nb'] : 0);
 
                 $this->result[$i]['user'] = empty($row[$on]) ?
-                    "<i>" . _('report:: non-renseigne') . "</i>" : $row[$on];
-                $total['nbprev'] += ( ! is_null($row['nb']) ? $row['nb'] : 0);
+                    "<i>"._('report:: non-renseigne')."</i>" : $row[$on];
+                $total['nbprev'] += (! is_null($row['nb']) ? $row['nb'] : 0);
                 $this->result[$i]['usrid'] = $row['usrid'];
             }
 
@@ -543,13 +543,13 @@ class module_report_activity extends module_report
 
         if ($this->total > 0) {
             $this->result[$nb_row]['user'] = '<b>TOTAL</b>';
-            $this->result[$nb_row]['nbdoc'] = '<b>' . $total['nbdoc'] . '</b>';
-            $this->result[$nb_row]['nbprev'] = '<b>' . $total['nbprev'] . '</b>';
+            $this->result[$nb_row]['nbdoc'] = '<b>'.$total['nbdoc'].'</b>';
+            $this->result[$nb_row]['nbprev'] = '<b>'.$total['nbprev'].'</b>';
         }
 
-        foreach($this->result as $k=>$row) {
+        foreach ($this->result as $k => $row) {
             $_row = array();
-            foreach((array) $tab as $k2=>$f) {
+            foreach ((array) $tab as $k2 => $f) {
                 $_row[$k2] = array_key_exists($k2, $row) ? $row[$k2] : '';
             }
             $_row['usrid'] = array_key_exists('usrid', $row) ? $row['usrid'] : '';
@@ -598,17 +598,17 @@ class module_report_activity extends module_report
                 GROUP BY tt.user, tt.final";
 */
         $sql = "SELECT tt.usrid, tt.user, tt.final, tt.record_id, SUM(1) AS nb, SUM(size) AS poid\n"
-            . " FROM (\n"
-            . "        SELECT DISTINCT(log.id), log.usrid, user, final, log_docs.record_id\n"
-            . "        FROM (log_docs)\n"
-            . "            INNER JOIN log FORCE INDEX (date_site) ON (log.id = log_docs.log_id)\n"
-            . "            WHERE log.site = :site_id\n"
-            . "            AND log_docs.action = 'download'\n"
-            . "            AND (" . $datefilter['sql'] . ")\n"
-            . ") AS tt\n"
-            . "LEFT JOIN subdef AS s ON (s.record_id = tt.record_id)\n"
-            . "WHERE s.name = tt.final\n"
-            . "GROUP BY tt.user, tt.final";
+            ." FROM (\n"
+            ."        SELECT DISTINCT(log.id), log.usrid, user, final, log_docs.record_id\n"
+            ."        FROM (log_docs)\n"
+            ."            INNER JOIN log FORCE INDEX (date_site) ON (log.id = log_docs.log_id)\n"
+            ."            WHERE log.site = :site_id\n"
+            ."            AND log_docs.action = 'download'\n"
+            ."            AND (".$datefilter['sql'].")\n"
+            .") AS tt\n"
+            ."LEFT JOIN subdef AS s ON (s.record_id = tt.record_id)\n"
+            ."WHERE s.name = tt.final\n"
+            ."GROUP BY tt.user, tt.final";
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $sql), FILE_APPEND);
 
@@ -627,7 +627,7 @@ class module_report_activity extends module_report
 
             $id = $row['usrid'];
 
-            if ( ! is_null($row['usrid'])
+            if (! is_null($row['usrid'])
                 && ! is_null($row['user'])
                 && ! is_null($row['final']) && ! is_null($row['nb'])
                 && ! is_null($row['poid'])) {
@@ -640,14 +640,16 @@ class module_report_activity extends module_report
                         (int) $row['poid'] : 0;
                     $result[$kttp][$id]['lib'] = $row['user'];
                     $result[$kttp][$id]['id'] = $id;
-                    if ( ! isset($result[$kttd][$id]['nb']))
+                    if (! isset($result[$kttd][$id]['nb'])) {
                         $result[$kttd][$id]['nb'] = 0;
+                    }
                 }
                 if ($row['final'] == 'preview') {
                     $result[$kttpr][$id]['lib'] = $row['user'];
                     $result[$kttpr][$id]['id'] = $id;
-                    if ( ! isset($result[$kttpr][$id]['nb']))
+                    if (! isset($result[$kttpr][$id]['nb'])) {
                         $result[$kttpr][$id]['nb'] = 0;
+                    }
                     $result[$kttpr][$id]['nb'] = ! is_null($row['nb']) ?
                         (int) $row['nb'] : 0;
                     $result[$kttpp][$id]['nb'] = ! is_null($row['poid']) ?
@@ -684,12 +686,12 @@ class module_report_activity extends module_report
             ) AS tt";
 */
         $sql = "SELECT tt.id, HOUR(tt.heures) AS heures\n"
-            . " FROM (\n"
-            . "     SELECT DISTINCT(log_date.id), log_date.date AS heures\n"
-            . "     FROM log AS log_date FORCE INDEX (date_site)\n"
-            . "     WHERE " . $datefilter['sql'] . " AND !ISNULL(usrid)"
-            . " AND log_date.site = :site_id\n"
-            . " ) AS tt";
+            ." FROM (\n"
+            ."     SELECT DISTINCT(log_date.id), log_date.date AS heures\n"
+            ."     FROM log AS log_date FORCE INDEX (date_site)\n"
+            ."     WHERE ".$datefilter['sql']." AND !ISNULL(usrid)"
+            ." AND log_date.site = :site_id\n"
+            ." ) AS tt";
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $sql), FILE_APPEND);
 
@@ -740,14 +742,14 @@ class module_report_activity extends module_report
             ORDER BY  tt.ddate ASC";
 */
         $sql = "SELECT tt.ddate, COUNT( DATE_FORMAT( tt.ddate, '%d' ) ) AS activity\n"
-            . " FROM (\n"
-            . "     SELECT DISTINCT(log_date.id), DATE_FORMAT( log_date.date, '%Y-%m-%d' ) AS ddate\n"
-            . "     FROM log AS log_date FORCE INDEX (date_site)\n"
-            . "     WHERE " . $datefilter['sql'] . "\n"
-            . "     AND log_date.site = :site_id AND !ISNULL(usrid)"
-            . ") AS tt\n"
-            . " GROUP by  tt.ddate\n"
-            . " ORDER BY  tt.ddate ASC";
+            ." FROM (\n"
+            ."     SELECT DISTINCT(log_date.id), DATE_FORMAT( log_date.date, '%Y-%m-%d' ) AS ddate\n"
+            ."     FROM log AS log_date FORCE INDEX (date_site)\n"
+            ."     WHERE ".$datefilter['sql']."\n"
+            ."     AND log_date.site = :site_id AND !ISNULL(usrid)"
+            .") AS tt\n"
+            ." GROUP by  tt.ddate\n"
+            ." ORDER BY  tt.ddate ASC";
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $sql), FILE_APPEND);
 
@@ -793,15 +795,15 @@ class module_report_activity extends module_report
             ORDER BY nb DESC";
 */
         $sql = "SELECT tt.usrid, tt.user, sum(1) AS nb\n"
-            . " FROM (\n"
-            . "     SELECT DISTINCT(log_date.id), log_date.usrid, log_date.user\n"
-            . "     FROM (`log_search`)\n"
-            . "         INNER JOIN log AS log_date FORCE INDEX (date_site) ON (log_search.log_id = log_date.id)\n"
-            . "     WHERE " . $datefilter['sql'] . "\n"
-            . "     AND log_date.site = :site_id"
-            . ") AS tt\n"
-            . " GROUP BY tt.usrid\n"
-            . " ORDER BY nb DESC";
+            ." FROM (\n"
+            ."     SELECT DISTINCT(log_date.id), log_date.usrid, log_date.user\n"
+            ."     FROM (`log_search`)\n"
+            ."         INNER JOIN log AS log_date FORCE INDEX (date_site) ON (log_search.log_id = log_date.id)\n"
+            ."     WHERE ".$datefilter['sql']."\n"
+            ."     AND log_date.site = :site_id"
+            .") AS tt\n"
+            ." GROUP BY tt.usrid\n"
+            ." ORDER BY nb DESC";
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $sql), FILE_APPEND);
 
@@ -844,15 +846,15 @@ class module_report_activity extends module_report
             ORDER BY nb DESC";
 */
         $sql = "SELECT TRIM(tt.search) AS question, tt.usrid, tt.user, SUM(1) AS nb\n"
-            . " FROM (\n"
-            . "     SELECT DISTINCT(log_date.id), log_search.search, log_date.usrid, log_date.user\n"
-            . "     FROM (`log_search`)\n"
-            . "         INNER JOIN log AS log_date FORCE INDEX (date_site) ON (log_search.log_id = log_date.id)\n"
-            . "     WHERE " . $datefilter['sql'] . "\n"
-            . "     AND log_date.site = :site_id"
-            . ") AS tt\n"
-            . " GROUP BY tt.search\n"
-            . " ORDER BY nb DESC";
+            ." FROM (\n"
+            ."     SELECT DISTINCT(log_date.id), log_search.search, log_date.usrid, log_date.user\n"
+            ."     FROM (`log_search`)\n"
+            ."         INNER JOIN log AS log_date FORCE INDEX (date_site) ON (log_search.log_id = log_date.id)\n"
+            ."     WHERE ".$datefilter['sql']."\n"
+            ."     AND log_date.site = :site_id"
+            .") AS tt\n"
+            ." GROUP BY tt.search\n"
+            ." ORDER BY nb DESC";
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $sql), FILE_APPEND);
 
@@ -897,14 +899,14 @@ class module_report_activity extends module_report
             ORDER BY nb_view DESC ";
 */
         $sql = "SELECT tt.referrer, SUM(1) AS nb_view\n"
-            . " FROM (\n"
-            . "     SELECT DISTINCT(log_date.id), referrer\n"
-            . "     FROM (log_view)\n"
-            . "        INNER JOIN log AS log_date FORCE INDEX (date_site) ON (log_view.log_id = log_date.id)\n"
-            . "     WHERE " . $datefilter['sql']
-            . ") AS tt\n"
-            . " GROUP BY referrer\n"
-            . " ORDER BY nb_view DESC ";
+            ." FROM (\n"
+            ."     SELECT DISTINCT(log_date.id), referrer\n"
+            ."     FROM (log_view)\n"
+            ."        INNER JOIN log AS log_date FORCE INDEX (date_site) ON (log_view.log_id = log_date.id)\n"
+            ."     WHERE ".$datefilter['sql']
+            .") AS tt\n"
+            ." GROUP BY referrer\n"
+            ." ORDER BY nb_view DESC ";
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $sql), FILE_APPEND);
 
@@ -917,11 +919,13 @@ class module_report_activity extends module_report
             ($row['referrer'] != 'NO REFERRER') ?
                     $host = parent::getHost($row['referrer']) :
                     $host = 'NO REFERRER';
-            if ( ! isset($result[$host]['nb']))
+            if (! isset($result[$host]['nb'])) {
                 $result[$host]['nb'] = 0;
-            if ( ! isset($result[$host]['lib']))
+            }
+            if (! isset($result[$host]['lib'])) {
                 $result[$host]['lib'] = $host;
-            $result[$host]['nb']+= ( (int) $row['nb_view']);
+            }
+            $result[$host]['nb'] += ((int) $row['nb_view']);
             $result[$host]['id'] = "false";
         }
 
@@ -933,7 +937,7 @@ class module_report_activity extends module_report
     {
         $conn = connection::getPDOConnection($app, $sbas_id);
         $result = array();
-        $datefilter = module_report_sqlfilter::constructDateFilter($dmin, $dmax,'log_docs.date');
+        $datefilter = module_report_sqlfilter::constructDateFilter($dmin, $dmax, 'log_docs.date');
 
         $params = array();
         $params = array_merge($params, $datefilter['params']);
@@ -953,14 +957,14 @@ class module_report_activity extends module_report
             ORDER BY activity ASC ";
 */
         $sql = "SELECT tt.ddate, COUNT( DATE_FORMAT( tt.ddate, '%d' ) ) AS activity\n"
-            . " FROM (\n"
-            . "     SELECT DISTINCT(log.id), DATE_FORMAT(log_docs.date, '%Y-%m-%d') AS ddate\n"
-            . "     FROM (log_docs)\n"
-            . "         INNER JOIN log FORCE INDEX (date_site) ON (log_docs.log_id = log.id)\n"
-            . "     WHERE " . $datefilter['sql'] . " AND log_docs.action = 'add'"
-            . " ) AS tt\n"
-            . " GROUP BY tt.ddate\n"
-            . " ORDER BY activity ASC ";
+            ." FROM (\n"
+            ."     SELECT DISTINCT(log.id), DATE_FORMAT(log_docs.date, '%Y-%m-%d') AS ddate\n"
+            ."     FROM (log_docs)\n"
+            ."         INNER JOIN log FORCE INDEX (date_site) ON (log_docs.log_id = log.id)\n"
+            ."     WHERE ".$datefilter['sql']." AND log_docs.action = 'add'"
+            ." ) AS tt\n"
+            ." GROUP BY tt.ddate\n"
+            ." ORDER BY activity ASC ";
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $sql), FILE_APPEND);
 
@@ -1000,14 +1004,14 @@ class module_report_activity extends module_report
             ORDER BY activity ASC ";
 */
         $sql = "SELECT tt.ddate, COUNT( DATE_FORMAT( tt.ddate, '%d' ) ) AS activity\n"
-            . " FROM (\n"
-            . "     SELECT DISTINCT(log.id), DATE_FORMAT( log_docs.date, '%Y-%m-%d') AS ddate\n"
-            . "     FROM (log_docs)\n"
-            . "         INNER JOIN log FORCE INDEX (date_site) ON (log_docs.log_id = log.id)\n"
-            . "     WHERE " . $datefilter['sql'] . " AND log_docs.action = 'edit'"
-            . ") AS tt\n"
-            . " GROUP BY tt.ddate\n"
-            . " ORDER BY activity ASC ";
+            ." FROM (\n"
+            ."     SELECT DISTINCT(log.id), DATE_FORMAT( log_docs.date, '%Y-%m-%d') AS ddate\n"
+            ."     FROM (log_docs)\n"
+            ."         INNER JOIN log FORCE INDEX (date_site) ON (log_docs.log_id = log.id)\n"
+            ."     WHERE ".$datefilter['sql']." AND log_docs.action = 'edit'"
+            .") AS tt\n"
+            ." GROUP BY tt.ddate\n"
+            ." ORDER BY activity ASC ";
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $sql), FILE_APPEND);
 
@@ -1048,15 +1052,15 @@ class module_report_activity extends module_report
             ORDER BY nb ASC ";
 */
         $sql = ""
-            . " SELECT tt.usrid, tt.user, sum( 1 ) AS nb\n"
-            . " FROM (\n"
-            . "     SELECT DISTINCT(log.id), log.usrid, log.user\n"
-            . "     FROM (log_docs)\n"
-            . "     INNER JOIN log FORCE INDEX (date_site) ON (log_docs.log_id = log.id)\n"
-            . "     WHERE " . $datefilter['sql'] . " AND log_docs.action = 'add'"
-            . ") AS tt\n"
-            . " GROUP BY tt.usrid\n"
-            . " ORDER BY nb ASC ";
+            ." SELECT tt.usrid, tt.user, sum( 1 ) AS nb\n"
+            ." FROM (\n"
+            ."     SELECT DISTINCT(log.id), log.usrid, log.user\n"
+            ."     FROM (log_docs)\n"
+            ."     INNER JOIN log FORCE INDEX (date_site) ON (log_docs.log_id = log.id)\n"
+            ."     WHERE ".$datefilter['sql']." AND log_docs.action = 'add'"
+            .") AS tt\n"
+            ." GROUP BY tt.usrid\n"
+            ." ORDER BY nb ASC ";
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $sql), FILE_APPEND);
 

@@ -17,7 +17,6 @@
  */
 interface Bridge_Api_ContainerInterface
 {
-
     public function get_id();
 
     public function get_thumbnail($width = 120, $height = 90);

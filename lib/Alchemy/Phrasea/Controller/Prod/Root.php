@@ -26,7 +26,6 @@ use Alchemy\Phrasea\Helper;
  */
 class Root implements ControllerProviderInterface
 {
-
     public function connect(SilexApplication $app)
     {
         $controllers = $app['controllers_factory'];
@@ -48,7 +47,7 @@ class Root implements ControllerProviderInterface
                 return $app->redirectPath('logout');
             }
 
-            $cssPath = $app['root.path'] . '/www/skins/prod/';
+            $cssPath = $app['root.path'].'/www/skins/prod/';
 
             $css = array();
             $cssfile = false;
@@ -94,13 +93,13 @@ class Root implements ControllerProviderInterface
 
                 $sbas['s' + $sbas_id] = array(
                     'sbid'   => $sbas_id,
-                    'seeker' => null);
+                    'seeker' => null, );
 
                 foreach ($databox->get_collections() as $coll) {
-                    $bas2sbas['b' . $coll->get_base_id()] = array(
+                    $bas2sbas['b'.$coll->get_base_id()] = array(
                         'sbid'  => $sbas_id,
                         'ckobj' => array('checked'    => false),
-                        'waschecked' => false
+                        'waschecked' => false,
                     );
                 }
             }

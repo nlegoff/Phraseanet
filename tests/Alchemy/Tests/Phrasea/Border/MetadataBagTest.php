@@ -17,7 +17,7 @@ class MetadataBagTest extends \PhraseanetPHPUnitAbstract
     public function setUp()
     {
         parent::setUp();
-        $this->object = new MetadataBag;
+        $this->object = new MetadataBag();
     }
 
     /**

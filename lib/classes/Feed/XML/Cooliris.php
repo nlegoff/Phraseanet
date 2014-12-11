@@ -254,17 +254,22 @@ class Feed_XML_Cooliris extends Feed_XML_Abstract implements Feed_XML_Interface
         $this->addTag($doc, $channel, 'title', $this->title);
         $this->addTag($doc, $channel, 'dc:title', $this->title);
         $this->addTag($doc, $channel, 'description', $this->subtitle);
-        if ($this->link instanceof Feed_Link)
+        if ($this->link instanceof Feed_Link) {
             $this->addTag($doc, $channel, 'link', $this->link->get_href());
+        }
 
-        if ($this->language)
+        if ($this->language) {
             $this->addTag($doc, $channel, 'language', $this->language);
-        if ($this->copyright)
+        }
+        if ($this->copyright) {
             $this->addTag($doc, $channel, 'copyright', $this->copyright);
-        if ($this->managingEditor)
+        }
+        if ($this->managingEditor) {
             $this->addTag($doc, $channel, 'managingEditor', $this->managingEditor);
-        if ($this->webMaster)
+        }
+        if ($this->webMaster) {
             $this->addTag($doc, $channel, 'webMaster', $this->webMaster);
+        }
         if ($this->updated_on instanceof DateTime) {
             $updated_on = $this->updated_on->format(DATE_RFC2822);
             $this->addTag($doc, $channel, 'pubDate', $updated_on);
@@ -278,23 +283,29 @@ class Feed_XML_Cooliris extends Feed_XML_Abstract implements Feed_XML_Interface
                 $this->addTag($doc, $channel, 'category', $category);
             }
         }
-        if ($this->generator)
+        if ($this->generator) {
             $this->addTag($doc, $channel, 'generator', $this->generator);
-        if ($this->docs)
+        }
+        if ($this->docs) {
             $this->addTag($doc, $channel, 'docs', $this->docs);
-        if ($this->ttl)
+        }
+        if ($this->ttl) {
             $this->addTag($doc, $channel, 'ttl', $this->ttl);
+        }
         if ($this->image instanceof Feed_XML_RSS_Image) {
             $image = $this->addTag($doc, $channel, 'image');
             $this->addTag($doc, $image, 'url', $this->image->get_url());
             $this->addTag($doc, $image, 'title', $this->image->get_title());
             $this->addTag($doc, $image, 'link', $this->image->get_link());
-            if ($this->image->get_width())
+            if ($this->image->get_width()) {
                 $this->addTag($doc, $image, 'width', $this->image->get_width());
-            if ($this->image->get_height())
+            }
+            if ($this->image->get_height()) {
                 $this->addTag($doc, $image, 'height', $this->image->get_height());
-            if ($this->image->get_description())
+            }
+            if ($this->image->get_description()) {
                 $this->addTag($doc, $image, 'description', $this->image->get_description());
+            }
         }
         if (count($this->skipHours)) {
             $skipHours = $this->addTag($doc, $channel, 'skipHours');
@@ -348,7 +359,6 @@ class Feed_XML_Cooliris extends Feed_XML_Abstract implements Feed_XML_Interface
      */
     protected function addContent(DOMDocument $document, DOMNode $node, Feed_Entry_Adapter $entry, Feed_Entry_Item $content)
     {
-
         $preview_sd = $content->get_record()->get_subdef('preview');
         $preview_permalink = $preview_sd->get_permalink();
         $thumbnail_sd = $content->get_record()->get_thumbnail();
@@ -356,7 +366,7 @@ class Feed_XML_Cooliris extends Feed_XML_Abstract implements Feed_XML_Interface
 
         $medium = strtolower($content->get_record()->get_type());
 
-        if ( ! in_array($medium, array('image', 'audio', 'video'))) {
+        if (! in_array($medium, array('image', 'audio', 'video'))) {
             return $this;
         }
 
@@ -401,12 +411,15 @@ class Feed_XML_Cooliris extends Feed_XML_Abstract implements Feed_XML_Interface
             $preview->setAttribute('expression', 'full');
             $preview->setAttribute('isDefault', 'true');
 
-            if ($preview_sd->get_width())
+            if ($preview_sd->get_width()) {
                 $preview->setAttribute('width', $preview_sd->get_width());
-            if ($preview_sd->get_height())
+            }
+            if ($preview_sd->get_height()) {
                 $preview->setAttribute('height', $preview_sd->get_height());
-            if ($duration)
+            }
+            if ($duration) {
                 $preview->setAttribute('duration', $duration);
+            }
         }
 
         if ($thumbnail_permalink) {
@@ -414,10 +427,12 @@ class Feed_XML_Cooliris extends Feed_XML_Abstract implements Feed_XML_Interface
 
             $thumbnail->setAttribute('url', (string) $thumbnail_permalink->get_url());
 
-            if ($thumbnail_sd->get_width())
+            if ($thumbnail_sd->get_width()) {
                 $thumbnail->setAttribute('width', $thumbnail_sd->get_width());
-            if ($thumbnail_sd->get_height())
+            }
+            if ($thumbnail_sd->get_height()) {
                 $thumbnail->setAttribute('height', $thumbnail_sd->get_height());
+            }
 
             $thumbnail = $this->addTag($document, $item, 'media:content');
 
@@ -427,12 +442,15 @@ class Feed_XML_Cooliris extends Feed_XML_Abstract implements Feed_XML_Interface
             $thumbnail->setAttribute('medium', $medium);
             $thumbnail->setAttribute('isDefault', 'false');
 
-            if ($thumbnail_sd->get_width())
+            if ($thumbnail_sd->get_width()) {
                 $thumbnail->setAttribute('width', $thumbnail_sd->get_width());
-            if ($thumbnail_sd->get_height())
+            }
+            if ($thumbnail_sd->get_height()) {
                 $thumbnail->setAttribute('height', $thumbnail_sd->get_height());
-            if ($duration)
+            }
+            if ($duration) {
                 $thumbnail->setAttribute('duration', $duration);
+            }
         }
 
         return $this;

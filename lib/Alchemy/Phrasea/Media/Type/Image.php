@@ -19,7 +19,6 @@ namespace Alchemy\Phrasea\Media\Type;
  */
 class Image implements Type
 {
-
     public function getType()
     {
         return self::TYPE_IMAGE;

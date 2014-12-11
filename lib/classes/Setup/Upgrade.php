@@ -170,18 +170,15 @@ class Setup_Upgrade
         $dumper = new Symfony\Component\Yaml\Dumper();
         $datas = $dumper->dump(
             array(
-            'percentage'      => $this->get_percentage()
-            , 'total_steps'     => $this->total_steps
-            , 'completed_steps' => $this->completed_steps
-            , 'message'         => $this->message
-            , 'last_update'     => $date_obj->format(DATE_ATOM)
+            'percentage'      => $this->get_percentage(), 'total_steps'     => $this->total_steps, 'completed_steps' => $this->completed_steps, 'message'         => $this->message, 'last_update'     => $date_obj->format(DATE_ATOM),
             ), 1
         );
 
-        if (!file_put_contents(self::get_lock_file(), $datas))
+        if (!file_put_contents(self::get_lock_file(), $datas)) {
             throw new Exception_Setup_CannotWriteLockFile(
                 sprintf('Cannot write lock file to %s', self::get_lock_file())
             );
+        }
 
         return $this;
     }
@@ -205,7 +202,7 @@ class Setup_Upgrade
      */
     public static function get_lock_file()
     {
-        return __DIR__ . '/../../../tmp/upgrade.lock';
+        return __DIR__.'/../../../tmp/upgrade.lock';
     }
 
     /**
@@ -245,14 +242,13 @@ class Setup_Upgrade
             , 'total_steps'     => 0
             , 'completed_steps' => 0
             , 'message'         => null
-            , 'last_update'     => null
+            , 'last_update'     => null,
         );
 
         if ($active) {
             $parser = new Symfony\Component\Yaml\Parser();
             $datas = array_merge(
-                $datas
-                , $parser->parse(file_get_contents(self::get_lock_file()))
+                $datas, $parser->parse(file_get_contents(self::get_lock_file()))
             );
         }
 

@@ -13,7 +13,6 @@ namespace Alchemy\Phrasea\SearchEngine;
 
 class SearchEngineSuggestion
 {
-
     /**
      * @var string
      */

@@ -36,7 +36,6 @@ class TokenValidator
 
             return $datas['usr_id'];
         } catch (NotFoundHttpException $e) {
-
         }
 
         return false;

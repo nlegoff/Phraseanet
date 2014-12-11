@@ -19,7 +19,6 @@ use Silex\ServiceProviderInterface;
 
 class SearchEngineServiceProvider implements ServiceProviderInterface
 {
-
     public function register(Application $app)
     {
         $app['phraseanet.SE'] = $app->share(function ($app) {

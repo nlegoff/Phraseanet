@@ -20,7 +20,6 @@ use Doctrine\Common\Cache\MemcacheCache as DoctrineMemcache;
  */
 class MemcacheCache extends DoctrineMemcache implements Cache
 {
-
     /**
      * {@inheritdoc}
      */
@@ -50,7 +49,7 @@ class MemcacheCache extends DoctrineMemcache implements Cache
      */
     public function get($key)
     {
-        if ( ! $this->contains($key)) {
+        if (! $this->contains($key)) {
             throw new Exception('Unable to retrieve the value');
         }
 

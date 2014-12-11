@@ -17,5 +17,4 @@
  */
 class Bridge_Exception_ActionAuthBadConnection extends Bridge_Exception
 {
-
 }

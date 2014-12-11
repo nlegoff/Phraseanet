@@ -39,7 +39,7 @@ class PhraseaExceptionHandler extends SymfonyExceptionHandler
                 $title = _('Sorry, site is currently undergoing maintenance, come back soon.');
                 break;
             case isset(Response::$statusTexts[$exception->getStatusCode()]):
-                $title = $exception->getStatusCode() . ' : ' . Response::$statusTexts[$exception->getStatusCode()];
+                $title = $exception->getStatusCode().' : '.Response::$statusTexts[$exception->getStatusCode()];
                 break;
             default:
                 $title = 'Whoops, looks like something went wrong.';
@@ -49,8 +49,8 @@ class PhraseaExceptionHandler extends SymfonyExceptionHandler
         $start = strpos($content, '</h1>');
 
         $content = '<div id="sf-resetcontent" class="sf-reset">'
-            . '<h1><span>' . $title . '</span></h1>'
-            . substr($content, $start);
+            .'<h1><span>'.$title.'</span></h1>'
+            .substr($content, $start);
 
         return $content;
     }

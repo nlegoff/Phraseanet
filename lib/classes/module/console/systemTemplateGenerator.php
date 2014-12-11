@@ -23,7 +23,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class module_console_systemTemplateGenerator extends Command
 {
-
     public function __construct($name = null)
     {
         parent::__construct($name);
@@ -36,8 +35,8 @@ class module_console_systemTemplateGenerator extends Command
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $tplDirs = array(
-            realpath(__DIR__ . '/../../../../templates/web/'),
-            realpath(__DIR__ . '/../../../../templates/mobile/')
+            realpath(__DIR__.'/../../../../templates/web/'),
+            realpath(__DIR__.'/../../../../templates/mobile/'),
         );
 
         $n_ok = $n_error = 0;
@@ -53,10 +52,10 @@ class module_console_systemTemplateGenerator extends Command
             foreach ($finder->files()->in(array($tplDir)) as $file) {
                 try {
                     $this->container['twig']->loadTemplate(str_replace($tplDir, '', $file->getPathname()));
-                    $output->writeln('' . $file . '');
+                    $output->writeln(''.$file.'');
                     $n_ok ++;
                 } catch (\Exception $e) {
-                    $output->writeln('<error>' . $e->getMessage() . '</error>');
+                    $output->writeln('<error>'.$e->getMessage().'</error>');
                     $n_error ++;
                 }
             }

@@ -13,5 +13,4 @@ namespace Alchemy\Phrasea\Exception;
 
 interface Exception
 {
-
 }

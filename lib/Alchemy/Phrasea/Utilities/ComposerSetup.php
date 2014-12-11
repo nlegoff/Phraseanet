@@ -71,7 +71,7 @@ class ComposerSetup
             throw new RuntimeException('Unable run composer install script.');
         }
 
-        if (!@rename(getcwd() . '/composer.phar', $target)) {
+        if (!@rename(getcwd().'/composer.phar', $target)) {
             throw new RuntimeException('Composer install failed.');
         }
 

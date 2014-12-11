@@ -58,14 +58,14 @@ class Informations implements ControllerProviderInterface
                 'date'      => array(_('report:: date'), 0, 0, 0, 0),
                 'type'      => array(_('phrseanet:: sous definition'), 0, 0, 0, 0),
                 'titre'     => array(_('report:: titre'), 0, 0, 0, 0),
-                'taille'    => array(_('report:: poids'), 0, 0, 0, 0)
+                'taille'    => array(_('report:: poids'), 0, 0, 0, 0),
             ),
             'conf'  => array(
                 'identifiant'   => array(_('report:: identifiant'), 0, 0, 0, 0),
                 'nom'           => array(_('report:: nom'), 0, 0, 0, 0),
                 'mail'          => array(_('report:: email'), 0, 0, 0, 0),
                 'adresse'       => array(_('report:: adresse'), 0, 0, 0, 0),
-                'tel'           => array(_('report:: telephone'), 0, 0, 0, 0)
+                'tel'           => array(_('report:: telephone'), 0, 0, 0, 0),
             ),
             'config_cnx'    => array(
                 'ddate'     => array(_('report:: date'), 0, 0, 0, 0),
@@ -80,8 +80,8 @@ class Informations implements ControllerProviderInterface
             ),
             'config_ask' => array(
                 'search'    => array(_('report:: question'), 0, 0, 0, 0),
-                'ddate'     => array(_('report:: date'), 0, 0, 0, 0)
-            )
+                'ddate'     => array(_('report:: date'), 0, 0, 0, 0),
+            ),
         );
 
         $report = null;
@@ -97,7 +97,7 @@ class Informations implements ControllerProviderInterface
         if ('' !== $on && $app['phraseanet.registry']->get('GV_anonymousReport') == true) {
             $conf['conf'] = array(
                  $on   => array($on, 0, 0, 0, 0),
-                'nb'   => array(_('report:: nombre'), 0, 0, 0, 0)
+                'nb'   => array(_('report:: nombre'), 0, 0, 0, 0),
             );
         }
 
@@ -151,7 +151,7 @@ class Informations implements ControllerProviderInterface
                 if ($request->request->get('liste') == 'on') {
                     return $app->json(array('diag'  => $app['twig']->render('report/colFilter.html.twig', array(
                         'result' => $report->colFilter($field),
-                        'field'  => $field
+                        'field'  => $field,
                     )), 'title'  => sprintf(_('filtrer les resultats sur la colonne %s'), $field)));
                 }
 
@@ -192,7 +192,7 @@ class Informations implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             ));
         }
 
@@ -222,7 +222,7 @@ class Informations implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             ));
 
             $title = ('' === $on && isset($infoArray['result'])) ? $infoArray['result'][0]['identifiant'] : $selectValue;
@@ -233,7 +233,7 @@ class Informations implements ControllerProviderInterface
         return $app->json(array(
             'rs'          => sprintf('%s%s', $html_info, $html),
             'display_nav' => false,
-            'title'       => $title
+            'title'       => $title,
         ));
     }
 
@@ -248,7 +248,7 @@ class Informations implements ControllerProviderInterface
     {
         $conf = array(
             'version'   => array(_('report::version '), 0, 0, 0, 0),
-            'nb'        => array(_('report:: nombre'), 0, 0, 0, 0)
+            'nb'        => array(_('report:: nombre'), 0, 0, 0, 0),
         );
 
         $info = new \module_report_nav(
@@ -275,10 +275,10 @@ class Informations implements ControllerProviderInterface
                     'is_nav'      => false,
                     'is_groupby'  => false,
                     'is_plot'     => false,
-                    'is_doc'      => false
+                    'is_doc'      => false,
                 )),
                 'display_nav' => false,
-                'title'       => $browser
+                'title'       => $browser,
             ));
     }
 
@@ -297,7 +297,7 @@ class Informations implements ControllerProviderInterface
             'date'      => array(_('report:: date'), 0, 0, 0, 0),
             'type'      => array(_('phrseanet:: sous definition'), 0, 0, 0, 0),
             'titre'     => array(_('report:: titre'), 0, 0, 0, 0),
-            'taille'    => array(_('report:: poids'), 0, 0, 0, 0)
+            'taille'    => array(_('report:: poids'), 0, 0, 0, 0),
         );
 
         $config_dl = array(
@@ -309,7 +309,7 @@ class Informations implements ControllerProviderInterface
             'fonction'  => array(_('report:: fonction'), 0, 0, 0, 0),
             'activite'  => array(_('report:: activite'), 0, 0, 0, 0),
             'pays'      => array(_('report:: pays'), 0, 0, 0, 0),
-            'societe'   => array(_('report:: societe'), 0, 0, 0, 0)
+            'societe'   => array(_('report:: societe'), 0, 0, 0, 0),
         );
 
         //format conf according user preferences
@@ -362,7 +362,7 @@ class Informations implements ControllerProviderInterface
             'is_nav'      => false,
             'is_groupby'  => false,
             'is_plot'     => false,
-            'is_doc'      => false
+            'is_doc'      => false,
         ));
 
         $from = $request->request->get('from', '');
@@ -373,7 +373,7 @@ class Informations implements ControllerProviderInterface
             return $app->json(array(
                 'rs'          => $html,
                 'display_nav' => false,
-                'title'       => $title
+                'title'       => $title,
             ));
         }
 
@@ -403,7 +403,7 @@ class Informations implements ControllerProviderInterface
                 if ($request->request->get('liste') == 'on') {
                     return $app->json(array('diag'  => $app['twig']->render('report/colFilter.html.twig', array(
                         'result' => $download->colFilter($field),
-                        'field'  => $field
+                        'field'  => $field,
                     )), 'title'  => sprintf(_('filtrer les resultats sur la colonne %s'), $field)));
                 }
 
@@ -435,13 +435,13 @@ class Informations implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             ));
 
             return $app->json(array(
                 'rs'          => $html,
                 'display_nav' => false,
-                'title'       => $title
+                'title'       => $title,
             ));
         }
 
@@ -451,7 +451,7 @@ class Informations implements ControllerProviderInterface
                 'nom'           => array(_('report:: nom'), 0, 0, 0, 0),
                 'mail'          => array(_('report:: email'), 0, 0, 0, 0),
                 'adresse'       => array(_('report:: adresse'), 0, 0, 0, 0),
-                'tel'           => array(_('report:: telephone'), 0, 0, 0, 0)
+                'tel'           => array(_('report:: telephone'), 0, 0, 0, 0),
             );
 
             $info = new \module_report_nav(
@@ -478,20 +478,20 @@ class Informations implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             ));
 
             return $app->json(array(
                 'rs'          => $html,
                 'display_nav' => false,
-                'title'       => $title
+                'title'       => $title,
             ));
         }
 
         return $app->json(array(
             'rs'          => $html,
             'display_nav' => false,
-            'title'       => $title
+            'title'       => $title,
         ));
     }
 

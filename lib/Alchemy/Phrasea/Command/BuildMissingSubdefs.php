@@ -44,7 +44,6 @@ class BuildMissingSubdefs extends Command
         $n = 0;
 
         foreach ($this->container['phraseanet.appbox']->get_databoxes() as $databox) {
-
             $subdefStructure = $databox->get_subdef_structure();
 
             $sql = 'SELECT record_id FROM record WHERE parent_record_id = 0';
@@ -66,16 +65,15 @@ class BuildMissingSubdefs extends Command
 
                 if ($group) {
                     foreach ($group as $subdef) {
-
                         $todo = false;
 
-                        if ( ! $record->has_subdef($subdef->get_name())) {
+                        if (! $record->has_subdef($subdef->get_name())) {
                             $todo = true;
                         }
                         if (in_array($subdef->get_name(), array('preview', 'thumbnail', 'thumbnailgif'))) {
                             try {
                                 $sub = $record->get_subdef($subdef->get_name());
-                                if ( ! $sub->is_physically_present()) {
+                                if (! $sub->is_physically_present()) {
                                     $todo = true;
                                 }
                             } catch (\Exception_Media_SubdefNotFound $e) {
@@ -85,7 +83,7 @@ class BuildMissingSubdefs extends Command
 
                         if ($todo) {
                             $record->generate_subdefs($databox, $this->container, array($subdef->get_name()));
-                            $this->container['monolog']->addInfo("generate " . $subdef->get_name() . " for record " . $record->get_record_id());
+                            $this->container['monolog']->addInfo("generate ".$subdef->get_name()." for record ".$record->get_record_id());
                             $n ++;
                         }
                     }
@@ -95,7 +93,7 @@ class BuildMissingSubdefs extends Command
             }
         }
 
-        $this->container['monolog']->addInfo($n . " subdefs done");
+        $this->container['monolog']->addInfo($n." subdefs done");
         $stop = microtime(true);
         $duration = $stop - $start;
 
@@ -103,5 +101,4 @@ class BuildMissingSubdefs extends Command
 
         return;
     }
-
 }

@@ -174,9 +174,9 @@ class Bridge implements ControllerProviderInterface
         try {
             $account = \Bridge_Account::load_account($app, $account_id);
 
-             if ($account->get_user()->get_id() !== $app['authentication']->getUser()->get_id()) {
-                 throw new HttpException(403, 'Access forbiden');
-             }
+            if ($account->get_user()->get_id() !== $app['authentication']->getUser()->get_id()) {
+                throw new HttpException(403, 'Access forbiden');
+            }
 
             $account->delete();
             $success = true;
@@ -204,7 +204,7 @@ class Bridge implements ControllerProviderInterface
             , 'account'        => $account
             , 'elements'       => $elements
             , 'error_message'  => $request->query->get('error')
-            , 'notice_message' => $request->query->get('notice')
+            , 'notice_message' => $request->query->get('notice'),
         );
 
         return $app['twig']->render('prod/actions/Bridge/records_list.html.twig', $params);
@@ -315,7 +315,7 @@ class Bridge implements ControllerProviderInterface
         );
 
         $params = array_merge($params, $route_params);
-        $template = 'prod/actions/Bridge/' . $account->get_api()->get_connector()->get_name() . '/' . $element_type . '_' . $action . ($destination ? '_' . $destination : '') . '.html.twig';
+        $template = 'prod/actions/Bridge/'.$account->get_api()->get_connector()->get_name().'/'.$element_type.'_'.$action.($destination ? '_'.$destination : '').'.html.twig';
 
         return $app['twig']->render($template, $params);
     }
@@ -336,7 +336,7 @@ class Bridge implements ControllerProviderInterface
         switch ($action) {
             case 'modify':
                 if (count($elements) != 1) {
-                    return $app->redirect('/prod/bridge/action/' . $account_id . '/' . $action . '/' . $element_type . '/?elements_list=' . implode(';', $elements) . '&error=' . _('Vous ne pouvez pas editer plusieurs elements simultanement'));
+                    return $app->redirect('/prod/bridge/action/'.$account_id.'/'.$action.'/'.$element_type.'/?elements_list='.implode(';', $elements).'&error='._('Vous ne pouvez pas editer plusieurs elements simultanement'));
                 }
                 try {
                     foreach ($elements as $element_id) {
@@ -358,7 +358,7 @@ class Bridge implements ControllerProviderInterface
                             'notice_message'    => $request->request->get('notice'),
                         );
 
-                        $template = 'prod/actions/Bridge/' . $account->get_api()->get_connector()->get_name() . '/' . $element_type . '_' . $action . ($destination ? '_' . $destination : '') . '.html.twig';
+                        $template = 'prod/actions/Bridge/'.$account->get_api()->get_connector()->get_name().'/'.$element_type.'_'.$action.($destination ? '_'.$destination : '').'.html.twig';
 
                         return $app['twig']->render($template, $params);
                     }
@@ -368,20 +368,20 @@ class Bridge implements ControllerProviderInterface
                         $account->get_api()->update_element($element_type, $element_id, $datas);
                     }
                 } catch (\Exception $e) {
-                    return $app->redirect('/prod/bridge/action/' . $account_id . '/' . $action . '/' . $element_type . '/?elements_list[]=' . $element_id . '&error=' . get_class($e) . ' : ' . $e->getMessage());
+                    return $app->redirect('/prod/bridge/action/'.$account_id.'/'.$action.'/'.$element_type.'/?elements_list[]='.$element_id.'&error='.get_class($e).' : '.$e->getMessage());
                 }
 
-                return $app->redirect('/prod/bridge/adapter/' . $account_id . '/load-' . $class . 's/' . $element_type . '/?page=&update=success#anchor');
+                return $app->redirect('/prod/bridge/adapter/'.$account_id.'/load-'.$class.'s/'.$element_type.'/?page=&update=success#anchor');
             case 'createcontainer':
                 try {
                     $container_type = $request->request->get('f_container_type');
 
                     $account->get_api()->create_container($container_type, $request);
                 } catch (\Exception $e) {
-                    return $app->redirect('/prod/bridge/action/' . $account_id . '/' . $action . '/' . $element_type . '/?error=' . get_class($e) . ' : ' . $e->getMessage());
+                    return $app->redirect('/prod/bridge/action/'.$account_id.'/'.$action.'/'.$element_type.'/?error='.get_class($e).' : '.$e->getMessage());
                 }
 
-                return $app->redirect('/prod/bridge/adapter/' . $account_id . '/load-' . $class . 's/' . $element_type . '/?page=&update=success#anchor');
+                return $app->redirect('/prod/bridge/adapter/'.$account_id.'/load-'.$class.'s/'.$element_type.'/?page=&update=success#anchor');
             case 'moveinto':
                 try {
                     $container_id = $request->request->get('container_id');
@@ -389,20 +389,20 @@ class Bridge implements ControllerProviderInterface
                         $account->get_api()->add_element_to_container($element_type, $element_id, $destination, $container_id);
                     }
                 } catch (\Exception $e) {
-                    return $app->redirect('/prod/bridge/action/' . $account_id . '/' . $action . '/' . $element_type . '/?error=' . get_class($e) . ' : ' . $e->getMessage());
+                    return $app->redirect('/prod/bridge/action/'.$account_id.'/'.$action.'/'.$element_type.'/?error='.get_class($e).' : '.$e->getMessage());
                 }
 
-                return $app->redirect('/prod/bridge/adapter/' . $account_id . '/load-containers/' . $destination . '/?page=&update=success#anchor');
+                return $app->redirect('/prod/bridge/adapter/'.$account_id.'/load-containers/'.$destination.'/?page=&update=success#anchor');
             case 'deleteelement':
                 try {
                     foreach ($elements as $element_id) {
                         $account->get_api()->delete_object($element_type, $element_id);
                     }
                 } catch (\Exception $e) {
-                    return $app->redirect('/prod/bridge/action/' . $account_id . '/' . $action . '/' . $element_type . '/?error=' . get_class($e) . $e->getMessage());
+                    return $app->redirect('/prod/bridge/action/'.$account_id.'/'.$action.'/'.$element_type.'/?error='.get_class($e).$e->getMessage());
                 }
 
-                return $app->redirect('/prod/bridge/adapter/' . $account_id . '/load-' . $class . 's/' . $element_type . '/');
+                return $app->redirect('/prod/bridge/adapter/'.$account_id.'/load-'.$class.'s/'.$element_type.'/');
             default:
                 throw new \Exception('Unknown action');
                 break;
@@ -430,7 +430,7 @@ class Bridge implements ControllerProviderInterface
         );
 
         return $app['twig']->render(
-            'prod/actions/Bridge/' . $account->get_api()->get_connector()->get_name() . '/upload.html.twig', $params
+            'prod/actions/Bridge/'.$account->get_api()->get_connector()->get_name().'/upload.html.twig', $params
         );
     }
 
@@ -460,7 +460,7 @@ class Bridge implements ControllerProviderInterface
                 'adapter_action'    => 'upload',
             );
 
-            return $app['twig']->render('prod/actions/Bridge/' . $account->get_api()->get_connector()->get_name() . '/upload.html.twig', $params);
+            return $app['twig']->render('prod/actions/Bridge/'.$account->get_api()->get_connector()->get_name().'/upload.html.twig', $params);
         }
 
         foreach ($route->get_elements() as $record) {
@@ -470,6 +470,6 @@ class Bridge implements ControllerProviderInterface
             \Bridge_Element::create($app, $account, $record, $title, \Bridge_Element::STATUS_PENDING, $default_type, $datas);
         }
 
-        return $app->redirect('/prod/bridge/adapter/' . $account->get_id() . '/load-records/?notice=' . sprintf(_('%d elements en attente'), count($route->get_elements())));
+        return $app->redirect('/prod/bridge/adapter/'.$account->get_id().'/load-records/?notice='.sprintf(_('%d elements en attente'), count($route->get_elements())));
     }
 }

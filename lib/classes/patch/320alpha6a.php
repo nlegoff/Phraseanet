@@ -81,8 +81,9 @@ class patch_320alpha6a implements patchInterface
 
         foreach ($nodes as $node) {
             $name = mb_strtolower(trim($node->getAttribute('name')));
-            if ($name === '')
+            if ($name === '') {
                 continue;
+            }
             $node->setAttribute('name', $name);
         }
 

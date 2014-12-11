@@ -28,16 +28,16 @@ class Probe35 implements ProbeInterface
      */
     public function isMigrable()
     {
-        $oldFilesExist = is_file(__DIR__ . "/../../../../../../config/connexion.inc")
-            && is_file(__DIR__ . "/../../../../../../config/config.inc");
+        $oldFilesExist = is_file(__DIR__."/../../../../../../config/connexion.inc")
+            && is_file(__DIR__."/../../../../../../config/config.inc");
 
         if ($oldFilesExist) {
-            if (!is_file(__DIR__ . "/../../../../../../config/config.yml")) {
+            if (!is_file(__DIR__."/../../../../../../config/config.yml")) {
                 return true;
             }
             // previous upgrade did not rename these files
-            rename(__DIR__ . "/../../../../../../config/connexion.inc", __DIR__ . "/../../../../../../config/connexion.inc.old");
-            rename(__DIR__ . "/../../../../../../config/config.inc", __DIR__ . "/../../../../../../config/config.inc.old");
+            rename(__DIR__."/../../../../../../config/connexion.inc", __DIR__."/../../../../../../config/connexion.inc.old");
+            rename(__DIR__."/../../../../../../config/config.inc", __DIR__."/../../../../../../config/config.inc.old");
 
             return false;
         }

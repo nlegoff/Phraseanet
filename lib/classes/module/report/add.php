@@ -28,7 +28,7 @@ class module_report_add extends module_report
         'record_id' => 'd.record_id',
         'final'     => 'd.final',
         'comment'   => 'd.comment',
-        'size'      => 's.size'
+        'size'      => 's.size',
     );
 
     /**
@@ -81,12 +81,12 @@ class module_report_add extends module_report
                     $user = User_Adapter::getInstance($value, $this->app);
                     $caption = $user->get_display_name();
                 } catch (\Exception $e) {
-
                 }
-            } elseif ($field == 'date')
+            } elseif ($field == 'date') {
                 $caption = $this->app['date-formatter']->getPrettyString(new DateTime($value));
-            elseif ($field == 'size')
+            } elseif ($field == 'size') {
                 $caption = p4string::format_octets($value);
+            }
 
             $ret[] = array('val'   => $caption, 'value' => $value);
         }
@@ -104,19 +104,21 @@ class module_report_add extends module_report
                         $this->result[$i][$value] = $this->pretty_string ? $this->app['date-formatter']->getPrettyString(new DateTime($row[$value])) : $row[$value];
                     } elseif ($value == 'size') {
                         $this->result[$i][$value] = p4string::format_octets($row[$value]);
-                    } else
+                    } else {
                         $this->result[$i][$value] = $row[$value];
+                    }
                 } else {
                     if ($value == 'comment') {
                         $this->result[$i][$value] = '&nbsp;';
                     } else {
-                        $this->result[$i][$value] = '<i>' . _('report:: non-renseigne') . '</i>';
+                        $this->result[$i][$value] = '<i>'._('report:: non-renseigne').'</i>';
                     }
                 }
             }
             $i ++;
-            if ($i >= $this->nb_record)
+            if ($i >= $this->nb_record) {
                 break;
+            }
         }
     }
 }

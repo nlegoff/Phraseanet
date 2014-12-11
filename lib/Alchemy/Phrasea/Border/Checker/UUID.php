@@ -20,7 +20,6 @@ use Doctrine\ORM\EntityManager;
  */
 class UUID extends AbstractChecker
 {
-
     public function __construct(Application $app)
     {
         parent::__construct($app);

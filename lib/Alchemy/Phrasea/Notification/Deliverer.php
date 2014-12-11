@@ -53,7 +53,7 @@ class Deliverer
             throw new LogicException('You must provide a receiver for a mail notification');
         }
 
-        $message = \Swift_Message::newInstance($this->prefix . $mail->getSubject(), $mail->renderHTML(), 'text/html', 'utf-8');
+        $message = \Swift_Message::newInstance($this->prefix.$mail->getSubject(), $mail->renderHTML(), 'text/html', 'utf-8');
         $message->addPart($mail->getMessage(), 'text/plain', 'utf-8');
 
         $message->setFrom($this->emitter->getEmail(), $this->emitter->getName());
@@ -63,8 +63,8 @@ class Deliverer
             $message->setReplyTo($mail->getEmitter()->getEmail(), $mail->getEmitter()->getName());
         }
 
-        if(is_array($attachments)) {
-            foreach($attachments as $attachment) {
+        if (is_array($attachments)) {
+            foreach ($attachments as $attachment) {
                 $message->attach($attachment->As_Swift_Attachment());
             }
         }

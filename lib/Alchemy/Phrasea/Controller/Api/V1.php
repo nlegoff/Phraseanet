@@ -111,30 +111,34 @@ class V1 implements ControllerProviderInterface
                 } else {
                     switch ($ressource) {
                         case \API_V1_Log::DATABOXES_RESSOURCE :
-                            if ((int) $exploded_route[1] > 0 && sizeof($exploded_route) == 3)
+                            if ((int) $exploded_route[1] > 0 && sizeof($exploded_route) == 3) {
                                 $aspect = $exploded_route[2];
+                            }
                             break;
                         case \API_V1_Log::RECORDS_RESSOURCE :
                             if ((int) $exploded_route[1] > 0 && sizeof($exploded_route) == 4) {
-                                if (!isset($exploded_route[3]))
+                                if (!isset($exploded_route[3])) {
                                     $aspect = "record";
-                                elseif (preg_match("/^set/", $exploded_route[3]))
+                                } elseif (preg_match("/^set/", $exploded_route[3])) {
                                     $action = $exploded_route[3];
-                                else
+                                } else {
                                     $aspect = $exploded_route[3];
+                                }
                             }
                             break;
                         case \API_V1_Log::BASKETS_RESSOURCE :
                             if ((int) $exploded_route[1] > 0 && sizeof($exploded_route) == 3) {
-                                if (preg_match("/^set/", $exploded_route[2]) || preg_match("/^delete/", $exploded_route[2]))
+                                if (preg_match("/^set/", $exploded_route[2]) || preg_match("/^delete/", $exploded_route[2])) {
                                     $action = $exploded_route[2];
-                                else
+                                } else {
                                     $aspect = $exploded_route[2];
+                                }
                             }
                             break;
                         case \API_V1_Log::FEEDS_RESSOURCE :
-                            if ((int) $exploded_route[1] > 0 && sizeof($exploded_route) == 3)
+                            if ((int) $exploded_route[1] > 0 && sizeof($exploded_route) == 3) {
                                 $aspect = $exploded_route[2];
+                            }
                             break;
                     }
                 }
@@ -154,15 +158,7 @@ class V1 implements ControllerProviderInterface
             $pathInfo = $request->getPathInfo();
             $route = $parseRoute($pathInfo, $response);
             \API_V1_Log::create(
-                $app
-                , $account
-                , $request->getMethod() . " " . $pathInfo
-                , $response->getStatusCode()
-                , $response->headers->get('content-type')
-                , $route['ressource']
-                , $route['general']
-                , $route['aspect']
-                , $route['action']
+                $app, $account, $request->getMethod()." ".$pathInfo, $response->getStatusCode(), $response->headers->get('content-type'), $route['ressource'], $route['general'], $route['aspect'], $route['action']
             );
         });
 

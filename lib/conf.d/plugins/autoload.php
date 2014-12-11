@@ -4,7 +4,7 @@
 // To update configuration, use bin/console plugins:* commands.
 
 return call_user_func(function () {
-    $loader = require __DIR__ . '/../vendor/autoload.php';
+    $loader = require __DIR__.'/../vendor/autoload.php';
 
     return $loader;
 });

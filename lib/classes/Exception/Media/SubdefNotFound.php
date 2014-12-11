@@ -19,5 +19,4 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class Exception_Media_SubdefNotFound extends NotFoundHttpException
 {
-
 }

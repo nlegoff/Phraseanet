@@ -67,7 +67,6 @@ class phrasea
 
             return self::$_sbas_params;
         } catch (\Exception $e) {
-
         }
 
         self::$_sbas_params = array();
@@ -91,16 +90,12 @@ class phrasea
     {
         $codeset = "UTF-8";
 
-        putenv('LANG=' . $locale . '.' . $codeset);
-        putenv('LANGUAGE=' . $locale . '.' . $codeset);
+        putenv('LANG='.$locale.'.'.$codeset);
+        putenv('LANGUAGE='.$locale.'.'.$codeset);
         bind_textdomain_codeset($textdomain, 'UTF-8');
 
-        bindtextdomain($textdomain, __DIR__ . '/../../locale/');
-        setlocale(LC_ALL
-            , $locale . '.UTF-8'
-            , $locale . '.UTF8'
-            , $locale . '.utf-8'
-            , $locale . '.utf8');
+        bindtextdomain($textdomain, __DIR__.'/../../locale/');
+        setlocale(LC_ALL, $locale.'.UTF-8', $locale.'.UTF8', $locale.'.utf-8', $locale.'.utf8');
         textdomain($textdomain);
     }
 
@@ -116,12 +111,13 @@ class phrasea
             5 => _('admin::monitor: module thesaurus'),
             6 => _('admin::monitor: module comparateur'),
             7 => _('admin::monitor: module validation'),
-            8 => _('admin::monitor: module upload')
+            8 => _('admin::monitor: module upload'),
         );
 
         foreach ($array_modules as $a) {
-            if (isset($modules[$a]))
+            if (isset($modules[$a])) {
                 $array[] = $modules[$a];
+            }
         }
 
         return $array;
@@ -161,8 +157,9 @@ class phrasea
             $stmt->closeCursor();
 
             foreach ($rs as $row) {
-                if (!isset(self::$_coll2bas[$row['sbas_id']]))
+                if (!isset(self::$_coll2bas[$row['sbas_id']])) {
                     self::$_coll2bas[$row['sbas_id']] = array();
+                }
                 self::$_coll2bas[$row['sbas_id']][$row['server_coll_id']] = (int) $row['base_id'];
             }
         }
@@ -175,10 +172,7 @@ class phrasea
         self::$_coll2bas = self::$_bas2coll = self::$_bas_labels = self::$_bas2sbas = null;
         $appbox->delete_data_from_cache(
             array(
-                self::CACHE_BAS_2_COLL
-                , self::CACHE_BAS_2_COLL
-                , self::CACHE_BAS_LABELS
-                , self::CACHE_SBAS_FROM_BAS
+                self::CACHE_BAS_2_COLL, self::CACHE_BAS_2_COLL, self::CACHE_BAS_LABELS, self::CACHE_SBAS_FROM_BAS,
             )
         );
 

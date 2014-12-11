@@ -29,7 +29,6 @@ class DatabaseHelper extends Helper
             new \connection_pdo('test', $hostname, $port, $user, $password, $db_name, array(), false);
             $connection_ok = true;
         } catch (\Exception $e) {
-
         }
 
         if ($db_name && $connection_ok === true) {
@@ -55,7 +54,6 @@ class DatabaseHelper extends Helper
                     }
                 }
             } catch (\Exception $e) {
-
             }
         }
 
@@ -64,7 +62,7 @@ class DatabaseHelper extends Helper
             'database'   => $db_ok,
             'is_empty'   => $empty,
             'is_appbox'  => $is_appbox,
-            'is_databox' => $is_databox
+            'is_databox' => $is_databox,
         );
     }
 }

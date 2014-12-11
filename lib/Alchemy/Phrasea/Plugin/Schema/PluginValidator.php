@@ -27,9 +27,9 @@ class PluginValidator
     {
         $this->ensureComposer($directory);
         $this->ensureManifest($directory);
-        $this->ensureDir($directory . DIRECTORY_SEPARATOR . 'public');
+        $this->ensureDir($directory.DIRECTORY_SEPARATOR.'public');
 
-        $manifest = $directory . DIRECTORY_SEPARATOR . 'manifest.json';
+        $manifest = $directory.DIRECTORY_SEPARATOR.'manifest.json';
         $data = @json_decode(@file_get_contents($manifest));
 
         if (JSON_ERROR_NONE !== json_last_error()) {
@@ -45,7 +45,7 @@ class PluginValidator
         $manifest = new Manifest($this->objectToArray($data));
 
         foreach ($manifest->getTwigPaths() as $path) {
-            $this->ensureDirIn($directory . DIRECTORY_SEPARATOR . $path, $directory);
+            $this->ensureDirIn($directory.DIRECTORY_SEPARATOR.$path, $directory);
         }
 
         return $manifest;
@@ -53,13 +53,13 @@ class PluginValidator
 
     private function ensureManifest($directory)
     {
-        $manifest = $directory . DIRECTORY_SEPARATOR . 'manifest.json';
+        $manifest = $directory.DIRECTORY_SEPARATOR.'manifest.json';
         $this->ensureFile($manifest);
     }
 
     private function ensureComposer($directory)
     {
-        $composer = $directory . DIRECTORY_SEPARATOR . 'composer.json';
+        $composer = $directory.DIRECTORY_SEPARATOR.'composer.json';
         $this->ensureFile($composer);
     }
 

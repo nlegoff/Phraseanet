@@ -30,7 +30,7 @@ class Bridge_Api_Dailymotion_Element implements Bridge_Api_ElementInterface
      * @param  type                           $type
      * @return Bridge_Api_Dailymotion_Element
      */
-    public function __construct(Array $entry, $type)
+    public function __construct(array $entry, $type)
     {
         $this->entry = $entry;
         $this->type = $type;

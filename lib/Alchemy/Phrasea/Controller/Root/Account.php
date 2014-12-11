@@ -120,7 +120,6 @@ class Account implements ControllerProviderInterface
     public function resetEmail(PhraseaApplication $app, Request $request)
     {
         if (null === ($password = $request->request->get('form_password')) || null === ($email = $request->request->get('form_email')) || null === ($emailConfirm = $request->request->get('form_email_confirm'))) {
-
             $app->abort(400, _('Could not perform request, please contact an administrator.'));
         }
 
@@ -215,9 +214,7 @@ class Account implements ControllerProviderInterface
 
         try {
             $account = \API_OAuth2_Account::load_with_user(
-                $app
-                , new \API_OAuth2_Application($app, $application_id)
-                , $app['authentication']->getUser()
+                $app, new \API_OAuth2_Application($app, $application_id), $app['authentication']->getUser()
             );
 
             $account->set_revoked((bool) $request->query->get('revoke'), false);
@@ -237,10 +234,10 @@ class Account implements ControllerProviderInterface
      */
     public function accountAccess(Application $app, Request $request)
     {
-        require_once $app['root.path'] . '/lib/classes/deprecated/inscript.api.php';
+        require_once $app['root.path'].'/lib/classes/deprecated/inscript.api.php';
 
         return $app['twig']->render('account/access.html.twig', array(
-            'inscriptions' => giveMeBases($app, $app['authentication']->getUser()->get_id())
+            'inscriptions' => giveMeBases($app, $app['authentication']->getUser()->get_id()),
         ));
     }
 
@@ -288,16 +285,15 @@ class Account implements ControllerProviderInterface
                 $regionName = isset($region['name']) ? $region['name'] : null;
 
                 if (null !== $city) {
-                    $info = $city . ($countryName ? ' (' . $countryName . ')' : null);
+                    $info = $city.($countryName ? ' ('.$countryName.')' : null);
                 } elseif (null !== $regionName) {
-                    $info = $regionName . ($countryName ? ' (' . $countryName . ')' : null);
+                    $info = $regionName.($countryName ? ' ('.$countryName.')' : null);
                 } elseif (null !== $countryName) {
                     $info = $countryName;
                 } else {
                     $info = '';
                 }
             } catch (GeonamesExceptionInterface $e) {
-
             }
 
             $result[] = array(
@@ -344,7 +340,6 @@ class Account implements ControllerProviderInterface
                     $register->add_request($app['authentication']->getUser(), \collection::get_from_base_id($app, $baseId));
                     $app->addFlash('success', _('login::notification: Vos demandes ont ete prises en compte'));
                 } catch (\Exception $e) {
-
                 }
             }
         }
@@ -366,7 +361,7 @@ class Account implements ControllerProviderInterface
             'form_pwdFTP',
             'form_destFTP',
             'form_prefixFTPfolder',
-            'form_retryFTP'
+            'form_retryFTP',
         );
 
         if (0 === count(array_diff($accountFields, array_keys($request->request->all())))) {

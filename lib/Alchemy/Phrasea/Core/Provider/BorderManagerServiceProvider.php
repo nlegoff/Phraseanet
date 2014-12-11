@@ -18,7 +18,6 @@ use Silex\ServiceProviderInterface;
 
 class BorderManagerServiceProvider implements ServiceProviderInterface
 {
-
     public function register(Application $app)
     {
         $app['border-manager'] = $app->share(function (Application $app) {
@@ -53,7 +52,6 @@ class BorderManagerServiceProvider implements ServiceProviderInterface
                     try {
                         $checkerObj = new $className($app, $options);
                         if (isset($checker['databoxes'])) {
-
                             $databoxes = array();
                             foreach ($checker['databoxes'] as $sbas_id) {
                                 try {
@@ -66,7 +64,6 @@ class BorderManagerServiceProvider implements ServiceProviderInterface
                             $checkerObj->restrictToDataboxes($databoxes);
                         }
                         if (isset($checker['collections'])) {
-
                             $collections = array();
                             foreach ($checker['collections'] as $base_id) {
                                 try {

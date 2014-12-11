@@ -18,8 +18,6 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Process\ExecutableFinder;
-use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Process\Process;
 use vierbergenlars\SemVer\version as SemVer;
 
@@ -53,7 +51,7 @@ class IniReset extends Command
         // get dbs
         $conf = $this->container['phraseanet.configuration']->getConfig();
         $dbs = array('ab' => $conf['main']['database']['dbname'], 'dbs' => array(), 'setup_dbs' => array());
-        foreach($this->container['phraseanet.appbox']->get_databoxes() as $databox) {
+        foreach ($this->container['phraseanet.appbox']->get_databoxes() as $databox) {
             $dbs['dbs'][] = $databox;
         }
 
@@ -67,17 +65,17 @@ class IniReset extends Command
                     _('Please enter the databox name to reset or create')
                 );
             }
-        } else if ($input->getOption('db-name')) {
+        } elseif ($input->getOption('db-name')) {
             $dbName = $input->getOption('db-name');
-        } else  {
+        } else {
             $dbName = current($dbs['dbs'])->get_dbname();
         }
 
         $continue = 'y';
-        if (count($dbs['dbs']) > 1 && in_array($dbName, array_map(function($db) { return $db->get_dbname();}, $dbs['dbs']))) {
+        if (count($dbs['dbs']) > 1 && in_array($dbName, array_map(function ($db) { return $db->get_dbname();}, $dbs['dbs']))) {
             if ($interactive) {
                 do {
-                    $continue = mb_strtolower($dialog->ask($output, '<question>' .$dbName.' database is going to be truncated, do you want to continue ? (Y/n)</question>', 'Y'));
+                    $continue = mb_strtolower($dialog->ask($output, '<question>'.$dbName.' database is going to be truncated, do you want to continue ? (Y/n)</question>', 'Y'));
                 } while (!in_array($continue, array('y', 'n')));
             }
         }
@@ -86,7 +84,7 @@ class IniReset extends Command
             return;
         }
 
-        $unmountedDbs = $dbToMount = array_diff(array_map(function($db) { return $db->get_dbname();}, $dbs['dbs']), array($dbName));
+        $unmountedDbs = $dbToMount = array_diff(array_map(function ($db) { return $db->get_dbname();}, $dbs['dbs']), array($dbName));
 
         if (count($unmountedDbs) > 1 && $interactive) {
             array_unshift($unmountedDbs, 'all');
@@ -100,14 +98,14 @@ class IniReset extends Command
                 true
             );
 
-            $dbToMount = array_map(function($c) use ($unmountedDbs) {
+            $dbToMount = array_map(function ($c) use ($unmountedDbs) {
                 return $unmountedDbs[$c];
             }, $selected);
         }
 
         if ($input->getOption('dependencies') || !SemVer::eq($this->container['phraseanet.appbox']->get_version(), $this->container['phraseanet.version']->getNumber())) {
-            $this->getApplication()->find('dependencies:all')->run( new ArrayInput(array(
-                'command' => 'dependencies:all'
+            $this->getApplication()->find('dependencies:all')->run(new ArrayInput(array(
+                'command' => 'dependencies:all',
             )), $output);
         }
 
@@ -125,7 +123,7 @@ class IniReset extends Command
             $this->container['filesystem']->copy($this->container['root.path'].'/hudson/connexion.inc', $this->container['root.path'].'/config/connexion.inc');
             $this->container['filesystem']->copy($this->container['root.path'].'/hudson/_GV.php', $this->container['root.path'].'/config/_GV.php');
 
-            $content = file_get_contents($this->container['root.path'] . '/hudson/fixtures.sql');
+            $content = file_get_contents($this->container['root.path'].'/hudson/fixtures.sql');
             $content = str_replace('{{APPLICATION_BOX}}', $dbs['ab'], $content);
             $content = str_replace('{{DATA_BOX}}', $dbName, $content);
             $content = str_replace('{{USER_EMAIL}}', $input->getOption('email'), $content);
@@ -138,16 +136,16 @@ class IniReset extends Command
             $output->setVerbosity(OutputInterface::VERBOSITY_QUIET);
             $this->getApplication()->find('dbal:import')->run(new ArrayInput(array(
                 'command' => 'dbal:import',
-                'file' => $tmpFile
+                'file' => $tmpFile,
             )), $output);
             $output->setVerbosity($verbosity);
             $output->writeln('Importing Phraseanet v3.1 fixtures...<info>OK</info>');
         } else {
             $this->getApplication()->find('system:uninstall')->run(new ArrayInput(array(
-                'command' => 'system:uninstall'
+                'command' => 'system:uninstall',
             )), $output);
 
-            $process = new Process(sprintf('php ' . __DIR__ . '/../../../../../bin/setup system:install --email=%s --password=%s --db-user=%s --db-template=%s --db-password=%s --databox=%s --appbox=%s --server-name=%s --db-host=%s --db-port=%s -y',
+            $process = new Process(sprintf('php '.__DIR__.'/../../../../../bin/setup system:install --email=%s --password=%s --db-user=%s --db-template=%s --db-password=%s --databox=%s --appbox=%s --server-name=%s --db-host=%s --db-port=%s -y',
                 $input->getOption('email'),
                 $input->getOption('password'),
                 $conf['main']['database']['user'],
@@ -181,13 +179,13 @@ class IniReset extends Command
             $output->writeln('Mounting database "'.$databox->get_dbname().'"...<info>OK</info>');
         }
 
-        $process = new Process(('php ' . __DIR__ . '/../../../../../bin/setup system:upgrade -y -f'));
+        $process = new Process(('php '.__DIR__.'/../../../../../bin/setup system:upgrade -y -f'));
         $process->run();
 
         // create setup dbs
         $command = $this->getApplication()->find('ini:setup-tests-dbs');
         $input = new ArrayInput(array(
-            'command' => 'ini:setup-tests-dbs'
+            'command' => 'ini:setup-tests-dbs',
         ));
         $command->run($input, $output);
 

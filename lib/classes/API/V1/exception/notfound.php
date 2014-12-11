@@ -18,5 +18,4 @@
 class API_V1_exception_notfound extends API_V1_exception_abstract
 {
     protected static $details = 'Requested ressource is not found';
-
 }

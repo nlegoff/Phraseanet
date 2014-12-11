@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class Download implements ControllerProviderInterface
 {
-
     /**
      * {@inheritDoc}
      */
@@ -92,7 +91,7 @@ class Download implements ControllerProviderInterface
             'downloader'  => $app['authentication']->getUser()->get_id(),
             'subdefs'     => $subdefs,
             'from_basket' => $ssttid,
-            'export_file' => $download->getExportName()
+            'export_file' => $download->getExportName(),
         ));
 
         return $app->redirectPath('prepare_download', array('token' => $token));

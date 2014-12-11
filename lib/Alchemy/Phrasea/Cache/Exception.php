@@ -18,5 +18,4 @@ namespace Alchemy\Phrasea\Cache;
  */
 class Exception extends \Exception
 {
-
 }

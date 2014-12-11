@@ -92,8 +92,6 @@ class DoDownload implements ControllerProviderInterface
      */
     public function prepareDownload(Application $app, Request $request, $token)
     {
-
-
         $datas = $app['tokens']->helloToken($token);
 
         if (false === $list = @unserialize((string) $datas['datas'])) {
@@ -125,7 +123,7 @@ class DoDownload implements ControllerProviderInterface
             'records'       => $records,
             'token'         => $token,
             'anonymous'     => $request->query->get('anonymous', false),
-            'type'          => $request->query->get('type', \Session_Logger::EVENT_EXPORTDOWNLOAD)
+            'type'          => $request->query->get('type', \Session_Logger::EVENT_EXPORTDOWNLOAD),
         )));
     }
 
@@ -152,11 +150,11 @@ class DoDownload implements ControllerProviderInterface
             $file = end($list['files']);
             $subdef = end($file['subdefs']);
             $exportName = sprintf('%s%s.%s', $file['export_name'], $subdef['ajout'], $subdef['exportExt']);
-            $exportFile = \p4string::addEndSlash($subdef['path']) . $subdef['file'];
+            $exportFile = \p4string::addEndSlash($subdef['path']).$subdef['file'];
             $mime = $subdef['mime'];
             $list['complete'] = true;
         } else {
-            $exportFile = $app['root.path'] . '/tmp/download/' . $datas['value'] . '.zip';
+            $exportFile = $app['root.path'].'/tmp/download/'.$datas['value'].'.zip';
             $mime = 'application/zip';
         }
 
@@ -193,14 +191,14 @@ class DoDownload implements ControllerProviderInterface
         } catch (NotFoundHttpException $e) {
             return $app->json(array(
                 'success' => false,
-                'message' => 'Invalid token'
+                'message' => 'Invalid token',
             ));
         }
 
         if (false === $list = @unserialize((string) $datas['datas'])) {
             return $app->json(array(
                 'success' => false,
-                'message' => 'Invalid datas'
+                'message' => 'Invalid datas',
             ));
         }
 
@@ -210,7 +208,7 @@ class DoDownload implements ControllerProviderInterface
         ignore_user_abort(true);
 
         if ($list['count'] > 1) {
-            \set_export::build_zip($app, $token, $list, sprintf($app['root.path'] . '/tmp/download/%s.zip', $datas['value']));
+            \set_export::build_zip($app, $token, $list, sprintf($app['root.path'].'/tmp/download/%s.zip', $datas['value']));
         } else {
             $list['complete'] = true;
             $app['tokens']->updateToken($token, serialize($list));
@@ -218,7 +216,7 @@ class DoDownload implements ControllerProviderInterface
 
         return $app->json(array(
             'success' => true,
-            'message' => ''
+            'message' => '',
         ));
     }
 

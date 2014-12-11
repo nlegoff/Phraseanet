@@ -46,8 +46,8 @@ class MailRequestPasswordUpdate extends AbstractMailWithLink
         }
 
         return sprintf(_('Password renewal for login "%s" has been requested'), $this->login)
-        . "\n"
-        .  _('login:: Visitez le lien suivant et suivez les instructions pour continuer, sinon ignorez cet email et il ne se passera rien');
+        ."\n"
+        ._('login:: Visitez le lien suivant et suivez les instructions pour continuer, sinon ignorez cet email et il ne se passera rien');
     }
 
     /**

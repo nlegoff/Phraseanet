@@ -17,7 +17,6 @@
  */
 interface Feed_Entry_ItemInterface
 {
-
     public function __construct(appbox $appbox, Feed_Entry_Adapter $entry, $id);
 
     public function get_id();

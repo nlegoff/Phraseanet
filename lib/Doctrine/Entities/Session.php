@@ -441,7 +441,7 @@ class Session
             }
         }
 
-        return null;
+        return;
     }
 
     public function hasModuleId($moduleId)

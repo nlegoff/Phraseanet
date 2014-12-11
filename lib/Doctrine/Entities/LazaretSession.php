@@ -96,7 +96,6 @@ class LazaretSession
         try {
             $user = \User_Adapter::getInstance($this->usr_id, $app);
         } catch (\Exception $e) {
-
         }
 
         return $user;

@@ -63,9 +63,10 @@ class random
                 switch ($row['type']) {
                     case 'download':
                     case 'email':
-                        $file = $this->app['root.path'] . '/tmp/download/' . $row['value'] . '.zip';
-                        if (is_file($file))
+                        $file = $this->app['root.path'].'/tmp/download/'.$row['value'].'.zip';
+                        if (is_file($file)) {
                             unlink($file);
+                        }
                         break;
                 }
             }
@@ -77,7 +78,6 @@ class random
 
             return true;
         } catch (\Exception $e) {
-
         }
 
         return false;
@@ -91,12 +91,14 @@ class random
      */
     public static function generatePassword($length = 8, $possible = SELF::LETTERS_AND_NUMBERS)
     {
-        if ( ! is_int($length))
-            throw new Exception_InvalidArgument ();
+        if (! is_int($length)) {
+            throw new Exception_InvalidArgument();
+        }
 
         $password = "";
-        if ( ! in_array($possible, array(self::LETTERS_AND_NUMBERS, self::LETTERS, self::NUMBERS)))
+        if (! in_array($possible, array(self::LETTERS_AND_NUMBERS, self::LETTERS, self::NUMBERS))) {
             $possible = self::LETTERS_AND_NUMBERS;
+        }
         $i = 0;
         $possible_length = strlen($possible);
         while ($i < $length) {
@@ -164,7 +166,7 @@ class random
                 , ':type'     => $type
                 , ':usr'      => ($usr ? $usr : '-1')
                 , ':end_date' => ($end_date instanceof DateTime ? $end_date->format(DATE_ISO8601) : null)
-                , ':datas'    => ((trim($datas) != '') ? $datas : null)
+                , ':datas'    => ((trim($datas) != '') ? $datas : null),
             );
             $stmt->execute($params);
             $stmt->closeCursor();
@@ -186,7 +188,6 @@ class random
 
             return true;
         } catch (\Exception $e) {
-
         }
 
         return false;
@@ -206,7 +207,6 @@ class random
 
             return true;
         } catch (\Exception $e) {
-
         }
 
         return false;
@@ -225,8 +225,9 @@ class random
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new NotFoundHttpException('Token not found');
+        }
 
         return $row;
     }

@@ -17,5 +17,4 @@
  */
 abstract class API_V1_Abstract implements API_V1_Interface
 {
-
 }

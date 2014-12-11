@@ -40,7 +40,7 @@ class module_report_sqlaction extends module_report_sql implements module_report
     {
         $customFieldMap = array();
 
-        $filter = $this->filter->getReportFilter() ? : array('params' => array(), 'sql' => false);
+        $filter = $this->filter->getReportFilter() ?: array('params' => array(), 'sql' => false);
         $this->params = array_merge(array(':action' => $this->action), $filter['params']);
 
         if ($this->groupby == false) {
@@ -51,7 +51,7 @@ class module_report_sqlaction extends module_report_sql implements module_report
                     FROM (log_docs AS d)
                     INNER JOIN log FORCE INDEX (date_site) ON (log.id = d.log_id)
                     LEFT JOIN record ON (record.record_id = d.record_id)
-                    WHERE (" . $filter['sql'] . ") AND (d.action = :action)
+                    WHERE (".$filter['sql'].") AND (d.action = :action)
                 ) AS tt";
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $this->sql), FILE_APPEND);
@@ -64,7 +64,7 @@ class module_report_sqlaction extends module_report_sql implements module_report
                 'd.date'        => 'tt.date',
                 'record.mime'   => 'tt.mime',
                 'file'          => 'tt.file',
-                'd.comment'     => 'tt.comment'
+                'd.comment'     => 'tt.comment',
             );
 
             $stmt = $this->getConnBas()->prepare($this->sql);
@@ -72,21 +72,21 @@ class module_report_sqlaction extends module_report_sql implements module_report
             $this->total_row = $stmt->rowCount();
             $stmt->closeCursor();
 
-            $this->sql .= $this->filter->getOrderFilter($customFieldMap) ? : '';
-            $this->sql .= $this->filter->getLimitFilter() ? : '';
+            $this->sql .= $this->filter->getOrderFilter($customFieldMap) ?: '';
+            $this->sql .= $this->filter->getLimitFilter() ?: '';
         } else {
             $this->sql = "
-                SELECT " . $this->groupby . ", SUM(1) AS nombre
+                SELECT ".$this->groupby.", SUM(1) AS nombre
                 FROM (
-                    SELECT DISTINCT(log.id), TRIM(" . $this->getTransQuery($this->groupby) . ") AS " . $this->groupby . " , log.usrid , d.final,  d.record_id, d.date
+                    SELECT DISTINCT(log.id), TRIM(".$this->getTransQuery($this->groupby).") AS ".$this->groupby." , log.usrid , d.final,  d.record_id, d.date
                     FROM (log_docs as d)
                         INNER JOIN log FORCE INDEX (date_site) ON (log.id = d.log_id)
                         LEFT JOIN record ON (record.record_id = d.record_id)
-                        WHERE (" . $filter['sql'] . ") AND (d.action = :action)
+                        WHERE (".$filter['sql'].") AND (d.action = :action)
                 ) AS tt
                 LEFT JOIN subdef AS s ON (s.record_id=tt.record_id)
                 WHERE s.name='document'
-                GROUP BY " . $this->groupby . "
+                GROUP BY ".$this->groupby."
                 ORDER BY nombre";
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $this->sql), FILE_APPEND);
@@ -102,23 +102,22 @@ class module_report_sqlaction extends module_report_sql implements module_report
 
     public function sqlDistinctValByField($field)
     {
-        $filter = $this->filter->getReportFilter() ? : array('params' => array(), 'sql' => false);
+        $filter = $this->filter->getReportFilter() ?: array('params' => array(), 'sql' => false);
         $this->params = array_merge(array(':action' => $this->action), $filter['params']);
 
         $this->sql = "
             SELECT DISTINCT(val)
             FROM (
-                SELECT DISTINCT(log.id), " . $this->getTransQuery($field) . " AS val
+                SELECT DISTINCT(log.id), ".$this->getTransQuery($field)." AS val
                 FROM (log_docs as d)
                     INNER JOIN log FORCE INDEX (date_site) ON (log.id = d.log_id)
                     LEFT JOIN record ON (record.record_id = d.record_id)
                     LEFT JOIN subdef as s ON (s.record_id=d.record_id AND s.name='document')
-                WHERE (" . $filter['sql'] . ")
+                WHERE (".$filter['sql'].")
                 AND (d.action = :action)
-            ) AS tt " . ($this->filter->getOrderFilter() ? $this->filter->getOrderFilter() : '');
+            ) AS tt ".($this->filter->getOrderFilter() ? $this->filter->getOrderFilter() : '');
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n%s\n\n", __FILE__, __LINE__, $this->sql), FILE_APPEND);
-
         return array('sql' => $this->sql, 'params' => $this->params);
     }
 }

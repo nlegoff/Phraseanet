@@ -22,7 +22,6 @@
  */
 interface API_OAuth2_Exception_Interface
 {
-
     public function getError();
 
     public function getHttp_code();

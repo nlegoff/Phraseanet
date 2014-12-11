@@ -13,30 +13,24 @@ use Alchemy\Phrasea\Application as SilexApp;
 
 class recordutils
 {
-
     public function __construct($bas, $rec)
     {
-
     }
 
     public function __destruct()
     {
-
     }
 
     public static function watermark(SilexApp $app, \media_subdef $subdef)
     {
-
     }
 
     public static function stamp(SilexApp $app, \media_subdef $subdef)
     {
-
     }
 
     public function embed_preview()
     {
-
     }
 
     public function binary_datas($type, $bas, $rec, $usr = false, $ses = false)

@@ -35,7 +35,7 @@ class Activity implements ControllerProviderInterface
             ->bind('report_activity_users_connexions');
 
         $controllers->post('/users/downloads', $this->call('doReportDownloadsByUsers'))
-            ->bind('report_activity_users_downloads');;
+            ->bind('report_activity_users_downloads');
 
         $controllers->post('/questions/best-of', $this->call('doReportBestOfQuestions'))
             ->bind('report_activity_questions_bestof');
@@ -112,10 +112,10 @@ class Activity implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             )),
             'display_nav' => false,
-            'title'       => false
+            'title'       => false,
         ));
     }
 
@@ -168,10 +168,10 @@ class Activity implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             )),
             'display_nav' => false,
-            'title'       => false
+            'title'       => false,
         ));
     }
 
@@ -187,7 +187,7 @@ class Activity implements ControllerProviderInterface
         $conf = array(
             'search'    => array(_('report:: question'), 0, 0, 0, 0),
             'nb'        => array(_('report:: nombre'), 0, 0, 0, 0),
-            'nb_rep'    => array(_('report:: nombre de reponses'), 0, 0, 0, 0)
+            'nb_rep'    => array(_('report:: nombre de reponses'), 0, 0, 0, 0),
         );
 
         $activity = new \module_report_activity(
@@ -202,7 +202,7 @@ class Activity implements ControllerProviderInterface
         $activity->setTop(20);
         $activity->setConfig(false);
 
-       if ($request->request->get('printcsv') == 'on') {
+        if ($request->request->get('printcsv') == 'on') {
             $activity->setHasLimit(false);
             $activity->setPrettyString(false);
 
@@ -220,10 +220,10 @@ class Activity implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             )),
             'display_nav' => false,
-            'title'       => false
+            'title'       => false,
         ));
     }
 
@@ -239,7 +239,7 @@ class Activity implements ControllerProviderInterface
         $conf = array(
             'search'    => array(_('report:: question'), 0, 0, 0, 0),
             'nb'        => array(_('report:: nombre'), 0, 0, 0, 0),
-            'nb_rep'    => array(_('report:: nombre de reponses'), 0, 0, 0, 0)
+            'nb_rep'    => array(_('report:: nombre de reponses'), 0, 0, 0, 0),
         );
 
         $activity = new \module_report_activity(
@@ -261,7 +261,7 @@ class Activity implements ControllerProviderInterface
 
         $activity->setConfig(false);
 
-       if ($request->request->get('printcsv') == 'on') {
+        if ($request->request->get('printcsv') == 'on') {
             $activity->setHasLimit(false);
             $activity->setPrettyString(false);
 
@@ -279,10 +279,10 @@ class Activity implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             )),
             'display_nav' => false,
-            'title'       => false
+            'title'       => false,
         ));
     }
 
@@ -312,21 +312,21 @@ class Activity implements ControllerProviderInterface
             $activity->getActivityPerHours();
 
             return $this->getCSVResponse($app, $activity, 'activity_per_hours');
-         }
+        }
 
-         $report = $activity->getActivityPerHours();
+        $report = $activity->getActivityPerHours();
 
-         return $app->json(array(
+        return $app->json(array(
              'rs' =>  $app['twig']->render('report/ajax_data_content.html.twig', array(
                  'result'      => isset($report['report']) ? $report['report'] : $report,
                  'is_infouser' => false,
                  'is_nav'      => false,
                  'is_groupby'  => false,
                  'is_plot'     => true,
-                 'is_doc'      => false
+                 'is_doc'      => false,
              )),
              'display_nav' => false,
-             'title'       => false
+             'title'       => false,
          ));
     }
 
@@ -343,7 +343,7 @@ class Activity implements ControllerProviderInterface
             'ddate'     => array(_('report:: jour'), 0, 0, 0, 0),
             'total'     => array(_('report:: total des telechargements'), 0, 0, 0, 0),
             'preview'   => array(_('report:: preview'), 0, 0, 0, 0),
-            'document'  => array(_('report:: document'), 0, 0, 0, 0)
+            'document'  => array(_('report:: document'), 0, 0, 0, 0),
         );
 
         $activity = new \module_report_activity(
@@ -372,21 +372,21 @@ class Activity implements ControllerProviderInterface
             $activity->getDownloadByBaseByDay($conf);
 
             return $this->getCSVResponse($app, $activity, 'activity_db_by_base_by_day');
-         }
+        }
 
-         $report = $activity->getDownloadByBaseByDay($conf);
+        $report = $activity->getDownloadByBaseByDay($conf);
 
-         return $app->json(array(
+        return $app->json(array(
              'rs' =>  $app['twig']->render('report/ajax_data_content.html.twig', array(
                  'result'      => isset($report['report']) ? $report['report'] : $report,
                  'is_infouser' => false,
                  'is_nav'      => false,
                  'is_groupby'  => false,
                  'is_plot'     => false,
-                 'is_doc'      => false
+                 'is_doc'      => false,
              )),
              'display_nav' => false,
-             'title'       => false
+             'title'       => false,
          ));
     }
 
@@ -440,7 +440,7 @@ class Activity implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             )),
             'display_nav' => $report['display_nav'], // do we display the prev and next button ?
             'next'        => $report['next_page'], //Number of the next page
@@ -448,7 +448,7 @@ class Activity implements ControllerProviderInterface
             'page'        => $report['page'], //The current page
             'filter'      => ((sizeof($report['filter']) > 0) ? serialize($report['filter']) : ''), //the serialized filters
             'col'         => $report['active_column'], //all the columns where a filter is applied
-            'limit'       => $report['nb_record']
+            'limit'       => $report['nb_record'],
         ));
     }
 
@@ -501,7 +501,7 @@ class Activity implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             )),
             'display_nav' => $report['display_nav'], // do we display the prev and next button ?
             'next'        => $report['next_page'], //Number of the next page
@@ -509,7 +509,7 @@ class Activity implements ControllerProviderInterface
             'page'        => $report['page'], //The current page
             'filter'      => ((sizeof($report['filter']) > 0) ? serialize($report['filter']) : ''), //the serialized filters
             'col'         => $report['active_column'], //all the columns where a filter is applied
-            'limit'       => $report['nb_record']
+            'limit'       => $report['nb_record'],
         ));
     }
 
@@ -562,7 +562,7 @@ class Activity implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             )),
             'display_nav' => $report['display_nav'], // do we display the prev and next button ?
             'next'        => $report['next_page'], //Number of the next page
@@ -570,7 +570,7 @@ class Activity implements ControllerProviderInterface
             'page'        => $report['page'], //The current page
             'filter'      => ((sizeof($report['filter']) > 0) ? serialize($report['filter']) : ''), //the serialized filters
             'col'         => $report['active_column'], //all the columns where a filter is applied
-            'limit'       => $report['nb_record']
+            'limit'       => $report['nb_record'],
         ));
     }
 
@@ -624,7 +624,7 @@ class Activity implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             )),
             'display_nav' => $report['display_nav'], // do we display the prev and next button ?
             'next'        => $report['next_page'], //Number of the next page
@@ -632,7 +632,7 @@ class Activity implements ControllerProviderInterface
             'page'        => $report['page'], //The current page
             'filter'      => ((sizeof($report['filter']) > 0) ? serialize($report['filter']) : ''), //the serialized filters
             'col'         => $report['active_column'], //all the columns where a filter is applied
-            'limit'       => $report['nb_record']
+            'limit'       => $report['nb_record'],
         ));
     }
 
@@ -686,7 +686,7 @@ class Activity implements ControllerProviderInterface
                 'is_nav'      => false,
                 'is_groupby'  => false,
                 'is_plot'     => false,
-                'is_doc'      => false
+                'is_doc'      => false,
             )),
             'display_nav' => $report['display_nav'], // do we display the prev and next button ?
             'next'        => $report['next_page'], //Number of the next page
@@ -694,7 +694,7 @@ class Activity implements ControllerProviderInterface
             'page'        => $report['page'], //The current page
             'filter'      => ((sizeof($report['filter']) > 0) ? serialize($report['filter']) : ''), //the serialized filters
             'col'         => $report['active_column'], //all the columns where a filter is applied
-            'limit'       => $report['nb_record']
+            'limit'       => $report['nb_record'],
         ));
     }
 
@@ -738,7 +738,7 @@ class Activity implements ControllerProviderInterface
         //display content of a table column when user click on it
         if ($request->request->get('conf') == 'on') {
             return $app->json(array('liste' => $app['twig']->render('report/listColumn.html.twig', array(
-                'conf'  => $base_conf
+                'conf'  => $base_conf,
             )), "title" => _("configuration")));
         }
 
@@ -765,7 +765,7 @@ class Activity implements ControllerProviderInterface
             if ($request->request->get('liste') == 'on') {
                 return $app->json(array('diag'  => $app['twig']->render('report/colFilter.html.twig', array(
                     'result' => $report->colFilter($field),
-                    'field'  => $field
+                    'field'  => $field,
                 )), "title"  => sprintf(_('filtrer les resultats sur la colonne %s'), $field)));
             }
 
@@ -808,10 +808,10 @@ class Activity implements ControllerProviderInterface
                     'is_nav'      => false,
                     'is_groupby'  => true,
                     'is_plot'     => false,
-                    'is_doc'      => false
+                    'is_doc'      => false,
                 )),
                 'display_nav' => false,
-                'title'       => _(sprintf('Groupement des resultats sur le champ %s',  $groupField))
+                'title'       => _(sprintf('Groupement des resultats sur le champ %s',  $groupField)),
             ));
         }
 

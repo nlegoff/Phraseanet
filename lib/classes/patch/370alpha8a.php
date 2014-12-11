@@ -88,7 +88,7 @@ class patch_370alpha8a implements patchInterface
             if (false !== $sx = simplexml_load_string($x)) {
                 $period = (int) ($sx->period);
 
-                if ( ! array_key_exists('_' . $period, $tdom)) {
+                if (! array_key_exists('_'.$period, $tdom)) {
                     $dom = new DOMDocument('1.0', 'UTF-8');
                     $dom->formatOutput = true;
                     $dom->preserveWhiteSpace = false;
@@ -96,10 +96,10 @@ class patch_370alpha8a implements patchInterface
                     $ts->appendChild($dom->createElement('period'))->appendChild($dom->createTextNode(60 * $period));
                     $ts->appendChild($dom->createElement('logsql'))->appendChild($dom->createTextNode('1'));
                     $tasks = $ts->appendChild($dom->createElement('tasks'));
-                    $tdom['_' . $period] = array('dom'   => $dom, 'tasks' => $tasks);
+                    $tdom['_'.$period] = array('dom'   => $dom, 'tasks' => $tasks);
                 } else {
-                    $dom = &$tdom['_' . $period]['dom'];
-                    $tasks = &$tdom['_' . $period]['tasks'];
+                    $dom = &$tdom['_'.$period]['dom'];
+                    $tasks = &$tdom['_'.$period]['tasks'];
                 }
 
                 /*
@@ -109,7 +109,7 @@ class patch_370alpha8a implements patchInterface
                     $t = $tasks->appendChild($dom->createElement('task'));
                     $t->setAttribute('active', '0');
 //                        $t->setAttribute('name', 'imported from \'' . $task->getTitle() . '\'');
-                    $t->setAttribute('name', 'imported from \'' . $task['name'] . '\'');
+                    $t->setAttribute('name', 'imported from \''.$task['name'].'\'');
                     $t->setAttribute('action', 'update');
 
                     if ($sx->sbas_id) {
@@ -145,7 +145,7 @@ class patch_370alpha8a implements patchInterface
                             $bit = (int) ($st[0]);
                             if ($bit >= 0 && $bit < 32 && ($st[1] == '0' || $st[1] == '1')) {
                                 $from->appendChild($dom->createElement('status'))
-                                    ->setAttribute('mask', $st[1] . str_repeat('x', $bit - 1));
+                                    ->setAttribute('mask', $st[1].str_repeat('x', $bit - 1));
                             } else {
                                 $warning[] = sprintf("Bad (from) status '%s'", trim($sx->status0));
                                 $active = false;
@@ -175,7 +175,7 @@ class patch_370alpha8a implements patchInterface
                             $bit = (int) ($st[0]);
                             if ($bit >= 0 && $bit < 32 && ($st[1] == '0' || $st[1] == '1')) {
                                 $to->appendChild($dom->createElement('status'))
-                                    ->setAttribute('mask', $st[1] . str_repeat('x', $bit - 1));
+                                    ->setAttribute('mask', $st[1].str_repeat('x', $bit - 1));
                             } else {
                                 $warning[] = sprintf("Bad (to) status '%s'", trim($sx->status1));
                                 $active = false;
@@ -207,7 +207,7 @@ class patch_370alpha8a implements patchInterface
                         $t = $dom->importNode(dom_import_simplexml($sxt), true);
                         $t->setAttribute('active', '0');
 //                            $t->setAttribute('name', 'imported from \'' . $task->getTitle() . '\'');
-                        $t->setAttribute('name', 'imported from \'' . $task['name'] . '\'');
+                        $t->setAttribute('name', 'imported from \''.$task['name'].'\'');
                         $t->setAttribute('action', 'update');
 
                         if ($sx->sbas_id) {
@@ -250,7 +250,7 @@ class patch_370alpha8a implements patchInterface
             }
 
             if (count($taskstodel) > 0) {
-                $conn->exec('DELETE FROM task2 WHERE task_id IN(' . implode(',', $taskstodel) . ')');
+                $conn->exec('DELETE FROM task2 WHERE task_id IN('.implode(',', $taskstodel).')');
             }
         }
 

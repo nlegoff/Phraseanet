@@ -34,8 +34,8 @@ class AssetsManager
     {
         try {
             $this->fs->mirror(
-                $this->pluginsDirectory . DIRECTORY_SEPARATOR . $manifest->getName() . DIRECTORY_SEPARATOR . 'public',
-                $this->rootPath . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . $manifest->getName()
+                $this->pluginsDirectory.DIRECTORY_SEPARATOR.$manifest->getName().DIRECTORY_SEPARATOR.'public',
+                $this->rootPath.DIRECTORY_SEPARATOR.'www'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$manifest->getName()
             );
         } catch (IOException $e) {
             throw new RuntimeException(
@@ -54,7 +54,7 @@ class AssetsManager
     public function remove($name)
     {
         try {
-            $this->fs->remove($this->rootPath . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . $name);
+            $this->fs->remove($this->rootPath.DIRECTORY_SEPARATOR.'www'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$name);
         } catch (IOException $e) {
             throw new RuntimeException(
                 sprintf('Unable to remove assets for plugin %s', $name), $e->getCode(), $e

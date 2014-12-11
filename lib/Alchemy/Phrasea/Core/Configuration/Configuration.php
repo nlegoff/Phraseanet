@@ -176,7 +176,7 @@ class Configuration implements ConfigurationInterface
     public function initialize()
     {
         $this->delete();
-        $this->dumpFile($this->config, $this->loadFile(__DIR__ . static::CONFIG_REF), 0600);
+        $this->dumpFile($this->config, $this->loadFile(__DIR__.static::CONFIG_REF), 0600);
 
         return $this->getConfig();
     }
@@ -205,7 +205,7 @@ class Configuration implements ConfigurationInterface
 
     private function loadDefaultConfiguration()
     {
-        return $this->parser->parse($this->loadFile(__DIR__ . static::CONFIG_REF));
+        return $this->parser->parse($this->loadFile(__DIR__.static::CONFIG_REF));
     }
 
     private function writeCacheConfig($content)

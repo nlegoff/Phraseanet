@@ -185,7 +185,6 @@ class media_subdef extends media_abstract implements cache_cacheableInterface
 
             return $this;
         } catch (\Exception $e) {
-
         }
 
         $connbas = $this->record->get_databox()->get_connection();
@@ -197,7 +196,7 @@ class media_subdef extends media_abstract implements cache_cacheableInterface
 
         $params = array(
             ':record_id' => $this->record->get_record_id(),
-            ':name'      => $this->name
+            ':name'      => $this->name,
         );
 
         $stmt = $connbas->prepare($sql);
@@ -216,14 +215,16 @@ class media_subdef extends media_abstract implements cache_cacheableInterface
             $this->is_substituted = ! ! $row['substit'];
             $this->subdef_id = (int) $row['subdef_id'];
 
-            if ($row['updated_on'])
+            if ($row['updated_on']) {
                 $this->modification_date = new DateTime($row['updated_on']);
-            if ($row['created_on'])
+            }
+            if ($row['created_on']) {
                 $this->creation_date = new DateTime($row['created_on']);
+            }
 
             $this->is_physically_present = true;
         } elseif ($substitute === false) {
-            throw new Exception_Media_SubdefNotFound($this->name . ' not found');
+            throw new Exception_Media_SubdefNotFound($this->name.' not found');
         }
 
         if (! $row) {
@@ -243,7 +244,7 @@ class media_subdef extends media_abstract implements cache_cacheableInterface
             , 'is_substituted'     => $this->is_substituted
             , 'subdef_id'          => $this->subdef_id
             , 'modification_date'  => $this->modification_date
-            , 'creation_date'      => $this->creation_date
+            , 'creation_date'      => $this->creation_date,
         );
 
         $this->set_data_to_cache($datas);
@@ -284,7 +285,7 @@ class media_subdef extends media_abstract implements cache_cacheableInterface
             $this->mime = 'image/png';
             $this->width = 256;
             $this->height = 256;
-            $this->path = $this->app['root.path'] . '/www/skins/icons/substitution/';
+            $this->path = $this->app['root.path'].'/www/skins/icons/substitution/';
             $this->file = 'regroup_thumb.png';
             $this->url = Url::factory('/skins/icons/substitution/regroup_thumb.png');
         } else {
@@ -294,17 +295,17 @@ class media_subdef extends media_abstract implements cache_cacheableInterface
             $this->mime = 'image/png';
             $this->width = 256;
             $this->height = 256;
-            $this->path = $this->app['root.path'] . '/www/skins/icons/substitution/';
-            $this->file = str_replace('+', '%20', $mime) . '.png';
-            $this->url = Url::factory('/skins/icons/substitution/' . $this->file);
+            $this->path = $this->app['root.path'].'/www/skins/icons/substitution/';
+            $this->file = str_replace('+', '%20', $mime).'.png';
+            $this->url = Url::factory('/skins/icons/substitution/'.$this->file);
         }
 
         $this->is_physically_present = false;
 
-        if ( ! file_exists($this->path . $this->file)) {
-            $this->path = $this->app['root.path'] . '/www/skins/icons/';
+        if (! file_exists($this->path.$this->file)) {
+            $this->path = $this->app['root.path'].'/www/skins/icons/';
             $this->file = 'substitution.png';
-            $this->url = Url::factory('/skins/icons/' . $this->file);
+            $this->url = Url::factory('/skins/icons/'.$this->file);
         }
 
         return $this;
@@ -334,8 +335,9 @@ class media_subdef extends media_abstract implements cache_cacheableInterface
      */
     public function get_permalink()
     {
-        if ( ! $this->permalink && $this->is_physically_present())
+        if (! $this->permalink && $this->is_physically_present()) {
             $this->permalink = media_Permalink_Adapter::getPermalink($this->app, $this->record->get_databox(), $this);
+        }
 
         return $this->permalink;
     }
@@ -481,7 +483,7 @@ class media_subdef extends media_abstract implements cache_cacheableInterface
      */
     public function get_pathfile()
     {
-        return $this->path . $this->file;
+        return $this->path.$this->file;
     }
 
     /**
@@ -553,7 +555,7 @@ class media_subdef extends media_abstract implements cache_cacheableInterface
      */
     public function rotate($angle, Alchemyst $alchemyst, MediaVorus $mediavorus)
     {
-        if ( ! $this->is_physically_present()) {
+        if (! $this->is_physically_present()) {
             throw new \Alchemy\Phrasea\Exception\RuntimeException('You can not rotate a substitution');
         }
 
@@ -601,7 +603,7 @@ class media_subdef extends media_abstract implements cache_cacheableInterface
      */
     public function readTechnicalDatas(MediaVorus $mediavorus)
     {
-        if ( ! $this->is_physically_present()) {
+        if (! $this->is_physically_present()) {
             return array();
         }
 
@@ -676,7 +678,6 @@ class media_subdef extends media_abstract implements cache_cacheableInterface
         }
 
         try {
-
             $sql = 'SELECT subdef_id FROM subdef
                     WHERE record_id = :record_id AND name = :name';
             $stmt = $connbas->prepare($sql);
@@ -756,17 +757,17 @@ class media_subdef extends media_abstract implements cache_cacheableInterface
             }
         }
 
-        $this->url = Url::factory("/datafiles/" . $this->record->get_sbas_id()
-            . "/" . $this->record->get_record_id() . "/"
-            . $this->get_name() . "/?etag=".$this->getEtag());
+        $this->url = Url::factory("/datafiles/".$this->record->get_sbas_id()
+            ."/".$this->record->get_record_id()."/"
+            .$this->get_name()."/?etag=".$this->getEtag());
 
         return;
     }
 
     public function get_cache_key($option = null)
     {
-        return 'subdef_' . $this->get_record()->get_serialize_key()
-            . '_' . $this->name . ($option ? '_' . $option : '');
+        return 'subdef_'.$this->get_record()->get_serialize_key()
+            .'_'.$this->name.($option ? '_'.$option : '');
     }
 
     public function get_data_from_cache($option = null)

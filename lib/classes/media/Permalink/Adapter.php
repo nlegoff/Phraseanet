@@ -147,7 +147,7 @@ class media_Permalink_Adapter implements media_Permalink_Interface, cache_cachea
      */
     public function get_url()
     {
-        $label = $this->get_label() . '.' . pathinfo($this->media_subdef->get_file(), PATHINFO_EXTENSION);
+        $label = $this->get_label().'.'.pathinfo($this->media_subdef->get_file(), PATHINFO_EXTENSION);
 
         return Url::factory($this->app->url('permalinks_permalink', array(
             'sbas_id'   => $this->media_subdef->get_sbas_id(),
@@ -207,7 +207,7 @@ class media_Permalink_Adapter implements media_Permalink_Interface, cache_cachea
 
         $params = array(
             ':activated' => $this->is_activated,
-            ':id'        => $this->get_id()
+            ':id'        => $this->get_id(),
         );
 
         $stmt->execute($params);
@@ -226,8 +226,9 @@ class media_Permalink_Adapter implements media_Permalink_Interface, cache_cachea
     public function set_label($label)
     {
         $label = trim($label) ? trim($label) : 'untitled';
-        while (strpos($label, '  ') !== false)
+        while (strpos($label, '  ') !== false) {
             $label = str_replace('  ', ' ', $label);
+        }
 
         $this->label = $this->app['unicode']->remove_nonazAZ09(
             str_replace(' ', '-', $label)
@@ -261,7 +262,6 @@ class media_Permalink_Adapter implements media_Permalink_Interface, cache_cachea
 
             return $this;
         } catch (\Exception $e) {
-
         }
 
         $sql = 'SELECT p.id, p.token, p.activated, p.created_on, p.last_modified
@@ -273,8 +273,9 @@ class media_Permalink_Adapter implements media_Permalink_Interface, cache_cachea
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
-            throw new Exception_Media_SubdefNotFound ();
+        if (! $row) {
+            throw new Exception_Media_SubdefNotFound();
+        }
 
         $this->id = (int) $row['id'];
         $this->token = $row['token'];
@@ -289,7 +290,7 @@ class media_Permalink_Adapter implements media_Permalink_Interface, cache_cachea
             , 'is_activated'  => $this->is_activated
             , 'created_on'    => $this->created_on
             , 'last_modified' => $this->last_modified
-            , 'label'         => $this->label
+            , 'label'         => $this->label,
         );
 
         $this->set_data_to_cache($datas);
@@ -309,7 +310,6 @@ class media_Permalink_Adapter implements media_Permalink_Interface, cache_cachea
         try {
             return new self($app, $databox, $media_subdef);
         } catch (\Exception $e) {
-
         }
 
         return self::create($app, $databox, $media_subdef);
@@ -331,7 +331,7 @@ class media_Permalink_Adapter implements media_Permalink_Interface, cache_cachea
         $params = array(
             ':subdef_id' => $media_subdef->get_subdef_id()
             , ':token'     => random::generatePassword(8, random::LETTERS_AND_NUMBERS)
-            , ':activated' => '1'
+            , ':activated' => '1',
         );
 
         $error = null;
@@ -375,7 +375,7 @@ class media_Permalink_Adapter implements media_Permalink_Interface, cache_cachea
         $params = array(
             ':record_id' => $record_id
             , ':token'     => $token
-            , ':name'      => $name
+            , ':name'      => $name,
         );
 
         $stmt = $databox->get_connection()->prepare($sql);
@@ -390,12 +390,12 @@ class media_Permalink_Adapter implements media_Permalink_Interface, cache_cachea
             return new record_adapter($app, $databox->get_sbas_id(), $record_id);
         }
 
-        return null;
+        return;
     }
 
     public function get_cache_key($option = null)
     {
-        return 'permalink_' . $this->media_subdef->get_subdef_id() . ($option ? '_' . $option : '');
+        return 'permalink_'.$this->media_subdef->get_subdef_id().($option ? '_'.$option : '');
     }
 
     public function get_data_from_cache($option = null)

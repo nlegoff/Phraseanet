@@ -458,7 +458,6 @@ class Basket
                     ->get_subdef('document')
                     ->get_size();
             } catch (\Exception $e) {
-
             }
         }
 

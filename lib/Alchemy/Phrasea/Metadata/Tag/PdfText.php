@@ -16,5 +16,4 @@ class PdfText extends AbstractTag
     protected $Type = '';
     protected $Writable = false;
     protected $Description = 'The content text of the PDF file';
-
 }

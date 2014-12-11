@@ -17,5 +17,4 @@
  */
 class recordutils_document extends recordutils
 {
-
 }

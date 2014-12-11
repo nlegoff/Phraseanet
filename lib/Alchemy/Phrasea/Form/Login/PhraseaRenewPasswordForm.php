@@ -26,8 +26,8 @@ class PhraseaRenewPasswordForm extends AbstractType
             'label'         => _('Current password'),
             'required'      => true,
             'constraints'   => array(
-                new Assert\NotBlank()
-            )
+                new Assert\NotBlank(),
+            ),
         ));
 
         $builder->add('password', 'repeated', array(
@@ -47,6 +47,6 @@ class PhraseaRenewPasswordForm extends AbstractType
 
     public function getName()
     {
-        return null;
+        return;
     }
 }

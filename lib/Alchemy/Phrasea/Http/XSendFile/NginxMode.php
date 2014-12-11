@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class NginxMode extends AbstractServerMode implements ModeInterface
 {
-     /**
+    /**
      * {@inheritdoc}
      */
     public function setHeaders(Request $request)
@@ -28,7 +28,7 @@ class NginxMode extends AbstractServerMode implements ModeInterface
             $xAccelMapping[] = sprintf('%s=%s', $entry['mount-point'], $entry['directory']);
         }
 
-        if (count($xAccelMapping) > 0 ) {
+        if (count($xAccelMapping) > 0) {
             $request->headers->add(array(
                 'X-Sendfile-Type' => 'X-Accel-Redirect',
                 'X-Accel-Mapping' => implode(',', $xAccelMapping),
@@ -53,7 +53,7 @@ class NginxMode extends AbstractServerMode implements ModeInterface
             }
 
             if (!isset($entry['mount-point'])) {
-                 throw new InvalidArgumentException('XSendFile mapping entry must contain at least a "mount-point" key');
+                throw new InvalidArgumentException('XSendFile mapping entry must contain at least a "mount-point" key');
             }
 
             if (false === is_dir(trim($entry['directory'])) || '' === trim($entry['mount-point'])) {
@@ -62,7 +62,7 @@ class NginxMode extends AbstractServerMode implements ModeInterface
 
             $final[] = array(
                 'directory' => $this->sanitizePath(realpath($entry['directory'])),
-                'mount-point' => $this->sanitizeMountPoint($entry['mount-point'])
+                'mount-point' => $this->sanitizeMountPoint($entry['mount-point']),
             );
         }
 
@@ -76,11 +76,11 @@ class NginxMode extends AbstractServerMode implements ModeInterface
     {
         $output = "\n";
         foreach ($this->mapping as $entry) {
-            $output .= "  location " . $entry['mount-point']. " {\n";
+            $output .= "  location ".$entry['mount-point']." {\n";
             $output .= "      internal;\n";
             $output .= "      add_header Etag \$upstream_http_etag;\n";
             $output .= "      add_header Link \$upstream_http_link;\n";
-            $output .= "      alias " .  $entry['directory'] . ";\n";
+            $output .= "      alias ".$entry['directory'].";\n";
             $output .= "  }\n";
         }
 

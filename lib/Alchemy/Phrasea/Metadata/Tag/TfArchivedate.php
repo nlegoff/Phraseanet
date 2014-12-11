@@ -16,5 +16,4 @@ class TfArchivedate extends AbstractTag
     protected $Type = '';
     protected $Writable = false;
     protected $Description = 'The date the document has been archived';
-
 }

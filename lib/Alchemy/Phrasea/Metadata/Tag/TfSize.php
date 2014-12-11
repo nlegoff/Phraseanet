@@ -16,5 +16,4 @@ class TfSize extends AbstractTag
     protected $Type = '';
     protected $Writable = false;
     protected $Description = 'The size of the file';
-
 }

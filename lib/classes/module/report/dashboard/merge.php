@@ -128,8 +128,9 @@ class module_report_dashboard_merge implements module_report_dashboard_component
     private function sum()
     {
         $this->sorted[$this->currentkey] = 0;
-        foreach ($this->sort[$this->currentkey] as $k => $v)
+        foreach ($this->sort[$this->currentkey] as $k => $v) {
             $this->sorted[$this->currentkey] += $v;
+        }
 
         return;
     }
@@ -142,7 +143,6 @@ class module_report_dashboard_merge implements module_report_dashboard_component
     {
         foreach ($this->sort[$this->currentkey] as $sbas => $val) {
             foreach ($val as $key => $value) {
-
                 isset($this->sorted[$this->currentkey][$key]) ?
                         $this->sorted[$this->currentkey][$key] += $value :
                         $this->sorted[$this->currentkey][$key] = $value;
@@ -159,9 +159,10 @@ class module_report_dashboard_merge implements module_report_dashboard_component
      */
     private function toString()
     {
-        foreach ($this->sorted[$this->currentkey] as $k => $v)
+        foreach ($this->sorted[$this->currentkey] as $k => $v) {
             $this->sorted[$this->currentkey][$k] =
                 (string) number_format($v, 2, '.', '');
+        }
 
         return;
     }
@@ -175,14 +176,15 @@ class module_report_dashboard_merge implements module_report_dashboard_component
         foreach ($this->sort[$this->currentkey] as $sbas => $val) {
             foreach ($val as $id => $info) {
                 foreach ($info as $k => $v) {
-                    if (is_int($v) || is_float($v))
+                    if (is_int($v) || is_float($v)) {
                         isset($this->sorted[$this->currentkey][$id][$k]) ?
                                 $this->sorted[$this->currentkey][$id][$k] += $v :
                                 $this->sorted[$this->currentkey][$id][$k] = $v;
-                    elseif (is_string($v))
+                    } elseif (is_string($v)) {
                         $this->sorted[$this->currentkey][$id][$k] = $v;
-                    else
+                    } else {
                         $this->sorted[$this->currentkey][$id][$k] = null;
+                    }
                 }
             }
         }

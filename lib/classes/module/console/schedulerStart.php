@@ -25,7 +25,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class module_console_schedulerStart extends Command
 {
-
     public function __construct($name = null)
     {
         parent::__construct($name);
@@ -51,12 +50,12 @@ class module_console_schedulerStart extends Command
                 'enabled'   => true,
                 'level'     => 'INFO',
                 'max-files' => 10,
-            )
+            ),
         ), $taskManagerConf);
 
         if ($taskManagerConf['logger']['enabled']) {
             $level = defined('Monolog\\Logger::'.$taskManagerConf['logger']['level']) ? constant('Monolog\\Logger::'.$taskManagerConf['logger']['level']) : Logger::INFO;
-            $logfile = __DIR__ . '/../../../../logs/scheduler.log';
+            $logfile = __DIR__.'/../../../../logs/scheduler.log';
             $rotateHandler = new Handler\RotatingFileHandler($logfile, $taskManagerConf['logger']['max-files'], $level);
             $logger->pushHandler($rotateHandler);
         }

@@ -8,6 +8,6 @@ class LocalesRequirementsTest extends RequirementsTestCase
 {
     protected function provideRequirements()
     {
-        return new LocalesRequirements;
+        return new LocalesRequirements();
     }
 }

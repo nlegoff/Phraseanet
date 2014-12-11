@@ -54,7 +54,7 @@ class set_selection extends set_abstract
      *
      * @return set_selection
      */
-    public function grep_authorized(Array $rights = array(), Array $sbas_rights = array())
+    public function grep_authorized(array $rights = array(), array $sbas_rights = array())
     {
         $to_remove = array();
 
@@ -70,19 +70,19 @@ class set_selection extends set_abstract
                 if ($this->app['authentication']->getUser()->ACL()->has_preview_grant($record)) {
                     continue;
                 }
-                if ( ! $this->app['authentication']->getUser()->ACL()->has_access_to_base($base_id)) {
+                if (! $this->app['authentication']->getUser()->ACL()->has_access_to_base($base_id)) {
                     $to_remove[] = $id;
                     continue;
                 }
             } else {
                 foreach ($rights as $right) {
-                    if ( ! $this->app['authentication']->getUser()->ACL()->has_right_on_base($base_id, $right)) {
+                    if (! $this->app['authentication']->getUser()->ACL()->has_right_on_base($base_id, $right)) {
                         $to_remove[] = $id;
                         continue;
                     }
                 }
                 foreach ($sbas_rights as $right) {
-                    if ( ! $this->app['authentication']->getUser()->ACL()->has_right_on_sbas($sbas_id, $right)) {
+                    if (! $this->app['authentication']->getUser()->ACL()->has_right_on_sbas($sbas_id, $right)) {
                         $to_remove[] = $id;
                         continue;
                     }
@@ -94,8 +94,8 @@ class set_selection extends set_abstract
 
                 $sql = 'SELECT record_id
                 FROM record
-                WHERE ((status ^ ' . $this->app['authentication']->getUser()->ACL()->get_mask_xor($base_id) . ')
-                        & ' . $this->app['authentication']->getUser()->ACL()->get_mask_and($base_id) . ')=0
+                WHERE ((status ^ '.$this->app['authentication']->getUser()->ACL()->get_mask_xor($base_id).')
+                        & '.$this->app['authentication']->getUser()->ACL()->get_mask_and($base_id).')=0
                 AND record_id = :record_id';
 
                 $stmt = $connsbas->prepare($sql);
@@ -107,7 +107,6 @@ class set_selection extends set_abstract
                     $to_remove[] = $id;
                 }
             } catch (\Exception $e) {
-
             }
         }
         foreach ($to_remove as $id) {
@@ -124,7 +123,7 @@ class set_selection extends set_abstract
      *
      * @return set_selection
      */
-    public function load_list(Array $lst, $flatten_groupings = false)
+    public function load_list(array $lst, $flatten_groupings = false)
     {
         foreach ($lst as $basrec) {
             $basrec = explode('_', $basrec);

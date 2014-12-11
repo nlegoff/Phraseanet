@@ -35,28 +35,28 @@ class JavascriptBuilder extends Command
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $files = array(
-            $this->container['root.path'] . '/www/skins/build/bootstrap/js/bootstrap.js' => array(
-                $this->container['root.path'] . '/www/assets/bootstrap/js/bootstrap-transition.js',
-                $this->container['root.path'] . '/www/assets/bootstrap/js/bootstrap-alert.js',
-                $this->container['root.path'] . '/www/assets/bootstrap/js/bootstrap-button.js',
-                $this->container['root.path'] . '/www/assets/bootstrap/js/bootstrap-carousel.js',
-                $this->container['root.path'] . '/www/assets/bootstrap/js/bootstrap-collapse.js',
-                $this->container['root.path'] . '/www/assets/bootstrap/js/bootstrap-dropdown.js',
-                $this->container['root.path'] . '/www/assets/bootstrap/js/bootstrap-modal.js',
-                $this->container['root.path'] . '/www/assets/bootstrap/js/bootstrap-tooltip.js',
-                $this->container['root.path'] . '/www/assets/bootstrap/js/bootstrap-popover.js',
-                $this->container['root.path'] . '/www/assets/bootstrap/js/bootstrap-scrollspy.js',
-                $this->container['root.path'] . '/www/assets/bootstrap/js/bootstrap-tab.js',
-                $this->container['root.path'] . '/www/assets/bootstrap/js/bootstrap-typeahead.js',
-                $this->container['root.path'] . '/www/assets/bootstrap/js/bootstrap-affix.js',
-            )
+            $this->container['root.path'].'/www/skins/build/bootstrap/js/bootstrap.js' => array(
+                $this->container['root.path'].'/www/assets/bootstrap/js/bootstrap-transition.js',
+                $this->container['root.path'].'/www/assets/bootstrap/js/bootstrap-alert.js',
+                $this->container['root.path'].'/www/assets/bootstrap/js/bootstrap-button.js',
+                $this->container['root.path'].'/www/assets/bootstrap/js/bootstrap-carousel.js',
+                $this->container['root.path'].'/www/assets/bootstrap/js/bootstrap-collapse.js',
+                $this->container['root.path'].'/www/assets/bootstrap/js/bootstrap-dropdown.js',
+                $this->container['root.path'].'/www/assets/bootstrap/js/bootstrap-modal.js',
+                $this->container['root.path'].'/www/assets/bootstrap/js/bootstrap-tooltip.js',
+                $this->container['root.path'].'/www/assets/bootstrap/js/bootstrap-popover.js',
+                $this->container['root.path'].'/www/assets/bootstrap/js/bootstrap-scrollspy.js',
+                $this->container['root.path'].'/www/assets/bootstrap/js/bootstrap-tab.js',
+                $this->container['root.path'].'/www/assets/bootstrap/js/bootstrap-typeahead.js',
+                $this->container['root.path'].'/www/assets/bootstrap/js/bootstrap-affix.js',
+            ),
         );
 
         $output->writeln('Building JavaScript assets');
         foreach ($files as $target => $sources) {
             $this->buildJavascript($input, $output, $target, $sources);
 
-            $minifiedTarget = substr($target, 0, -3) . '.min.js';
+            $minifiedTarget = substr($target, 0, -3).'.min.js';
             $this->buildMinifiedJavascript($input, $output, $minifiedTarget, $target);
         }
     }

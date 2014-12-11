@@ -89,14 +89,12 @@ class Manager
         $file->getUUID(true, false);
 
         if (($visa->isValid() || $forceBehavior === self::FORCE_RECORD) && $forceBehavior !== self::FORCE_LAZARET) {
-
             $this->addMediaAttributes($file);
 
             $element = $this->createRecord($file);
 
             $code = self::RECORD_CREATED;
         } else {
-
             $element = $this->createLazaret($file, $visa, $session, $forceBehavior === self::FORCE_LAZARET);
 
             $code = self::LAZARET_CREATED;
@@ -171,7 +169,6 @@ class Manager
     {
         $checkers = $this->checkers;
         foreach ($this->checkers as $offset => $registered) {
-
             if ($checker == $registered) {
                 array_splice($checkers, $offset, 1);
             }
@@ -200,22 +197,21 @@ class Manager
      */
     protected function bookLazaretPathfile($filename, $suffix = '')
     {
-        $output = $this->app['root.path'] . '/tmp/lazaret/lzrt_' . substr($filename, 0, 3) . '_' . $suffix . '.' . pathinfo($filename, PATHINFO_EXTENSION);
+        $output = $this->app['root.path'].'/tmp/lazaret/lzrt_'.substr($filename, 0, 3).'_'.$suffix.'.'.pathinfo($filename, PATHINFO_EXTENSION);
         $infos = pathinfo($output);
         $n = 0;
 
-        $this->app['filesystem']->mkdir($this->app['root.path'] . '/tmp/lazaret');
+        $this->app['filesystem']->mkdir($this->app['root.path'].'/tmp/lazaret');
 
         while (true) {
-            $output = sprintf('%s/%s-%d%s', $infos['dirname'], $infos['filename'],  ++ $n, (isset($infos['extension']) ? '.' . $infos['extension'] : ''));
+            $output = sprintf('%s/%s-%d%s', $infos['dirname'], $infos['filename'],  ++ $n, (isset($infos['extension']) ? '.'.$infos['extension'] : ''));
 
             try {
-                if ( ! $this->app['filesystem']->exists($output)) {
+                if (! $this->app['filesystem']->exists($output)) {
                     $this->app['filesystem']->touch($output);
                     break;
                 }
             } catch (IOException $e) {
-
             }
         }
 
@@ -292,7 +288,7 @@ class Manager
 
                     $story = $attribute->getValue();
 
-                    if ( ! $story->hasChild($element)) {
+                    if (! $story->hasChild($element)) {
                         $story->appendChild($element);
                     }
 
@@ -341,7 +337,6 @@ class Manager
         try {
             $this->app['media-alchemyst']->turnInto($file->getFile()->getPathname(), $lazaretPathnameThumb, $spec);
         } catch (MediaAlchemystException $e) {
-
         }
 
         $lazaretFile = new LazaretFile();
@@ -370,8 +365,7 @@ class Manager
         }
 
         foreach ($visa->getResponses() as $response) {
-            if ( ! $response->isOk()) {
-
+            if (! $response->isOk()) {
                 $check = new \Entities\LazaretCheck();
                 $check->setCheckClassname(get_class($response->getChecker()));
                 $check->setLazaretFile($lazaretFile);

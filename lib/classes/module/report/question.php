@@ -25,7 +25,7 @@ class module_report_question extends module_report
         'site'        => 'log.site',
         'sit_session' => 'log.sit_session',
         'appli'       => 'log.appli',
-        'ip'          => 'log.ip'
+        'ip'          => 'log.ip',
     );
 
     /**
@@ -39,7 +39,7 @@ class module_report_question extends module_report
      */
     public function __construct(Application $app, $arg1, $arg2, $sbas_id, $collist)
     {
-//        parent::__construct($app, $arg1, $arg2, $sbas_id, $collist);
+        //        parent::__construct($app, $arg1, $arg2, $sbas_id, $collist);
         parent::__construct($app, $arg1, $arg2, $sbas_id, "");
         $this->title = _('report:: question');
     }
@@ -71,12 +71,13 @@ class module_report_question extends module_report
 
         foreach ($rs as $row) {
             $value = $row['val'];
-            if ($field == 'appli')
+            if ($field == 'appli') {
                 $caption = implode(' ', phrasea::modulesName(@unserialize($row['val'])));
-            elseif ($field == "ddate")
+            } elseif ($field == "ddate") {
                 $caption = $this->app['date-formatter']->getPrettyString(new DateTime($value));
-            else
+            } else {
                 $caption = $row['val'];
+            }
             $ret[] = array('val'   => $caption, 'value' => $value);
         }
 
@@ -88,17 +89,20 @@ class module_report_question extends module_report
         $tab = array();
         $i = 0;
         foreach ($rs as $row) {
-            if ($this->enable_limit && ($i > $this->nb_record))
+            if ($this->enable_limit && ($i > $this->nb_record)) {
                 break;
+            }
             foreach ($this->champ as $key => $value) {
                 if ($row[$value]) {
-                    if ($value == 'ddate')
+                    if ($value == 'ddate') {
                         $this->result[$i][$value] =
                             $this->pretty_string ? $this->app['date-formatter']->getPrettyString(new DateTime($row[$value])) : $row[$value];
-                    else
+                    } else {
                         $this->result[$i][$value] = $row[$value];
-                } else
-                    $this->result[$i][$value] = "<i>" . _('report:: non-renseigne') . "</i>";
+                    }
+                } else {
+                    $this->result[$i][$value] = "<i>"._('report:: non-renseigne')."</i>";
+                }
             }
             $i ++;
         }

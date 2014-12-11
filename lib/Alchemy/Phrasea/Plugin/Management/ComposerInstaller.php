@@ -30,7 +30,7 @@ class ComposerInstaller
 
         $this->setup = $setup;
         $this->phpExecutable = $phpExecutable;
-        $this->composer = $pluginsDirectory . DIRECTORY_SEPARATOR . 'composer.phar';
+        $this->composer = $pluginsDirectory.DIRECTORY_SEPARATOR.'composer.phar';
     }
 
     public function install($directory)
@@ -67,7 +67,7 @@ class ComposerInstaller
             }
         } else {
             $process = ProcessBuilder::create(array(
-                $this->phpExecutable, $this->composer, 'self-update'
+                $this->phpExecutable, $this->composer, 'self-update',
             ))->getProcess();
             $process->run();
         }

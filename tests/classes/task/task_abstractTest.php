@@ -134,10 +134,10 @@ class task_abstractTest extends PhraseanetPHPUnitAbstract
     public function testLockTask()
     {
         $methodL = new ReflectionMethod(self::$task, 'lockTask');
-        $methodL->setAccessible(TRUE);
+        $methodL->setAccessible(true);
 
         $methodU = new ReflectionMethod(self::$task, 'unlockTask');
-        $methodU->setAccessible(TRUE);
+        $methodU->setAccessible(true);
 
         // test that task should not be locked
         try {

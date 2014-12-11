@@ -26,7 +26,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Dashboard implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -216,7 +215,6 @@ class Dashboard implements ControllerProviderInterface
     public function addAdmins(Application $app, Request $request)
     {
         if (count($admins = $request->request->get('admins', array())) > 0) {
-
             if (!in_array($app['authentication']->getUser()->get_id(), $admins)) {
                 $admins[] = $app['authentication']->getUser()->get_id();
             }

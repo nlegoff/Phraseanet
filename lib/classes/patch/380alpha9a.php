@@ -61,8 +61,8 @@ class patch_380alpha9a implements patchInterface
                 $labelOff = (string) $sb['labelOff'];
                 $labelOn = (string) $sb['labelOn'];
 
-                $this->status[$bit]["labeloff"] =  $labelOff ? : 'no-' . $name;
-                $this->status[$bit]["labelon"] = $labelOn ? : 'ok-' . $name;
+                $this->status[$bit]["labeloff"] =  $labelOff ?: 'no-'.$name;
+                $this->status[$bit]["labelon"] = $labelOn ?: 'ok-'.$name;
             }
         }
 

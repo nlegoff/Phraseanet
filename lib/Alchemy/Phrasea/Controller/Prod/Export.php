@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Export implements ControllerProviderInterface
 {
-
     /**
      * {@inheritDoc}
      */
@@ -122,7 +121,7 @@ class Export implements ControllerProviderInterface
             'ssttid'               => $request->request->get('ssel'),
             'lst'                  => $download->serialize_list(),
             'default_export_title' => $app['phraseanet.registry']->get('GV_default_export_title'),
-            'choose_export_title'  => $app['phraseanet.registry']->get('GV_choose_export_title')
+            'choose_export_title'  => $app['phraseanet.registry']->get('GV_choose_export_title'),
         )));
     }
 
@@ -152,7 +151,7 @@ class Export implements ControllerProviderInterface
 
         return $app->json(array(
             'success' => $success,
-            'message' => $msg
+            'message' => $msg,
         ));
     }
 
@@ -177,7 +176,7 @@ class Export implements ControllerProviderInterface
         if (count($download->get_display_ftp()) == 0) {
             return $app->json(array(
                 'success' => false,
-                'message' => _("You do not have required rights to send these documents over FTP")
+                'message' => _("You do not have required rights to send these documents over FTP"),
             ));
         }
 
@@ -205,12 +204,12 @@ class Export implements ControllerProviderInterface
 
             return $app->json(array(
                 'success' => true,
-                'message' => _('Export saved in the waiting queue')
+                'message' => _('Export saved in the waiting queue'),
             ));
         } catch (\Exception $e) {
             return $app->json(array(
                 'success' => false,
-                'message' => _('Something went wrong')
+                'message' => _('Something went wrong'),
             ));
         }
     }
@@ -237,12 +236,12 @@ class Export implements ControllerProviderInterface
             $app['authentication']->getUser(),
             $app['filesystem'],
             (array) $request->request->get('obj'),
-            $request->request->get("type") == "title" ? : false,
+            $request->request->get("type") == "title" ?: false,
             $request->request->get('businessfields')
         );
 
         $separator = preg_split('//', ' ;,', -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-        $separator = '/\\' . implode('|\\', $separator) . '/';
+        $separator = '/\\'.implode('|\\', $separator).'/';
 
         $list['export_name'] = sprintf("%s.zip", $download->getExportName());
         $list['email'] = implode(';', preg_split($separator, $request->request->get("destmail", "")));
@@ -258,7 +257,7 @@ class Export implements ControllerProviderInterface
                     'lst'    => $lst,
                     'ssttid' => $ssttid,
                     'dest'   => $mail,
-                    'reason' => \eventsmanager_notify_downloadmailfail::MAIL_NO_VALID
+                    'reason' => \eventsmanager_notify_downloadmailfail::MAIL_NO_VALID,
                 ));
             }
         }
@@ -273,7 +272,7 @@ class Export implements ControllerProviderInterface
                 $app,
                 $token,
                 $list,
-                $app['root.path'] . '/tmp/download/' . $token . '.zip'
+                $app['root.path'].'/tmp/download/'.$token.'.zip'
             );
 
             $remaingEmails = $destMails;
@@ -305,7 +304,7 @@ class Export implements ControllerProviderInterface
                         'lst'    => $lst,
                         'ssttid' => $ssttid,
                         'dest'   => $mail,
-                        'reason' => \eventsmanager_notify_downloadmailfail::MAIL_FAIL
+                        'reason' => \eventsmanager_notify_downloadmailfail::MAIL_FAIL,
                     ));
                 }
             }
@@ -316,14 +315,14 @@ class Export implements ControllerProviderInterface
                     'lst'    => $lst,
                     'ssttid' => $ssttid,
                     'dest'   => $mail,
-                    'reason' => 0
+                    'reason' => 0,
                 ));
             }
         }
 
         return $app->json(array(
             'success' => true,
-            'message' => ''
+            'message' => '',
         ));
     }
 

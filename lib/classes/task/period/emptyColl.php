@@ -38,7 +38,7 @@ class task_period_emptyColl extends task_appboxAbstract
      */
     public static function getDefaultSettings(Configuration $config, array $params = array())
     {
-        return '<?xml version="1.0" encoding="UTF-8"?><tasksettings><bas_id>' . (isset($params['bas_id']) ? $params['bas_id'] : '' ) . '</bas_id></tasksettings>';
+        return '<?xml version="1.0" encoding="UTF-8"?><tasksettings><bas_id>'.(isset($params['bas_id']) ? $params['bas_id'] : '').'</bas_id></tasksettings>';
     }
 
     protected function loadSettings(SimpleXMLElement $sx_task_settings)
@@ -68,12 +68,12 @@ class task_period_emptyColl extends task_appboxAbstract
         return array();
     }
 
-    protected function processOneContent(appbox $appbox, Array $row)
+    protected function processOneContent(appbox $appbox, array $row)
     {
         return $this;
     }
 
-    protected function postProcessOneContent(appbox $appbox, Array $row)
+    protected function postProcessOneContent(appbox $appbox, array $row)
     {
         return $this;
     }

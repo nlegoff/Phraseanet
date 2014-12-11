@@ -36,7 +36,7 @@ use Alchemy\Phrasea\Command\CheckConfig;
 use Alchemy\Phrasea\Command\Setup\XSendFileMappingGenerator;
 use Alchemy\Phrasea\Command\Setup\XSendFileConfigurationDumper;
 
-require_once __DIR__ . '/../lib/autoload.php';
+require_once __DIR__.'/../lib/autoload.php';
 
 $cli = new CLI("
   _____  _    _ _____            _____ ______          _   _ ______ _______
@@ -54,7 +54,7 @@ $cli = new CLI("
  This program comes with ABSOLUTELY NO WARRANTY.
  This is free software, and you are welcome to redistribute it
  under certain conditions; type `about:license' for details.\n\n"
-            . ' KONSOLE KOMMANDER', Version::getName() . ' ' . Version::getNumber());
+            .' KONSOLE KOMMANDER', Version::getName().' '.Version::getNumber());
 
 if (!$cli['phraseanet.configuration-tester']->isInstalled()) {
     throw new \RuntimeException('Phraseanet is not installed, use setup command instead');
@@ -112,4 +112,4 @@ $cli->command(new StaticMappingGenerator());
 
 $cli->loadPlugins();
 
-exit(is_int($cli->run()) ? : 1);
+exit(is_int($cli->run()) ?: 1);

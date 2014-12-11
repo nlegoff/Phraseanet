@@ -166,7 +166,7 @@ class databox extends base
     {
         $this->load();
 
-        return $this->viewname ? : $this->dbname;
+        return $this->viewname ?: $this->dbname;
     }
 
     public function set_viewname($viewname)
@@ -208,7 +208,6 @@ class databox extends base
             try {
                 $ret[] = collection::get_from_coll_id($this->app, $this, $coll_id);
             } catch (\Exception $e) {
-
             }
         }
 
@@ -220,7 +219,6 @@ class databox extends base
         try {
             return $this->get_data_from_cache(self::CACHE_COLLECTIONS);
         } catch (\Exception $e) {
-
         }
 
         $conn = connection::getPDOConnection($this->app);
@@ -376,21 +374,23 @@ class databox extends base
         $stmt->closeCursor();
 
         foreach ($rs as $rowbas) {
-            if ( ! isset($trows[$rowbas[$sortk1]]))
+            if (! isset($trows[$rowbas[$sortk1]])) {
                 $trows[$rowbas[$sortk1]] = array();
+            }
             $trows[$rowbas[$sortk1]][$rowbas[$sortk2]] = array(
                 "coll_id"   => $rowbas["coll_id"],
                 "asciiname" => $rowbas["asciiname"],
                 "lostcoll"  => $rowbas["lostcoll"],
                 "name"      => $rowbas["name"],
                 "n"         => $rowbas["n"],
-                "siz"       => $rowbas["siz"]
+                "siz"       => $rowbas["siz"],
             );
         }
 
         ksort($trows);
-        foreach ($trows as $kgrp => $vgrp)
+        foreach ($trows as $kgrp => $vgrp) {
             ksort($trows[$kgrp]);
+        }
 
         return $trows;
     }
@@ -419,15 +419,17 @@ class databox extends base
         $ret = array(
             'xml_indexed'       => 0,
             'thesaurus_indexed' => 0,
-            'jeton_subdef' => array()
+            'jeton_subdef' => array(),
         );
 
         foreach ($rs as $row) {
             $status = $row['status'];
-            if ($status & 1)
+            if ($status & 1) {
                 $ret['xml_indexed'] += $row['n'];
-            if ($status & 2)
+            }
+            if ($status & 2) {
                 $ret['thesaurus_indexed'] += $row['n'];
+            }
         }
 
         $sql = "SELECT type, COUNT(record_id) AS n FROM record WHERE jeton & ".JETON_MAKE_SUBDEF." GROUP BY type";
@@ -437,7 +439,7 @@ class databox extends base
         $stmt->closeCursor();
 
         foreach ($rs as $row) {
-            $ret['jeton_subdef'][$row['type']] = (int)$row['n'];
+            $ret['jeton_subdef'][$row['type']] = (int) $row['n'];
         }
 
         return $ret;
@@ -479,7 +481,7 @@ class databox extends base
                 $user->ACL()->delete_data_from_cache(ACL::CACHE_RIGHTS_BAS);
                 $user->ACL()->delete_injected_rights_sbas($this);
             }
-            $n+=50;
+            $n += 50;
         }
 
         foreach ($this->app['EM']->getRepository('\Entities\StoryWZ')->findByDatabox($this->app, $this) as $story) {
@@ -522,8 +524,8 @@ class databox extends base
 
     public static function create(Application $app, connection_pdo $connection, \SplFileInfo $data_template, registryInterface $registry)
     {
-        if ( ! file_exists($data_template->getRealPath())) {
-            throw new \InvalidArgumentException($data_template->getRealPath() . " does not exist");
+        if (! file_exists($data_template->getRealPath())) {
+            throw new \InvalidArgumentException($data_template->getRealPath()." does not exist");
         }
 
         $credentials = $connection->get_credentials();
@@ -544,7 +546,7 @@ class databox extends base
             , ':port'     => $port
             , ':dbname'   => $dbname
             , ':user'     => $user
-            , ':password' => $password
+            , ':password' => $password,
         );
 
         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -557,16 +559,15 @@ class databox extends base
         }
 
         try {
-            $sql = 'CREATE DATABASE `' . $dbname . '`
+            $sql = 'CREATE DATABASE `'.$dbname.'`
               CHARACTER SET utf8 COLLATE utf8_unicode_ci';
             $stmt = $connection->prepare($sql);
             $stmt->execute();
             $stmt->closeCursor();
         } catch (\Exception $e) {
-
         }
 
-        $sql = 'USE `' . $dbname . '`';
+        $sql = 'USE `'.$dbname.'`';
         $stmt = $connection->prepare($sql);
         $stmt->execute();
         $stmt->closeCursor();
@@ -576,19 +577,15 @@ class databox extends base
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
-        if ($row)
+        if ($row) {
             $ord = $row['ord'] + 1;
+        }
 
         $sql = 'INSERT INTO sbas (sbas_id, ord, host, port, dbname, sqlengine, user, pwd)
               VALUES (null, :ord, :host, :port, :dbname, "MYSQL", :user, :password)';
         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
         $stmt->execute(array(
-            ':ord'      => $ord
-            , ':host'     => $host
-            , ':port'     => $port
-            , ':dbname'   => $dbname
-            , ':user'     => $user
-            , ':password' => $password
+            ':ord'      => $ord, ':host'     => $host, ':port'     => $port, ':dbname'   => $dbname, ':user'     => $user, ':password' => $password,
         ));
         $stmt->closeCursor();
         $sbas_id = (int) $app['phraseanet.appbox']->get_connection()->lastInsertId();
@@ -624,19 +621,15 @@ class databox extends base
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
-        if ($row)
+        if ($row) {
             $ord = $row['ord'] + 1;
+        }
 
         $sql = 'INSERT INTO sbas (sbas_id, ord, host, port, dbname, sqlengine, user, pwd)
               VALUES (null, :ord, :host, :port, :dbname, "MYSQL", :user, :password)';
         $stmt = $conn->prepare($sql);
         $stmt->execute(array(
-            ':ord'      => $ord
-            , ':host'     => $host
-            , ':port'     => $port
-            , ':dbname'   => $dbname
-            , ':user'     => $user
-            , ':password' => $password
+            ':ord'      => $ord, ':host'     => $host, ':port'     => $port, ':dbname'   => $dbname, ':user'     => $user, ':password' => $password,
         ));
 
         $stmt->closeCursor();
@@ -663,7 +656,7 @@ class databox extends base
 
     public function get_cache_key($option = null)
     {
-        return 'databox_' . $this->id . '_' . ($option ? $option . '_' : '');
+        return 'databox_'.$this->id.'_'.($option ? $option.'_' : '');
     }
 
     /**
@@ -728,22 +721,22 @@ class databox extends base
         $day = date('d', strtotime($date));
 
         $n = 0;
-        $comp = $year . DIRECTORY_SEPARATOR . $month . DIRECTORY_SEPARATOR . $day . DIRECTORY_SEPARATOR;
+        $comp = $year.DIRECTORY_SEPARATOR.$month.DIRECTORY_SEPARATOR.$day.DIRECTORY_SEPARATOR;
 
-        $pathout = $repository_path . $comp;
+        $pathout = $repository_path.$comp;
 
-        while (($pathout = $repository_path . $comp . self::addZeros($n)) && is_dir($pathout) && iterator_count(new \DirectoryIterator($pathout)) > 100) {
+        while (($pathout = $repository_path.$comp.self::addZeros($n)) && is_dir($pathout) && iterator_count(new \DirectoryIterator($pathout)) > 100) {
             $n ++;
         }
 
         $filesystem->mkdir($pathout, 0750);
 
-        return $pathout . DIRECTORY_SEPARATOR;
+        return $pathout.DIRECTORY_SEPARATOR;
     }
 
     public function delete()
     {
-        $sql = 'DROP DATABASE `' . $this->get_dbname() . '`';
+        $sql = 'DROP DATABASE `'.$this->get_dbname().'`';
         $stmt = $this->get_connection()->prepare($sql);
         $stmt->execute();
         $stmt->closeCursor();
@@ -756,7 +749,7 @@ class databox extends base
     private static function addZeros($n, $length = 5)
     {
         while (strlen($n) < $length) {
-            $n = '0' . $n;
+            $n = '0'.$n;
         }
 
         return $n;
@@ -779,12 +772,12 @@ class databox extends base
             , databox_Field_DCESAbstract::Identifier  => new databox_Field_DCES_Identifier()
             , databox_Field_DCESAbstract::Language    => new databox_Field_DCES_Language()
             , databox_Field_DCESAbstract::Publisher   => new databox_Field_DCES_Publisher()
-            , databox_Field_DCESAbstract::Relation    => new databox_Field_DCES_Relation
-            , databox_Field_DCESAbstract::Rights      => new databox_Field_DCES_Rights
-            , databox_Field_DCESAbstract::Source      => new databox_Field_DCES_Source
+            , databox_Field_DCESAbstract::Relation    => new databox_Field_DCES_Relation()
+            , databox_Field_DCESAbstract::Rights      => new databox_Field_DCES_Rights()
+            , databox_Field_DCESAbstract::Source      => new databox_Field_DCES_Source()
             , databox_Field_DCESAbstract::Subject     => new databox_Field_DCES_Subject()
             , databox_Field_DCESAbstract::Title       => new databox_Field_DCES_Title()
-            , databox_Field_DCESAbstract::Type        => new databox_Field_DCES_Type()
+            , databox_Field_DCESAbstract::Type        => new databox_Field_DCES_Type(),
         );
     }
 
@@ -812,7 +805,7 @@ class databox extends base
         $sql = 'SELECT coll_id, asciiname FROM coll';
 
         if (count($colls) > 0) {
-            $sql .= ' WHERE coll_id NOT IN (' . implode(',', $colls) . ')';
+            $sql .= ' WHERE coll_id NOT IN ('.implode(',', $colls).')';
         }
 
         $stmt = $this->get_connection()->prepare($sql);
@@ -852,7 +845,6 @@ class databox extends base
      */
     public function saveStructure(DOMDocument $dom_struct)
     {
-
         $dom_struct->documentElement
             ->setAttribute("modification_date", $now = date("YmdHis"));
 
@@ -865,7 +857,7 @@ class databox extends base
         $stmt->execute(
             array(
                 ':structure' => $this->structure,
-                ':now'       => $now
+                ':now'       => $now,
             )
         );
         $stmt->closeCursor();
@@ -888,7 +880,6 @@ class databox extends base
 
     public function saveCterms(DOMDocument $dom_cterms)
     {
-
         $dom_cterms->documentElement->setAttribute("modification_date", $now = date("YmdHis"));
 
         $sql = "UPDATE pref SET value = :xml, updated_on = :date
@@ -897,7 +888,7 @@ class databox extends base
         $this->cterms = $dom_cterms->saveXML();
         $params = array(
             ':xml'  => $this->cterms
-            , ':date' => $now
+            , ':date' => $now,
         );
 
         $stmt = $this->get_connection()->prepare($sql);
@@ -910,7 +901,6 @@ class databox extends base
 
     public function saveThesaurus(DOMDocument $dom_thesaurus)
     {
-
         $dom_thesaurus->documentElement->setAttribute("modification_date", $now = date("YmdHis"));
         $this->thesaurus = $dom_thesaurus->saveXML();
 
@@ -925,16 +915,14 @@ class databox extends base
 
     public function setNewStructure(\SplFileInfo $data_template, $path_doc)
     {
-        if ( ! file_exists($data_template->getPathname())) {
+        if (! file_exists($data_template->getPathname())) {
             throw new \InvalidArgumentException(sprintf('File %s does not exists'));
         }
 
         $contents = file_get_contents($data_template->getPathname());
 
         $contents = str_replace(
-            array("{{basename}}", "{{datapathnoweb}}")
-            , array($this->dbname, $path_doc)
-            , $contents
+            array("{{basename}}", "{{datapathnoweb}}"), array($this->dbname, $path_doc), $contents
         );
 
         $dom_doc = new DOMDocument();
@@ -957,22 +945,19 @@ class databox extends base
             $src = trim(isset($field['src']) ? str_replace('/rdf:RDF/rdf:Description/', '', $field['src']) : '');
 
             $meta_id = isset($field['meta_id']) ? $field['meta_id'] : null;
-            if ( ! is_null($meta_id))
+            if (! is_null($meta_id)) {
                 continue;
+            }
 
-            $nodes = $xp_struct->query('/record/description/' . $fname);
+            $nodes = $xp_struct->query('/record/description/'.$fname);
             if ($nodes->length > 0) {
                 $nodes->item(0)->parentNode->removeChild($nodes->item(0));
             }
             $this->saveStructure($dom_struct);
 
             $type = isset($field['type']) ? $field['type'] : 'string';
-            $type = in_array($type
-                    , array(
-                    databox_field::TYPE_DATE
-                    , databox_field::TYPE_NUMBER
-                    , databox_field::TYPE_STRING
-                    , databox_field::TYPE_TEXT
+            $type = in_array($type, array(
+                    databox_field::TYPE_DATE, databox_field::TYPE_NUMBER, databox_field::TYPE_STRING, databox_field::TYPE_TEXT,
                     )
                 ) ? $type : databox_field::TYPE_STRING;
 
@@ -1014,7 +999,7 @@ class databox extends base
             ->update_rights_to_sbas(
                 $this->id, array(
                 'bas_manage'        => 1, 'bas_modify_struct' => 1,
-                'bas_modif_th'      => 1, 'bas_chupub'        => 1
+                'bas_modif_th'      => 1, 'bas_chupub'        => 1,
                 )
         );
 
@@ -1035,8 +1020,8 @@ class databox extends base
                 $stmt->execute(array(':coll_id'  => $row['coll_id'], ':sbas_id'  => $this->id));
                 $base_ids[] = $base_id = $conn->lastInsertId();
 
-                if ( ! empty($row['logo'])) {
-                    file_put_contents($this->app['root.path'] . '/config/minilogos/' . $base_id, $row['logo']);
+                if (! empty($row['logo'])) {
+                    file_put_contents($this->app['root.path'].'/config/minilogos/'.$base_id, $row['logo']);
                 }
             } catch (\Exception $e) {
                 unset($e);
@@ -1047,11 +1032,7 @@ class databox extends base
         $user->ACL()->give_access_to_base($base_ids);
         foreach ($base_ids as $base_id) {
             $user->ACL()->update_rights_to_base($base_id, array(
-                'canpush'         => 1, 'cancmd'          => 1
-                , 'canputinalbum'   => 1, 'candwnldhd'      => 1, 'candwnldpreview' => 1, 'canadmin'        => 1
-                , 'actif'           => 1, 'canreport'       => 1, 'canaddrecord'    => 1, 'canmodifrecord'  => 1
-                , 'candeleterecord' => 1, 'chgstatus'       => 1, 'imgtools'        => 1, 'manage'          => 1
-                , 'modify_struct'   => 1, 'nowatermark'     => 1
+                'canpush'         => 1, 'cancmd'          => 1, 'canputinalbum'   => 1, 'candwnldhd'      => 1, 'candwnldpreview' => 1, 'canadmin'        => 1, 'actif'           => 1, 'canreport'       => 1, 'canaddrecord'    => 1, 'canmodifrecord'  => 1, 'candeleterecord' => 1, 'chgstatus'       => 1, 'imgtools'        => 1, 'manage'          => 1, 'modify_struct'   => 1, 'nowatermark'     => 1,
                 )
             );
         }
@@ -1067,8 +1048,9 @@ class databox extends base
     public static function getPrintLogo($sbas_id)
     {
         $out = '';
-        if (is_file(($filename = __DIR__ . '/../../config/minilogos/'.\databox::PIC_PDF.'_' . $sbas_id . '.jpg')))
+        if (is_file(($filename = __DIR__.'/../../config/minilogos/'.\databox::PIC_PDF.'_'.$sbas_id.'.jpg'))) {
             $out = file_get_contents($filename);
+        }
 
         return $out;
     }
@@ -1076,7 +1058,7 @@ class databox extends base
     public function clear_logs()
     {
         foreach (array('log', 'log_colls', 'log_docs', 'log_search', 'log_view', 'log_thumb') as $table) {
-            $sql = 'DELETE FROM ' . $table;
+            $sql = 'DELETE FROM '.$table;
             $stmt = $this->get_connection()->prepare($sql);
             $stmt->execute();
             $stmt->closeCursor();
@@ -1131,10 +1113,11 @@ class databox extends base
 
         $DOM_thesaurus = $this->get_dom_thesaurus();
 
-        if ($DOM_thesaurus && ($tmp = new thesaurus_xpath($DOM_thesaurus)) !== false)
+        if ($DOM_thesaurus && ($tmp = new thesaurus_xpath($DOM_thesaurus)) !== false) {
             self::$_xpath_thesaurus[$sbas_id] = $tmp;
-        else
+        } else {
             self::$_xpath_thesaurus[$sbas_id] = false;
+        }
 
         return self::$_xpath_thesaurus[$sbas_id];
     }
@@ -1151,10 +1134,11 @@ class databox extends base
 
         $thesaurus = $this->get_thesaurus();
 
-        if ($thesaurus && false !== $tmp = simplexml_load_string($thesaurus))
+        if ($thesaurus && false !== $tmp = simplexml_load_string($thesaurus)) {
             self::$_sxml_thesaurus[$sbas_id] = $tmp;
-        else
+        } else {
             self::$_sxml_thesaurus[$sbas_id] = false;
+        }
 
         return self::$_sxml_thesaurus[$sbas_id];
     }
@@ -1207,7 +1191,6 @@ class databox extends base
         try {
             return $this->get_data_from_cache(self::CACHE_STRUCTURE);
         } catch (\Exception $e) {
-
         }
 
         $structure = null;
@@ -1217,8 +1200,9 @@ class databox extends base
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ($row)
+        if ($row) {
             $structure = $row['value'];
+        }
         $this->set_data_to_cache($structure, self::CACHE_STRUCTURE);
 
         return $structure;
@@ -1241,8 +1225,9 @@ class databox extends base
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ($row)
+        if ($row) {
             $this->cterms = $row['value'];
+        }
 
         return $this->cterms;
     }
@@ -1264,10 +1249,11 @@ class databox extends base
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;
 
-        if ($structure && $dom->loadXML($structure) !== false)
+        if ($structure && $dom->loadXML($structure) !== false) {
             $this->_dom_structure = $dom;
-        else
+        } else {
             $this->_dom_structure = false;
+        }
 
         return $this->_dom_structure;
     }
@@ -1289,10 +1275,11 @@ class databox extends base
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;
 
-        if ($cterms && $dom->loadXML($cterms) !== false)
+        if ($cterms && $dom->loadXML($cterms) !== false) {
             $this->_dom_cterms = $dom;
-        else
+        } else {
             $this->_dom_cterms = false;
+        }
 
         return $this->_dom_cterms;
     }
@@ -1309,10 +1296,11 @@ class databox extends base
 
         $structure = $this->get_structure();
 
-        if ($structure && false !== $tmp = simplexml_load_string($structure))
+        if ($structure && false !== $tmp = simplexml_load_string($structure)) {
             $this->_sxml_structure = $tmp;
-        else
+        } else {
             $this->_sxml_structure = false;
+        }
 
         return $this->_sxml_structure;
     }
@@ -1328,10 +1316,11 @@ class databox extends base
 
         $dom_doc = $this->get_dom_structure();
 
-        if ($dom_doc && ($tmp = new DOMXpath($dom_doc)) !== false)
+        if ($dom_doc && ($tmp = new DOMXpath($dom_doc)) !== false) {
             $this->_xpath_structure = $tmp;
-        else
+        } else {
             $this->_xpath_structure = false;
+        }
 
         return $this->_xpath_structure;
     }
@@ -1358,8 +1347,9 @@ class databox extends base
                 continue;
             }
 
-            if ( ! isset($AvSubdefs[$subdefgroup_name]))
+            if (! isset($AvSubdefs[$subdefgroup_name])) {
                 $AvSubdefs[$subdefgroup_name] = array();
+            }
 
             foreach ($subdefs as $sd) {
                 $sd_name = trim(mb_strtolower((string) $sd->attributes()->name));
@@ -1368,7 +1358,7 @@ class databox extends base
                     $errors[] = _('ERREUR : Les name de subdef sont uniques par groupe de subdefs et necessaire');
                     continue;
                 }
-                if ( ! in_array($sd_class, array('thumbnail', 'preview', 'document'))) {
+                if (! in_array($sd_class, array('thumbnail', 'preview', 'document'))) {
                     $errors[] = _('ERREUR : La classe de subdef est necessaire et egal a "thumbnail","preview" ou "document"');
                     continue;
                 }
@@ -1398,7 +1388,6 @@ class databox extends base
 
             return $this;
         } catch (\Exception $e) {
-
         }
 
         $sql = 'SELECT value, locale, updated_on FROM pref WHERE prop ="ToU"';
@@ -1443,8 +1432,9 @@ class databox extends base
         $terms = str_replace(array("\r\n", "\n", "\r"), array('', '', ''), strip_tags($terms, '<p><strong><a><ul><ol><li><h1><h2><h3><h4><h5><h6>'));
         $sql = 'UPDATE pref SET value = :terms ';
 
-        if ($reset_date)
+        if ($reset_date) {
             $sql .= ', updated_on=NOW() ';
+        }
 
         $sql .= ' WHERE prop="ToU" AND locale = :locale';
 

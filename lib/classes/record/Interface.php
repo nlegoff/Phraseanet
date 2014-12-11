@@ -13,7 +13,6 @@ use Alchemy\Phrasea\Application;
 use Alchemy\Phrasea\SearchEngine\SearchEngineInterface;
 use Doctrine\ORM\EntityManager;
 use MediaVorus\Media\MediaInterface;
-use MediaVorus\MediaVorus;
 
 /**
  *
@@ -22,7 +21,6 @@ use MediaVorus\MediaVorus;
  */
 interface record_Interface
 {
-
     public function get_creation_date();
 
     public function get_uuid();
@@ -89,7 +87,7 @@ interface record_Interface
 
     public function substitute_subdef($name, MediaInterface $media, Application $app);
 
-    public function set_metadatas(Array $metadatas, $force_readonly = false);
+    public function set_metadatas(array $metadatas, $force_readonly = false);
 
     public function reindex();
 
@@ -103,7 +101,7 @@ interface record_Interface
 
     public function delete();
 
-    public function generate_subdefs(databox $databox, Application $app, Array $wanted_subdefs = null);
+    public function generate_subdefs(databox $databox, Application $app, array $wanted_subdefs = null);
 
     public function log_view($log_id, $referrer, $gv_sit);
 

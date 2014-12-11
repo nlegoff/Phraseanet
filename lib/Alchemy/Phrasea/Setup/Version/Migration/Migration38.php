@@ -29,10 +29,10 @@ class Migration38 implements MigrationInterface
     {
         $this->app = $app;
 
-        $this->connexionsYaml = $app['root.path'] . '/config/connexions.yml';
-        $this->binariesYaml = $app['root.path'] . '/config/binaries.yml';
-        $this->servicesYaml = $app['root.path'] . '/config/services.yml';
-        $this->configYaml = $app['root.path'] . '/config/config.yml';
+        $this->connexionsYaml = $app['root.path'].'/config/connexions.yml';
+        $this->binariesYaml = $app['root.path'].'/config/binaries.yml';
+        $this->servicesYaml = $app['root.path'].'/config/services.yml';
+        $this->configYaml = $app['root.path'].'/config/config.yml';
     }
 
     public function migrate()
@@ -63,7 +63,7 @@ class Migration38 implements MigrationInterface
              $this->configYaml,
              $this->connexionsYaml,
              $this->binariesYaml,
-             $this->servicesYaml
+             $this->servicesYaml,
         ) as $file) {
             if (is_file($file)) {
                 rename($file, $file.'.bkp');

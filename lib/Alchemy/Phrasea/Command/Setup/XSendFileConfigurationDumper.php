@@ -44,7 +44,6 @@ class XSendFileConfigurationDumper extends Command
             $configuration = $this->container['phraseanet.xsendfile-factory']->getMode(true, true)->getVirtualHostConfiguration();
             $output->writeln('XSendFile configuration seems <info>OK</info>');
             $output->writeln($configuration);
-
         } catch (RuntimeException $e) {
             $output->writeln('XSendFile configuration seems <error>invalid</error>');
 

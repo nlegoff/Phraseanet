@@ -15,7 +15,7 @@ class MetaFieldsBagTest extends \PhraseanetPHPUnitAbstract
     public function setUp()
     {
         parent::setUp();
-        $this->object = new MetaFieldsBag;
+        $this->object = new MetaFieldsBag();
     }
 
     /**

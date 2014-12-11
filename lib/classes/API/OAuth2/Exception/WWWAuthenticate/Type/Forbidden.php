@@ -22,7 +22,6 @@
  */
 class API_OAuth2_Exception_WWWAuthenticate_Type_Forbidden extends API_OAuth2_Exception_WWWAuthenticate
 {
-
     /**
      *
      * @param  string                                              $realm

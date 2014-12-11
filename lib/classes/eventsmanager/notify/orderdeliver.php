@@ -62,7 +62,7 @@ class eventsmanager_notify_orderdeliver extends eventsmanager_notifyAbstract
             'from'    => ''
             , 'to'      => ''
             , 'ssel_id' => ''
-            , 'n'       => ''
+            , 'n'       => '',
         );
 
         $params = array_merge($default, $params);
@@ -109,7 +109,6 @@ class eventsmanager_notify_orderdeliver extends eventsmanager_notifyAbstract
 
                 $readyToSend = true;
             } catch (\Exception $e) {
-
             }
 
             if ($readyToSend) {
@@ -120,7 +119,7 @@ class eventsmanager_notify_orderdeliver extends eventsmanager_notifyAbstract
                         $user_to->get_id(),
                         null,
                         $basket->getId()
-                    )
+                    ),
                 ));
 
                 $mail = MailInfoOrderDelivered::create($this->app, $receiver, $emitter, null);
@@ -168,10 +167,10 @@ class eventsmanager_notify_orderdeliver extends eventsmanager_notifyAbstract
         $ret = array(
             'text'  => sprintf(
                 _('%1$s vous a delivre %2$d document(s) pour votre commande %3$s'), $sender, $n, '<a href="/lightbox/compare/'
-                . (string) $sx->ssel_id . '/" target="_blank">'
-                . $basket->getName() . '</a>'
+                .(string) $sx->ssel_id.'/" target="_blank">'
+                .$basket->getName().'</a>'
             )
-            , 'class' => ''
+            , 'class' => '',
         );
 
         return $ret;

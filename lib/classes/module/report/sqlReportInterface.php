@@ -11,7 +11,6 @@
 
 interface module_report_sqlReportInterface
 {
-
     public function buildSql();
 
     public function sqlDistinctValByField($field);

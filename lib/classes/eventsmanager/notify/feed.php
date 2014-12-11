@@ -94,10 +94,7 @@ class eventsmanager_notify_feed extends eventsmanager_notifyAbstract
                     $readyToSend = false;
                     try {
                         $token = $this->app['tokens']->getUrlToken(
-                                \random::TYPE_FEED_ENTRY
-                                , $user_to_notif->get_id()
-                                , null
-                                , $entry->get_id()
+                                \random::TYPE_FEED_ENTRY, $user_to_notif->get_id(), null, $entry->get_id()
                         );
 
                         $url = $this->app->url('lightbox', array('LOG' => $token));
@@ -105,7 +102,6 @@ class eventsmanager_notify_feed extends eventsmanager_notifyAbstract
                         $receiver = Receiver::fromUser($user_to_notif);
                         $readyToSend = true;
                     } catch (\Exception $e) {
-
                     }
 
                     if ($readyToSend) {
@@ -145,11 +141,9 @@ class eventsmanager_notify_feed extends eventsmanager_notifyAbstract
 
         $ret = array(
             'text'  => sprintf(
-                _('%1$s has published %2$s')
-                , $entry->get_author_name()
-                , '<a href="/lightbox/feeds/entry/' . $entry->get_id() . '/" target="_blank">' . $entry->get_title() . '</a>'
+                _('%1$s has published %2$s'), $entry->get_author_name(), '<a href="/lightbox/feeds/entry/'.$entry->get_id().'/" target="_blank">'.$entry->get_title().'</a>'
             )
-            , 'class' => ($unread == 1 ? 'reload_baskets' : '')
+            , 'class' => ($unread == 1 ? 'reload_baskets' : ''),
         );
 
         return $ret;

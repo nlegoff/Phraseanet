@@ -45,9 +45,9 @@ class Root implements ControllerProviderInterface
     public function getRobots(Application $app, Request $request)
     {
         if ($app['phraseanet.registry']->get('GV_allow_search_engine') === true) {
-            $buffer = "User-Agent: *\n" . "Allow: /\n";
+            $buffer = "User-Agent: *\n"."Allow: /\n";
         } else {
-            $buffer = "User-Agent: *\n" . "Disallow: /\n";
+            $buffer = "User-Agent: *\n"."Disallow: /\n";
         }
 
         return new Response($buffer, 200, array('Content-Type' => 'text/plain'));

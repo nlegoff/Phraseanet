@@ -23,7 +23,6 @@ use Alchemy\Phrasea\Command\Developer\RegenerateSqliteDb;
 use Alchemy\Phrasea\Command\Developer\RoutesDumper;
 use Alchemy\Phrasea\Command\Developer\SetupTestsDbs;
 use Alchemy\Phrasea\Command\Developer\Uninstaller;
-
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 // DBAL Commands
@@ -45,7 +44,7 @@ use Doctrine\ORM\Tools\Console\Command\ConvertMappingCommand;
 use Doctrine\ORM\Tools\Console\Command\RunDqlCommand;
 use Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand;
 
-require_once __DIR__ . '/../lib/autoload.php';
+require_once __DIR__.'/../lib/autoload.php';
 
 $cli = new CLI("
  ___  ___  _  _  ___  __    __  ___  ___  ___     ____  __    __  __    ___
@@ -57,12 +56,12 @@ $cli = new CLI("
  This program comes with ABSOLUTELY NO WARRANTY.
  This is free software, and you are welcome to redistribute it
  under certain conditions; type `about:license' for details.\n\n"
-            . ' Phraseanet Developer Tools ', Version::getName() . ' ' . Version::getNumber());
+            .' Phraseanet Developer Tools ', Version::getName().' '.Version::getNumber());
 
 if ($cli['phraseanet.configuration']->isSetup()) {
     $helpers = array(
         'db' => new ConnectionHelper($cli['EM']->getConnection()),
-        'em' => new EntityManagerHelper($cli['EM'])
+        'em' => new EntityManagerHelper($cli['EM']),
     );
 
     $helperSet = $cli['console']->getHelperSet();
@@ -106,4 +105,4 @@ $cli['console']->addCommands(array(
     new ValidateSchemaCommand(),
 ));
 
-exit(is_int($cli->run()) ? : 1);
+exit(is_int($cli->run()) ?: 1);

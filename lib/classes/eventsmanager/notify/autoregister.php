@@ -46,7 +46,7 @@ class eventsmanager_notify_autoregister extends eventsmanager_notifyAbstract
     {
         $default = array(
             'usr_id'       => ''
-            , 'autoregister' => array()
+            , 'autoregister' => array(),
         );
 
         $params = array_merge($default, $params);
@@ -61,7 +61,7 @@ class eventsmanager_notify_autoregister extends eventsmanager_notifyAbstract
         $sql = 'SELECT u.usr_id, b.base_id FROM usr u, basusr b
       WHERE u.usr_id = b.usr_id
       AND b.base_id
-        IN (' . implode(', ', array_keys($base_ids)) . ')
+        IN ('.implode(', ', array_keys($base_ids)).')
       AND model_of="0"
       AND b.actif="1"
       AND b.canadmin="1"
@@ -74,13 +74,13 @@ class eventsmanager_notify_autoregister extends eventsmanager_notifyAbstract
             $stmt->closeCursor();
 
             foreach ($rs as $row) {
-                if ( ! isset($mailColl[$row['usr_id']]))
+                if (! isset($mailColl[$row['usr_id']])) {
                     $mailColl[$row['usr_id']] = array();
+                }
 
                 $mailColl[$row['usr_id']][] = $row['base_id'];
             }
         } catch (\Exception $e) {
-
         }
 
         $dom_xml = new DOMDocument('1.0', 'UTF-8');
@@ -115,7 +115,6 @@ class eventsmanager_notify_autoregister extends eventsmanager_notifyAbstract
         }
 
         foreach ($mailColl as $usr_id => $base_ids) {
-
             $mailed = false;
 
             if ($this->shouldSendNotificationFor($usr_id)) {
@@ -125,8 +124,9 @@ class eventsmanager_notify_autoregister extends eventsmanager_notifyAbstract
                     continue;
                 }
 
-                if (self::mail($admin_user, $registered_user))
+                if (self::mail($admin_user, $registered_user)) {
                     $mailed = true;
+                }
             }
 
             $this->broker->notify($usr_id, __CLASS__, $datas, $mailed);
@@ -157,7 +157,7 @@ class eventsmanager_notify_autoregister extends eventsmanager_notifyAbstract
         $ret = array(
             'text'  => sprintf(
                 _('%1$s s\'est enregistre sur une ou plusieurs %2$scollections%3$s'), $sender, '<a href="/admin/?section=users" target="_blank">', '</a>')
-            , 'class' => ''
+            , 'class' => '',
         );
 
         return $ret;
@@ -179,7 +179,7 @@ class eventsmanager_notify_autoregister extends eventsmanager_notifyAbstract
     public function get_description()
     {
         return _('Recevoir des notifications lorsqu\'un'
-                . ' utilisateur s\'inscrit sur une collection');
+                .' utilisateur s\'inscrit sur une collection');
     }
 
     /**
@@ -202,7 +202,6 @@ class eventsmanager_notify_autoregister extends eventsmanager_notifyAbstract
             $receiver = Receiver::fromUser($to);
             $readyToSend = true;
         } catch (\Exception $e) {
-
         }
 
         if ($readyToSend) {

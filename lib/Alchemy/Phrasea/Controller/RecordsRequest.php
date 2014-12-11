@@ -168,7 +168,7 @@ class RecordsRequest extends ArrayCollection
             return $this->first();
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -217,8 +217,7 @@ class RecordsRequest extends ArrayCollection
             $repository = $app['EM']->getRepository('\Entities\StoryWZ');
 
             $storyWZ = $repository->findByUserAndId(
-                $app, $app['authentication']->getUser()
-                , $request->get('story')
+                $app, $app['authentication']->getUser(), $request->get('story')
             );
 
             $received[$storyWZ->getRecord($app)->get_serialize_key()] = $storyWZ->getRecord($app);
@@ -243,7 +242,6 @@ class RecordsRequest extends ArrayCollection
         $to_remove = array();
 
         foreach ($elements as $id => $record) {
-
             if (!$app['authentication']->getUser()->ACL()->has_access_to_record($record)) {
                 $to_remove[] = $id;
                 continue;

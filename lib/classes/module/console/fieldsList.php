@@ -21,7 +21,6 @@ use Alchemy\Phrasea\Command\Command;
 
 class module_console_fieldsList extends Command
 {
-
     public function __construct($name = null)
     {
         parent::__construct($name);
@@ -37,20 +36,14 @@ class module_console_fieldsList extends Command
             /* @var $databox \databox */
             $output->writeln(
                 sprintf(
-                    "\n ---------------- \nOn databox %s (sbas_id %d) :\n"
-                    , $databox->get_label($this->container['locale.I18n'])
-                    , $databox->get_sbas_id()
+                    "\n ---------------- \nOn databox %s (sbas_id %d) :\n", $databox->get_label($this->container['locale.I18n']), $databox->get_sbas_id()
                 )
             );
 
             foreach ($databox->get_meta_structure()->get_elements() as $field) {
                 $output->writeln(
                     sprintf(
-                        "  %2d - <info>%s</info> (%s) %s"
-                        , $field->get_id()
-                        , $field->get_name()
-                        , $field->get_type()
-                        , ($field->is_multi() ? '<comment>multi</comment>' : '')
+                        "  %2d - <info>%s</info> (%s) %s", $field->get_id(), $field->get_name(), $field->get_type(), ($field->is_multi() ? '<comment>multi</comment>' : '')
                     )
                 );
             }

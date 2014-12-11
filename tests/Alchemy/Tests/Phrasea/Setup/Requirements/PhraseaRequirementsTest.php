@@ -8,6 +8,6 @@ class PhraseaRequirementsTest extends RequirementsTestCase
 {
     protected function provideRequirements()
     {
-        return new PhraseaRequirements;
+        return new PhraseaRequirements();
     }
 }

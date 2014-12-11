@@ -47,12 +47,12 @@ class Compiler
 
         foreach ($files as $file) {
             if (false === is_file($file)) {
-                throw new RuntimeException($file . ' does not exists.');
+                throw new RuntimeException($file.' does not exists.');
             }
         }
 
         if (!is_writable(dirname($target))) {
-            throw new RuntimeException(realpath(dirname($target)) . ' is not writable.');
+            throw new RuntimeException(realpath(dirname($target)).' is not writable.');
         }
 
         $commands = $files;

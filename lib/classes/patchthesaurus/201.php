@@ -16,7 +16,6 @@
  */
 class patchthesaurus_201
 {
-
     public function patch($version, &$domct, &$domth, connection_pdo &$connbas)
     {
         if ($version == "2.0.1") {
@@ -31,7 +30,7 @@ class patchthesaurus_201
                 $nid = (int) ($te->item($i)->getAttribute("nextid"));
                 for ($n = $te->item($i)->firstChild; $n; $n = $n->nextSibling) {
                     if ($n->nodeName == "sy") {
-                        $n->setAttribute("id", $id . "." . $nid);
+                        $n->setAttribute("id", $id.".".$nid);
                         $te->item($i)->setAttribute("nextid",  ++ $nid);
                     }
                 }
@@ -48,7 +47,7 @@ class patchthesaurus_201
             $stmt->closeCursor();
 
             $domct = new DOMDocument();
-            $domct->load(__DIR__ . "/../../../lib/conf.d/blank_cterms.xml");
+            $domct->load(__DIR__."/../../../lib/conf.d/blank_cterms.xml");
             $ct = $domct->documentElement;
             $ct->setAttribute("creation_date", $now = date("YmdHis"));
             $ct->setAttribute("modification_date", $now);

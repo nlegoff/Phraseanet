@@ -108,7 +108,7 @@ class API_V1_resultTest extends PhraseanetPHPUnitAuthenticatedAbstract
 
         $api_result = new API_V1_result(self::$DI['app'], new Request(), $this->api);
         $api_result->set_error_message(OAUTH2_ERROR_INVALID_REQUEST, 'detaillage');
-        $this->assertErrorMessage($api_result, 200, OAUTH2_ERROR_INVALID_REQUEST, NULL, 'detaillage');
+        $this->assertErrorMessage($api_result, 200, OAUTH2_ERROR_INVALID_REQUEST, null, 'detaillage');
     }
 
     protected function assertErrorMessage(API_V1_result $api_result, $code, $type, $message, $detail)

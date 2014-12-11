@@ -39,7 +39,6 @@ class SuggestionFinder
         $infos = $token->getIdentity();
 
         if ($infos->has(Identity::PROPERTY_EMAIL)) {
-
             $sql = 'SELECT usr_id FROM usr WHERE usr_mail = :email';
             $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
             $stmt->execute(array(':email' => $infos->get(Identity::PROPERTY_EMAIL)));
@@ -51,6 +50,6 @@ class SuggestionFinder
             }
         }
 
-        return null;
+        return;
     }
 }

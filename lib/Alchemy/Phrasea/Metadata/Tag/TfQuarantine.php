@@ -16,5 +16,4 @@ class TfQuarantine extends AbstractTag
     protected $Type = '';
     protected $Writable = false;
     protected $Description = 'The date when document is added to quarantine';
-
 }

@@ -14,11 +14,8 @@ namespace Alchemy\Phrasea\Core\Event\Subscriber;
 use Alchemy\Phrasea\Application;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 class ContentNegotiationSubscriber implements EventSubscriberInterface
 {

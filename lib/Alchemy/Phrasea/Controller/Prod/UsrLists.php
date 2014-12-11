@@ -28,7 +28,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  */
 class UsrLists implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -102,7 +101,7 @@ class UsrLists implements ControllerProviderInterface
         $datas = array(
             'success' => false
             , 'message' => ''
-            , 'result'  => null
+            , 'result'  => null,
         );
 
         $lists = new ArrayCollection();
@@ -125,7 +124,7 @@ class UsrLists implements ControllerProviderInterface
                         'job'          => $owner->getUser($app)->get_job(),
                         'company'      => $owner->getUser($app)->get_company(),
                         'email'        => $owner->getUser($app)->get_email(),
-                        'role'         => $owner->getRole()
+                        'role'         => $owner->getRole(),
                     );
                 }
 
@@ -146,22 +145,21 @@ class UsrLists implements ControllerProviderInterface
                     'created' => $list->getCreated()->format(DATE_ATOM),
                     'updated' => $list->getUpdated()->format(DATE_ATOM),
                     'owners'  => $owners,
-                    'users'   => $entries
+                    'users'   => $entries,
                 );
             }
 
             $datas = array(
                 'success' => true
                 , 'message' => ''
-                , 'result'  => $result
+                , 'result'  => $result,
             );
         } catch (ControllerException $e) {
             $datas = array(
                 'success' => false
-                , 'message' => $e->getMessage()
+                , 'message' => $e->getMessage(),
             );
         } catch (\Exception $e) {
-
         }
 
         if ($request->getRequestFormat() == 'json') {
@@ -180,7 +178,7 @@ class UsrLists implements ControllerProviderInterface
         $datas = array(
             'success' => false
             , 'message' => sprintf(_('Unable to create list %s'), $list_name)
-            , 'list_id' => null
+            , 'list_id' => null,
         );
 
         try {
@@ -205,15 +203,14 @@ class UsrLists implements ControllerProviderInterface
             $datas = array(
                 'success' => true
                 , 'message' => sprintf(_('List %s has been created'), $list_name)
-                , 'list_id' => $List->getId()
+                , 'list_id' => $List->getId(),
             );
         } catch (ControllerException $e) {
             $datas = array(
                 'success' => false
-                , 'message' => $e->getMessage()
+                , 'message' => $e->getMessage(),
             );
         } catch (\Exception $e) {
-
         }
 
         return $app->json($datas);
@@ -236,7 +233,7 @@ class UsrLists implements ControllerProviderInterface
                 'job'          => $owner->getUser($app)->get_job(),
                 'company'      => $owner->getUser($app)->get_company(),
                 'email'        => $owner->getUser($app)->get_email(),
-                'role'         => $owner->getRole($app)
+                'role'         => $owner->getRole($app),
             );
         }
 
@@ -258,8 +255,8 @@ class UsrLists implements ControllerProviderInterface
                 'created' => $list->getCreated()->format(DATE_ATOM),
                 'updated' => $list->getUpdated()->format(DATE_ATOM),
                 'owners'  => $owners,
-                'users'   => $entries
-            )
+                'users'   => $entries,
+            ),
         ));
     }
 
@@ -269,7 +266,7 @@ class UsrLists implements ControllerProviderInterface
 
         $datas = array(
             'success' => false
-            , 'message' => _('Unable to update list')
+            , 'message' => _('Unable to update list'),
         );
 
         try {
@@ -293,15 +290,14 @@ class UsrLists implements ControllerProviderInterface
 
             $datas = array(
                 'success' => true
-                , 'message' => _('List has been updated')
+                , 'message' => _('List has been updated'),
             );
         } catch (ControllerException $e) {
             $datas = array(
                 'success' => false
-                , 'message' => $e->getMessage()
+                , 'message' => $e->getMessage(),
             );
         } catch (\Exception $e) {
-
         }
 
         return $app->json($datas);
@@ -323,18 +319,17 @@ class UsrLists implements ControllerProviderInterface
 
             $datas = array(
                 'success' => true
-                , 'message' => sprintf(_('List has been deleted'))
+                , 'message' => sprintf(_('List has been deleted')),
             );
         } catch (ControllerException $e) {
             $datas = array(
                 'success' => false
-                , 'message' => $e->getMessage()
+                , 'message' => $e->getMessage(),
             );
         } catch (\Exception $e) {
-
             $datas = array(
                 'success' => false
-                , 'message' => sprintf(_('Unable to delete list'))
+                , 'message' => sprintf(_('Unable to delete list')),
             );
         }
 
@@ -362,18 +357,17 @@ class UsrLists implements ControllerProviderInterface
 
             $datas = array(
                 'success' => true
-                , 'message' => _('Entry removed from list')
+                , 'message' => _('Entry removed from list'),
             );
         } catch (ControllerException $e) {
             $datas = array(
                 'success' => false
-                , 'message' => $e->getMessage()
+                , 'message' => $e->getMessage(),
             );
         } catch (\Exception $e) {
-
             $datas = array(
                 'success' => false
-                , 'message' => _('Unable to remove entry from list ' . $e->getMessage())
+                , 'message' => _('Unable to remove entry from list '.$e->getMessage()),
             );
         }
 
@@ -401,8 +395,9 @@ class UsrLists implements ControllerProviderInterface
             foreach ($request->request->get('usr_ids') as $usr_id) {
                 $user_entry = \User_Adapter::getInstance($usr_id, $app);
 
-                if ($list->has($user_entry, $app))
+                if ($list->has($user_entry, $app)) {
                     continue;
+                }
 
                 $entry = new UsrListEntry();
                 $entry->setUser($user_entry);
@@ -421,25 +416,24 @@ class UsrLists implements ControllerProviderInterface
                 $datas = array(
                     'success' => true
                     , 'message' => sprintf(_('%d Users added to list'), count($inserted_usr_ids))
-                    , 'result'  => $inserted_usr_ids
+                    , 'result'  => $inserted_usr_ids,
                 );
             } else {
                 $datas = array(
                     'success' => true
                     , 'message' => sprintf(_('%d User added to list'), count($inserted_usr_ids))
-                    , 'result'  => $inserted_usr_ids
+                    , 'result'  => $inserted_usr_ids,
                 );
             }
         } catch (ControllerException $e) {
             $datas = array(
                 'success' => false
-                , 'message' => $e->getMessage()
+                , 'message' => $e->getMessage(),
             );
         } catch (\Exception $e) {
-
             $datas = array(
                 'success' => false
-                , 'message' => _('Unable to add usr to list')
+                , 'message' => _('Unable to add usr to list'),
             );
         }
 
@@ -461,7 +455,6 @@ class UsrLists implements ControllerProviderInterface
                 throw new \Exception(_('You are not authorized to do this'));
             }
         } catch (\Exception $e) {
-
         }
 
         return $app['twig']->render('prod/actions/Feedback/List-Share.html.twig', array('list' => $list));
@@ -475,10 +468,11 @@ class UsrLists implements ControllerProviderInterface
             UsrListOwner::ROLE_ADMIN,
         );
 
-        if (!$app['request']->request->get('role'))
+        if (!$app['request']->request->get('role')) {
             throw new BadRequestHttpException('Missing role parameter');
-        elseif (!in_array($app['request']->request->get('role'), $availableRoles))
+        } elseif (!in_array($app['request']->request->get('role'), $availableRoles)) {
             throw new BadRequestHttpException('Role is invalid');
+        }
 
         try {
             $repository = $app['EM']->getRepository('\Entities\UsrList');
@@ -516,18 +510,17 @@ class UsrLists implements ControllerProviderInterface
 
             $datas = array(
                 'success' => true
-                , 'message' => _('List shared to user')
+                , 'message' => _('List shared to user'),
             );
         } catch (ControllerException $e) {
             $datas = array(
                 'success' => false
-                , 'message' => $e->getMessage()
+                , 'message' => $e->getMessage(),
             );
         } catch (\Exception $e) {
-
             $datas = array(
                 'success' => false
-                , 'message' => _('Unable to share the list with the usr')
+                , 'message' => _('Unable to share the list with the usr'),
             );
         }
 
@@ -555,17 +548,17 @@ class UsrLists implements ControllerProviderInterface
 
             $datas = array(
                 'success' => true
-                , 'message' => _('Owner removed from list')
+                , 'message' => _('Owner removed from list'),
             );
         } catch (ControllerException $e) {
             $datas = array(
                 'success' => false
-                , 'message' => $e->getMessage()
+                , 'message' => $e->getMessage(),
             );
         } catch (\Exception $e) {
             $datas = array(
                 'success' => false
-                , 'message' => _('Unable to remove usr from list')
+                , 'message' => _('Unable to remove usr from list'),
             );
         }
 

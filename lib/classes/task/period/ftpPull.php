@@ -38,17 +38,7 @@ class task_period_ftpPull extends task_appboxAbstract
         $request = http_request::getInstance();
 
         $parm2 = $request->get_parms(
-            'proxy'
-            , 'proxyport'
-            , 'host'
-            , 'port'
-            , 'user'
-            , 'password'
-            , 'ssl'
-            , 'ftppath'
-            , 'localpath'
-            , 'passive'
-            , 'period'
+            'proxy', 'proxyport', 'host', 'port', 'user', 'password', 'ssl', 'ftppath', 'localpath', 'passive', 'period'
         );
         $dom = new DOMDocument();
         $dom->preserveWhiteSpace = false;
@@ -56,17 +46,7 @@ class task_period_ftpPull extends task_appboxAbstract
         if (@$dom->loadXML($oldxml)) {
             $xmlchanged = false;
             foreach (array(
-            'str:proxy'
-            , 'str:proxyport'
-            , 'str:period'
-            , 'boo:passive'
-            , 'boo:ssl'
-            , 'str:password'
-            , 'str:user'
-            , 'str:ftppath'
-            , 'str:localpath'
-            , 'str:port'
-            , 'str:host'
+            'str:proxy', 'str:proxyport', 'str:period', 'boo:passive', 'boo:ssl', 'str:password', 'str:user', 'str:ftppath', 'str:localpath', 'str:port', 'str:host',
             ) as $pname) {
                 $ptype = substr($pname, 0, 3);
                 $pname = substr($pname, 4);
@@ -97,14 +77,14 @@ class task_period_ftpPull extends task_appboxAbstract
         return($dom->saveXML());
     }
 
-
     public function printInterfaceJS()
     {
         global $parm;
         ?>
         <script type="text/javascript">
 
-            function taskFillGraphic_<?php echo(get_class($this));?>(xml)
+            function taskFillGraphic_<?php echo(get_class($this));
+        ?>(xml)
             {
                 if (xml) {
                     xml = $.parseXML(xml);
@@ -129,7 +109,9 @@ class task_period_ftpPull extends task_appboxAbstract
 
             $(document).ready(function () {
                 var limits = {
-                    'period' :{'min':<?php echo self::MINPERIOD; ?>, 'max':<?php echo self::MAXPERIOD; ?>}
+                    'period' :{'min':<?php echo self::MINPERIOD;
+        ?>, 'max':<?php echo self::MAXPERIOD;
+        ?>}
                 } ;
                 $(".formElem").change(function () {
                     fieldname = $(this).attr("name");
@@ -152,6 +134,7 @@ class task_period_ftpPull extends task_appboxAbstract
         </script>
 
         <?php
+
     }
 
     public function getInterfaceHTML()
@@ -240,21 +223,7 @@ class task_period_ftpPull extends task_appboxAbstract
         $request = http_request::getInstance();
 
         $parm = $request->get_parms(
-            'xml'
-            , 'name'
-            , 'active'
-            , 'proxy'
-            , 'proxyport'
-            , 'period'
-            , 'localpath'
-            , 'ftppath'
-            , 'port'
-            , 'host'
-            , 'user'
-            , 'password'
-            , 'passive'
-            , 'ssl'
-            , 'debug'
+            'xml', 'name', 'active', 'proxy', 'proxyport', 'period', 'localpath', 'ftppath', 'port', 'host', 'user', 'password', 'passive', 'ssl', 'debug'
         );
 
         if ($parm["xml"] === null) {
@@ -263,17 +232,7 @@ class task_period_ftpPull extends task_appboxAbstract
             if (($domTaskSettings = $domdoc->loadXML($taskrow["settings"])) != FALSE) {
                 $xmlchanged = false;
                 foreach (array(
-                'proxy'
-                , 'proxyport'
-                , 'period'
-                , 'localpath'
-                , 'ftppath'
-                , 'host'
-                , 'port'
-                , 'user'
-                , 'password'
-                , 'passive'
-                , 'ssl'
+                'proxy', 'proxyport', 'period', 'localpath', 'ftppath', 'host', 'port', 'user', 'password', 'passive', 'ssl',
                 ) as $f) {
                     if ($parm[$f] !== NULL) {
                         if (($ns = $domTaskSettings->getElementsByTagName($f)->item(0)) != NULL) {
@@ -305,15 +264,15 @@ class task_period_ftpPull extends task_appboxAbstract
         $sql = "";
         $params = array(':task_id' => $taskid);
         if ($parm["xml"] !== NULL) {
-            $sql .= ( $sql ? " ," : "") . "settings = :settings";
+            $sql .= ($sql ? " ," : "")."settings = :settings";
             $params[':settings'] = $parm['xml'];
         }
         if ($parm["name"] !== NULL) {
-            $sql .= ( $sql ? " ," : "") . "name = :name";
+            $sql .= ($sql ? " ," : "")."name = :name";
             $params[':name'] = $parm['name'];
         }
         if ($parm["active"] !== NULL) {
-            $sql .= ( $sql ? " ," : "") . "active = :active";
+            $sql .= ($sql ? " ," : "")."active = :active";
             $params[':active'] = $parm['active'];
         }
 
@@ -354,7 +313,7 @@ class task_period_ftpPull extends task_appboxAbstract
         foreach (array('localpath', 'host', 'port', 'user', 'password', 'ftppath') as $f) {
             if (trim((string) ($this->{$f})) === '') {
                 $this->log(sprintf('setting \'%s\' must be set', $f), self::LOG_ERROR);
-                $this->running = FALSE;
+                $this->running = false;
             }
         }
 
@@ -362,11 +321,11 @@ class task_period_ftpPull extends task_appboxAbstract
 
         if (!is_dir($this->localpath)) {
             $this->log(sprintf('\'%s\' does not exists', $this->localpath), self::LOG_ERROR);
-            $this->running = FALSE;
+            $this->running = false;
         }
         if (!is_writeable($this->localpath)) {
             $this->log(sprintf('\'%s\' is not writeable', $this->localpath), self::LOG_ERROR);
-            $this->running = FALSE;
+            $this->running = false;
         }
 
         if (!$this->running) {
@@ -411,7 +370,7 @@ class task_period_ftpPull extends task_appboxAbstract
                     continue;
                 }
 
-                $finalpath = p4string::addEndSlash($this->localpath) . ($filepath[0] == '/' ? mb_substr($filepath, 1) : $filepath);
+                $finalpath = p4string::addEndSlash($this->localpath).($filepath[0] == '/' ? mb_substr($filepath, 1) : $filepath);
                 $this->logger->addDebug("Ok pour rappatriement de $filepath vers $finalpath\n");
 
                 try {
@@ -424,7 +383,7 @@ class task_period_ftpPull extends task_appboxAbstract
                     $ftp->get($finalpath, $filepath);
                     $ftp->delete($filepath);
                 } catch (\Exception $e) {
-                    $this->logger->addDebug("Erreur lors du rappatriement de $filepath : " . $e->getMessage());
+                    $this->logger->addDebug("Erreur lors du rappatriement de $filepath : ".$e->getMessage());
                 }
             }
 
@@ -441,14 +400,12 @@ class task_period_ftpPull extends task_appboxAbstract
         }
     }
 
-    protected function processOneContent(appbox $appbox, Array $row)
+    protected function processOneContent(appbox $appbox, array $row)
     {
-
     }
 
-    protected function postProcessOneContent(appbox $appbox, Array $row)
+    protected function postProcessOneContent(appbox $appbox, array $row)
     {
-
     }
 
     /**

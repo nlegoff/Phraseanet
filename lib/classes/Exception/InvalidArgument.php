@@ -17,5 +17,4 @@
  */
 class Exception_InvalidArgument extends Exception_Abstract
 {
-
 }

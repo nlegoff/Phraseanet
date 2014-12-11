@@ -202,9 +202,9 @@ class Fields implements ControllerProviderInterface
                     }
 
                     $res[] = array(
-                        'id'    => $namespace . '/' . $tagname,
-                        'label' => $datas['namespace'] . ' / ' . $datas['tagname'],
-                        'value' => $datas['namespace'] . ':' . $datas['tagname'],
+                        'id'    => $namespace.'/'.$tagname,
+                        'label' => $datas['namespace'].' / '.$datas['tagname'],
+                        'value' => $datas['namespace'].':'.$datas['tagname'],
                     );
                 }
             }
@@ -241,8 +241,8 @@ class Fields implements ControllerProviderInterface
         return $app->json($field->toArray(), 201, array(
             'location' => $app->path('admin_fields_show_field', array(
                 'sbas_id' => $sbas_id,
-                'id' => $field->get_id()
-        ))));
+                'id' => $field->get_id(),
+        )), ));
     }
 
     public function listFields(Application $app, $sbas_id)
@@ -347,7 +347,6 @@ class Fields implements ControllerProviderInterface
             $field->setVocabularyControl($vocabulary);
             $field->setVocabularyRestricted($data['vocabulary-restricted']);
         } catch (\InvalidArgumentException $e) {
-
         }
 
         if ('' !== $dcesElement = (string) $data['dces-element']) {
@@ -366,7 +365,7 @@ class Fields implements ControllerProviderInterface
         return array(
             'name', 'multi', 'thumbtitle', 'tag', 'business', 'indexable',
             'required', 'separator', 'readonly', 'type', 'tbranch', 'report',
-            'vocabulary-type', 'vocabulary-restricted', 'dces-element', 'labels'
+            'vocabulary-type', 'vocabulary-restricted', 'dces-element', 'labels',
         );
     }
 

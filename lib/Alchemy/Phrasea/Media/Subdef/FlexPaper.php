@@ -23,7 +23,6 @@ class FlexPaper extends Provider
 
     public function __construct()
     {
-
     }
 
     public function getType()

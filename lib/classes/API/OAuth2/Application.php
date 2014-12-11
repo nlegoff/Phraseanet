@@ -231,20 +231,22 @@ class API_OAuth2_Application
      */
     public function set_type($type)
     {
-        if ( ! in_array($type, array(self::DESKTOP_TYPE, self::WEB_TYPE)))
+        if (! in_array($type, array(self::DESKTOP_TYPE, self::WEB_TYPE))) {
             throw new Exception_InvalidArgument();
+        }
 
         $this->type = $type;
 
-        if ($this->type == self::DESKTOP_TYPE)
+        if ($this->type == self::DESKTOP_TYPE) {
             $this->set_redirect_uri(self::NATIVE_APP_REDIRECT_URI);
+        }
 
         $sql = 'UPDATE api_applications SET type = :type, last_modified = NOW()
             WHERE application_id = :application_id';
 
         $params = array(
             ':type'           => $this->type
-            , ':application_id' => $this->id
+            , ':application_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -277,7 +279,7 @@ class API_OAuth2_Application
 
         $params = array(
             ':name'           => $this->name
-            , ':application_id' => $this->id
+            , ':application_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -311,7 +313,7 @@ class API_OAuth2_Application
 
         $params = array(
             ':description'    => $this->description
-            , ':application_id' => $this->id
+            , ':application_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -331,7 +333,7 @@ class API_OAuth2_Application
 
         $params = array(
             ':webhook'    => $url
-        , ':application_id' => $this->id
+        , ':application_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -365,7 +367,7 @@ class API_OAuth2_Application
 
         $params = array(
             ':website'        => $this->website
-            , ':application_id' => $this->id
+            , ':application_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -399,7 +401,7 @@ class API_OAuth2_Application
 
         $params = array(
             ':activated'      => $this->activated
-            , ':application_id' => $this->id
+            , ':application_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -433,7 +435,7 @@ class API_OAuth2_Application
 
         $params = array(
             ':grant_password' => $this->grant_password
-            , ':application_id' => $this->id
+            , ':application_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -485,7 +487,7 @@ class API_OAuth2_Application
 
         $params = array(
             ':client_id'      => $this->client_id
-            , ':application_id' => $this->id
+            , ':application_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -519,7 +521,7 @@ class API_OAuth2_Application
 
         $params = array(
             ':client_secret'  => $this->client_secret
-            , ':application_id' => $this->id
+            , ':application_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -552,7 +554,7 @@ class API_OAuth2_Application
 
         $params = array(
             ':redirect_uri'   => $this->redirect_uri
-            , ':application_id' => $this->id
+            , ':application_id' => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -574,7 +576,7 @@ class API_OAuth2_Application
 
         $params = array(
             ':usr_id' => $user->get_id()
-            , ':id'     => $this->id
+            , ':id'     => $this->id,
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -582,8 +584,9 @@ class API_OAuth2_Application
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new NotFoundHttpException('Application not found.');
+        }
 
         return new API_OAuth2_Account($this->app, $row['api_account_id']);
     }
@@ -661,7 +664,7 @@ class API_OAuth2_Application
             ':client_secret'  => $client_secret,
             ':nonce'          => $nonce,
             ':activated'      => 1,
-            ':grant_password' => 0
+            ':grant_password' => 0,
         );
 
         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -695,8 +698,9 @@ class API_OAuth2_Application
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new NotFoundHttpException('Client not found.');
+        }
 
         return new self($app, $row['application_id']);
     }

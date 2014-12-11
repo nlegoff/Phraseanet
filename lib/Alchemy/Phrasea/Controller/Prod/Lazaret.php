@@ -31,7 +31,6 @@ use Symfony\Component\Filesystem\Exception\IOException;
  */
 class Lazaret implements ControllerProviderInterface
 {
-
     /**
      * Connect the ControllerCollection to the Silex Application
      *
@@ -222,7 +221,7 @@ class Lazaret implements ControllerProviderInterface
             'base_id'  => $lazaretFile->getBaseId(),
             'created'  => $lazaretFile->getCreated()->format(\DateTime::ATOM),
             'updated'  => $lazaretFile->getUpdated()->format(\DateTime::ATOM),
-            'pathname' => $app['root.path'] . '/tmp/lazaret/' . $lazaretFile->getFilename(),
+            'pathname' => $app['root.path'].'/tmp/lazaret/'.$lazaretFile->getFilename(),
             'sha256'   => $lazaretFile->getSha256(),
             'uuid'     => $lazaretFile->getUuid(),
         );
@@ -266,8 +265,8 @@ class Lazaret implements ControllerProviderInterface
             return $app->json($ret);
         }
 
-        $lazaretFileName = $app['root.path'] . '/tmp/lazaret/' . $lazaretFile->getFilename();
-        $lazaretThumbFileName = $app['root.path'] . '/tmp/lazaret/' . $lazaretFile->getThumbFilename();
+        $lazaretFileName = $app['root.path'].'/tmp/lazaret/'.$lazaretFile->getFilename();
+        $lazaretThumbFileName = $app['root.path'].'/tmp/lazaret/'.$lazaretFile->getThumbFilename();
 
         try {
             $borderFile = Border\File::buildFromPathfile(
@@ -347,7 +346,6 @@ class Lazaret implements ControllerProviderInterface
         try {
             $app['filesystem']->remove(array($lazaretFileName, $lazaretThumbFileName));
         } catch (IOException $e) {
-
         }
 
         return $app->json($ret);
@@ -378,7 +376,6 @@ class Lazaret implements ControllerProviderInterface
             $this->denyLazaretFile($app, $lazaretFile);
             $ret['success'] = true;
         } catch (\Exception $e) {
-
         }
 
         return $app->json($ret);
@@ -386,8 +383,8 @@ class Lazaret implements ControllerProviderInterface
 
     protected function denyLazaretFile(Application $app, LazaretFile $lazaretFile)
     {
-        $lazaretFileName = $app['root.path'] . '/tmp/lazaret/' . $lazaretFile->getFilename();
-        $lazaretThumbFileName = $app['root.path'] . '/tmp/lazaret/' . $lazaretFile->getThumbFilename();
+        $lazaretFileName = $app['root.path'].'/tmp/lazaret/'.$lazaretFile->getFilename();
+        $lazaretThumbFileName = $app['root.path'].'/tmp/lazaret/'.$lazaretFile->getThumbFilename();
 
         $app['EM']->remove($lazaretFile);
         $app['EM']->flush();
@@ -395,7 +392,6 @@ class Lazaret implements ControllerProviderInterface
         try {
             $app['filesystem']->remove(array($lazaretFileName, $lazaretThumbFileName));
         } catch (IOException $e) {
-
         }
 
         return $this;
@@ -478,8 +474,8 @@ class Lazaret implements ControllerProviderInterface
             return $app->json($ret);
         }
 
-        $lazaretFileName = $app['root.path'] . '/tmp/lazaret/' . $lazaretFile->getFilename();
-        $lazaretThumbFileName = $app['root.path'] . '/tmp/lazaret/' . $lazaretFile->getThumbFilename();
+        $lazaretFileName = $app['root.path'].'/tmp/lazaret/'.$lazaretFile->getFilename();
+        $lazaretThumbFileName = $app['root.path'].'/tmp/lazaret/'.$lazaretFile->getThumbFilename();
 
         try {
             $media = $app['mediavorus']->guess($lazaretFileName);
@@ -505,7 +501,6 @@ class Lazaret implements ControllerProviderInterface
         try {
             $app['filesystem']->remove(array($lazaretFileName, $lazaretThumbFileName));
         } catch (IOException $e) {
-
         }
 
         return $app->json($ret);
@@ -529,7 +524,7 @@ class Lazaret implements ControllerProviderInterface
             return new Response(null, 404);
         }
 
-        $lazaretThumbFileName = $app['root.path'] . '/tmp/lazaret/' . $lazaretFile->getThumbFilename();
+        $lazaretThumbFileName = $app['root.path'].'/tmp/lazaret/'.$lazaretFile->getThumbFilename();
 
         return $app['phraseanet.file-serve']->deliverFile($lazaretThumbFileName, $lazaretFile->getOriginalName(), DeliverDataInterface::DISPOSITION_INLINE, 'image/jpeg');
     }

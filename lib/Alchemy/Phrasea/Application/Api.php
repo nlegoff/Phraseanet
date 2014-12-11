@@ -41,7 +41,7 @@ return call_user_func(function ($environment = PhraseaApplication::ENV_PROD) {
     }));
 
     // handle API content negotiation
-    $app->before(function(Request $request) use ($app) {
+    $app->before(function (Request $request) use ($app) {
         // register custom API format
         $request->setFormat(\API_V1_result::FORMAT_JSON_EXTENDED, \API_V1_adapter::$extendedContentTypes['json']);
         $request->setFormat(\API_V1_result::FORMAT_YAML_EXTENDED, \API_V1_adapter::$extendedContentTypes['yaml']);
@@ -52,7 +52,7 @@ return call_user_func(function ($environment = PhraseaApplication::ENV_PROD) {
         $priorities = array('application/json', 'application/yaml', 'text/yaml', 'text/javascript', 'application/javascript');
         foreach (\API_V1_adapter::$extendedContentTypes['json'] as $priorities[]);
         foreach (\API_V1_adapter::$extendedContentTypes['yaml'] as $priorities[]);
-        $format = $app['format.negociator']->getBest($request->headers->get('accept') ,$priorities);
+        $format = $app['format.negociator']->getBest($request->headers->get('accept'), $priorities);
 
         // throw unacceptable http error if API can not handle asked format
         if (null === $format) {
@@ -71,12 +71,12 @@ return call_user_func(function ($environment = PhraseaApplication::ENV_PROD) {
             array(
                 \API_V1_result::FORMAT_JSON_EXTENDED,
                 \API_V1_result::FORMAT_YAML_EXTENDED,
-                \API_V1_result::FORMAT_JSONP_EXTENDED
+                \API_V1_result::FORMAT_JSONP_EXTENDED,
             )
         ));
     }, PhraseaApplication::EARLY_EVENT);
 
-    $app->after(function(Request $request, Response $response) use ($app) {
+    $app->after(function (Request $request, Response $response) use ($app) {
         if ($request->getRequestFormat(\API_V1_result::FORMAT_JSON) === \API_V1_result::FORMAT_JSONP && !$response->isOk() && !$response->isServerError()) {
             $response->setStatusCode(200);
         }
@@ -107,10 +107,10 @@ return call_user_func(function ($environment = PhraseaApplication::ENV_PROD) {
                     'authenticationVersion'   => 'draft#v9',
                     'authenticationEndPoints' => array(
                         'authorization_token' => '/api/oauthv2/authorize',
-                        'access_token'        => '/api/oauthv2/token'
-                    )
-                )
-            )
+                        'access_token'        => '/api/oauthv2/token',
+                    ),
+                ),
+            ),
         ))->get_response();
     });
 

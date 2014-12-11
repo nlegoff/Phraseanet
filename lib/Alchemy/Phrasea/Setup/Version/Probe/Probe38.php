@@ -28,9 +28,9 @@ class Probe38 implements ProbeInterface
      */
     public function isMigrable()
     {
-        return is_file($this->app['root.path'] . "/config/config.yml")
-            && is_file($this->app['root.path'] . "/config/services.yml")
-            && is_file($this->app['root.path'] . "/config/connexions.yml");
+        return is_file($this->app['root.path']."/config/config.yml")
+            && is_file($this->app['root.path']."/config/services.yml")
+            && is_file($this->app['root.path']."/config/connexions.yml");
     }
 
     /**

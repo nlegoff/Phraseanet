@@ -14,7 +14,7 @@ class GifTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->object = new Gif;
+        $this->object = new Gif();
     }
 
     /**

@@ -9,7 +9,6 @@
  */
 
 use Alchemy\Phrasea\Core\Configuration\Configuration;
-
 use MediaAlchemyst\Transmuter\Image2Image;
 
 class task_period_subdef extends task_databoxAbstract
@@ -61,14 +60,13 @@ class task_period_subdef extends task_databoxAbstract
         $this->thumbnailExtraction = (Boolean) trim($sx_task_settings->embedded);
         $this->mono_sbas_id = (int) trim($sx_task_settings->sbas);
 
-        foreach(array('image',
+        foreach (array('image',
                     'video',
                     'audio',
                     'document',
                     'flash',
-                    'unknown') as $f)
-        {
-            if(!isset($sx_task_settings->{"type_".$f})) {
+                    'unknown', ) as $f) {
+            if (!isset($sx_task_settings->{"type_".$f})) {
                 $sx_task_settings->{"type_".$f} = "1";
             }
             $this->recordtype[$f] = (Boolean) trim($sx_task_settings->{"type_".$f});
@@ -107,14 +105,7 @@ class task_period_subdef extends task_databoxAbstract
         if (@$dom->loadXML($oldxml)) {
             $xmlchanged = false;
 
-            foreach (array('str:period', 'str:sbas'
-                     , 'boo:type_image'
-                     , 'boo:type_video'
-                     , 'boo:type_audio'
-                     , 'boo:type_document'
-                     , 'boo:type_flash'
-                     , 'boo:type_unknown'
-                     , 'str:flush', 'str:maxrecs', 'str:maxmegs', 'boo:embedded') as $pname) {
+            foreach (array('str:period', 'str:sbas', 'boo:type_image', 'boo:type_video', 'boo:type_audio', 'boo:type_document', 'boo:type_flash', 'boo:type_unknown', 'str:flush', 'str:maxrecs', 'str:maxmegs', 'boo:embedded') as $pname) {
                 $ptype = substr($pname, 0, 3);
                 $pname = substr($pname, 4);
                 $pvalue = $parm2[$pname];
@@ -180,7 +171,8 @@ class task_period_subdef extends task_databoxAbstract
             <?php echo $form ?>.flush.value   = "<?php echo p4string::MakeString($sxml->flush, "js", '"') ?>";
             <?php echo $form ?>.maxrecs.value = "<?php echo p4string::MakeString($sxml->maxrecs, "js", '"') ?>";
             <?php echo $form ?>.maxmegs.value = "<?php echo p4string::MakeString($sxml->maxmegs, "js", '"') ?>";
-            <?php echo $form ?>.embedded.value = <?php echo (Boolean) trim($sxml->embedded); ?>;
+            <?php echo $form ?>.embedded.value = <?php echo (Boolean) trim($sxml->embedded);
+            ?>;
             </script>
 
             <?php
@@ -200,7 +192,8 @@ class task_period_subdef extends task_databoxAbstract
     {
         ?>
         <script type="text/javascript">
-            function taskFillGraphic_<?php echo(get_class($this));?>(xml)
+            function taskFillGraphic_<?php echo(get_class($this));
+        ?>(xml)
             {
                 if (xml) {
                     xml = $.parseXML(xml);
@@ -209,14 +202,14 @@ class task_period_subdef extends task_databoxAbstract
                     with($("#graphicForm"))
                     {
                         var f = ["period", "flush", "maxrecs", "maxmegs"];
-                        for(var i in f) {
+                        for (var i in f) {
                             $("INPUT[name='"+f[i]+"']").val(xml.find(f[i]).text());
                         }
                         var f = ["image", "video", "audio", "document", "flash", "unknown"];
-                        for(var i  in f) {
+                        for (var i  in f) {
                             // if not defined in settings, default to checked
                             var v = xml.find("type_"+f[i]).text();
-                            if(v == "") {
+                            if (v == "") {
                                 v = "1";
                             }
                             $("INPUT[name='type_"+f[i]+"']").attr("checked", !!parseInt(v));
@@ -230,10 +223,18 @@ class task_period_subdef extends task_databoxAbstract
 
             $(document).ready(function () {
                 var limits = {
-                    'period' :{'min':<?php echo self::MINPERIOD; ?>, 'max':<?php echo self::MAXPERIOD; ?>},
-                    'flush'  :{'min':<?php echo self::MINFLUSH; ?>,  'max':<?php echo self::MAXFLUSH; ?>},
-                    'maxrecs':{'min':<?php echo self::MINRECS; ?>,   'max':<?php echo self::MAXRECS; ?>},
-                    'maxmegs':{'min':<?php echo self::MINMEGS; ?>,   'max':<?php echo self::MAXMEGS; ?>}
+                    'period' :{'min':<?php echo self::MINPERIOD;
+        ?>, 'max':<?php echo self::MAXPERIOD;
+        ?>},
+                    'flush'  :{'min':<?php echo self::MINFLUSH;
+        ?>,  'max':<?php echo self::MAXFLUSH;
+        ?>},
+                    'maxrecs':{'min':<?php echo self::MINRECS;
+        ?>,   'max':<?php echo self::MAXRECS;
+        ?>},
+                    'maxmegs':{'min':<?php echo self::MINMEGS;
+        ?>,   'max':<?php echo self::MAXMEGS;
+        ?>}
                 } ;
                 $(".formElem").change(function () {
                     fieldname = $(this).attr("name");
@@ -254,6 +255,7 @@ class task_period_subdef extends task_databoxAbstract
             });
         </script>
         <?php
+
     }
 
     /**
@@ -276,39 +278,44 @@ class task_period_subdef extends task_databoxAbstract
                 <label class="control-label"> <?php echo sprintf(_("Databox")) ?></label>
                 <div class="controls">
                     <select name="sbas">
-                        <option value=""><?php echo _("All"); ?></option>
+                        <option value=""><?php echo _("All");
+        ?></option>
                         <?php
 foreach ($this->dependencyContainer['phraseanet.appbox']->get_databoxes() as $databox) {
-    printf("<option value=\"%s\">%s (%s)</option>\n"
-        , $databox->get_sbas_id()
-        , p4string::MakeString($databox->get_viewname(), 'html')
-        , $databox->get_sbas_id()
+    printf("<option value=\"%s\">%s (%s)</option>\n", $databox->get_sbas_id(), p4string::MakeString($databox->get_viewname(), 'html'), $databox->get_sbas_id()
     );
 }
-                        ?>
+        ?>
                     </select>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label"> <?php echo _("recordtype"); ?></label>
+                <label class="control-label"> <?php echo _("recordtype");
+        ?></label>
                 <div class="controls">
                     <label class="checkbox inline">
-                        <input type="checkbox" name="type_image" value="image"> <?php echo _("image"); ?>
+                        <input type="checkbox" name="type_image" value="image"> <?php echo _("image");
+        ?>
                     </label>
                     <label class="checkbox inline">
-                        <input type="checkbox" name="type_video" value="video"> <?php echo _("video"); ?>
+                        <input type="checkbox" name="type_video" value="video"> <?php echo _("video");
+        ?>
                     </label>
                     <label class="checkbox inline">
-                        <input type="checkbox" name="type_audio" value="audio"> <?php echo _("audio"); ?>
+                        <input type="checkbox" name="type_audio" value="audio"> <?php echo _("audio");
+        ?>
                     </label>
                     <label class="checkbox inline">
-                        <input type="checkbox" name="type_document" value="document"> <?php echo _("document"); ?>
+                        <input type="checkbox" name="type_document" value="document"> <?php echo _("document");
+        ?>
                     </label>
                     <label class="checkbox inline">
-                        <input type="checkbox" name="type_flash" value="flash"> <?php echo _("flash"); ?>
+                        <input type="checkbox" name="type_flash" value="flash"> <?php echo _("flash");
+        ?>
                     </label>
                     <label class="checkbox inline">
-                        <input type="checkbox" name="type_unknown" value="unknown"> <?php echo _("unknown"); ?>
+                        <input type="checkbox" name="type_unknown" value="unknown"> <?php echo _("unknown");
+        ?>
                     </label>
                 </div>
             </div>
@@ -348,25 +355,24 @@ foreach ($this->dependencyContainer['phraseanet.appbox']->get_databoxes() as $da
         $sqltypes = "";
         $sqlqmark = array();
         $sqlparms = array();
-        foreach($this->recordtype as $k=>$v) {
-            if($v > 0) {
-                $sqltypes .= ($sqltypes?',':'') . "'" . $k . "'";
+        foreach ($this->recordtype as $k => $v) {
+            if ($v > 0) {
+                $sqltypes .= ($sqltypes ? ',' : '')."'".$k."'";
                 $sqlqmark[] = '?';
                 $sqlparms[] = $k;
             }
         }
         $rs = array();
-        if(count($sqlqmark) > 0)
-        {
+        if (count($sqlqmark) > 0) {
             Image2Image::$lookForEmbeddedPreview = $this->thumbnailExtraction;
 
             $connbas = $databox->get_connection();
 
             $sql = 'SELECT SQL_CALC_FOUND_ROWS coll_id, record_id'
-                  . ' FROM record'
-                  . ' WHERE jeton & ' . JETON_MAKE_SUBDEF . ' > 0'
-                  . ' AND type IN(' . implode(',', $sqlqmark) . ')'
-                  . ' ORDER BY record_id DESC LIMIT 0, '.$this->maxrecs;
+                  .' FROM record'
+                  .' WHERE jeton & '.JETON_MAKE_SUBDEF.' > 0'
+                  .' AND type IN('.implode(',', $sqlqmark).')'
+                  .' ORDER BY record_id DESC LIMIT 0, '.$this->maxrecs;
             $stmt = $connbas->prepare($sql);
             $stmt->execute($sqlparms);
             $rs = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -380,16 +386,15 @@ foreach ($this->dependencyContainer['phraseanet.appbox']->get_databoxes() as $da
 
             $this->setProgress(0, $this->_todo);
         }
+
         return $rs;
     }
 
-    public function processOneContent(databox $databox, Array $row)
+    public function processOneContent(databox $databox, array $row)
     {
         $record_id = $row['record_id'];
         $this->log(sprintf(
-                "Generate subdefs for : sbasid=%s / databox=%s / recordid=%s "
-                , $databox->get_sbas_id(), $databox->get_dbname() , $record_id)
-                , self::LOG_INFO
+                "Generate subdefs for : sbasid=%s / databox=%s / recordid=%s ", $databox->get_sbas_id(), $databox->get_dbname(), $record_id), self::LOG_INFO
             );
 
         try {
@@ -399,9 +404,7 @@ foreach ($this->dependencyContainer['phraseanet.appbox']->get_databoxes() as $da
         } catch (\Exception $e) {
             $this->log(
                 sprintf(
-                "Generate subdefs failed for : sbasid=%s / databox=%s / recordid=%s : %s"
-                , $databox->get_sbas_id(), $databox->get_dbname() , $record_id, $e->getMessage())
-                , self::LOG_WARNING
+                "Generate subdefs failed for : sbasid=%s / databox=%s / recordid=%s : %s", $databox->get_sbas_id(), $databox->get_dbname(), $record_id, $e->getMessage()), self::LOG_WARNING
             );
         }
 
@@ -415,16 +418,16 @@ foreach ($this->dependencyContainer['phraseanet.appbox']->get_databoxes() as $da
         return $this;
     }
 
-    protected function postProcessOneContent(databox $databox, Array $row)
+    protected function postProcessOneContent(databox $databox, array $row)
     {
-        if($this->_todo > 0) {
+        if ($this->_todo > 0) {
             $this->_todo--;
             $this->setProgress(0, $this->_todo);
         }
 
         $connbas = $databox->get_connection();
         $sql = 'UPDATE record
-              SET jeton=(jeton & ~' . JETON_MAKE_SUBDEF . '), moddate=NOW()
+              SET jeton=(jeton & ~'.JETON_MAKE_SUBDEF.'), moddate=NOW()
               WHERE record_id=:record_id';
 
         $stmt = $connbas->prepare($sql);
@@ -440,16 +443,15 @@ foreach ($this->dependencyContainer['phraseanet.appbox']->get_databoxes() as $da
 
         if ($sql != '') {
             $this->log(sprintf(
-                    'setting %d record(s) to subdef meta writing'
-                    , count($this->recs_to_write)
+                    'setting %d record(s) to subdef meta writing', count($this->recs_to_write)
                 ), self::LOG_INFO);
 
             try {
                 $connbas = connection::getPDOConnection($this->dependencyContainer, $this->sbas_id);
                 $sql = 'UPDATE record
                 SET status=(status & ~0x03),
-                    jeton=(jeton | ' . JETON_WRITE_META_SUBDEF . ')
-                WHERE record_id IN (' . $sql . ')';
+                    jeton=(jeton | '.JETON_WRITE_META_SUBDEF.')
+                WHERE record_id IN ('.$sql.')';
                 $stmt = $connbas->prepare($sql);
                 $stmt->execute();
                 $stmt->closeCursor();

@@ -10,7 +10,6 @@
  */
 
 use Alchemy\Phrasea\Application;
-
 use Alchemy\Phrasea\Authentication\Exception\AccountLockedException;
 use Alchemy\Phrasea\Authentication\Exception\RequireCaptchaException;
 use Symfony\Component\HttpFoundation\Request;
@@ -182,7 +181,7 @@ class API_OAuth2_Adapter extends OAuth2
      * @param  string  $client_secret
      * @return boolean
      */
-    protected function checkClientCredentials($client_id, $client_secret = NULL)
+    protected function checkClientCredentials($client_id, $client_secret = null)
     {
         try {
             $application = API_OAuth2_Application::load_from_client_id($this->app, $client_id);
@@ -193,7 +192,6 @@ class API_OAuth2_Adapter extends OAuth2
 
             return ($application->get_client_secret() === $client_secret);
         } catch (\Exception $e) {
-
         }
 
         return false;
@@ -234,11 +232,9 @@ class API_OAuth2_Adapter extends OAuth2
                 , 'session_id'  => $token->get_session_id()
                 , 'revoked'     => ($token->get_account()->is_revoked() ? '1' : '0')
                 , 'usr_id'      => $token->get_account()->get_user()->get_id()
-                , 'oauth_token' => $token->get_value()
+                , 'oauth_token' => $token->get_value(),
             );
-
         } catch (\Exception $e) {
-
         }
 
         return $result;
@@ -255,7 +251,7 @@ class API_OAuth2_Adapter extends OAuth2
      * @param  string             $scope
      * @return API_OAuth2_Adapter
      */
-    protected function setAccessToken($oauth_token, $account_id, $expires, $scope = NULL)
+    protected function setAccessToken($oauth_token, $account_id, $expires, $scope = null)
     {
         $account = new API_OAuth2_Account($this->app, $account_id);
         $token = API_OAuth2_Token::create($this->app['phraseanet.appbox'], $account, $scope);
@@ -274,7 +270,7 @@ class API_OAuth2_Adapter extends OAuth2
     {
         return array(
             OAUTH2_GRANT_TYPE_AUTH_CODE,
-            OAUTH2_GRANT_TYPE_USER_CREDENTIALS
+            OAUTH2_GRANT_TYPE_USER_CREDENTIALS,
         );
     }
 
@@ -304,13 +300,12 @@ class API_OAuth2_Adapter extends OAuth2
                 'redirect_uri' => $code->get_redirect_uri()
                 , 'client_id'    => $code->get_account()->get_application()->get_client_id()
                 , 'expires'      => $code->get_expires()
-                , 'account_id'   => $code->get_account()->get_id()
+                , 'account_id'   => $code->get_account()->get_id(),
             );
         } catch (\Exception $e) {
-
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -324,7 +319,7 @@ class API_OAuth2_Adapter extends OAuth2
      * @param  string             $scope
      * @return API_OAuth2_Adapter
      */
-    protected function setAuthCode($code, $account_id, $redirect_uri, $expires, $scope = NULL)
+    protected function setAuthCode($code, $account_id, $redirect_uri, $expires, $scope = null)
     {
         $account = new API_OAuth2_Account($this->app, $account_id);
         $code = API_OAuth2_AuthCode::create($this->app, $account, $code, $expires);
@@ -336,7 +331,7 @@ class API_OAuth2_Adapter extends OAuth2
     /**
      * Overrides OAuth2::setRefreshToken().
      */
-    protected function setRefreshToken($refresh_token, $account_id, $expires, $scope = NULL)
+    protected function setRefreshToken($refresh_token, $account_id, $expires, $scope = null)
     {
         $account = new API_OAuth2_Account($this->app, $account_id);
         API_OAuth2_RefreshToken::create($this->app, $account, $expires, $refresh_token, $scope);
@@ -355,13 +350,12 @@ class API_OAuth2_Adapter extends OAuth2
             return array(
                 'token'     => $token->get_value()
                 , 'expires'   => $token->get_expires()->format('U')
-                , 'client_id' => $token->get_account()->get_application()->get_client_id()
+                , 'client_id' => $token->get_account()->get_application()->get_client_id(),
             );
         } catch (\Exception $e) {
-
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -382,11 +376,10 @@ class API_OAuth2_Adapter extends OAuth2
      */
     public function getAuthorizationRequestParameters(Request $request)
     {
-
         $datas = array(
             'response_type' => $request->get('response_type', false)
             , 'client_id'     => $request->get('client_id', false)
-            , 'redirect_uri'  => $request->get('redirect_uri', false)
+            , 'redirect_uri'  => $request->get('redirect_uri', false),
         );
 
         $scope = $request->get('scope', false);
@@ -404,16 +397,16 @@ class API_OAuth2_Adapter extends OAuth2
             "client_id" => array(
                 "filter"  => FILTER_VALIDATE_REGEXP
                 , "options" => array("regexp"        => OAUTH2_CLIENT_ID_REGEXP)
-                , "flags"         => FILTER_REQUIRE_SCALAR
+                , "flags"         => FILTER_REQUIRE_SCALAR,
             )
             , "response_type" => array(
                 "filter"  => FILTER_VALIDATE_REGEXP
                 , "options" => array("regexp"       => OAUTH2_AUTH_RESPONSE_TYPE_REGEXP)
-                , "flags"        => FILTER_REQUIRE_SCALAR
+                , "flags"        => FILTER_REQUIRE_SCALAR,
             )
             , "redirect_uri" => array("filter" => FILTER_SANITIZE_URL)
             , "state"  => array("flags" => FILTER_REQUIRE_SCALAR)
-            , "scope" => array("flags" => FILTER_REQUIRE_SCALAR)
+            , "scope" => array("flags" => FILTER_REQUIRE_SCALAR),
         );
 
         $input = filter_var_array($datas, $filters);
@@ -423,10 +416,11 @@ class API_OAuth2_Adapter extends OAuth2
          * check for valid redirect_uri
          */
         if (! $input["client_id"]) {
-            if ($input["redirect_uri"])
+            if ($input["redirect_uri"]) {
                 $this->errorDoRedirectUriCallback(
-                    $input["redirect_uri"], OAUTH2_ERROR_INVALID_CLIENT, NULL, NULL, $input["state"]
+                    $input["redirect_uri"], OAUTH2_ERROR_INVALID_CLIENT, null, null, $input["state"]
                 );
+            }
             // We don't have a good URI to use
             $this->errorJsonResponse(OAUTH2_HTTP_FOUND, OAUTH2_ERROR_INVALID_CLIENT);
         }
@@ -440,18 +434,19 @@ class API_OAuth2_Adapter extends OAuth2
         /**
          *  At least one of: existing redirect URI or input redirect URI must be specified
          */
-        if ( ! $redirect_uri && ! $input["redirect_uri"])
+        if (! $redirect_uri && ! $input["redirect_uri"]) {
             $this->errorJsonResponse(
                 OAUTH2_HTTP_FOUND, OAUTH2_ERROR_INVALID_REQUEST);
-
+        }
 
         /**
          *  getRedirectUri() should return FALSE if the given client ID is invalid
          * this probably saves us from making a separate db call, and simplifies the method set
          */
-        if ($redirect_uri === FALSE)
+        if ($redirect_uri === FALSE) {
             $this->errorDoRedirectUriCallback(
-                $input["redirect_uri"], OAUTH2_ERROR_INVALID_CLIENT, NULL, NULL, $input["state"]);
+                $input["redirect_uri"], OAUTH2_ERROR_INVALID_CLIENT, null, null, $input["state"]);
+        }
 
         /**
          * If there's an existing uri and one from input, verify that they match
@@ -464,8 +459,9 @@ class API_OAuth2_Adapter extends OAuth2
                 substr(
                     $input["redirect_uri"], 0, strlen($redirect_uri)
                 ), $redirect_uri);
-            if ($compare !== 0)
-                $this->errorDoRedirectUriCallback($input["redirect_uri"], OAUTH2_ERROR_REDIRECT_URI_MISMATCH, NULL, NULL, $input["state"]);
+            if ($compare !== 0) {
+                $this->errorDoRedirectUriCallback($input["redirect_uri"], OAUTH2_ERROR_REDIRECT_URI_MISMATCH, null, null, $input["state"]);
+            }
         } elseif ($redirect_uri) {
             /**
              *  They did not provide a uri from input, so use the stored one
@@ -477,26 +473,29 @@ class API_OAuth2_Adapter extends OAuth2
          * Check response_type
          */
         if (! $input["response_type"]) {
-            $this->errorDoRedirectUriCallback($input["redirect_uri"], OAUTH2_ERROR_INVALID_REQUEST, 'Invalid response type.', NULL, $input["state"]);
+            $this->errorDoRedirectUriCallback($input["redirect_uri"], OAUTH2_ERROR_INVALID_REQUEST, 'Invalid response type.', null, $input["state"]);
         }
 
         /**
          * Check requested auth response type against the list of supported types
          */
-        if (array_search($input["response_type"], $this->getSupportedAuthResponseTypes()) === FALSE)
-            $this->errorDoRedirectUriCallback($input["redirect_uri"], OAUTH2_ERROR_UNSUPPORTED_RESPONSE_TYPE, NULL, NULL, $input["state"]);
+        if (array_search($input["response_type"], $this->getSupportedAuthResponseTypes()) === FALSE) {
+            $this->errorDoRedirectUriCallback($input["redirect_uri"], OAUTH2_ERROR_UNSUPPORTED_RESPONSE_TYPE, null, null, $input["state"]);
+        }
 
         /**
          *  Restrict clients to certain authorization response types
          */
-        if ($this->checkRestrictedAuthResponseType($input["client_id"], $input["response_type"]) === FALSE)
-            $this->errorDoRedirectUriCallback($input["redirect_uri"], OAUTH2_ERROR_UNAUTHORIZED_CLIENT, NULL, NULL, $input["state"]);
+        if ($this->checkRestrictedAuthResponseType($input["client_id"], $input["response_type"]) === FALSE) {
+            $this->errorDoRedirectUriCallback($input["redirect_uri"], OAUTH2_ERROR_UNAUTHORIZED_CLIENT, null, null, $input["state"]);
+        }
 
         /**
          * Validate that the requested scope is supported
          */
-        if ($input["scope"] && ! $this->checkScope($input["scope"], $this->getSupportedScopes()))
-            $this->errorDoRedirectUriCallback($input["redirect_uri"], OAUTH2_ERROR_INVALID_SCOPE, NULL, NULL, $input["state"]);
+        if ($input["scope"] && ! $this->checkScope($input["scope"], $this->getSupportedScopes())) {
+            $this->errorDoRedirectUriCallback($input["redirect_uri"], OAUTH2_ERROR_INVALID_SCOPE, null, null, $input["state"]);
+        }
 
         /**
          * at this point all params are ok
@@ -513,8 +512,9 @@ class API_OAuth2_Adapter extends OAuth2
      */
     public function updateAccount($usr_id)
     {
-        if ($this->client === null)
+        if ($this->client === null) {
             throw new logicalException("Client property must be set before update an account");
+        }
 
         try {
             $user = User_Adapter::getInstance($usr_id, $this->app);
@@ -553,17 +553,20 @@ class API_OAuth2_Adapter extends OAuth2
         );
         extract($params);
 
-        if ($state !== NULL)
+        if ($state !== NULL) {
             $result["query"]["state"] = $state;
+        }
 
         if ($is_authorized === FALSE) {
             $result["error"] = OAUTH2_ERROR_USER_DENIED;
         } else {
-            if ($response_type == OAUTH2_AUTH_RESPONSE_TYPE_AUTH_CODE)
+            if ($response_type == OAUTH2_AUTH_RESPONSE_TYPE_AUTH_CODE) {
                 $result["code"] = $this->createAuthCode($account_id, $redirect_uri, $scope);
+            }
 
-            if ($response_type == OAUTH2_AUTH_RESPONSE_TYPE_ACCESS_TOKEN)
+            if ($response_type == OAUTH2_AUTH_RESPONSE_TYPE_ACCESS_TOKEN) {
                 $result["error"] = OAUTH2_ERROR_UNSUPPORTED_RESPONSE_TYPE;
+            }
         }
 
         return $result;
@@ -587,42 +590,41 @@ class API_OAuth2_Adapter extends OAuth2
 
             return true;
         } catch (\Exception $e) {
-
         }
 
         return false;
     }
 
-    public function verifyAccessToken($scope = NULL, $exit_not_present = TRUE, $exit_invalid = TRUE, $exit_expired = TRUE, $exit_scope = TRUE, $realm = NULL)
+    public function verifyAccessToken($scope = null, $exit_not_present = true, $exit_invalid = true, $exit_expired = true, $exit_scope = true, $realm = null)
     {
         $token_param = $this->getAccessTokenParams();
 
         // Access token was not provided
         if ($token_param === false) {
-            return $exit_not_present ? $this->errorWWWAuthenticateResponseHeader(OAUTH2_HTTP_BAD_REQUEST, $realm, OAUTH2_ERROR_INVALID_REQUEST, 'The request is missing a required parameter, includes an unsupported parameter or parameter value, repeats the same parameter, uses more than one method for including an access token, or is otherwise malformed.', NULL, $scope) : FALSE;
+            return $exit_not_present ? $this->errorWWWAuthenticateResponseHeader(OAUTH2_HTTP_BAD_REQUEST, $realm, OAUTH2_ERROR_INVALID_REQUEST, 'The request is missing a required parameter, includes an unsupported parameter or parameter value, repeats the same parameter, uses more than one method for including an access token, or is otherwise malformed.', null, $scope) : false;
         }
 
         // Get the stored token data (from the implementing subclass)
         $token = $this->getAccessToken($token_param);
 
         if ($token === NULL) {
-            return $exit_invalid ? $this->errorWWWAuthenticateResponseHeader(OAUTH2_HTTP_UNAUTHORIZED, $realm, OAUTH2_ERROR_INVALID_TOKEN, 'The access token provided is invalid.', NULL, $scope) : FALSE;
+            return $exit_invalid ? $this->errorWWWAuthenticateResponseHeader(OAUTH2_HTTP_UNAUTHORIZED, $realm, OAUTH2_ERROR_INVALID_TOKEN, 'The access token provided is invalid.', null, $scope) : false;
         }
 
         if (isset($token['revoked']) && $token['revoked']) {
-            return $exit_invalid ? $this->errorWWWAuthenticateResponseHeader(OAUTH2_HTTP_UNAUTHORIZED, $realm, OAUTH2_ERROR_INVALID_TOKEN, 'End user has revoked access to his personal datas for your application.', NULL, $scope) : FALSE;
+            return $exit_invalid ? $this->errorWWWAuthenticateResponseHeader(OAUTH2_HTTP_UNAUTHORIZED, $realm, OAUTH2_ERROR_INVALID_TOKEN, 'End user has revoked access to his personal datas for your application.', null, $scope) : false;
         }
 
         if ($this->enable_expire) {
             // Check token expiration (I'm leaving this check separated, later we'll fill in better error messages)
             if (isset($token["expires"]) && time() > $token["expires"]) {
-                return $exit_expired ? $this->errorWWWAuthenticateResponseHeader(OAUTH2_HTTP_UNAUTHORIZED, $realm, OAUTH2_ERROR_EXPIRED_TOKEN, 'The access token provided has expired.', NULL, $scope) : FALSE;
+                return $exit_expired ? $this->errorWWWAuthenticateResponseHeader(OAUTH2_HTTP_UNAUTHORIZED, $realm, OAUTH2_ERROR_EXPIRED_TOKEN, 'The access token provided has expired.', null, $scope) : false;
             }
         }
         // Check scope, if provided
         // If token doesn't have a scope, it's NULL/empty, or it's insufficient, then throw an error
-        if ($scope && ( ! isset($token["scope"]) || ! $token["scope"] || ! $this->checkScope($scope, $token["scope"]))) {
-            return $exit_scope ? $this->errorWWWAuthenticateResponseHeader(OAUTH2_HTTP_FORBIDDEN, $realm, OAUTH2_ERROR_INSUFFICIENT_SCOPE, 'The request requires higher privileges than provided by the access token.', NULL, $scope) : FALSE;
+        if ($scope && (! isset($token["scope"]) || ! $token["scope"] || ! $this->checkScope($scope, $token["scope"]))) {
+            return $exit_scope ? $this->errorWWWAuthenticateResponseHeader(OAUTH2_HTTP_FORBIDDEN, $realm, OAUTH2_ERROR_INSUFFICIENT_SCOPE, 'The request requires higher privileges than provided by the access token.', null, $scope) : false;
         }
         //save token's linked ses_id
         $this->session_id = $token['session_id'];
@@ -640,16 +642,19 @@ class API_OAuth2_Adapter extends OAuth2
         );
         extract($params);
 
-        if ($state !== NULL)
+        if ($state !== NULL) {
             $result["query"]["state"] = $state;
-        if ($is_authorized === FALSE)
+        }
+        if ($is_authorized === FALSE) {
             $result["query"]["error"] = OAUTH2_ERROR_USER_DENIED;
-        else {
-            if ($response_type == OAUTH2_AUTH_RESPONSE_TYPE_AUTH_CODE || $response_type == OAUTH2_AUTH_RESPONSE_TYPE_CODE_AND_TOKEN)
+        } else {
+            if ($response_type == OAUTH2_AUTH_RESPONSE_TYPE_AUTH_CODE || $response_type == OAUTH2_AUTH_RESPONSE_TYPE_CODE_AND_TOKEN) {
                 $result["query"]["code"] = $this->createAuthCode($account_id, $redirect_uri, $scope);
+            }
 
-            if ($response_type == OAUTH2_AUTH_RESPONSE_TYPE_ACCESS_TOKEN || $response_type == OAUTH2_AUTH_RESPONSE_TYPE_CODE_AND_TOKEN)
+            if ($response_type == OAUTH2_AUTH_RESPONSE_TYPE_ACCESS_TOKEN || $response_type == OAUTH2_AUTH_RESPONSE_TYPE_CODE_AND_TOKEN) {
                 $result["fragment"] = $this->createAccessToken($account_id, $scope);
+            }
         }
         $this->doRedirectUriCallback($redirect_uri, $result);
     }
@@ -674,48 +679,57 @@ class API_OAuth2_Adapter extends OAuth2
         $input = filter_input_array(INPUT_POST, $filters);
 
         // Grant Type must be specified.
-        if ( ! $input["grant_type"])
+        if (! $input["grant_type"]) {
             $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_INVALID_REQUEST, 'Invalid grant_type parameter or parameter missing');
+        }
 
         // Make sure we've implemented the requested grant type
-        if ( ! in_array($input["grant_type"], $this->getSupportedGrantTypes()))
+        if (! in_array($input["grant_type"], $this->getSupportedGrantTypes())) {
             $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_UNSUPPORTED_GRANT_TYPE);
+        }
 
         // Authorize the client
         $client = $this->getClientCredentials();
 
-        if ($this->checkClientCredentials($client[0], $client[1]) === FALSE)
+        if ($this->checkClientCredentials($client[0], $client[1]) === FALSE) {
             $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_INVALID_CLIENT);
+        }
 
-        if ( ! $this->checkRestrictedGrantType($client[0], $input["grant_type"]))
+        if (! $this->checkRestrictedGrantType($client[0], $input["grant_type"])) {
             $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_UNAUTHORIZED_CLIENT);
+        }
 
-        if ( ! $this->checkRestrictedGrantType($client[0], $input["grant_type"]))
+        if (! $this->checkRestrictedGrantType($client[0], $input["grant_type"])) {
             $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_UNAUTHORIZED_CLIENT);
+        }
 
         // Do the granting
         switch ($input["grant_type"]) {
             case OAUTH2_GRANT_TYPE_AUTH_CODE:
-                if ( ! $input["code"] || ! $input["redirect_uri"])
+                if (! $input["code"] || ! $input["redirect_uri"]) {
                     $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_INVALID_REQUEST);
+                }
                 $stored = $this->getAuthCode($input["code"]);
 
                 // Ensure that the input uri starts with the stored uri
-                if ($stored === NULL || (strcasecmp(substr($input["redirect_uri"], 0, strlen($stored["redirect_uri"])), $stored["redirect_uri"]) !== 0) || $client[0] != $stored["client_id"])
+                if ($stored === NULL || (strcasecmp(substr($input["redirect_uri"], 0, strlen($stored["redirect_uri"])), $stored["redirect_uri"]) !== 0) || $client[0] != $stored["client_id"]) {
                     $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_INVALID_GRANT);
+                }
 
-                if ($stored["expires"] < time())
+                if ($stored["expires"] < time()) {
                     $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_EXPIRED_TOKEN);
+                }
                 break;
             case OAUTH2_GRANT_TYPE_USER_CREDENTIALS:
                 $application = API_OAuth2_Application::load_from_client_id($this->app, $client[0]);
 
-                if ( ! $application->is_password_granted()) {
+                if (! $application->is_password_granted()) {
                     $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_UNSUPPORTED_GRANT_TYPE, 'Password grant type is not enable for your client');
                 }
 
-                if ( ! $input["username"] || ! $input["password"])
+                if (! $input["username"] || ! $input["password"]) {
                     $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_INVALID_REQUEST, 'Missing parameters. "username" and "password" required');
+                }
 
                 $stored = $this->checkUserCredentials($client[0], $input["username"], $input["password"]);
 
@@ -724,26 +738,31 @@ class API_OAuth2_Adapter extends OAuth2
                 }
                 break;
             case OAUTH2_GRANT_TYPE_ASSERTION:
-                if ( ! $input["assertion_type"] || ! $input["assertion"])
+                if (! $input["assertion_type"] || ! $input["assertion"]) {
                     $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_INVALID_REQUEST);
+                }
 
                 $stored = $this->checkAssertion($client[0], $input["assertion_type"], $input["assertion"]);
 
-                if ($stored === FALSE)
+                if ($stored === FALSE) {
                     $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_INVALID_GRANT);
+                }
 
                 break;
             case OAUTH2_GRANT_TYPE_REFRESH_TOKEN:
-                if ( ! $input["refresh_token"])
+                if (! $input["refresh_token"]) {
                     $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_INVALID_REQUEST, 'No "refresh_token" parameter found');
+                }
 
                 $stored = $this->getRefreshToken($input["refresh_token"]);
 
-                if ($stored === NULL || $client[0] != $stored["client_id"])
+                if ($stored === NULL || $client[0] != $stored["client_id"]) {
                     $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_INVALID_GRANT);
+                }
 
-                if ($stored["expires"] < time())
+                if ($stored["expires"] < time()) {
                     $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_EXPIRED_TOKEN);
+                }
 
                 // store the refresh token locally so we can delete it when a new refresh token is generated
                 $this->setVariable('_old_refresh_token', $stored["token"]);
@@ -752,16 +771,19 @@ class API_OAuth2_Adapter extends OAuth2
             case OAUTH2_GRANT_TYPE_NONE:
                 $stored = $this->checkNoneAccess($client[0]);
 
-                if ($stored === FALSE)
+                if ($stored === FALSE) {
                     $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_INVALID_REQUEST);
+                }
         }
 
         // Check scope, if provided
-        if ($input["scope"] && ( ! is_array($stored) || ! isset($stored["scope"]) || ! $this->checkScope($input["scope"], $stored["scope"])))
+        if ($input["scope"] && (! is_array($stored) || ! isset($stored["scope"]) || ! $this->checkScope($input["scope"], $stored["scope"]))) {
             $this->errorJsonResponse(OAUTH2_HTTP_BAD_REQUEST, OAUTH2_ERROR_INVALID_SCOPE);
+        }
 
-        if ( ! $input["scope"])
-            $input["scope"] = NULL;
+        if (! $input["scope"]) {
+            $input["scope"] = null;
+        }
 
         $token = $this->createAccessToken($stored['account_id'], $input["scope"]);
         $this->sendJsonHeaders();
@@ -771,15 +793,16 @@ class API_OAuth2_Adapter extends OAuth2
         return;
     }
 
-    protected function createAccessToken($account_id, $scope = NULL)
+    protected function createAccessToken($account_id, $scope = null)
     {
         $token = array(
             "access_token" => $this->genAccessToken(),
-            "scope"        => $scope
+            "scope"        => $scope,
         );
 
-        if ($this->enable_expire)
+        if ($this->enable_expire) {
             $token['expires_in'] = $this->getVariable('access_token_lifetime', OAUTH2_DEFAULT_ACCESS_TOKEN_LIFETIME);
+        }
 
         $this->setAccessToken($token["access_token"], $account_id, time() + $this->getVariable('access_token_lifetime', OAUTH2_DEFAULT_ACCESS_TOKEN_LIFETIME), $scope);
 
@@ -788,8 +811,9 @@ class API_OAuth2_Adapter extends OAuth2
             $token["refresh_token"] = $this->genAccessToken();
             $this->setRefreshToken($token["refresh_token"], $account_id, time() + $this->getVariable('refresh_token_lifetime', OAUTH2_DEFAULT_REFRESH_TOKEN_LIFETIME), $scope);
             // If we've granted a new refresh token, expire the old one
-            if ($this->getVariable('_old_refresh_token'))
+            if ($this->getVariable('_old_refresh_token')) {
                 $this->unsetRefreshToken($this->getVariable('_old_refresh_token'));
+            }
         }
 
         return $token;
@@ -811,7 +835,7 @@ class API_OAuth2_Adapter extends OAuth2
             return array(
                 'redirect_uri' => $this->client->get_redirect_uri()
                 , 'client_id'    => $this->client->get_client_id()
-                , 'account_id'   => $account->get_id()
+                , 'account_id'   => $account->get_id(),
             );
         } catch (AccountLockedException $e) {
             return false;

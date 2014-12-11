@@ -17,7 +17,6 @@
  */
 class set_exportftp extends set_export
 {
-
     /**
      *
      * @param integer $usr_to
@@ -44,20 +43,20 @@ class set_exportftp extends set_export
         }
 
         $text_mail_receiver = "Bonjour,\n"
-            . "L'utilisateur "
-            . $this->app['authentication']->getUser()->get_display_name() . " (login : " . $this->app['authentication']->getUser()->get_login() . ") "
-            . "a fait un transfert FTP sur le serveur ayant comme adresse \""
-            . $host . "\" avec le login \"" . $login . "\"  "
-            . "et pour repertoire de destination \""
-            . $destfolder . "\"\n";
+            ."L'utilisateur "
+            .$this->app['authentication']->getUser()->get_display_name()." (login : ".$this->app['authentication']->getUser()->get_login().") "
+            ."a fait un transfert FTP sur le serveur ayant comme adresse \""
+            .$host."\" avec le login \"".$login."\"  "
+            ."et pour repertoire de destination \""
+            .$destfolder."\"\n";
 
         $text_mail_sender = "Bonjour,\n"
-            . "Vous avez fait un export FTP  avec les caracteristiques "
-            . "de connexion suivantes\n"
-            . "- adresse du serveur : \"" . $host . "\"\n"
-            . "- login utilisé \"" . $login . "\"\n"
-            . "- repertoire de destination \"" . $destfolder . "\"\n"
-            . "\n";
+            ."Vous avez fait un export FTP  avec les caracteristiques "
+            ."de connexion suivantes\n"
+            ."- adresse du serveur : \"".$host."\"\n"
+            ."- login utilisé \"".$login."\"\n"
+            ."- repertoire de destination \"".$destfolder."\"\n"
+            ."\n";
 
         $fn = "id";
         $fv = "null";
@@ -108,7 +107,7 @@ class set_exportftp extends set_export
             , ':text_mail_sender'   => $text_mail_sender
             , ':usr_id'             => $this->app['authentication']->getUser()->get_id()
             , ':foldertocreate'     => $makedirectory
-            , ':logfile'            => ( ! ! $logfile ? '1' : '0')
+            , ':logfile'            => (! ! $logfile ? '1' : '0'),
         );
 
         $sql = "INSERT INTO ftp_export ($fn) VALUES ($fv)";
@@ -129,8 +128,8 @@ class set_exportftp extends set_export
         foreach ($this->list['files'] as $file) {
             foreach ($file['subdefs'] as $subdef => $properties) {
                 $filename = $file['export_name']
-                    . $properties["ajout"] . '.'
-                    . $properties['exportExt'];
+                    .$properties["ajout"].'.'
+                    .$properties['exportExt'];
 
                 $bfields = isset($properties['businessfields']) ? $properties['businessfields'] : null;
 
@@ -141,7 +140,7 @@ class set_exportftp extends set_export
                     , ':subdef'         => $subdef
                     , ':filename'       => $filename
                     , ':folder'         => $properties['folder']
-                    , ':businessfields' => $bfields
+                    , ':businessfields' => $bfields,
                 );
                 $stmt->execute($params);
             }

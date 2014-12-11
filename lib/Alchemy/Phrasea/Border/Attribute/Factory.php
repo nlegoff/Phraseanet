@@ -19,7 +19,6 @@ use Alchemy\Phrasea\Application;
  */
 class Factory
 {
-
     /**
      * Build a file package Attribute
      *

@@ -1064,7 +1064,7 @@ abstract class ApiAbstract extends \PhraseanetWebTestCaseAbstract
 
         $this->assertArrayHasKey('embed', $content['response']);
 
-        $embedTypes = array_flip(array_map(function($subdef) {return $subdef['name'];},$content['response']['embed']));
+        $embedTypes = array_flip(array_map(function ($subdef) {return $subdef['name'];},$content['response']['embed']));
 
         //access to all subdefs
         $this->assertArrayHasKey('document', $embedTypes);
@@ -1100,11 +1100,10 @@ abstract class ApiAbstract extends \PhraseanetWebTestCaseAbstract
         $this->evaluateMeta200($content);
         $this->assertArrayHasKey('embed', $content['response']);
         // no hd subdef
-        $embedTypes = array_flip(array_map(function($subdef) {return $subdef['name'];},$content['response']['embed']));
+        $embedTypes = array_flip(array_map(function ($subdef) {return $subdef['name'];},$content['response']['embed']));
         $this->assertArrayHasKey('preview', $embedTypes);
         $this->assertArrayNotHasKey('document', $embedTypes);
     }
-
 
     public function testRecordsEmbedRouteNoPreviewAndHdRights()
     {
@@ -1124,8 +1123,8 @@ abstract class ApiAbstract extends \PhraseanetWebTestCaseAbstract
         $this->evaluateMeta200($content);
         $this->assertArrayHasKey('embed', $content['response']);
         // no preview
-        $this->assertArrayNotHasKey('document', array_flip(array_map(function($subdef) {return $subdef['name'];},$content['response']['embed'])));
-        $this->assertArrayNotHasKey('preview', array_flip(array_map(function($subdef) {return $subdef['name'];},$content['response']['embed'])));
+        $this->assertArrayNotHasKey('document', array_flip(array_map(function ($subdef) {return $subdef['name'];},$content['response']['embed'])));
+        $this->assertArrayNotHasKey('preview', array_flip(array_map(function ($subdef) {return $subdef['name'];},$content['response']['embed'])));
     }
 
     /**

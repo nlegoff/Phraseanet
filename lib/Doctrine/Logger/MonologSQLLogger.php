@@ -67,7 +67,7 @@ class MonologSQLLogger implements \Doctrine\DBAL\Logging\SQLLogger
     {
         $mstime = microtime(true) - $this->start;
 
-        $this->output["times"] = $mstime . " seconds";
+        $this->output["times"] = $mstime." seconds";
         if ($this->outputType == self::JSON) {
             $this->log(json_encode($this->output));
         } elseif ($this->outputType == self::YAML) {

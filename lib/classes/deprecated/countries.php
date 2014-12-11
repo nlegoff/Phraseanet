@@ -513,12 +513,14 @@ function getCountries($lng = 'fr')
         'WF'                 => 'WALLIS ET FUTUNA',
         'YE'                 => 'YÉMEN',
         'ZM'                 => 'ZAMBIE',
-        'ZW'                 => 'ZIMBABWE'
+        'ZW'                 => 'ZIMBABWE',
     );
-    if ( ! isset($countries[$lng]))
+    if (! isset($countries[$lng])) {
         $lng = 'us';
-    foreach ($countries[$lng] as $k => $country)
+    }
+    foreach ($countries[$lng] as $k => $country) {
         $countries[$lng][$k] = mb_strtolower($country);
+    }
 
     return $countries[$lng];
 }

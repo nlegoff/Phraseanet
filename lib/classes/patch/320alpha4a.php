@@ -88,7 +88,7 @@ class patch_320alpha4a implements patchInterface
             , 'tf-mimetype'    => 'Phraseanet:tf-mimetype'
             , 'tf-recordid'    => 'Phraseanet:tf-recordid'
             , 'tf-size'        => 'Phraseanet:tf-size'
-            , 'tf-width'       => 'Phraseanet:tf-width'
+            , 'tf-width'       => 'Phraseanet:tf-width',
         );
 
         $sxe = $databox->get_sxml_structure();
@@ -96,13 +96,12 @@ class patch_320alpha4a implements patchInterface
         $xp_struct = $databox->get_xpath_structure();
 
         foreach ($sxe->description->children() as $fname => $field) {
-
             $src = trim(isset($field['src']) ? $field['src'] : '');
             if (array_key_exists($src, $phrasea_maps)) {
                 $src = $phrasea_maps[$src];
             }
 
-            $nodes = $xp_struct->query('/record/description/' . $fname);
+            $nodes = $xp_struct->query('/record/description/'.$fname);
             if ($nodes->length > 0) {
                 $node = $nodes->item(0);
                 $node->setAttribute('src', $src);

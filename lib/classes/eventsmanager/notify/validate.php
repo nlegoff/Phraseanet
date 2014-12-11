@@ -56,7 +56,7 @@ class eventsmanager_notify_validate extends eventsmanager_notifyAbstract
             'from'    => ''
             , 'to'      => ''
             , 'message' => ''
-            , 'ssel_id' => ''
+            , 'ssel_id' => '',
         );
 
         $params = array_merge($default, $params);
@@ -90,7 +90,6 @@ class eventsmanager_notify_validate extends eventsmanager_notifyAbstract
         $mailed = false;
 
         if ($this->shouldSendNotificationFor($params['to'])) {
-
             $readyToSend = false;
             try {
                 $user_from = User_Adapter::getInstance($params['from'], $this->app);
@@ -106,7 +105,6 @@ class eventsmanager_notify_validate extends eventsmanager_notifyAbstract
 
                 $readyToSend = true;
             } catch (\Exception $e) {
-
             }
 
             if ($readyToSend) {
@@ -150,22 +148,21 @@ class eventsmanager_notify_validate extends eventsmanager_notifyAbstract
 
             $basket = $repository->findUserBasket($this->app, $ssel_id, $this->app['authentication']->getUser(), false);
 
-            $basket_name = trim($basket->getName()) ? : _('Une selection');
+            $basket_name = trim($basket->getName()) ?: _('Une selection');
         } catch (\Exception $e) {
             $basket_name = _('Une selection');
         }
 
         $bask_link = '<a href="'
-            . $this->app->url('lightbox_validation', array('ssel_id' => (string) $sx->ssel_id))
-            . '" target="_blank">'
-            . $basket_name . '</a>';
+            .$this->app->url('lightbox_validation', array('ssel_id' => (string) $sx->ssel_id))
+            .'" target="_blank">'
+            .$basket_name.'</a>';
 
         $ret = array(
             'text'  => sprintf(
-                _('%1$s vous demande de valider %2$s')
-                , $sender, $bask_link
+                _('%1$s vous demande de valider %2$s'), $sender, $bask_link
             )
-            , 'class' => ($unread == 1 ? 'reload_baskets' : '')
+            , 'class' => ($unread == 1 ? 'reload_baskets' : ''),
         );
 
         return $ret;

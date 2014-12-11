@@ -46,7 +46,7 @@ class eventsmanager_notify_order extends eventsmanager_notifyAbstract
     {
         $default = array(
             'usr_id'   => ''
-            , 'order_id' => array()
+            , 'order_id' => array(),
         );
 
         $params = array_merge($default, $params);
@@ -73,7 +73,6 @@ class eventsmanager_notify_order extends eventsmanager_notifyAbstract
                     ->who_have_right(array('order_master'))
                     ->execute()->get_results();
         } catch (\Exception $e) {
-
         }
 
         if (count($users) == 0) {
@@ -156,11 +155,8 @@ class eventsmanager_notify_order extends eventsmanager_notifyAbstract
         $sender = User_Adapter::getInstance($usr_id, $this->app)->get_display_name();
 
         $ret = array(
-            'text'  => sprintf(_('%1$s a passe une %2$scommande%3$s')
-                , $sender
-                , '<a href="/prod/order/'.$order_id.'/" class="dialog full-dialog" title="'._('Orders manager').'">'
-                , '</a>')
-            , 'class' => ''
+            'text'  => sprintf(_('%1$s a passe une %2$scommande%3$s'), $sender, '<a href="/prod/order/'.$order_id.'/" class="dialog full-dialog" title="'._('Orders manager').'">', '</a>')
+            , 'class' => '',
         );
 
         return $ret;

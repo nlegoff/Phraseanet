@@ -72,8 +72,7 @@ class Lightbox implements ControllerProviderInterface
             /* @var $repository \Repositories\BasketRepository */
 
             $basket_collection = array_merge(
-                $repository->findActiveByUser($app['authentication']->getUser())
-                , $repository->findActiveValidationByUser($app['authentication']->getUser())
+                $repository->findActiveByUser($app['authentication']->getUser()), $repository->findActiveValidationByUser($app['authentication']->getUser())
             );
 
             $template = 'lightbox/index.html.twig';
@@ -84,7 +83,7 @@ class Lightbox implements ControllerProviderInterface
             return new Response($app['twig']->render($template, array(
                     'baskets_collection' => $basket_collection,
                     'module_name'        => 'Lightbox',
-                    'module'             => 'lightbox'
+                    'module'             => 'lightbox',
                     )
             ));
         })
@@ -119,7 +118,7 @@ class Lightbox implements ControllerProviderInterface
             if ($app['browser']->isMobile()) {
                 $output = $app['twig']->render('lightbox/basket_element.html.twig', array(
                     'basket_element' => $BasketElement,
-                    'module_name'    => $BasketElement->getRecord($app)->get_title()
+                    'module_name'    => $BasketElement->getRecord($app)->get_title(),
                     )
                 );
 
@@ -164,7 +163,7 @@ class Lightbox implements ControllerProviderInterface
             if ($app['browser']->isMobile()) {
                 $output = $app['twig']->render('lightbox/feed_element.html.twig', array(
                     'feed_element' => $item,
-                    'module_name'  => $item->get_record()->get_title()
+                    'module_name'  => $item->get_record()->get_title(),
                     )
                 );
 
@@ -211,9 +210,7 @@ class Lightbox implements ControllerProviderInterface
             );
 
             $basket = $repository->findUserBasket(
-                $app, $ssel_id
-                , $app['authentication']->getUser()
-                , false
+                $app, $ssel_id, $app['authentication']->getUser(), false
             );
 
             if ($basket->getIsRead() === false) {
@@ -239,7 +236,7 @@ class Lightbox implements ControllerProviderInterface
                         'basket'             => $basket,
                         'local_title'        => strip_tags($basket->getName()),
                         'module'             => 'lightbox',
-                        'module_name'        => _('admin::monitor: module validation')
+                        'module_name'        => _('admin::monitor: module validation'),
                         )
                 ));
             $response->setCharset('UTF-8');
@@ -265,9 +262,7 @@ class Lightbox implements ControllerProviderInterface
             );
 
             $basket = $repository->findUserBasket(
-                $app, $ssel_id
-                , $app['authentication']->getUser()
-                , false
+                $app, $ssel_id, $app['authentication']->getUser(), false
             );
 
             if ($basket->getIsRead() === false) {
@@ -293,7 +288,7 @@ class Lightbox implements ControllerProviderInterface
                         'basket'             => $basket,
                         'local_title'        => strip_tags($basket->getName()),
                         'module'             => 'lightbox',
-                        'module_name'        => _('admin::monitor: module validation')
+                        'module_name'        => _('admin::monitor: module validation'),
                         )
                 ));
             $response->setCharset('UTF-8');
@@ -326,7 +321,7 @@ class Lightbox implements ControllerProviderInterface
                 'first_item'  => array_shift($content),
                 'local_title' => $feed_entry->get_title(),
                 'module'      => 'lightbox',
-                'module_name' => _('admin::monitor: module validation')
+                'module_name' => _('admin::monitor: module validation'),
                 )
             );
             $response = new Response($output, 200);
@@ -345,9 +340,7 @@ class Lightbox implements ControllerProviderInterface
 
             /* @var $repository \Repositories\BasketRepository */
             $basket = $repository->findUserBasket(
-                $app, $ssel_id
-                , $app['authentication']->getUser()
-                , false
+                $app, $ssel_id, $app['authentication']->getUser(), false
             );
 
             $response = new Response($app['twig']->render($template, array('basket' => $basket)));
@@ -365,7 +358,7 @@ class Lightbox implements ControllerProviderInterface
             $note = $request->request->get('note');
 
             if (is_null($note)) {
-                Return new Response('You must provide a note value', 400);
+                return new Response('You must provide a note value', 400);
             }
 
             /* @var $repository \Repositories\BasketElementRepository */
@@ -403,7 +396,7 @@ class Lightbox implements ControllerProviderInterface
             $agreement = $request->request->get('agreement');
 
             if (is_null($agreement)) {
-                Return new Response('You must provide an agreement value', 400);
+                return new Response('You must provide an agreement value', 400);
             }
 
             $agreement = $agreement > 0;
@@ -413,15 +406,14 @@ class Lightbox implements ControllerProviderInterface
                 $ret = array(
                     'error'      => true,
                     'releasable' => false,
-                    'datas'      => _('Erreur lors de la mise a jour des donnes ')
+                    'datas'      => _('Erreur lors de la mise a jour des donnes '),
                 );
 
                 $repository = $app['EM']->getRepository('\Entities\BasketElement');
 
                 /* @var $repository \Repositories\BasketElementRepository */
                 $basket_element = $repository->findUserElement(
-                    $sselcont_id
-                    , $app['authentication']->getUser()
+                    $sselcont_id, $app['authentication']->getUser()
                 );
                 /* @var $basket_element \Entities\BasketElement */
                 $validationDatas = $basket_element->getUserValidationDatas($app['authentication']->getUser(), $app);
@@ -448,9 +440,7 @@ class Lightbox implements ControllerProviderInterface
                 }
 
                 $ret = array(
-                    'error'      => false
-                    , 'datas'      => ''
-                    , 'releasable' => $releasable
+                    'error'      => false, 'datas'      => '', 'releasable' => $releasable,
                 );
             } catch (ControllerException $e) {
                 $ret['datas'] = $e->getMessage();
@@ -470,9 +460,7 @@ class Lightbox implements ControllerProviderInterface
             try {
                 /* @var $repository \Repositories\BasketRepository */
                 $basket = $repository->findUserBasket(
-                    $app, $ssel_id
-                    , $app['authentication']->getUser()
-                    , false
+                    $app, $ssel_id, $app['authentication']->getUser(), false
                 );
 
                 if (!$basket->getValidation()) {
@@ -500,10 +488,7 @@ class Lightbox implements ControllerProviderInterface
 
                 $expires = new \DateTime('+10 days');
                 $url = $app->url('lightbox', array('LOG' => $app['tokens']->getUrlToken(
-                        \random::TYPE_VALIDATE
-                        , $basket->getValidation()->getInitiator($app)->get_id()
-                        , $expires
-                        , $basket->getId()
+                        \random::TYPE_VALIDATE, $basket->getValidation()->getInitiator($app)->get_id(), $expires, $basket->getId()
                 )));
 
                 $to = $basket->getValidation()->getInitiator($app)->get_id();
@@ -511,7 +496,7 @@ class Lightbox implements ControllerProviderInterface
                     'ssel_id' => $basket->getId(),
                     'from'    => $app['authentication']->getUser()->get_id(),
                     'url'     => $url,
-                    'to'      => $to
+                    'to'      => $to,
                 );
 
                 $app['events-manager']->trigger('__VALIDATION_DONE__', $params);

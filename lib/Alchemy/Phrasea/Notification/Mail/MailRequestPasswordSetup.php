@@ -46,8 +46,8 @@ class MailRequestPasswordSetup extends AbstractMailWithLink
         }
 
         return sprintf(_('Your account with the login %s as been created'), $this->login)
-            . "\n"
-            . _('You now have to set up your pasword');
+            ."\n"
+            ._('You now have to set up your pasword');
     }
 
     /**

@@ -8,6 +8,6 @@ class OpcodeCacheRequirementTest extends RequirementsTestCase
 {
     protected function provideRequirements()
     {
-        return new OpcodeCacheRequirement;
+        return new OpcodeCacheRequirement();
     }
 }

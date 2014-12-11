@@ -59,7 +59,6 @@ class Printer extends RecordHelper
                 $element->get_preview()->get_type() == \media_subdef::TYPE_IMAGE;
                 $n ++;
             } catch (\Exception $e) {
-
             }
         }
 
@@ -74,7 +73,6 @@ class Printer extends RecordHelper
                 $element->get_thumbnail()->get_type() == \media_subdef::TYPE_IMAGE;
                 $n ++;
             } catch (\Exception $e) {
-
             }
         }
 

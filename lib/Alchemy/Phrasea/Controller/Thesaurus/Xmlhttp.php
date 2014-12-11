@@ -77,7 +77,7 @@ class Xmlhttp implements ControllerProviderInterface
             if ($request->get("tid") == "T") {
                 $q = "/thesaurus";
             } else {
-                $q = "/thesaurus//te[@id='" . $request->get("tid") . "']";
+                $q = "/thesaurus//te[@id='".$request->get("tid")."']";
             }
 
             $parentnode = $xpathth->query($q)->item(0);
@@ -89,7 +89,7 @@ class Xmlhttp implements ControllerProviderInterface
             $ctchanged = $thchanged = false;
 
             foreach ($request->get("cid") as $cid) {
-                $q = "//te[@id='" . $cid . "']";
+                $q = "//te[@id='".$cid."']";
                 if ($request->get("debug")) {
                     printf("qct: %s<br/>\n", $q);
                 }
@@ -106,9 +106,9 @@ class Xmlhttp implements ControllerProviderInterface
                     $te = $domth->importNode($ct, true);
                     $chgids = array();
                     if (($pid = $parentnode->getAttribute("id")) == "") {
-                        $pid = "T" . $nid;
+                        $pid = "T".$nid;
                     } else {
-                        $pid .= "." . $nid;
+                        $pid .= ".".$nid;
                     }
 
                     $this->renumerate($request->get('piv'), $te, $pid, $chgids);
@@ -118,8 +118,8 @@ class Xmlhttp implements ControllerProviderInterface
                         printf("newid=%s<br/>\n", $te->getAttribute("id"));
                     }
 
-                    $soldid = str_replace(".", "d", $oldid) . "d";
-                    $snewid = str_replace(".", "d", $pid) . "d";
+                    $soldid = str_replace(".", "d", $oldid)."d";
+                    $snewid = str_replace(".", "d", $pid)."d";
                     $l = strlen($soldid) + 1;
 
                     $sql = "UPDATE thit
@@ -130,23 +130,23 @@ class Xmlhttp implements ControllerProviderInterface
                         printf("soldid=%s ; snewid=%s<br/>\nsql=%s<br/>\n", $soldid, $snewid, $sql);
                     } else {
                         $stmt = $connbas->prepare($sql);
-                        $stmt->execute(array(':like' => $soldid . '%'));
+                        $stmt->execute(array(':like' => $soldid.'%'));
                         $stmt->closeCursor();
                     }
 
                     $refreshid = $parentnode->getAttribute('id');
-                    $refresh['T' . $refreshid] = array(
+                    $refresh['T'.$refreshid] = array(
                         'type' => 'T',
                         'sbid' => $sbas_id,
-                        'id'   => $refreshid
+                        'id'   => $refreshid,
                     );
                     $thchanged = true;
 
                     $refreshid = $ct->parentNode->getAttribute("id");
-                    $refresh['C' . $refreshid] = array(
+                    $refresh['C'.$refreshid] = array(
                         'type' => 'C',
                         'sbid' => $sbas_id,
-                        'id'   => $refreshid
+                        'id'   => $refreshid,
                     );
 
                     $ct->parentNode->removeChild($ct);
@@ -166,9 +166,9 @@ class Xmlhttp implements ControllerProviderInterface
                         $chgids = array();
                         if (($pid = $parentnode->getAttribute("id")) == "") {
                             // racine
-                            $pid = "T" . $nid;
+                            $pid = "T".$nid;
                         } else {
-                            $pid .= "." . $nid;
+                            $pid .= ".".$nid;
                         }
 
                         $this->renumerate($request->get('piv'), $te, $pid, $chgids);
@@ -178,8 +178,8 @@ class Xmlhttp implements ControllerProviderInterface
                             printf("newid=%s<br/>\n", $te->getAttribute("id"));
                         }
 
-                        $soldid = str_replace(".", "d", $oldid) . "d";
-                        $snewid = str_replace(".", "d", $pid) . "d";
+                        $soldid = str_replace(".", "d", $oldid)."d";
+                        $snewid = str_replace(".", "d", $pid)."d";
                         $l = strlen($soldid) + 1;
 
                         $sql = "UPDATE thit
@@ -190,7 +190,7 @@ class Xmlhttp implements ControllerProviderInterface
                             printf("soldid=%s ; snewid=%s<br/>\nsql=%s<br/>\n", $soldid, $snewid, $sql);
                         } else {
                             $stmt = $connbas->prepare($sql);
-                            $stmt->execute(array(':like' => $soldid . '%'));
+                            $stmt->execute(array(':like' => $soldid.'%'));
                             $stmt->closeCursor();
                         }
 
@@ -198,17 +198,17 @@ class Xmlhttp implements ControllerProviderInterface
                     }
 
                     $refreshid = $parentnode->parentNode->getAttribute("id");
-                    $refresh['T' . $refreshid] = array(
+                    $refresh['T'.$refreshid] = array(
                         'type' => 'T',
                         'sbid' => $sbas_id,
-                        'id'   => $refreshid
+                        'id'   => $refreshid,
                     );
 
                     $refreshid = $ct->parentNode->getAttribute("id");
-                    $refresh['C' . $refreshid] = array(
+                    $refresh['C'.$refreshid] = array(
                         'type' => 'C',
                         'sbid' => $sbas_id,
-                        'id'   => $refreshid
+                        'id'   => $refreshid,
                     );
 
                     $ct->parentNode->removeChild($ct);
@@ -222,7 +222,6 @@ class Xmlhttp implements ControllerProviderInterface
                 $databox->saveThesaurus($domth);
             }
         } catch (\Exception $e) {
-
         }
 
         $ret['refresh'] = array_values($refresh);
@@ -242,7 +241,7 @@ class Xmlhttp implements ControllerProviderInterface
 
         for ($n = $node->firstChild; $n; $n = $n->nextSibling) {
             if ($n->nodeType == XML_ELEMENT_NODE && ($n->nodeName == "te" || $n->nodeName == "sy")) {
-                $this->renumerate($lang, $n, $id . "." . $nchild, $chgids, $depth + 1);
+                $this->renumerate($lang, $n, $id.".".$nchild, $chgids, $depth + 1);
                 $nchild++;
             }
         }
@@ -276,7 +275,7 @@ class Xmlhttp implements ControllerProviderInterface
                 // le champ est teste d'apres son tbranch
                 if ($meta && ($databox_field = $meta->get_element_by_name($request->get('acf')))) {
                     $tbranch = $databox_field->get_tbranch();
-                    $q = "(" . $tbranch . ")/descendant-or-self::te[@id='" . $request->get("id") . "']";
+                    $q = "(".$tbranch.")/descendant-or-self::te[@id='".$request->get("id")."']";
 
                     if ($request->get("debug")) {
                         printf("tbranch-q = \" $q \" <br/>\n");
@@ -288,15 +287,14 @@ class Xmlhttp implements ControllerProviderInterface
                 }
             }
 
-
             if ($request->get("id") == "T") {
                 $q = "/thesaurus";
             } else {
-                $q = "/thesaurus//te[@id='" . $request->get("id") . "']";
+                $q = "/thesaurus//te[@id='".$request->get("id")."']";
             }
 
             if ($request->get("debug")) {
-                print("q:" . $q . "<br/>\n");
+                print("q:".$q."<br/>\n");
             }
 
             $nodes = $xpath->query($q);
@@ -332,12 +330,12 @@ class Xmlhttp implements ControllerProviderInterface
                             $goodsy = $firstsy;
                         }
 
-                        $fullpath = " / " . $goodsy . $fullpath;
+                        $fullpath = " / ".$goodsy.$fullpath;
 
                         if ($depth == 0) {
-                            $fullpath_html = "<span class='path_separator'> / </span><span class='main_term'>" . $goodsy . "</span>" . $fullpath_html;
+                            $fullpath_html = "<span class='path_separator'> / </span><span class='main_term'>".$goodsy."</span>".$fullpath_html;
                         } else {
-                            $fullpath_html = "<span class='path_separator'> / </span>" . $goodsy . $fullpath_html;
+                            $fullpath_html = "<span class='path_separator'> / </span>".$goodsy.$fullpath_html;
                         }
                     }
                 }
@@ -376,7 +374,7 @@ class Xmlhttp implements ControllerProviderInterface
 
                 $params = array(
                     ':editpresetid' => $request->get('presetid'),
-                    ':usr_id'       => $usr_id
+                    ':usr_id'       => $usr_id,
                 );
 
                 $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -391,7 +389,7 @@ class Xmlhttp implements ControllerProviderInterface
                 $dom->preserveWhiteSpace = false;
                 $dom->formatOutput = true;
 
-                $xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?><edit_preset>' . $request->get('f') . '</edit_preset>';
+                $xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?><edit_preset>'.$request->get('f').'</edit_preset>';
                 $dom->loadXML($xml);
 
                 $sql = 'INSERT INTO edit_presets
@@ -469,12 +467,12 @@ class Xmlhttp implements ControllerProviderInterface
                 if (!array_key_exists($fn, $t_desc)) {
                     $t_desc[$fn] = trim($fv);
                 } else {
-                    $t_desc[$fn] .= ' ; ' . trim($fv);
+                    $t_desc[$fn] .= ' ; '.trim($fv);
                 }
             }
             $desc = '';
             foreach ($t_desc as $fn => $fv) {
-                $desc .= '    <p><b>' . $fn . ':&nbsp;</b>' . str_replace(array('&', '<', '>'), array('&amp;', '&lt;', '&gt;'), $fv) . '</p>' . "\n";
+                $desc .= '    <p><b>'.$fn.':&nbsp;</b>'.str_replace(array('&', '<', '>'), array('&amp;', '&lt;', '&gt;'), $fv).'</p>'."\n";
             }
 
             ob_start();
@@ -508,13 +506,12 @@ class Xmlhttp implements ControllerProviderInterface
         ), true)));
 
         if (null !== $request->get('bid')) {
-
             $databox = $app['phraseanet.appbox']->get_databox((int) $request->get('bid'));
             $dom = $databox->get_dom_thesaurus();
 
             if ($dom) {
                 $xpath = $databox->get_xpath_thesaurus();
-                $q = "/thesaurus//sy[@id='" . $request->get('id') . "']";
+                $q = "/thesaurus//sy[@id='".$request->get('id')."']";
 
                 $nodes = $xpath->query($q);
                 if ($nodes->length > 0) {
@@ -547,11 +544,11 @@ class Xmlhttp implements ControllerProviderInterface
         if ($request->get("id") == "T") {
             $q = "/thesaurus";
         } else {
-            $q = "/thesaurus//te[@id='" . $request->get("id") . "']";
+            $q = "/thesaurus//te[@id='".$request->get("id")."']";
         }
 
         if ($request->get("debug")) {
-            print("q:" . $q . "<br/>\n");
+            print("q:".$q."<br/>\n");
         }
 
         $nodes = $xpath->query($q);
@@ -582,17 +579,17 @@ class Xmlhttp implements ControllerProviderInterface
                             }
                             if (!$realksy && $request->get("lng") && $lng == $request->get("lng")) {
                                 $realksy = $ksy;
-                                $allsy = $t . ($allsy ? " ; " : "") . $allsy;
+                                $allsy = $t.($allsy ? " ; " : "").$allsy;
 
                                 array_push($tsy, array(
                                     "id" => $n2->getAttribute("id"),
-                                    "sy" => $t
+                                    "sy" => $t,
                                 ));
                             } else {
-                                $allsy .= ( $allsy ? " ; " : "") . $t;
+                                $allsy .= ($allsy ? " ; " : "").$t;
                                 array_push($tsy, array(
                                     "id" => $n2->getAttribute("id"),
-                                    "sy" => $t
+                                    "sy" => $t,
                                 ));
                             }
                         }
@@ -602,26 +599,25 @@ class Xmlhttp implements ControllerProviderInterface
                     }
                     if ($request->get("sortsy") && $request->get("lng")) {
                         for ($uniq = 0; $uniq < 9999; $uniq++) {
-                            if (!isset($tts[$realksy . "_" . $uniq])) {
+                            if (!isset($tts[$realksy."_".$uniq])) {
                                 break;
                             }
                         }
-                        $tts[$realksy . "_" . $uniq] = array(
+                        $tts[$realksy."_".$uniq] = array(
                             "id"     => $n->getAttribute("id"),
                             "allsy"  => $allsy,
                             "nchild" => $xpath->query("te", $n)->length,
-                            "tsy"    => $tsy
+                            "tsy"    => $tsy,
                         );
                     } else {
                         $tts[] = array(
                             "id"     => $n->getAttribute("id"),
                             "allsy"  => $allsy,
                             "nchild" => $xpath->query("te", $n)->length,
-                            "tsy"    => $tsy
+                            "tsy"    => $tsy,
                         );
                     }
                 } elseif ($n->nodeName == "sy") {
-
                 }
             }
 
@@ -638,17 +634,17 @@ class Xmlhttp implements ControllerProviderInterface
                 $t = $ts["allsy"];
                 $lt = "";
                 foreach ($ts["tsy"] as $sy) {
-                    $lt .= ( $lt ? " ; " : "");
-                    $lt .= "<i id='TH_W." . $bid . "." . $sy["id"] . "'>";
+                    $lt .= ($lt ? " ; " : "");
+                    $lt .= "<i id='TH_W.".$bid.".".$sy["id"]."'>";
                     $lt .= $sy["sy"];
                     $lt .= "</i>";
                 }
-                $html .= "<p id='TH_T." . $bid . "." . $tid . "'>";
+                $html .= "<p id='TH_T.".$bid.".".$tid."'>";
                 if ($ts["nchild"] > 0) {
-                    $html .= "<u id='TH_P." . $bid . "." . $tid . "'>+</u>";
+                    $html .= "<u id='TH_P.".$bid.".".$tid."'>+</u>";
                     $html .= $lt;
                     $html .= "</p>";
-                    $html .= "<div id='TH_K." . $bid . "." . $tid . "' class='c'>";
+                    $html .= "<div id='TH_K.".$bid.".".$tid."' class='c'>";
                     $html .= "loading";
                     $html .= "</div>";
                 } else {
@@ -692,11 +688,11 @@ class Xmlhttp implements ControllerProviderInterface
         if ($request->get("id") == "T") {
             $q = "/thesaurus";
         } else {
-            $q = "/thesaurus//te[@id='" . $request->get("id") . "']";
+            $q = "/thesaurus//te[@id='".$request->get("id")."']";
         }
 
         if ($request->get("debug")) {
-            print("q:" . $q . "<br/>\n");
+            print("q:".$q."<br/>\n");
         }
 
         $nodes = $xpath->query($q);
@@ -728,46 +724,46 @@ class Xmlhttp implements ControllerProviderInterface
 
                             if (!$realksy && $app['locale'] && $lng == $app['locale']) {
                                 $realksy = $ksy;
-                                $allsy = $t . ($allsy ? " ; " : "") . $allsy;
+                                $allsy = $t.($allsy ? " ; " : "").$allsy;
 
                                 array_push($tsy, array(
                                     "id" => $n2->getAttribute("id"),
-                                    "sy" => $t
+                                    "sy" => $t,
                                 ));
                             } else {
-                                $allsy .= ( $allsy ? " ; " : "") . $t;
+                                $allsy .= ($allsy ? " ; " : "").$t;
                                 array_push($tsy, array(
                                     "id" => $n2->getAttribute("id"),
-                                    "sy" => $t
+                                    "sy" => $t,
                                 ));
                             }
                         }
                     }
-                    if (!$realksy)
+                    if (!$realksy) {
                         $realksy = $firstksy;
+                    }
 
                     if ($request->get("sortsy") && $app['locale']) {
                         for ($uniq = 0; $uniq < 9999; $uniq++) {
-                            if (!isset($tts[$realksy . "_" . $uniq])) {
+                            if (!isset($tts[$realksy."_".$uniq])) {
                                 break;
                             }
                         }
-                        $tts[$realksy . "_" . $uniq] = array(
+                        $tts[$realksy."_".$uniq] = array(
                             "id"     => $n->getAttribute("id"),
                             "allsy"  => $allsy,
                             "nchild" => $xpath->query("te", $n)->length,
-                            "tsy"    => $tsy
+                            "tsy"    => $tsy,
                         );
                     } else {
                         $tts[] = array(
                             "id"     => $n->getAttribute("id"),
                             "allsy"  => $allsy,
                             "nchild" => $xpath->query("te", $n)->length,
-                            "tsy"    => $tsy
+                            "tsy"    => $tsy,
                         );
                     }
                 } elseif ($n->nodeName == "sy") {
-
                 }
             }
 
@@ -785,17 +781,17 @@ class Xmlhttp implements ControllerProviderInterface
                 $t = $ts["allsy"];
                 $lt = "";
                 foreach ($ts["tsy"] as $sy) {
-                    $lt .= ( $lt ? " ; " : "");
-                    $lt .= "<i id='GL_W." . $bid . "." . $sy["id"] . "'>";
+                    $lt .= ($lt ? " ; " : "");
+                    $lt .= "<i id='GL_W.".$bid.".".$sy["id"]."'>";
                     $lt .= $sy["sy"];
                     $lt .= "</i>";
                 }
-                $zhtml .= "<p id='TH_T." . $bid . "." . $tid . "'>";
+                $zhtml .= "<p id='TH_T.".$bid.".".$tid."'>";
                 if ($ts["nchild"] > 0) {
-                    $zhtml .= "<u id='TH_P." . $bid . "." . $tid . "'>+</u>";
+                    $zhtml .= "<u id='TH_P.".$bid.".".$tid."'>+</u>";
                     $zhtml .= $lt;
                     $zhtml .= "</p>";
-                    $zhtml .= "<div id='TH_K." . $bid . "." . $tid . "' class='c'>";
+                    $zhtml .= "<div id='TH_K.".$bid.".".$tid."' class='c'>";
                     $zhtml .= "loading";
                     $zhtml .= "</div>";
                 } else {
@@ -827,7 +823,7 @@ class Xmlhttp implements ControllerProviderInterface
         $collections = $app['authentication']->getUser()->ACL()
             ->get_granted_base(array(), array($sbid)); // array(), $sbid);
         foreach ($collections as $collection) {
-            $lcoll .= ($lcoll?",":"") . $collection->get_coll_id();
+            $lcoll .= ($lcoll ? "," : "").$collection->get_coll_id();
         }
         $site = $app['phraseanet.configuration']['main']['key'];
         $usr_id = $app['authentication']->getUser()->get_id();
@@ -846,12 +842,12 @@ class Xmlhttp implements ControllerProviderInterface
             if ($lthid > 1) {
                 $dthid = str_replace('.', 'd', $thid);
                 $sql = "SELECT"
-                       . " 0+SUBSTR(t.value, " . ($lthid + 2) . ") AS k, COUNT(DISTINCT(`record_id`)) AS n"
-                       . " FROM (thit AS t INNER JOIN record AS r USING(record_id))"
-                       . " INNER JOIN collusr AS c ON c.site=:site AND c.usr_id=:usr_id AND r.coll_id=c.coll_id"
-                       . " WHERE t.value LIKE :like AND r.coll_id IN(".$lcoll.") AND (r.status^c.mask_xor)&c.mask_and=0"
-                       . " GROUP BY k ORDER BY NULL";
-                $sqlparm = array(':like' => $dthid . 'd%', ':site'=>$site, ':usr_id'=>$usr_id);
+                       ." 0+SUBSTR(t.value, ".($lthid + 2).") AS k, COUNT(DISTINCT(`record_id`)) AS n"
+                       ." FROM (thit AS t INNER JOIN record AS r USING(record_id))"
+                       ." INNER JOIN collusr AS c ON c.site=:site AND c.usr_id=:usr_id AND r.coll_id=c.coll_id"
+                       ." WHERE t.value LIKE :like AND r.coll_id IN(".$lcoll.") AND (r.status^c.mask_xor)&c.mask_and=0"
+                       ." GROUP BY k ORDER BY NULL";
+                $sqlparm = array(':like' => $dthid.'d%', ':site' => $site, ':usr_id' => $usr_id);
 
                 $stmt = $connbas->prepare($sql);
                 $stmt->execute($sqlparm);
@@ -860,7 +856,7 @@ class Xmlhttp implements ControllerProviderInterface
                 $stmt->closeCursor();
 
                 foreach ($rs as $rowbas) {
-                    $t_nrec[$thid . '.' . $rowbas['k']] = $rowbas;
+                    $t_nrec[$thid.'.'.$rowbas['k']] = $rowbas;
                 }
             }
 
@@ -879,10 +875,10 @@ class Xmlhttp implements ControllerProviderInterface
 
                 $xpath = new \DOMXPath($dom);
                 if ($thid == 'T' || $thid == 'C') {
-                    $q = '/' . $xqroot;
+                    $q = '/'.$xqroot;
                     $term0 = $dbname;
                 } else {
-                    $q = '/' . $xqroot . '//te[@id=\'' . $thid . '\']';
+                    $q = '/'.$xqroot.'//te[@id=\''.$thid.'\']';
                 }
 
                 $nodes = $xpath->query($q);
@@ -896,10 +892,10 @@ class Xmlhttp implements ControllerProviderInterface
 
                     $class = '';
                     if ($nts0 > 0) {
-                        $class .= ( $class == '' ? '' : ' ') . 'expandable';
+                        $class .= ($class == '' ? '' : ' ').'expandable';
                     }
                     if ($request->get('last')) {
-                        $class .= ( $class == '' ? '' : ' ') . 'last';
+                        $class .= ($class == '' ? '' : ' ').'last';
                     }
                     // on dresse la liste des termes specifiques avec comme cle le synonyme dans la langue pivot
                     $nts = 0;
@@ -914,14 +910,14 @@ class Xmlhttp implements ControllerProviderInterface
                             $label = $this->buildBranchLabel($dbname, $lng, $n, $key0, $nts0);
 
                             for ($uniq = 0; $uniq < 9999; $uniq++) {
-                                if (!isset($tts[$key0 . '_' . $uniq])) {
+                                if (!isset($tts[$key0.'_'.$uniq])) {
                                     break;
                                 }
                             }
-                            $tts[$key0 . '_' . $uniq] = array(
+                            $tts[$key0.'_'.$uniq] = array(
                                 'label' => $label,
                                 'nts'   => $nts0,
-                                'n'     => $n
+                                'n'     => $n,
                             );
                         }
                     }
@@ -929,10 +925,10 @@ class Xmlhttp implements ControllerProviderInterface
                     if ($nts > 0) {
                         $field0 = $node0->getAttribute('field');
                         if ($field0) {
-                            $field0 = 'field="' . $field0 . '"';
+                            $field0 = 'field="'.$field0.'"';
                         }
 
-                        $html .= '<UL ' . $field0 . '>' . "\n";
+                        $html .= '<UL '.$field0.'>'."\n";
 
                         if ($request->get('sortsy') && $lng != '') {
                             ksort($tts, SORT_STRING);
@@ -943,43 +939,42 @@ class Xmlhttp implements ControllerProviderInterface
                         foreach ($tts as $ts) {
                             $class = '';
                             if ($ts['nts'] > 0) {
-                                $class .= ( $class == '' ? '' : ' ') . 'expandable';
+                                $class .= ($class == '' ? '' : ' ').'expandable';
                             }
                             if (--$nts == 0) {
-                                $class .= ( $class == '' ? '' : ' ') . 'last';
+                                $class .= ($class == '' ? '' : ' ').'last';
                             }
 
                             $tid = $ts['n']->getAttribute('id');
 
-                            $html .= '    <LI id="' . $request->get('type') . 'X_P.' . $sbid . '.' . $tid . '" class="' . $class . '">' . "\n";
+                            $html .= '    <LI id="'.$request->get('type').'X_P.'.$sbid.'.'.$tid.'" class="'.$class.'">'."\n";
                             if ($ts['nts'] > 0) {
-                                $html .= '<div class="hitarea expandable-hitarea" />' . "\n";
+                                $html .= '<div class="hitarea expandable-hitarea" />'."\n";
                             } else {
-                                $html .= '<div></div>' . "\n";
+                                $html .= '<div></div>'."\n";
                             }
 
-                            $html .= '<span>' . $ts['label'] . '</span>';
+                            $html .= '<span>'.$ts['label'].'</span>';
 
                             if (isset($t_nrec[$tid])) {
-                                $html .= ' <I>' . $t_nrec[$tid]['n'] . '</I>';
+                                $html .= ' <I>'.$t_nrec[$tid]['n'].'</I>';
                             }
 
                             $html .= "\n";
 
                             if ($ts['nts'] > 0) {
-                                $html .= '<UL style="display:none">loading</UL>' . "\n";
+                                $html .= '<UL style="display:none">loading</UL>'."\n";
                             }
 
-                            $html .= '</LI>' . "\n";
+                            $html .= '</LI>'."\n";
                         }
-                        $html .= '</UL>' . "\n";
+                        $html .= '</UL>'."\n";
                     }
 
-                    $html .= '</LI>' . "\n";
+                    $html .= '</LI>'."\n";
                 }
             }
         } catch (\Exception $e) {
-
         }
 
         return $app->json(array('parm' => array(
@@ -1020,7 +1015,7 @@ class Xmlhttp implements ControllerProviderInterface
                     $t = $n2->getAttribute('v');
                     $key = $n2->getAttribute('w');  // key of the current sy
                     if ($k = $n2->getAttribute('k')) {
-                        $key .= ' (' . $k . ')';
+                        $key .= ' ('.$k.')';
                     }
                     if (!$key0) {
                         $key0 = $key;
@@ -1030,9 +1025,9 @@ class Xmlhttp implements ControllerProviderInterface
                         $key0 = $key;
                         $lngfound = true;
 
-                        $label = '<span ' . $class . '>' . $t . '</span>' . ($label == '' ? '' : ' <span class="separator">;</span> ') . $label;
+                        $label = '<span '.$class.'>'.$t.'</span>'.($label == '' ? '' : ' <span class="separator">;</span> ').$label;
                     } else {
-                        $label = $label . ($label == '' ? '' : ' ; ') . '<span ' . $class . '>' . $t . '</span>';
+                        $label = $label.($label == '' ? '' : ' ; ').'<span '.$class.'>'.$t.'</span>';
                     }
                 } elseif ($n2->nodeName == 'te') {
                     $nts0++;
@@ -1068,13 +1063,12 @@ class Xmlhttp implements ControllerProviderInterface
         if (($znode = $xpath->query($q)->item(0))) {
             $q2 = '//sy';
             if ($request->get('t')) {
-
                 $t = $this->splitTermAndContext($request->get('t'));
-                $q2 = 'starts-with(@w, \'' . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[0])) . '\')';
+                $q2 = 'starts-with(@w, \''.\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[0])).'\')';
                 if ($t[1]) {
-                    $q2 .= ' and starts-with(@k, \'' . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[1])) . '\')';
+                    $q2 .= ' and starts-with(@k, \''.\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[1])).'\')';
                 }
-                $q2 = '//sy[' . $q2 . ']';
+                $q2 = '//sy['.$q2.']';
             }
 
             $nodes = $xpath->query($q2, $znode);
@@ -1096,8 +1090,8 @@ class Xmlhttp implements ControllerProviderInterface
                     $t = $n->getAttribute('v');
                     $tid = $n->getAttribute('id');
 
-                    $html .= '<p id=\'TH_T.' . $bid . '.' . $tid . '\'>';
-                    $html .= '<b id=\'TH_W.' . $bid . '.' . $tid . '\'>' . $t . '</b>';
+                    $html .= '<p id=\'TH_T.'.$bid.'.'.$tid.'\'>';
+                    $html .= '<b id=\'TH_W.'.$bid.'.'.$tid.'\'>'.$t.'</b>';
                     $html .= '</p>';
                 }
             }
@@ -1134,32 +1128,32 @@ class Xmlhttp implements ControllerProviderInterface
                 if ($n->nodeName == 'sy') {
                     $t = $n->getAttribute('v');
                     if ($n->getAttribute('bold')) {
-                        $allsy .= ( $allsy ? ' ; ' : '') . '<b id=\'TH_W.' . $bid . '.' . $n->getAttribute('id') . '\'>' . $t . '</b>';
+                        $allsy .= ($allsy ? ' ; ' : '').'<b id=\'TH_W.'.$bid.'.'.$n->getAttribute('id').'\'>'.$t.'</b>';
                     } else {
-                        $allsy .= ( $allsy ? ' ; ' : '') . '<i id=\'TH_W.' . $bid . '.' . $n->getAttribute('id') . '\' >' . $t . '</i>';
+                        $allsy .= ($allsy ? ' ; ' : '').'<i id=\'TH_W.'.$bid.'.'.$n->getAttribute('id').'\' >'.$t.'</i>';
                     }
                 } elseif ($n->nodeName == 'te') {
                     $nts++;
                 }
             }
             if ($allsy == '') {
-                $allsy = '<i id=\'TH_W.' . $bid . '.' . $tid . '\'>THESAURUS</i>';
+                $allsy = '<i id=\'TH_W.'.$bid.'.'.$tid.'\'>THESAURUS</i>';
             }
 
             if ($nts > 0) {
-                $html .= '<p id=\'TH_T.' . $bid . '.' . $tid . '\'>';
-                $html .= '<u id=\'TH_P.' . $bid . '.' . $tid . '\'>...</u>';
+                $html .= '<p id=\'TH_T.'.$bid.'.'.$tid.'\'>';
+                $html .= '<u id=\'TH_P.'.$bid.'.'.$tid.'\'>...</u>';
                 $html .= $allsy;
                 $html .= '</p>';
                 $class = 'h';
             } else {
-                $html .= '<p id=\'TH_T.' . $bid . '.' . $tid . '\'>';
+                $html .= '<p id=\'TH_T.'.$bid.'.'.$tid.'\'>';
                 $html .= '<u class=\'w\'> </u>';
                 $html .= $allsy;
                 $html .= '</p>';
                 $class = 'c';
             }
-            $html .= '<div id=\'TH_K.' . $bid . '.' . $tid . '\' class=\'' . $class . '\'>';
+            $html .= '<div id=\'TH_K.'.$bid.'.'.$tid.'\' class=\''.$class.'\'>';
         }
 
         for ($n = $srcnode->firstChild; $n; $n = $n->nextSibling) {
@@ -1182,15 +1176,15 @@ class Xmlhttp implements ControllerProviderInterface
         }
 
         $ret = array(
-            'parms'=> array(
+            'parms' => array(
                 'bid'   => $request->get('bid'),
                 't'     => $request->get('t'),
                 'mod'   => $request->get('mod'),
-                'debug' => $request->get('debug')
+                'debug' => $request->get('debug'),
             ),
-            'result'=>NULL,
-            'error'=>'',
-            'error_code'=>0,
+            'result' => NULL,
+            'error' => '',
+            'error_code' => 0,
         );
 
         if (null === ($bid = $request->get('bid'))) {
@@ -1206,8 +1200,7 @@ class Xmlhttp implements ControllerProviderInterface
             return json_encode($ret);
         }
 
-
- $databox = $app['phraseanet.appbox']->get_databox((int) $bid);
+        $databox = $app['phraseanet.appbox']->get_databox((int) $bid);
         $dom = $databox->get_dom_thesaurus();
 
         if (!$dom) {
@@ -1224,10 +1217,11 @@ class Xmlhttp implements ControllerProviderInterface
             $q2 = '//sy';
             if ($request->get('t')) {
                 $t = $this->splitTermAndContext($request->get('t'));
-                $q2 = 'starts-with(@w, \'' . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[0])) . '\')';
-                if ($t[1])
-                    $q2 .= ' and starts-with(@k, \'' . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[1])) . '\')';
-                $q2 = '//sy[' . $q2 . ']';
+                $q2 = 'starts-with(@w, \''.\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[0])).'\')';
+                if ($t[1]) {
+                    $q2 .= ' and starts-with(@k, \''.\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[1])).'\')';
+                }
+                $q2 = '//sy['.$q2.']';
             }
             $nodes = $xpath->query($q2, $znode);
             if ($mod == 'TREE') {
@@ -1252,14 +1246,14 @@ class Xmlhttp implements ControllerProviderInterface
                 }
             }
         }
-        if($request->get('debug')) {
+        if ($request->get('debug')) {
             printf("<pre>%s</pre>", var_export($ret, true));
             // printf("<pre>%s</pre>", json_encode($ret, JSON_PRETTY_PRINT));
             die;
         }
+
         return json_encode($ret, JSON_PRETTY_PRINT);
     }
-
 
     public function OpenBranchesXml(Application $app, Request $request)
     {
@@ -1298,10 +1292,11 @@ class Xmlhttp implements ControllerProviderInterface
             $q2 = '//sy';
             if ($request->get('t')) {
                 $t = $this->splitTermAndContext($request->get('t'));
-                $q2 = 'starts-with(@w, \'' . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[0])) . '\')';
-                if ($t[1])
-                    $q2 .= ' and starts-with(@k, \'' . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[1])) . '\')';
-                $q2 = '//sy[' . $q2 . ']';
+                $q2 = 'starts-with(@w, \''.\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[0])).'\')';
+                if ($t[1]) {
+                    $q2 .= ' and starts-with(@k, \''.\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[1])).'\')';
+                }
+                $q2 = '//sy['.$q2.']';
             }
             $nodes = $xpath->query($q2, $znode);
             if ($mod == 'TREE') {
@@ -1321,8 +1316,8 @@ class Xmlhttp implements ControllerProviderInterface
                     $t = $n->getAttribute('v');
                     $tid = $n->getAttribute('id');
 
-                    $zhtml .= '<p id=\'TH_T.' . $bid . '.' . $tid . '\'>';
-                    $zhtml .= '<b id=\'GL_W.' . $bid . '.' . $tid . '\'>' . $t . '</b>';
+                    $zhtml .= '<p id=\'TH_T.'.$bid.'.'.$tid.'\'>';
+                    $zhtml .= '<b id=\'GL_W.'.$bid.'.'.$tid.'\'>'.$t.'</b>';
                     $zhtml .= '</p>';
                 }
             }
@@ -1344,7 +1339,7 @@ class Xmlhttp implements ControllerProviderInterface
                     'id' => $n->getAttribute('id'),
                     't'  => $t,
                     'lng' => $n->getAttribute('lng'),
-                    'bold' => (bool)$n->getAttribute('bold'),
+                    'bold' => (bool) $n->getAttribute('bold'),
                 );
             } elseif ($n->nodeName == 'te') {
                 $nts++;
@@ -1380,32 +1375,32 @@ class Xmlhttp implements ControllerProviderInterface
                 if ($n->nodeName == 'sy') {
                     $t = $n->getAttribute('v');
                     if ($n->getAttribute('bold')) {
-                        $allsy .= ( $allsy ? ' ; ' : '') . '<b id=\'GL_W.' . $bid . '.' . $n->getAttribute('id') . '\'>' . $t . '</b>';
+                        $allsy .= ($allsy ? ' ; ' : '').'<b id=\'GL_W.'.$bid.'.'.$n->getAttribute('id').'\'>'.$t.'</b>';
                     } else {
-                        $allsy .= ( $allsy ? ' ; ' : '') . '<i id=\'GL_W.' . $bid . '.' . $n->getAttribute('id') . '\' >' . $t . '</i>';
+                        $allsy .= ($allsy ? ' ; ' : '').'<i id=\'GL_W.'.$bid.'.'.$n->getAttribute('id').'\' >'.$t.'</i>';
                     }
                 } elseif ($n->nodeName == 'te') {
                     $nts++;
                 }
             }
             if ($allsy == '') {
-                $allsy = '<i id=\'GL_W.' . $bid . '.' . $tid . '\'>THESAURUS</i>';
+                $allsy = '<i id=\'GL_W.'.$bid.'.'.$tid.'\'>THESAURUS</i>';
             }
 
             if ($nts > 0) {
-                $html .= '<p id=\'TH_T.' . $bid . '.' . $tid . '\'>';
-                $html .= '<u id=\'TH_P.' . $bid . '.' . $tid . '\'>...</u>';
+                $html .= '<p id=\'TH_T.'.$bid.'.'.$tid.'\'>';
+                $html .= '<u id=\'TH_P.'.$bid.'.'.$tid.'\'>...</u>';
                 $html .= $allsy;
                 $html .= '</p>';
                 $class = 'h';
             } else {
-                $html .= '<p id=\'TH_T.' . $bid . '.' . $tid . '\'>';
+                $html .= '<p id=\'TH_T.'.$bid.'.'.$tid.'\'>';
                 $html .= '<u class=\'w\'> </u>';
                 $html .= $allsy;
                 $html .= '</p>';
                 $class = 'c';
             }
-            $html .= '<div id=\'TH_K.' . $bid . '.' . $tid . '\' class=\'' . $class . '\'>';
+            $html .= '<div id=\'TH_K.'.$bid.'.'.$tid.'\' class=\''.$class.'\'>';
         }
 
         for ($n = $srcnode->firstChild; $n; $n = $n->nextSibling) {
@@ -1416,8 +1411,9 @@ class Xmlhttp implements ControllerProviderInterface
             }
         }
 
-        if ($depth > 0)
+        if ($depth > 0) {
             $html .= '</div>';
+        }
     }
 
     public function ReplaceCandidateJson(Application $app, Request $request)
@@ -1429,30 +1425,29 @@ class Xmlhttp implements ControllerProviderInterface
             'maxRecsUpdatable' => self::SEARCH_REPLACE_MAXREC,
             'nRecsToUpdate'    => 0,
             'nRecsUpdated'     => 0,
-            'msg'              => ''
+            'msg'              => '',
         );
 
         foreach ($request->get('id') as $id) {
             $id = explode('.', $id);
             $sbas_id = array_shift($id);
-            if (!array_key_exists('b' . $sbas_id, $tsbas)) {
-                $tsbas['b' . $sbas_id] = array(
+            if (!array_key_exists('b'.$sbas_id, $tsbas)) {
+                $tsbas['b'.$sbas_id] = array(
                     'sbas_id' => (int) $sbas_id,
                     'tids'    => array(),
                     'domct'   => null,
                     'tvals'   => array(),
                     'lid'     => '',
-                    'trids'   => array()
+                    'trids'   => array(),
                 );
             }
-            $tsbas['b' . $sbas_id]['tids'][] = implode('.', $id);
+            $tsbas['b'.$sbas_id]['tids'][] = implode('.', $id);
         }
 
         $appbox = $app['phraseanet.appbox'];
 
         // first, count the number of records to update
         foreach ($tsbas as $ksbas => $sbas) {
-
             /* @var $databox databox */
             try {
                 $databox = $appbox->get_databox($sbas['sbas_id']);
@@ -1471,12 +1466,12 @@ class Xmlhttp implements ControllerProviderInterface
             $xpathct = new \DOMXPath($tsbas[$ksbas]['domct']);
 
             foreach ($sbas['tids'] as $tid) {
-                $xp = '//te[@id="' . $tid . '"]/sy';
+                $xp = '//te[@id="'.$tid.'"]/sy';
                 $nodes = $xpathct->query($xp);
                 if ($nodes->length == 1) {
                     $sy = $term = $nodes->item(0);
-                    $syid = str_replace('.', 'd', $sy->getAttribute('id')) . 'd';
-                    $lid .= ( $lid ? ',' : '') . "'" . $syid . "'";
+                    $syid = str_replace('.', 'd', $sy->getAttribute('id')).'d';
+                    $lid .= ($lid ? ',' : '')."'".$syid."'";
                     $field = $sy->parentNode->parentNode->getAttribute('field');
 
                     if (!array_key_exists($field, $tsbas[$ksbas]['tvals'])) {
@@ -1494,7 +1489,7 @@ class Xmlhttp implements ControllerProviderInterface
 
             // count records
             $sql = 'SELECT DISTINCT record_id AS r
-                    FROM thit WHERE value IN (' . $lid . ')
+                    FROM thit WHERE value IN ('.$lid.')
                     ORDER BY record_id';
             $stmt = $connbas->prepare($sql);
             $stmt->execute();
@@ -1507,7 +1502,6 @@ class Xmlhttp implements ControllerProviderInterface
 
         if ($ret['nRecsToUpdate'] <= self::SEARCH_REPLACE_MAXREC) {
             foreach ($tsbas as $sbas) {
-
                 /* @var $databox databox */
                 try {
                     $databox = $appbox->get_databox($sbas['sbas_id']);
@@ -1534,7 +1528,7 @@ class Xmlhttp implements ControllerProviderInterface
                                     $metadatask[] = array(
                                         'meta_struct_id' => $meta_struct_id,
                                         'meta_id'        => $v->getId(),
-                                        'value'          => $v->getValue()
+                                        'value'          => $v->getValue(),
                                     );
                                 }
                             } else {
@@ -1551,13 +1545,13 @@ class Xmlhttp implements ControllerProviderInterface
                                         $metadatask[] = array(
                                             'meta_struct_id' => $meta_struct_id,
                                             'meta_id'        => $v->getId(),
-                                            'value'          => $v->getValue()
+                                            'value'          => $v->getValue(),
                                         );
                                     } else {
                                         $metadatasd[] = array(
                                             'meta_struct_id' => $meta_struct_id,
                                             'meta_id'        => $v->getId(),
-                                            'value'          => $request->get('t') ? $request->get('t') : ''
+                                            'value'          => $request->get('t') ? $request->get('t') : '',
                                         );
                                     }
                                 }
@@ -1580,7 +1574,7 @@ class Xmlhttp implements ControllerProviderInterface
                         // remove candidate from cterms
                         $te = $sy->parentNode;
                         $te->parentNode->removeChild($te);
-                        $ret['ctermsDeleted'][] = $sbas['sbas_id'] . '.' . $te->getAttribute('id');
+                        $ret['ctermsDeleted'][] = $sbas['sbas_id'].'.'.$te->getAttribute('id');
                     }
                 }
                 if (!$request->get('debug')) {
@@ -1612,9 +1606,9 @@ class Xmlhttp implements ControllerProviderInterface
         try {
             $databox = $app['phraseanet.appbox']->get_databox($sbid);
 
-            $html = "" . '<LI id="TX_P.' . $sbid . '.T" class="expandable">' . "\n";
-            $html .= "\t" . '<div class="hitarea expandable-hitarea"></div>' . "\n";
-            $html .= "\t" . '<span>' . \phrasea::sbas_labels($sbid, $app) . '</span>' . "\n";
+            $html = "".'<LI id="TX_P.'.$sbid.'.T" class="expandable">'."\n";
+            $html .= "\t".'<div class="hitarea expandable-hitarea"></div>'."\n";
+            $html .= "\t".'<span>'.\phrasea::sbas_labels($sbid, $app).'</span>'."\n";
 
             if ($request->get('t')) {
                 if ($request->get('field') != '') {
@@ -1629,8 +1623,8 @@ class Xmlhttp implements ControllerProviderInterface
                     // search only in the branch(es) linked to this field
                     if ($dom_struct) {
                         $xpath = new \DOMXPath($dom_struct);
-                        if (($znode = $xpath->query('/record/description/' . $request->get('field'))->item(0))) {
-                            $q = '(' . $znode->getAttribute('tbranch') . ')';
+                        if (($znode = $xpath->query('/record/description/'.$request->get('field'))->item(0))) {
+                            $q = '('.$znode->getAttribute('tbranch').')';
                         }
                     }
                 } else {
@@ -1642,10 +1636,11 @@ class Xmlhttp implements ControllerProviderInterface
                     $xpath = new \DOMXPath($domth);
 
                     $t = $this->splitTermAndContext($request->get('t'));
-                    $q2 = 'starts-with(@w, \'' . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[0])) . '\')';
-                    if ($t[1])
-                        $q2 .= ' and starts-with(@k, \'' . \thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[1])) . '\')';
-                    $q2 = '//sy[' . $q2 . ' and @lng=\'' . $lng . '\']';
+                    $q2 = 'starts-with(@w, \''.\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[0])).'\')';
+                    if ($t[1]) {
+                        $q2 .= ' and starts-with(@k, \''.\thesaurus::xquery_escape($app['unicode']->remove_indexer_chars($t[1])).'\')';
+                    }
+                    $q2 = '//sy['.$q2.' and @lng=\''.$lng.'\']';
 
                     $q .= $q2;
 
@@ -1661,12 +1656,11 @@ class Xmlhttp implements ControllerProviderInterface
                     $this->getHTMLTerm($sbid, $lng, $domth->documentElement, $html);
                 }
             } else {
-                $html .= "\t" . '<ul style="display: none;">loading</ul>' . "\n";
+                $html .= "\t".'<ul style="display: none;">loading</ul>'."\n";
             }
 
-            $html .= "" . '</LI>' . "\n";
+            $html .= "".'</LI>'."\n";
         } catch (\Exception $e) {
-
         }
 
         return $app->json(array('parm' => array(
@@ -1688,13 +1682,12 @@ class Xmlhttp implements ControllerProviderInterface
         // compute the label of the term, regarding the current language.
         for ($n2 = $n->firstChild; $n2; $n2 = $n2->nextSibling) {
             if ($n2->nodeName == 'sy') {
-
                 $lng = $n2->getAttribute('lng');
                 $t = $n2->getAttribute('v');
                 $key = $n2->getAttribute('w');  // key of the current sy
 
                 if ($k = $n2->getAttribute('k')) {
-                    $key .= ' (' . $k . ')';
+                    $key .= ' ('.$k.')';
                 }
 
                 // first sy gives the key
@@ -1708,9 +1701,9 @@ class Xmlhttp implements ControllerProviderInterface
                     $key0 = $key;
                     $lngfound = true;
 
-                    $label = '<span ' . $class . '>' . $t . '</span>' . ($label == '' ? '' : ' ; ') . $label;
+                    $label = '<span '.$class.'>'.$t.'</span>'.($label == '' ? '' : ' ; ').$label;
                 } else {
-                    $label = $label . ($label == '' ? '' : ' ; ') . '<span ' . $class . '>' . $t . '</span>';
+                    $label = $label.($label == '' ? '' : ' ; ').'<span '.$class.'>'.$t.'</span>';
                 }
             } elseif ($n2->nodeName == 'te') {
                 $nts0++;
@@ -1737,10 +1730,11 @@ class Xmlhttp implements ControllerProviderInterface
                     $label = $this->buildTermLabel($lng, $n, $key0, $nts0);
 
                     for ($uniq = 0; $uniq < 9999; $uniq++) {
-                        if (!isset($tts[$key0 . '_' . $uniq]))
+                        if (!isset($tts[$key0.'_'.$uniq])) {
                             break;
+                        }
                     }
-                    $tts[$key0 . '_' . $uniq] = array('label' => $label, 'nts'   => $nts0, 'n'     => $n);
+                    $tts[$key0.'_'.$uniq] = array('label' => $label, 'nts'   => $nts0, 'n'     => $n);
                     $ntsopened++;
                 }
                 $nts++;
@@ -1750,37 +1744,36 @@ class Xmlhttp implements ControllerProviderInterface
         if ($nts > 0) {
             $tab = str_repeat("\t", 1 + $depth * 2);
 
-
             if ($ntsopened == 0) {
-                $html .= $tab . '<UL style="display:none">' . "\n";
-                $html .= $tab . '</UL>' . "\n";
+                $html .= $tab.'<UL style="display:none">'."\n";
+                $html .= $tab.'</UL>'."\n";
             } else {
-                $html .= $tab . '<UL>' . "\n";
+                $html .= $tab.'<UL>'."\n";
                 // dump every ts
                 foreach ($tts as $ts) {
                     $class = '';
                     if ($ts['nts'] > 0) {
-                        $class .= ( $class == '' ? '' : ' ') . 'expandable';
+                        $class .= ($class == '' ? '' : ' ').'expandable';
                     }
                     if (--$ntsopened == 0) {
-                        $class .= ( $class == '' ? '' : ' ') . 'last';
+                        $class .= ($class == '' ? '' : ' ').'last';
                     }
 
                     $tid = $ts['n']->getAttribute('id');
 
-                    $html .= $tab . "\t" . '<LI id="TX_P.' . $sbid . '.' . $tid . '" class="' . $class . '">' . "\n";
+                    $html .= $tab."\t".'<LI id="TX_P.'.$sbid.'.'.$tid.'" class="'.$class.'">'."\n";
                     if ($ts['nts'] > 0) {
-                        $html .= $tab . "\t\t" . '<div class="hitarea expandable-hitarea" />' . "\n";
+                        $html .= $tab."\t\t".'<div class="hitarea expandable-hitarea" />'."\n";
                     } else {
-                        $html .= $tab . "\t\t" . '<div />' . "\n";
+                        $html .= $tab."\t\t".'<div />'."\n";
                     }
-                    $html .= $tab . "\t\t" . '<span>' . $ts['label'] . '</span>' . "\n";
+                    $html .= $tab."\t\t".'<span>'.$ts['label'].'</span>'."\n";
 
                     $this->getHTMLTerm($sbid, $lng, $ts['n'], $html, $depth + 1);
 
-                    $html .= $tab . "\t" . '</LI>' . "\n";
+                    $html .= $tab."\t".'</LI>'."\n";
                 }
-                $html .= $tab . '</UL>' . "\n";
+                $html .= $tab.'</UL>'."\n";
             }
         }
     }

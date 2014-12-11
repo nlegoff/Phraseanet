@@ -96,8 +96,9 @@ class Bridge_Account
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new Bridge_Exception_AccountNotFound('Account Not Found');
+        }
 
         $this->dist_id = $row['dist_id'];
         $this->user = User_Adapter::getInstance($row['usr_id'], $this->app);
@@ -114,8 +115,9 @@ class Bridge_Account
      */
     public function get_settings()
     {
-        if ( ! $this->settings)
+        if (! $this->settings) {
             $this->settings = new Bridge_AccountSettings($this->app['phraseanet.appbox'], $this);
+        }
 
         return $this->settings;
     }
@@ -199,7 +201,7 @@ class Bridge_Account
         $params = array(
             ':name'   => $this->name
             , ':id'     => $this->id
-            , ':update' => $this->updated_on->format(DATE_ISO8601)
+            , ':update' => $this->updated_on->format(DATE_ISO8601),
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -246,8 +248,9 @@ class Bridge_Account
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new Bridge_Exception_AccountNotFound('Account Not Found');
+        }
 
         $api = new Bridge_Api($app, $row['api_id']);
         $api->get_connector()->set_locale($app['locale']);
@@ -271,7 +274,7 @@ class Bridge_Account
         $params = array(
             ':api_id'  => $api->get_id()
             , ':usr_id'  => $user->get_id()
-            , ':dist_id' => $distant_id
+            , ':dist_id' => $distant_id,
         );
 
         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -279,8 +282,9 @@ class Bridge_Account
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new Bridge_Exception_AccountNotFound();
+        }
 
         return new Bridge_Account($app, $api, $row['id']);
     }
@@ -295,7 +299,7 @@ class Bridge_Account
     public static function get_accounts_by_api(Application $app, Bridge_Api $api, $quantity = 50)
     {
         $sql = 'SELECT id FROM bridge_accounts WHERE api_id = :api_id
-            LIMIT 0,' . (int) $quantity;
+            LIMIT 0,'.(int) $quantity;
 
         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
         $stmt->execute(array(':api_id' => $api->get_id()));
@@ -331,7 +335,7 @@ class Bridge_Account
 
         foreach ($rs as $row) {
             $api_id = $row['api_id'];
-            if ( ! isset($apis[$api_id])) {
+            if (! isset($apis[$api_id])) {
                 try {
                     $apis[$api_id] = new Bridge_Api($app, $api_id);
                 } catch (\Exception $e) {
@@ -364,7 +368,7 @@ class Bridge_Account
             ':api_id'  => $api->get_id()
             , ':dist_id' => $dist_id
             , ':usr_id'  => $user->get_id()
-            , ':name'    => $name
+            , ':name'    => $name,
         );
 
         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);

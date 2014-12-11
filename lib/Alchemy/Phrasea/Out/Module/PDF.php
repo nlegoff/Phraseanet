@@ -179,10 +179,11 @@ class PDF
 
             $wimg = $himg = $ImgSize;
             if ($subdef->get_height() > 0 && $subdef->get_width() > 0) {
-                if ($subdef->get_width() > $subdef->get_height())
+                if ($subdef->get_width() > $subdef->get_height()) {
                     $himg = $wimg * $subdef->get_height() / $subdef->get_width();
-                else
+                } else {
                     $wimg = $himg * $subdef->get_width() / $subdef->get_height();
+                }
             }
 
             if ($fimg) {
@@ -193,7 +194,7 @@ class PDF
 
                 $this->pdf->SetXY($x, $y + 1);
                 $this->pdf->SetFont(PhraseaPDF::FONT, '', 10);
-                $t = $irow . '-' . $x;
+                $t = $irow.'-'.$x;
                 $t = $rec->get_title();
 
                 $this->pdf->MultiCell($DiapoW, $TitleH, $t, '0', 'C', false);
@@ -202,17 +203,10 @@ class PDF
                     $lk = $this->pdf->AddLink();
                     $this->pdf->SetLink($lk, 0, $npages + $rec->get_number());
                     $this->pdf->Image(
-                        $fimg
-                        , $x + (($DiapoW - $wimg) / 2)
-                        , $TitleH + $y + (($DiapoH - $TitleH - $himg) / 2)
-                        , $wimg, $himg
-                        , null, $lk
+                        $fimg, $x + (($DiapoW - $wimg) / 2), $TitleH + $y + (($DiapoH - $TitleH - $himg) / 2), $wimg, $himg, null, $lk
                     );
                 } else {
-                    $this->pdf->Image($fimg
-                        , $x + (($DiapoW - $wimg) / 2)
-                        , $TitleH + $y + (($DiapoH - $TitleH - $himg) / 2)
-                        , $wimg, $himg
+                    $this->pdf->Image($fimg, $x + (($DiapoW - $wimg) / 2), $TitleH + $y + (($DiapoH - $TitleH - $himg) / 2), $wimg, $himg
                     );
                 }
             }
@@ -245,20 +239,21 @@ class PDF
             $finalWidth = round($subdef->get_width() / 3.779528, 2);
             $finalheight = round($subdef->get_height() / 3.779528, 2);
             if ($finalWidth > 0 && $finalheight > 0) {
-                if ($finalWidth > $finalheight && ($wimg < $finalWidth))
+                if ($finalWidth > $finalheight && ($wimg < $finalWidth)) {
                     $finalheight = $wimg * $finalheight / $finalWidth;
-                else if ($finalheight > $finalWidth && $himg < $finalheight)
+                } elseif ($finalheight > $finalWidth && $himg < $finalheight) {
                     $finalWidth = $himg * $finalWidth / $finalheight;
-                else if ($finalheight == $finalWidth && $himg < $finalheight) {
+                } elseif ($finalheight == $finalWidth && $himg < $finalheight) {
                     $finalheight = $wimg * $finalheight / $finalWidth;
                     $finalWidth = $himg * $finalWidth / $finalheight;
                 }
             }
 
-            if ($this->pdf->GetY() > $this->pdf->getPageHeight() - (6 + $finalheight + 20))
+            if ($this->pdf->GetY() > $this->pdf->getPageHeight() - (6 + $finalheight + 20)) {
                 $this->pdf->AddPage();
+            }
 
-            $title = "record : " . $rec->get_title();
+            $title = "record : ".$rec->get_title();
 
             $y = $this->pdf->GetY();
 
@@ -304,7 +299,7 @@ class PDF
                 /* @var $field caption_field */
 
                 $this->pdf->SetFont(PhraseaPDF::FONT, 'B', 12);
-                $this->pdf->Write(5, $field->get_name() . " : ");
+                $this->pdf->Write(5, $field->get_name()." : ");
 
                 $this->pdf->SetFont(PhraseaPDF::FONT, '', 12);
                 $this->pdf->Write(5, $field->get_serialized_values());
@@ -312,8 +307,9 @@ class PDF
                 $this->pdf->Write(6, "\n");
                 $nf++;
             }
-            if ($this->pdf->PageNo() == $p0 && ($this->pdf->GetY() - $y0) < $finalheight)
+            if ($this->pdf->PageNo() == $p0 && ($this->pdf->GetY() - $y0) < $finalheight) {
                 $this->pdf->SetY($y0 + $finalheight);
+            }
             $ndoc++;
         }
         $this->pdf->SetLeftMargin($lmargin);
@@ -337,14 +333,14 @@ class PDF
             $tmargin = $this->pdf->GetY();
             $himg = 0;
             $y = 0;
-            $miniConv = NULL;
+            $miniConv = null;
 
             $LEFT__TEXT = "";
-            $LEFT__IMG = NULL;
+            $LEFT__IMG = null;
             $RIGHT_TEXT = "";
-            $RIGHT_IMG = NULL;
+            $RIGHT_IMG = null;
 
-            $LEFT__IMG = $this->app['root.path'] . "/config/minilogos/logopdf_" . $rec->get_sbas_id();
+            $LEFT__IMG = $this->app['root.path']."/config/minilogos/logopdf_".$rec->get_sbas_id();
 
             if (!is_file($LEFT__IMG)) {
                 $databox = $rec->get_databox();
@@ -365,7 +361,7 @@ class PDF
             if ($vn == "" || $vn == "1") {
                 $RIGHT_TEXT = \phrasea::bas_labels($rec->get_base_id(), $this->app);
             } elseif ($vn == "2") {
-                $RIGHT_IMG = $this->app['root.path'] . "/config/minilogos/" . $rec->get_base_id();
+                $RIGHT_IMG = $this->app['root.path']."/config/minilogos/".$rec->get_base_id();
             }
 
             $xtmp = $this->pdf->GetX();
@@ -396,18 +392,18 @@ class PDF
 
             if ($RIGHT_IMG != NULL && is_file($RIGHT_IMG)) {
                 if ($size = @getimagesize($RIGHT_IMG)) {
-
                     if ($size[2] == '1') {
                         if (!isset($miniConv[$RIGHT_IMG])) {
                             $tmp_filename = tempnam('minilogos/', 'gif4fpdf');
                             $img = imagecreatefromgif($RIGHT_IMG);
                             imageinterlace($img, 0);
                             imagepng($img, $tmp_filename);
-                            rename($tmp_filename, $tmp_filename . '.png');
-                            $miniConv[$RIGHT_IMG] = $tmp_filename . '.png';
-                            $RIGHT_IMG = $tmp_filename . '.png';
-                        } else
+                            rename($tmp_filename, $tmp_filename.'.png');
+                            $miniConv[$RIGHT_IMG] = $tmp_filename.'.png';
+                            $RIGHT_IMG = $tmp_filename.'.png';
+                        } else {
                             $RIGHT_IMG = $miniConv[$RIGHT_IMG];
+                        }
 
                         $wmm = (int) $size[0] * 25.4 / 72;
                         $hmm = (int) $size[1] * 25.4 / 72;
@@ -417,8 +413,9 @@ class PDF
                             $hmm = (int) $hmm / $coeff;
                         }
                         $tt = 0;
-                        if ($hmm < 6)
+                        if ($hmm < 6) {
                             $tt = (6 - $hmm) / 2;
+                        }
                         $this->pdf->Image($RIGHT_IMG, 200 - 0.5 - $wmm, $ytmp + 0.5 + $tt);
                     } else {
                         $wmm = (int) $size[0] * 25.4 / 72;
@@ -444,19 +441,20 @@ class PDF
             $f = $subdef->get_pathfile();
 
             if (!$this->app['authentication']->getUser()->ACL()->has_right_on_base($rec->get_base_id(), "nowatermark")
-                && $subdef->get_type() == \media_subdef::TYPE_IMAGE)
+                && $subdef->get_type() == \media_subdef::TYPE_IMAGE) {
                 $f = \recordutils_image::watermark($this->app, $subdef);
+            }
 
             $wimg = $himg = 150; // preview dans un carre de 150 mm
             // 1px = 3.77952 mm
             $finalWidth = round($subdef->get_width() / 3.779528, 2);
             $finalheight = round($subdef->get_height() / 3.779528, 2);
             if ($finalWidth > 0 && $finalheight > 0) {
-                if ($finalWidth > $finalheight && ($wimg < $finalWidth))
+                if ($finalWidth > $finalheight && ($wimg < $finalWidth)) {
                     $finalheight = $wimg * $finalheight / $finalWidth;
-                else if ($finalheight > $finalWidth && $himg < $finalheight)
+                } elseif ($finalheight > $finalWidth && $himg < $finalheight) {
                     $finalWidth = $himg * $finalWidth / $finalheight;
-                else if ($finalheight == $finalWidth && $himg < $finalheight) {
+                } elseif ($finalheight == $finalWidth && $himg < $finalheight) {
                     $finalheight = $wimg * $finalheight / $finalWidth;
                     $finalWidth = $himg * $finalWidth / $finalheight;
                 }
@@ -465,10 +463,11 @@ class PDF
             $this->pdf->Image($f, (210 - $finalWidth) / 2, $y, $finalWidth, $finalheight);
 
             if ($miniConv != NULL) {
-                foreach ($miniConv as $oneF)
+                foreach ($miniConv as $oneF) {
                     unlink($oneF);
+                }
             }
-            $this->pdf->SetXY($lmargin, $y += ( $finalheight + 5));
+            $this->pdf->SetXY($lmargin, $y += ($finalheight + 5));
 
             $nf = 0;
             if ($write_caption) {
@@ -479,14 +478,12 @@ class PDF
                     }
 
                     $this->pdf->SetFont(PhraseaPDF::FONT, 'B', 12);
-                    $this->pdf->Write(5, $field->get_name() . " : ");
+                    $this->pdf->Write(5, $field->get_name()." : ");
 
                     $this->pdf->SetFont(PhraseaPDF::FONT, '', 12);
 
                     $t = str_replace(
-                        array("&lt;", "&gt;", "&amp;")
-                        , array("<", ">", "&")
-                        , strip_tags($field->get_serialized_values())
+                        array("&lt;", "&gt;", "&amp;"), array("<", ">", "&"), strip_tags($field->get_serialized_values())
                     );
 
                     $this->pdf->Write(5, $t);

@@ -34,17 +34,18 @@ class module_report_dashboard_group implements module_report_dashboard_component
     public function process()
     {
         if ($this->valid) {
-            if (is_null($this->group_dash))
+            if (is_null($this->group_dash)) {
                 $this->group_dash = array();
+            }
             foreach ($this->dashboard as $key => $dash) {
                 if (is_object($dash) &&
                     $dash instanceof module_report_dashboard_feed &&
                     $dash->isValid()) {
                     $onedash = $dash->getDash();
                     foreach ($onedash as $typeofreport => $value) {
-                        if (is_array($value) && sizeof($value) == 0)
+                        if (is_array($value) && sizeof($value) == 0) {
                             continue;
-                        else {
+                        } else {
                             $this->group_dash[$typeofreport][] = $value;
                         }
                     }

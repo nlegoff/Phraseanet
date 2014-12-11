@@ -45,10 +45,11 @@ class Bridge_Api_Flickr_Element implements Bridge_Api_ElementInterface
         $this->entry = array();
         $this->type = $type;
 
-        if ($entry_from_list)
+        if ($entry_from_list) {
             $this->init_from_list_entry($entry);
-        else
+        } else {
             $this->init_from_single_entry($entry);
+        }
 
         $this->user_id = (string) $user_id;
 
@@ -75,8 +76,9 @@ class Bridge_Api_Flickr_Element implements Bridge_Api_ElementInterface
         $url = '';
 
         foreach ($photo->urls->url as $one_url) {
-            if ($one_url["type"] == "photopage")
+            if ($one_url["type"] == "photopage") {
                 $url = (string) $one_url;
+            }
         }
         $dates = $photo->dates;
         $visibility = $photo->visibility;
@@ -119,7 +121,7 @@ class Bridge_Api_Flickr_Element implements Bridge_Api_ElementInterface
             return (string) $entry["url_t"];
         }
 
-        if ( ! isset($entry["farm"]) || ! isset($entry["farm"]) || ! isset($entry["farm"]) || ! isset($entry["farm"]) || ! isset($entry["farm"])) {
+        if (! isset($entry["farm"]) || ! isset($entry["farm"]) || ! isset($entry["farm"]) || ! isset($entry["farm"]) || ! isset($entry["farm"])) {
             return '';
         }
 
@@ -130,11 +132,11 @@ class Bridge_Api_Flickr_Element implements Bridge_Api_ElementInterface
 
         if (empty($size) && empty($extension)) {
             return sprintf('https://farm%s.static.flickr.com/%s/%s_%s.jpg', $farm, $server_id, $id_photo, $secret);
-        } elseif ( ! empty($size) && ! empty($extension)) {
+        } elseif (! empty($size) && ! empty($extension)) {
             return sprintf('https://farm%s.static.flickr.com/%s/%s_%s_%s.jpg', $farm, $server_id, $id_photo, $secret, $size);
-        } elseif ( ! empty($size)) {
+        } elseif (! empty($size)) {
             return sprintf('https://farm%s.static.flickr.com/%s/%s_%s_%s.jpg', $farm, $server_id, $id_photo, $secret, $size, '.jpg');
-        } elseif ( ! empty($extension)) {
+        } elseif (! empty($extension)) {
             return sprintf('https://farm%s.static.flickr.com/%s/%s_%s_o.%s', $farm, $server_id, $id_photo, $secret, $extension);
         } else {
             return "";
@@ -193,8 +195,9 @@ class Bridge_Api_Flickr_Element implements Bridge_Api_ElementInterface
     public function get_updated_on()
     {
         $date = $this->entry["updated_on"];
-        if ($date)
+        if ($date) {
             $date = DateTime::createFromFormat('U', $date);
+        }
 
         return $date;
     }
@@ -232,7 +235,7 @@ class Bridge_Api_Flickr_Element implements Bridge_Api_ElementInterface
      */
     public function get_rating()
     {
-        return null;
+        return;
     }
 
     /**
@@ -242,8 +245,9 @@ class Bridge_Api_Flickr_Element implements Bridge_Api_ElementInterface
     public function get_created_on()
     {
         $date = $this->entry["created_on"];
-        if ($date)
+        if ($date) {
             $date = DateTime::createFromFormat('U', $date);
+        }
 
         return $date;
     }

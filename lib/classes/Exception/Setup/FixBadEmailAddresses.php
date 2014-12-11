@@ -17,5 +17,4 @@
  */
 class Exception_Setup_FixBadEmailAddresses extends Exception
 {
-
 }

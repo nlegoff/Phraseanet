@@ -18,7 +18,6 @@ use Alchemy\Phrasea\Application;
  */
 class patch_380alpha3b implements patchInterface
 {
-
     /**
      *
      * @var string
@@ -64,5 +63,4 @@ class patch_380alpha3b implements patchInterface
 
         return true;
     }
-
 }

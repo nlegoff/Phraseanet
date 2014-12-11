@@ -204,5 +204,4 @@ class latin extends AbstractCharset
     U+00C6->U+00E6, U+01E2->U+00E6, U+01E3->U+00E6, U+01FC->U+00E6, U+01FD->U+00E6,
     U+1D01->U+00E6, U+1D02->U+00E6, U+1D2D->U+00E6, U+1D46->U+00E6, U+00E6,
     ';
-
 }

@@ -2,7 +2,6 @@
 
 class p4string
 {
-
     public static function addFirstSlash($path)
     {
         if ($path == "") {
@@ -12,7 +11,7 @@ class p4string
         $c = substr($path, 0, 1);
 
         if ($c != "/" && $c != "\\") {
-            return "/" . $path;
+            return "/".$path;
         }
 
         return($path);
@@ -51,7 +50,7 @@ class p4string
 
         $lastCharacter = substr($path, -1, 1);
 
-        if ( ! in_array($lastCharacter, array('\\', '/'))) {
+        if (! in_array($lastCharacter, array('\\', '/'))) {
             $path .= DIRECTORY_SEPARATOR;
         }
 
@@ -102,7 +101,7 @@ class p4string
      */
     public static function MakeString($s, $context = 'html', $quoted = '')
     {
-        switch (mb_strtolower($context . '_' . $quoted)) {
+        switch (mb_strtolower($context.'_'.$quoted)) {
             case 'js_': // old method
                 $s = str_replace(array("\\", "\"", "'", "\r", "\n"), array("\\\\", "\\\"", "\\'", "\\r", "\\n"), $s);
                 break;
@@ -175,36 +174,36 @@ class p4string
     {
         $octets = (float) $octets;
         if ($octets < 900) {
-            return $octets . ' o';
+            return $octets.' o';
         }
         $koctet = round($octets / 1024, $precision);
         if ($koctet < 900) {
-            return $koctet . ' ko';
+            return $koctet.' ko';
         }
         $Moctet = round($octets / (1024 * 1024), $precision);
         if ($Moctet < 900) {
-            return $Moctet . ' Mo';
+            return $Moctet.' Mo';
         }
         $Goctet = round($octets / (1024 * 1024 * 1024), $precision);
         if ($Goctet < 900) {
-            return $Goctet . ' Go';
+            return $Goctet.' Go';
         }
         $Toctet = round($octets / (1024 * 1024 * 1024 * 1024), $precision);
 
-        return $Toctet . ' To';
+        return $Toctet.' To';
     }
 
     public static function format_seconds($seconds)
     {
         $durations = $durationm = $durationh = 0;
         $durations = fmod($seconds, 60);
-        $durations = $durations <= 9 ? '0' . $durations : $durations;
+        $durations = $durations <= 9 ? '0'.$durations : $durations;
         $durationm = fmod(floor($seconds / 60), 60);
-        $durationm = ($durationm <= 9 ? '0' . $durationm : $durationm) . ':';
+        $durationm = ($durationm <= 9 ? '0'.$durationm : $durationm).':';
         $durationh = floor($seconds / 3600);
         $durationh = $durationh == 0 ? '' : (
-            ($durationh <= 9 ? '0' . $durationh : $durationh) . ':');
-        $d = $durationh . $durationm . $durations;
+            ($durationh <= 9 ? '0'.$durationh : $durationh).':');
+        $d = $durationh.$durationm.$durations;
 
         if ($d == '00:00') {
             $d = '';

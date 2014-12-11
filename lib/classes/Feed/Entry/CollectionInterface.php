@@ -17,7 +17,6 @@
  */
 interface Feed_Entry_CollectionInterface
 {
-
     public function __construct();
 
     public function add_entry(Feed_Entry_Adapter $entry);

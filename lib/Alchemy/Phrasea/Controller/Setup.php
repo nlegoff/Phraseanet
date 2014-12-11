@@ -76,7 +76,7 @@ class Setup implements ControllerProviderInterface
         return $app['twig']->render('/setup/index.html.twig', array(
             'locale'                 => $app['locale'],
             'available_locales'      => Application::getAvailableLanguages(),
-            'current_servername'     => $request->getScheme() . '://' . $request->getHttpHost() . '/',
+            'current_servername'     => $request->getScheme().'://'.$request->getHttpHost().'/',
             'requirementsCollection' => $requirementsCollection,
         ));
     }
@@ -125,9 +125,9 @@ class Setup implements ControllerProviderInterface
             'available_templates' => array('en', 'fr'),
             'warnings'            => $warnings,
             'error'               => $request->query->get('error'),
-            'current_servername'  => $request->getScheme() . '://' . $request->getHttpHost() . '/',
+            'current_servername'  => $request->getScheme().'://'.$request->getHttpHost().'/',
             'discovered_binaries' => \setup::discover_binaries(),
-            'rootpath'            => realpath(__DIR__ . '/../../../../'),
+            'rootpath'            => realpath(__DIR__.'/../../../../'),
         ));
     }
 
@@ -135,7 +135,7 @@ class Setup implements ControllerProviderInterface
     {
         set_time_limit(360);
 
-        $servername = $request->getScheme() . '://' . $request->getHttpHost() . '/';
+        $servername = $request->getScheme().'://'.$request->getHttpHost().'/';
 
         $abConn = $dbConn = null;
 
@@ -199,7 +199,6 @@ class Setup implements ControllerProviderInterface
                 'notice'  => 'install_success',
             ));
         } catch (\Exception $e) {
-
         }
 
         return $app->redirectPath('install_step2', array(

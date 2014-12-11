@@ -27,8 +27,8 @@ class MailSuccessEmailConfirmationUnregistered extends AbstractMailWithLink
     public function getMessage()
     {
         return _('login::register: merci d\'avoir confirme votre adresse email')
-            . "\n"
-            . _("You have to wait for an administrator approval for your access request");
+            ."\n"
+            ._("You have to wait for an administrator approval for your access request");
     }
 
     /**

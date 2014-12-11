@@ -152,7 +152,7 @@ class connection_pdo extends connection_abstract implements connection_interface
                 $statement = new connection_pdoStatementDebugger($statement);
             }
 
-           return $statement;
+            return $statement;
         }
 
         return call_user_func_array(array($this->connection, $method), $args);

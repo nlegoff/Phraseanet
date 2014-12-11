@@ -19,5 +19,4 @@ class gurmukhi extends AbstractCharset
     U+0A5E->U+0A2B, U+0A05..U+0A0A, U+0A0F, U+0A10, U+0A13..U+0A28, U+0A2A..U+0A30,
     U+0A32, U+0A35, U+0A38, U+0A39, U+0A5C, U+0A66..U+0A6F
 ';
-
 }

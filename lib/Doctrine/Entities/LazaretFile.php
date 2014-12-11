@@ -428,7 +428,7 @@ class LazaretFile
         $merged = array_merge($uuidRecords, $shaRecords);
 
         foreach ($merged as $record) {
-            if ( ! in_array($record, $ret)) {
+            if (! in_array($record, $ret)) {
                 $ret[] = $record;
             }
         }

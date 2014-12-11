@@ -88,20 +88,26 @@ class Feed_XML_Atom extends Feed_XML_Abstract implements Feed_XML_Interface
 
         $this->add_navigation($document, $root, false);
 
-        if ($this->generator)
+        if ($this->generator) {
             $this->addTag($document, $root, 'generator', $this->generator);
-        if ($this->subtitle)
+        }
+        if ($this->subtitle) {
             $this->addTag($document, $root, 'subtitle', $this->subtitle);
-        if ($this->icon)
+        }
+        if ($this->icon) {
             $this->addTag($document, $root, 'icon', $this->icon);
+        }
         if ($this->author) {
             $author = $this->addTag($document, $root, 'author');
-            if ($this->author_email)
+            if ($this->author_email) {
                 $this->addTag($document, $author, 'email', $this->author_email);
-            if ($this->author_name)
+            }
+            if ($this->author_name) {
                 $this->addTag($document, $author, 'name', $this->author_name);
-            if ($this->author_url)
+            }
+            if ($this->author_url) {
                 $this->addTag($document, $author, 'uri', $this->author_url);
+            }
         }
 
         foreach ($this->items as $item) {
@@ -137,10 +143,12 @@ class Feed_XML_Atom extends Feed_XML_Abstract implements Feed_XML_Interface
         $this->addTag($document, $entry_node, 'title', $entry->get_title());
         $author = $this->addTag($document, $entry_node, 'author');
 
-        if ($entry->get_author_email())
+        if ($entry->get_author_email()) {
             $this->addTag($document, $author, 'email', $entry->get_author_email());
-        if ($entry->get_author_name())
+        }
+        if ($entry->get_author_name()) {
             $this->addTag($document, $author, 'name', $entry->get_author_name());
+        }
 
         $this->addTag($document, $entry_node, 'content', $entry->get_subtitle());
 

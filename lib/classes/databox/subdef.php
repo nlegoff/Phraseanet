@@ -174,7 +174,7 @@ class databox_subdef
             return $this->labels[$code];
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -206,9 +206,7 @@ class databox_subdef
         );
 
         if (isset(self::$mediaTypeToSubdefTypes[$this->subdef_group->getType()])) {
-
             foreach (self::$mediaTypeToSubdefTypes[$this->subdef_group->getType()] as $subdefType) {
-
                 if ($subdefType == $this->subdef_type->getType()) {
                     $mediatype_obj = $this->subdef_type;
                 } else {

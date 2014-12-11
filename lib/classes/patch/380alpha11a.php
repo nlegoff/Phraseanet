@@ -85,7 +85,7 @@ class patch_380alpha11a implements patchInterface
                 ->setBrowserVersion($row['browser_version'])
                 ->setBrowserName($row['browser']);
 
-            $sizes = explode ('x', $row['screen']);
+            $sizes = explode('x', $row['screen']);
 
             if (2 === count($sizes)) {
                 $session

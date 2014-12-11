@@ -10,7 +10,6 @@
  */
 
 use Alchemy\Phrasea\Application;
-
 use Alchemy\Phrasea\Exception\SessionNotFound;
 use Alchemy\Geonames\Exception\ExceptionInterface as GeonamesExceptionInterface;
 
@@ -38,7 +37,7 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
         , 'nl_NL' => 'Dutch'
         , 'en_GB' => 'English'
         , 'es_ES' => 'Español'
-        , 'fr_FR' => 'Français'
+        , 'fr_FR' => 'Français',
     );
 
     /**
@@ -91,7 +90,7 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
         'bask_val_order'          => 'nat',
         'basket_caption_display'  => '0',
         'basket_status_display'   => '0',
-        'basket_title_display'    => '0'
+        'basket_title_display'    => '0',
     );
 
     /**
@@ -105,7 +104,7 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
         'start_page' => array('PUBLI', 'QUERY', 'LAST_QUERY', 'HELP'),
         'technical_display' => array('0', '1', 'group'),
         'rollover_thumbnail' => array('caption', 'preview'),
-        'bask_val_order' => array('nat', 'asc', 'desc')
+        'bask_val_order' => array('nat', 'asc', 'desc'),
     );
 
     /**
@@ -331,7 +330,6 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
      */
     public function __construct($id, Application $app)
     {
-
         $this->app = $app;
         $this->load($id);
 
@@ -363,16 +361,17 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
     {
         if (is_int((int) $id) && (int) $id > 0) {
             $id = (int) $id;
-        } else
+        } else {
             throw new Exception('Invalid usr_id');
+        }
 
         if (!isset(self::$_instance[$id])) {
             try {
-                self::$_instance[$id] = $app['phraseanet.appbox']->get_data_from_cache('_user_' . $id);
+                self::$_instance[$id] = $app['phraseanet.appbox']->get_data_from_cache('_user_'.$id);
                 self::$_instance[$id]->set_app($app);
             } catch (\Exception $e) {
                 self::$_instance[$id] = new self($id, $app);
-                $app['phraseanet.appbox']->set_data_to_cache(self::$_instance[$id], '_user_' . $id);
+                $app['phraseanet.appbox']->set_data_to_cache(self::$_instance[$id], '_user_'.$id);
             }
         } else {
             self::$_instance[$id]->set_app($app);
@@ -491,7 +490,7 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
             $token = $this->app['tokens']->getUrlToken(\random::TYPE_RSS, $this->id);
         }
 
-        return new system_url($this->app['phraseanet.registry']->get('GV_ServerName') . 'atom/' . $token);
+        return new system_url($this->app['phraseanet.registry']->get('GV_ServerName').'atom/'.$token);
     }
 
     /**
@@ -511,12 +510,13 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
             $stmt->execute(array(
                 ':name'   => $query,
                 ':usr_id' => $app['authentication']->getUser()->get_id(),
-                ':query'  => $query
+                ':query'  => $query,
             ));
             $stmt->closeCursor();
 
-            if ($app['authentication']->getUser()->getPrefs('start_page') == 'LAST_QUERY')
+            if ($app['authentication']->getUser()->getPrefs('start_page') == 'LAST_QUERY') {
                 $app['authentication']->getUser()->setPrefs('start_page_query', $query);
+            }
         } catch (\Exception $e) {
             return false;
         }
@@ -540,7 +540,6 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
                     return $country['name'];
                 }
             } catch (GeonamesExceptionInterface $e) {
-
             }
         }
 
@@ -783,7 +782,6 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
                 $country_code = $country['code'];
             }
         } catch (GeonamesExceptionInterface $e) {
-
         }
 
         $sql = 'UPDATE usr SET geonameid = :geonameid, pays=:country_code, ville = :city WHERE usr_id = :usr_id';
@@ -895,8 +893,9 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
         $this->is_template = true;
         $this->template_owner = $owner;
 
-        if ($owner->get_id() == $this->get_id())
-            throw new Exception_InvalidArgument ();
+        if ($owner->get_id() == $this->get_id()) {
+            throw new Exception_InvalidArgument();
+        }
 
         $sql = 'UPDATE usr SET model_of = :owner_id WHERE usr_id = :usr_id';
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -995,7 +994,7 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
         $sql = 'UPDATE usr SET usr_login = :usr_login , usr_mail = null
             WHERE usr_id = :usr_id';
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
-        $stmt->execute(array(':usr_login' => '(#deleted_' . $this->get_login() . '_' . $this->get_id(), ':usr_id'    => $this->get_id()));
+        $stmt->execute(array(':usr_login' => '(#deleted_'.$this->get_login().'_'.$this->get_id(), ':usr_id'    => $this->get_id()));
         $stmt->closeCursor();
 
         $sql = 'DELETE FROM basusr WHERE usr_id = :usr_id';
@@ -1166,7 +1165,7 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
 
         $params = array(
             ':usr_id'      => $this->get_id()
-            , ':template_id' => $template->get_login()
+            , ':template_id' => $template->get_login(),
         );
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -1374,8 +1373,8 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
 
         foreach ($notifications as $notification_group => $nots) {
             foreach ($nots as $notification) {
-                if (!isset($this->_prefs['notification_' . $notification['id']])) {
-                    $this->_prefs['notification_' . $notification['id']] = '1';
+                if (!isset($this->_prefs['notification_'.$notification['id']])) {
+                    $this->_prefs['notification_'.$notification['id']] = '1';
                 }
             }
         }
@@ -1384,35 +1383,38 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
 
     public function get_notifications_preference(Application $app, $notification_id)
     {
-        if (!$this->notifications_preferences_loaded)
+        if (!$this->notifications_preferences_loaded) {
             $this->load_notifications_preferences($app);
+        }
 
-        return isset($this->_prefs['notification_' . $notification_id]) ? $this->_prefs['notification_' . $notification_id] : '0';
+        return isset($this->_prefs['notification_'.$notification_id]) ? $this->_prefs['notification_'.$notification_id] : '0';
     }
 
     public function set_notification_preference(Application $app, $notification_id, $value)
     {
-        if (!$this->notifications_preferences_loaded)
+        if (!$this->notifications_preferences_loaded) {
             $this->load_notifications_preferences($app);
+        }
 
-        $prop = 'notification_' . $notification_id;
+        $prop = 'notification_'.$notification_id;
         $value = $value ? '1' : '0';
 
         $this->setPrefs($prop, $value);
 
-        return ;
+        return;
     }
 
     public function get_display_name()
     {
-        if ($this->is_template())
+        if ($this->is_template()) {
             $display_name = sprintf(_('modele %s'), $this->get_login());
-        elseif (trim($this->lastname) !== '' || trim($this->firstname) !== '')
-            $display_name = $this->firstname . ' ' . $this->lastname;
-        elseif (trim($this->email) !== '')
+        } elseif (trim($this->lastname) !== '' || trim($this->firstname) !== '') {
+            $display_name = $this->firstname.' '.$this->lastname;
+        } elseif (trim($this->email) !== '') {
             $display_name = $this->email;
-        else
+        } else {
             $display_name = _('phraseanet::utilisateur inconnu');
+        }
 
         return $display_name;
     }
@@ -1427,12 +1429,11 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
             $stmt->execute(array(
                 ':usr_id' => $this->id,
                 ':prop'   => $prop,
-                ':value'  => $value
+                ':value'  => $value,
             ));
             $stmt->closeCursor();
             $this->delete_data_from_cache();
         } catch (\Exception $e) {
-
         }
 
         return $this;
@@ -1440,7 +1441,7 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
 
     public function get_cache_key($option = null)
     {
-        return '_user_' . $this->get_id() . ($option ? '_' . $option : '');
+        return '_user_'.$this->get_id().($option ? '_'.$option : '');
     }
 
     public function delete_data_from_cache($option = null)
@@ -1466,7 +1467,6 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
 
     public static function get_wrong_email_users(Application $app)
     {
-
         $sql = 'SELECT usr_mail, usr_id FROM usr WHERE usr_mail IS NOT NULL';
 
         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -1514,8 +1514,9 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
 
         if (isset(self::$available_values[$prop])) {
             $ok = false;
-            if (in_array($value, self::$available_values[$prop]))
+            if (in_array($value, self::$available_values[$prop])) {
                 $ok = true;
+            }
         }
 
         if ($ok) {
@@ -1571,7 +1572,7 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
             '6' => 'Compare',
             '7' => 'Validate',
             '8' => 'Upload',
-            '9' => 'API'
+            '9' => 'API',
         );
 
         if (isset($appName[$app_id])) {
@@ -1588,8 +1589,9 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
                     $row3 = $stmt->fetch(PDO::FETCH_ASSOC);
                     $stmt->closeCursor();
 
-                    if (!$row3)
+                    if (!$row3) {
                         throw new Exception('no log');
+                    }
                     $applis = unserialize($row3['appli']);
 
                     if (!in_array($app_id, $applis)) {
@@ -1600,14 +1602,13 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
 
                     $params = array(
                         ':applis' => serialize($applis)
-                        , ':log_id' => $logger->get_id()
+                        , ':log_id' => $logger->get_id(),
                     );
 
                     $stmt = $connbas->prepare($sql);
                     $stmt->execute($params);
                     $stmt->closeCursor();
                 } catch (\Exception $e) {
-
                 }
             }
         }
@@ -1629,8 +1630,9 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
 
         $users = array();
 
-        foreach ($rs as $row)
+        foreach ($rs as $row) {
             $users[$row['usr_id']] = $row['usr_login'];
+        }
 
         return $users;
     }
@@ -1643,14 +1645,13 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
             $stmt->execute(array(':usr_id' => $app['authentication']->getUser()->get_id()));
             $stmt->closeCursor();
 
-            $sql = "UPDATE usr SET create_db='1' WHERE usr_id IN (" . implode(',', $admins) . ")";
+            $sql = "UPDATE usr SET create_db='1' WHERE usr_id IN (".implode(',', $admins).")";
             $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
             $stmt->execute();
             $stmt->closeCursor();
 
             return true;
         } catch (\Exception $e) {
-
         }
 
         return false;
@@ -1669,7 +1670,7 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
                     'bas_manage'        => '1'
                     , 'bas_modify_struct' => '1'
                     , 'bas_modif_th'      => '1'
-                    , 'bas_chupub'        => '1'
+                    , 'bas_chupub'        => '1',
                 );
 
                 $user->ACL()->update_rights_to_sbas($databox->get_sbas_id(), $rights);
@@ -1695,7 +1696,7 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
                         , 'imgtools'          => '1'
                         , 'manage'            => '1'
                         , 'modify_struct'     => '1'
-                        , 'bas_modify_struct' => '1'
+                        , 'bas_modify_struct' => '1',
                     );
 
                     $user->ACL()->update_rights_to_base($collection->get_base_id(), $rights);
@@ -1745,7 +1746,7 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
             throw new \InvalidArgumentException('Invalid password');
         }
 
-        $login = $invite ? 'invite' . random::generatePassword(16) : $login;
+        $login = $invite ? 'invite'.random::generatePassword(16) : $login;
 
         $nonce = random::generatePassword(16);
 
@@ -1760,14 +1761,14 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
             ':password' => $app['auth.password-encoder']->encodePassword($password, $nonce),
             ':email'    => ($email ? $email : null),
             ':admin'    => ($admin ? '1' : '0'),
-            ':invite'   => ($invite ? '1' : '0')
+            ':invite'   => ($invite ? '1' : '0'),
         ));
         $stmt->closeCursor();
 
         $usr_id = $conn->lastInsertId();
 
         if ($invite) {
-            $sql = 'UPDATE usr SET usr_login = "invite' . $usr_id . '" WHERE usr_id="' . $usr_id . '"';
+            $sql = 'UPDATE usr SET usr_login = "invite'.$usr_id.'" WHERE usr_id="'.$usr_id.'"';
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $stmt->closeCursor();
@@ -1804,8 +1805,9 @@ class User_Adapter implements User_Interface, cache_cacheableInterface
     {
         $vars = array();
         foreach ($this as $key => $value) {
-            if (in_array($key, array('ACL', 'app')))
+            if (in_array($key, array('ACL', 'app'))) {
                 continue;
+            }
             $vars[] = $key;
         }
 

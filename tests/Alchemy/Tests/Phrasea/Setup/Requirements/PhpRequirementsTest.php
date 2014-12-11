@@ -8,6 +8,6 @@ class PhpRequirementsTest extends RequirementsTestCase
 {
     protected function provideRequirements()
     {
-        return new PhpRequirements;
+        return new PhpRequirements();
     }
 }

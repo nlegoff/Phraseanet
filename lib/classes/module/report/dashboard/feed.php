@@ -69,7 +69,7 @@ class module_report_dashboard_feed implements module_report_dashboard_componentI
      */
     public static function getInstance(Application $app, $sbasid, $sbas_coll, $dmin, $dmax)
     {
-        $cache_id = 'feed_' . md5($sbasid . '_' . $sbas_coll . '_' . $dmin . '_' . $dmax);
+        $cache_id = 'feed_'.md5($sbasid.'_'.$sbas_coll.'_'.$dmin.'_'.$dmax);
 
         try {
             $result = $app['phraseanet.appbox']->get_data_from_cache($cache_id);
@@ -77,7 +77,6 @@ class module_report_dashboard_feed implements module_report_dashboard_componentI
 
             return $result;
         } catch (\Exception $e) {
-
         }
         $tmp = new self($app, $sbasid, $sbas_coll, $dmin, $dmax);
 
@@ -208,7 +207,6 @@ class module_report_dashboard_feed implements module_report_dashboard_componentI
                 );
             }
         } catch (PDOException $e) {
-
         }
 
         return;
@@ -245,8 +243,9 @@ class module_report_dashboard_feed implements module_report_dashboard_componentI
     {
         $vars = array();
         foreach ($this as $key => $value) {
-            if (in_array($key, array('app')))
+            if (in_array($key, array('app'))) {
                 continue;
+            }
             $vars[] = $key;
         }
 

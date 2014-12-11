@@ -16,5 +16,4 @@ class TfDuration extends AbstractTag
     protected $Type = '';
     protected $Writable = false;
     protected $Description = 'The ctime of the archived file';
-
 }

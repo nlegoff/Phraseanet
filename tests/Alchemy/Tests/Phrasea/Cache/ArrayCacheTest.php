@@ -13,7 +13,7 @@ class ArrayCacheTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->object = new ArrayCache;
+        $this->object = new ArrayCache();
     }
 
     public function testIsServer()

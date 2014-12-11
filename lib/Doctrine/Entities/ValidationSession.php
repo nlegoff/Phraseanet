@@ -242,7 +242,7 @@ class ValidationSession
     public function isFinished()
     {
         if (is_null($this->getExpires())) {
-            return null;
+            return;
         }
 
         $date_obj = new \DateTime();
@@ -252,29 +252,23 @@ class ValidationSession
 
     public function getValidationString(Application $app, \User_Adapter $user)
     {
-
         if ($this->isInitiator($user)) {
             if ($this->isFinished()) {
                 return sprintf(
-                        _('Vous aviez envoye cette demande a %d utilisateurs')
-                        , (count($this->getParticipants()) - 1)
+                        _('Vous aviez envoye cette demande a %d utilisateurs'), (count($this->getParticipants()) - 1)
                 );
             } else {
                 return sprintf(
-                        _('Vous avez envoye cette demande a %d utilisateurs')
-                        , (count($this->getParticipants()) - 1)
+                        _('Vous avez envoye cette demande a %d utilisateurs'), (count($this->getParticipants()) - 1)
                 );
             }
         } else {
             if ($this->getParticipant($user, $app)->getCanSeeOthers()) {
                 return sprintf(
-                        _('Processus de validation recu de %s et concernant %d utilisateurs')
-                        , $this->getInitiator($app)->get_display_name()
-                        , (count($this->getParticipants()) - 1));
+                        _('Processus de validation recu de %s et concernant %d utilisateurs'), $this->getInitiator($app)->get_display_name(), (count($this->getParticipants()) - 1));
             } else {
                 return sprintf(
-                        _('Processus de validation recu de %s')
-                        , $this->getInitiator($app)->get_display_name()
+                        _('Processus de validation recu de %s'), $this->getInitiator($app)->get_display_name()
                 );
             }
         }
@@ -293,6 +287,6 @@ class ValidationSession
             }
         }
 
-        throw new NotFoundHttpException('Particpant not found' . $user->get_email());
+        throw new NotFoundHttpException('Particpant not found'.$user->get_email());
     }
 }

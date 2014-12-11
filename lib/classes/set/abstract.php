@@ -125,8 +125,9 @@ abstract class set_abstract implements IteratorAggregate
     {
         $n = 0;
         foreach ($this->elements as $record) {
-            if ($record->is_grouping())
+            if ($record->is_grouping()) {
                 $n ++;
+            }
         }
 
         return $n;
@@ -163,8 +164,9 @@ abstract class set_abstract implements IteratorAggregate
     public function remove_element(record_Interface $record)
     {
         $key = $record->get_serialize_key();
-        if (isset($this->elements[$key]))
+        if (isset($this->elements[$key])) {
             unset($this->elements[$key]);
+        }
 
         return $this;
     }

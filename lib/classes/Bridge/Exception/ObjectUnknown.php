@@ -17,5 +17,4 @@
  */
 class Bridge_Exception_ObjectUnknown extends Bridge_Exception
 {
-
 }

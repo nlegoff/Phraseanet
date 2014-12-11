@@ -63,7 +63,7 @@ class caption_field implements cache_cacheableInterface
             /**
              * Inconsistent, should not happen
              */
-            if ( ! $databox_field->is_multi()) {
+            if (! $databox_field->is_multi()) {
                 break;
             }
         }
@@ -76,7 +76,6 @@ class caption_field implements cache_cacheableInterface
         try {
             return $this->get_data_from_cache();
         } catch (\Exception $e) {
-
         }
 
         $connbas = $this->databox_field->get_connection();
@@ -87,7 +86,7 @@ class caption_field implements cache_cacheableInterface
 
         $params = array(
             ':record_id'      => $this->record->get_record_id()
-            , ':meta_struct_id' => $this->databox_field->get_id()
+            , ':meta_struct_id' => $this->databox_field->get_id(),
         );
 
         $stmt = $connbas->prepare($sql);
@@ -142,7 +141,6 @@ class caption_field implements cache_cacheableInterface
      */
     public function delete()
     {
-
         foreach ($this->get_values() as $value) {
             $value->delete();
         }
@@ -156,23 +154,26 @@ class caption_field implements cache_cacheableInterface
      * @param  string $separator
      * @return string
      */
-    protected static function serialize_value(Array $values, $separator, $highlight = false)
+    protected static function serialize_value(array $values, $separator, $highlight = false)
     {
-        if (strlen($separator) > 1)
+        if (strlen($separator) > 1) {
             $separator = $separator[0];
+        }
 
-        if (trim($separator) === '')
+        if (trim($separator) === '') {
             $separator = ' ';
-        else
-            $separator = ' ' . $separator . ' ';
+        } else {
+            $separator = ' '.$separator.' ';
+        }
 
         $array_values = array();
 
         foreach ($values as $value) {
-            if ($highlight)
+            if ($highlight) {
                 $array_values[] = $value->highlight_thesaurus();
-            else
+            } else {
                 $array_values[] = $value->getValue();
+            }
         }
 
         return implode($separator, $array_values);
@@ -206,7 +207,7 @@ class caption_field implements cache_cacheableInterface
     public function get_serialized_values($custom_separator = false, $highlight = false)
     {
         if (0 === count($this->values)) {
-            return null;
+            return;
         }
 
         if ($this->is_multi()) {
@@ -223,7 +224,6 @@ class caption_field implements cache_cacheableInterface
         }
 
         return $value->getValue();
-
     }
 
     /**
@@ -277,7 +277,7 @@ class caption_field implements cache_cacheableInterface
             // s'il y'a plusieurs delimiters, on transforme
             // en regexp pour utiliser split
             $separator = preg_split('//', $separator, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-            $separator = '/\\' . implode('|\\', $separator) . '/';
+            $separator = '/\\'.implode('|\\', $separator).'/';
             $values = preg_split($separator, $serialized_value);
         }
 
@@ -294,7 +294,7 @@ class caption_field implements cache_cacheableInterface
             WHERE meta_struct_id = :meta_struct_id';
         $stmt = $databox_field->get_databox()->get_connection()->prepare($sql);
         $params = array(
-            ':meta_struct_id' => $databox_field->get_id()
+            ':meta_struct_id' => $databox_field->get_id(),
         );
 
         $stmt->execute($params);
@@ -306,10 +306,10 @@ class caption_field implements cache_cacheableInterface
 
         while ($n < $rowcount) {
             $sql = 'SELECT record_id, id FROM metadatas
-              WHERE meta_struct_id = :meta_struct_id LIMIT ' . $n . ', ' . $increment;
+              WHERE meta_struct_id = :meta_struct_id LIMIT '.$n.', '.$increment;
 
             $params = array(
-                ':meta_struct_id' => $databox_field->get_id()
+                ':meta_struct_id' => $databox_field->get_id(),
             );
 
             $stmt = $databox_field->get_databox()->get_connection()->prepare($sql);
@@ -330,7 +330,6 @@ class caption_field implements cache_cacheableInterface
                     $app['phraseanet.SE']->updateRecord($record);
                     unset($record);
                 } catch (\Exception $e) {
-
                 }
             }
 
@@ -347,7 +346,7 @@ class caption_field implements cache_cacheableInterface
 
         $stmt = $databox_field->get_databox()->get_connection()->prepare($sql);
         $params = array(
-            ':meta_struct_id' => $databox_field->get_id()
+            ':meta_struct_id' => $databox_field->get_id(),
         );
 
         $stmt->execute($params);
@@ -360,10 +359,10 @@ class caption_field implements cache_cacheableInterface
         while ($n < $rowcount) {
             $sql = 'SELECT record_id, id FROM metadatas
               WHERE meta_struct_id = :meta_struct_id
-              LIMIT ' . $n . ', ' . $increment;
+              LIMIT '.$n.', '.$increment;
 
             $params = array(
-                ':meta_struct_id' => $databox_field->get_id()
+                ':meta_struct_id' => $databox_field->get_id(),
             );
 
             $stmt = $databox_field->get_databox()->get_connection()->prepare($sql);
@@ -384,7 +383,6 @@ class caption_field implements cache_cacheableInterface
                     unset($caption_field);
                     unset($record);
                 } catch (\Exception $e) {
-
                 }
             }
 
@@ -402,7 +400,7 @@ class caption_field implements cache_cacheableInterface
      */
     public function get_cache_key($option = null)
     {
-        return 'caption_field_' . $this->databox_field->get_id() . '_' . $this->record->get_serialize_key() . ($option ? '_' . $option : '');
+        return 'caption_field_'.$this->databox_field->get_id().'_'.$this->record->get_serialize_key().($option ? '_'.$option : '');
     }
 
     /**

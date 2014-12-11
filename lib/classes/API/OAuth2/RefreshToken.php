@@ -139,7 +139,7 @@ class API_OAuth2_RefreshToken
             ":refresh_token" => $refresh_token,
             ":account_id"    => $account->get_id(),
             ":expires"       => $expires,
-            ":scope"         => $scope
+            ":scope"         => $scope,
         );
         $stmt->execute($params);
         $stmt->closeCursor();

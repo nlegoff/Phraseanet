@@ -82,12 +82,13 @@ class patch_320alpha2a implements patchInterface
         $sql = 'UPDATE task2 SET `class` = :class WHERE task_id = :task_id';
         $stmt = $appbox->get_connection()->prepare($sql);
         foreach ($rs as $row) {
-            if (strpos($row['class'], 'task_period_') !== false)
+            if (strpos($row['class'], 'task_period_') !== false) {
                 continue;
+            }
 
             $params = array(
                 ':task_id' => $row['task_id']
-                , ':class'   => str_replace('task_', 'task_period_', $row['class'])
+                , ':class'   => str_replace('task_', 'task_period_', $row['class']),
             );
 
             $stmt->execute($params);

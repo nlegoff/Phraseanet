@@ -17,5 +17,4 @@
  */
 class media_adapter extends media_abstract
 {
-
 }

@@ -24,8 +24,9 @@ class module_report_sqlfilter
         $this->app = $app;
         $this->conn = connection::getPDOConnection($app, $report->getSbasid());
 
-        if (is_array($report->getTransQueryString()))
+        if (is_array($report->getTransQueryString())) {
             $this->cor_query = $report->getTransQueryString();
+        }
 
         $this->buildFilter($report);
 
@@ -36,7 +37,7 @@ class module_report_sqlfilter
     {
         return array(
             'sql' => ($dmin && $dmax ? ' '.$dateField.' > :date_min AND '.$dateField.' < :date_max ' : false)
-        , 'params' => ($dmin && $dmax ? array(':date_min' => $dmin, ':date_max' => $dmax) : array())
+        , 'params' => ($dmin && $dmax ? array(':date_min' => $dmin, ':date_max' => $dmax) : array()),
         );
     }
 
@@ -51,11 +52,11 @@ class module_report_sqlfilter
 
         $params = array(':log_site' => $this->app['phraseanet.configuration']['main']['key']);
         if ($this->filter['date'] && $this->filter['date']['sql'] !== '') {
-            $sql .= $this->filter['date']['sql'] . ' AND ';
+            $sql .= $this->filter['date']['sql'].' AND ';
             $params = array_merge($params, $this->filter['date']['params']);
         }
         if ($this->filter['user'] && $this->filter['user']['sql'] !== '') {
-            $sql .= $this->filter['user']['sql'] . ' AND ';
+            $sql .= $this->filter['user']['sql'].' AND ';
             $params = array_merge($params, $this->filter['user']['params']);
         }
 
@@ -124,17 +125,17 @@ class module_report_sqlfilter
         }
 */
         $sql = "";
-        if($report->getDmin()) {
-            $sql = $report->getDateField().">=" . $this->conn->quote($report->getDmin());
+        if ($report->getDmin()) {
+            $sql = $report->getDateField().">=".$this->conn->quote($report->getDmin());
         }
-        if($report->getDmax()) {
-            if($sql != "") {
+        if ($report->getDmax()) {
+            if ($sql != "") {
                 $sql .= " AND ";
             }
-            $sql .= $report->getDateField()."<=" . $this->conn->quote($report->getDmax());
+            $sql .= $report->getDateField()."<=".$this->conn->quote($report->getDmax());
         }
         $this->filter['date'] = array(
-            'sql' => $sql, 'params' => array()
+            'sql' => $sql, 'params' => array(),
         );
 
         return;
@@ -150,18 +151,19 @@ class module_report_sqlfilter
             $params = array();
             $n = 0;
             foreach ($f as $field => $value) {
-                if (array_key_exists($value['f'], $this->cor_query))
+                if (array_key_exists($value['f'], $this->cor_query)) {
                     $value['f'] = $this->cor_query[$value['f']];
+                }
 
                 if ($value['o'] == 'LIKE') {
-                    $filter[] = $value['f'] . ' ' . $value['o'] . ' \'%' . str_replace(array("'", '%'), array("\'", '\%'), ' :user_filter' . $n) . '%\'';
-                    $params[':user_filter' . $n] = $value['v'];
+                    $filter[] = $value['f'].' '.$value['o'].' \'%'.str_replace(array("'", '%'), array("\'", '\%'), ' :user_filter'.$n).'%\'';
+                    $params[':user_filter'.$n] = $value['v'];
                 } elseif ($value['o'] == 'OR') {
-                    $filter[] = $value['f'] . ' ' . $value['o'] . ' :user_filter' . $n;
-                    $params[':user_filter' . $n] = $value['v'];
+                    $filter[] = $value['f'].' '.$value['o'].' :user_filter'.$n;
+                    $params[':user_filter'.$n] = $value['v'];
                 } else {
-                    $filter[] = $value['f'] . ' ' . $value['o'] . ' :user_filter' . $n;
-                    $params[':user_filter' . $n] = $value['v'];
+                    $filter[] = $value['f'].' '.$value['o'].' :user_filter'.$n;
+                    $params[':user_filter'.$n] = $value['v'];
                 }
 
                 $n ++;
@@ -171,7 +173,6 @@ class module_report_sqlfilter
                 $filter_user = array('sql' => implode(' AND ', $filter), 'params' => $params);
                 $this->filter['user'] = $filter_user;
             }
-
         }
 
         return;
@@ -185,8 +186,8 @@ class module_report_sqlfilter
         if (($report->getUserId() != '')) {
             $tab = explode(",", $report->getListCollId());
             foreach ($tab as $val) {
-                $dl_coll_filter[] = "record.coll_id = :record_fil" . $n;
-                $params[":record_fil" . $n] = phrasea::collFromBas($this->app, $val);
+                $dl_coll_filter[] = "record.coll_id = :record_fil".$n;
+                $params[":record_fil".$n] = phrasea::collFromBas($this->app, $val);
                 $n ++;
             }
             if (count($dl_coll_filter) > 0) {
@@ -202,8 +203,8 @@ class module_report_sqlfilter
         $this->filter['order'] = false;
         if (sizeof($report->getOrder()) > 0) {
             $this->filter['order'] = " ORDER BY "
-                . $this->cor_query[$report->getOrder('champ')]
-                . ' ' . $report->getOrder('order');
+                .$this->cor_query[$report->getOrder('champ')]
+                .' '.$report->getOrder('order');
         }
 
         return;
@@ -218,7 +219,7 @@ class module_report_sqlfilter
         if ($p && $r) {
             $limit_inf = (int) ($p - 1) * $r;
             $limit_sup = (int) $r;
-            $this->filter['limit'] = " LIMIT " . $limit_inf . ', ' . $limit_sup;
+            $this->filter['limit'] = " LIMIT ".$limit_inf.', '.$limit_sup;
         }
 
         return;
@@ -243,8 +244,8 @@ class module_report_sqlfilter
             }
 
             return " ORDER BY "
-                . $customFieldMap[$this->cor_query[$this->report->getOrder('champ')]]
-                . ' ' . $this->report->getOrder('order');
+                .$customFieldMap[$this->cor_query[$this->report->getOrder('champ')]]
+                .' '.$this->report->getOrder('order');
         }
 
         return false;

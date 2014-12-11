@@ -26,7 +26,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class Feed implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -207,11 +206,8 @@ class Feed implements ControllerProviderInterface
 
             $feeds = \Feed_Collection::load($app, $app['authentication']->getUser());
 
-            $datas = $app['twig']->render('prod/feeds/feeds.html.twig'
-                , array(
-                'feeds' => $feeds
-                , 'feed'  => $feeds->get_aggregate()
-                , 'page'  => $page
+            $datas = $app['twig']->render('prod/feeds/feeds.html.twig', array(
+                'feeds' => $feeds, 'feed'  => $feeds->get_aggregate(), 'page'  => $page,
                 )
             );
 
@@ -238,10 +234,10 @@ class Feed implements ControllerProviderInterface
             $feeds = \Feed_Collection::load($app, $app['authentication']->getUser());
 
             $output = array(
-                'texte' => '<p>' . _('publication::Voici votre fil RSS personnel. Il vous permettra d\'etre tenu au courrant des publications.')
-                . '</p><p>' . _('publications::Ne le partagez pas, il est strictement confidentiel') . '</p>
-            <div><input type="text" readonly="readonly" class="input_select_copy" value="' . $feeds->get_aggregate()->get_user_link($app['phraseanet.registry'], $app['authentication']->getUser(), \Feed_Adapter::FORMAT_RSS, null, $renew)->get_href() . '"/></div>',
-                'titre' => _('publications::votre rss personnel')
+                'texte' => '<p>'._('publication::Voici votre fil RSS personnel. Il vous permettra d\'etre tenu au courrant des publications.')
+                .'</p><p>'._('publications::Ne le partagez pas, il est strictement confidentiel').'</p>
+            <div><input type="text" readonly="readonly" class="input_select_copy" value="'.$feeds->get_aggregate()->get_user_link($app['phraseanet.registry'], $app['authentication']->getUser(), \Feed_Adapter::FORMAT_RSS, null, $renew)->get_href().'"/></div>',
+                'titre' => _('publications::votre rss personnel'),
             );
 
             return $app->json($output);
@@ -252,10 +248,10 @@ class Feed implements ControllerProviderInterface
             $feed = \Feed_Adapter::load_with_user($app, $app['authentication']->getUser(), $id);
 
             $output = array(
-                'texte' => '<p>' . _('publication::Voici votre fil RSS personnel. Il vous permettra d\'etre tenu au courrant des publications.')
-                . '</p><p>' . _('publications::Ne le partagez pas, il est strictement confidentiel') . '</p>
-            <div><input type="text" style="width:100%" value="' . $feed->get_user_link($app['phraseanet.registry'], $app['authentication']->getUser(), \Feed_Adapter::FORMAT_RSS, null, $renew)->get_href() . '"/></div>',
-                'titre' => _('publications::votre rss personnel')
+                'texte' => '<p>'._('publication::Voici votre fil RSS personnel. Il vous permettra d\'etre tenu au courrant des publications.')
+                .'</p><p>'._('publications::Ne le partagez pas, il est strictement confidentiel').'</p>
+            <div><input type="text" style="width:100%" value="'.$feed->get_user_link($app['phraseanet.registry'], $app['authentication']->getUser(), \Feed_Adapter::FORMAT_RSS, null, $renew)->get_href().'"/></div>',
+                'titre' => _('publications::votre rss personnel'),
             );
 
             return $app->json($output);

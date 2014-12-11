@@ -20,21 +20,21 @@ abstract class task_databoxAbstract extends task_abstract
 
     abstract protected function retrieveSbasContent(databox $databox);
 
-    abstract protected function processOneContent(databox $databox, Array $row);
+    abstract protected function processOneContent(databox $databox, array $row);
 
     abstract protected function flushRecordsSbas();
 
-    abstract protected function postProcessOneContent(databox $databox, Array $row);
+    abstract protected function postProcessOneContent(databox $databox, array $row);
 
     protected function run2()
     {
-        $task_must_delete = FALSE; // if the task must be deleted (suicide) after run
-        $this->running = TRUE;
+        $task_must_delete = false; // if the task must be deleted (suicide) after run
+        $this->running = true;
         while ($this->running) {
             try {
                 $conn = connection::getPDOConnection($this->dependencyContainer);
             } catch (PDOException $e) {
-                $this->log($e->getMessage(), self::LOG_ERROR );
+                $this->log($e->getMessage(), self::LOG_ERROR);
                 if ($this->getRunner() == self::RUNNER_SCHEDULER) {
                     $this->log("appbox connection lost, restarting in 10 min.", self::LOG_ERROR);
 
@@ -49,7 +49,7 @@ abstract class task_databoxAbstract extends task_abstract
                     // runner = manual : can't restart so simply quit
                     $this->log("appbox connection lost, quit.", self::LOG_ERROR);
                 }
-                $this->running = FALSE;
+                $this->running = false;
 
                 return;
             }
@@ -71,7 +71,7 @@ abstract class task_databoxAbstract extends task_abstract
                 $duration = time();
             } catch (\Exception $e) {
                 // failed sql, simply return
-                $this->running = FALSE;
+                $this->running = false;
 
                 return;
             }
@@ -120,18 +120,18 @@ abstract class task_databoxAbstract extends task_abstract
                     case self::STATE_MAXRECSDONE:
                         if ($this->getRunner() == self::RUNNER_SCHEDULER) {
                             $this->setState(self::STATE_TORESTART);
-                            $this->running = FALSE;
+                            $this->running = false;
                         }
                         break;
 
                     case self::STATE_TOSTOP:
                         $this->setState(self::STATE_TOSTOP);
-                        $this->running = FALSE;
+                        $this->running = false;
                         break;
 
                     case self::STATE_TODELETE: // formal 'suicidable'
                         // DO NOT SUICIDE IN THE LOOP, may have to work on other sbas !!!
-                        $task_must_delete = TRUE;
+                        $task_must_delete = true;
                         break;
                 }
 

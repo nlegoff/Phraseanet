@@ -48,7 +48,6 @@ abstract class AbstractDelivery implements ControllerProviderInterface
                     $this->logView($app, $record, $request);
                 }
             } catch (\Exception $e) {
-
             }
         }
 
@@ -64,7 +63,6 @@ abstract class AbstractDelivery implements ControllerProviderInterface
             $log_id = $logger->get_id();
             $record->log_view($log_id, $request->headers->get('referer', 'NO REFERRER'), $app['phraseanet.configuration']['main']['key']);
         } catch (\Exception $e) {
-
         }
     }
 }

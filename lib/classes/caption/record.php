@@ -67,13 +67,13 @@ class caption_record implements caption_interface, cache_cacheableInterface
     {
         switch ($format) {
             case self::SERIALIZE_XML:
-                return $this->serializeXML( ! ! $includeBusinessFields);
+                return $this->serializeXML(! ! $includeBusinessFields);
                 break;
             case self::SERIALIZE_YAML:
-                return $this->serializeYAML( ! ! $includeBusinessFields);
+                return $this->serializeYAML(! ! $includeBusinessFields);
                 break;
             case self::SERIALIZE_JSON:
-                return $this->serializeJSON( ! ! $includeBusinessFields);
+                return $this->serializeJSON(! ! $includeBusinessFields);
                 break;
             default:
                 throw new \Exception(sprintf('Unknown format %s', $format));
@@ -232,7 +232,7 @@ class caption_record implements caption_interface, cache_cacheableInterface
      *
      * @return array
      */
-    public function get_fields(Array $grep_fields = null, $IncludeBusiness = false)
+    public function get_fields(array $grep_fields = null, $IncludeBusiness = false)
     {
         $fields = array();
 
@@ -294,7 +294,7 @@ class caption_record implements caption_interface, cache_cacheableInterface
             }
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -306,7 +306,7 @@ class caption_record implements caption_interface, cache_cacheableInterface
      *
      * @return array
      */
-    public function get_highlight_fields($highlight = '', Array $grep_fields = null, SearchEngineInterface $searchEngine = null, $includeBusiness = false)
+    public function get_highlight_fields($highlight = '', array $grep_fields = null, SearchEngineInterface $searchEngine = null, $includeBusiness = false)
     {
         $fields = array();
 
@@ -324,7 +324,7 @@ class caption_record implements caption_interface, cache_cacheableInterface
                 'name'      => $field->get_name(),
                 'label'     => $field->get_databox_field()->get_label($this->app['locale.I18n']),
                 'separator' => $field->get_databox_field()->get_separator(),
-                'sbas_id'   => $field->get_databox_field()->get_databox()->get_sbas_id()
+                'sbas_id'   => $field->get_databox_field()->get_databox()->get_sbas_id(),
             );
         }
 
@@ -357,7 +357,7 @@ class caption_record implements caption_interface, cache_cacheableInterface
      */
     public function get_cache_key($option = null)
     {
-        return 'caption_' . $this->record->get_serialize_key() . ($option ? '_' . $option : '');
+        return 'caption_'.$this->record->get_serialize_key().($option ? '_'.$option : '');
     }
 
     /**

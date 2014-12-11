@@ -62,7 +62,7 @@ abstract class media_abstract
      */
     public function get_random()
     {
-        return md5(time() . mt_rand(100000, 999999));
+        return md5(time().mt_rand(100000, 999999));
     }
 
     /**

@@ -22,5 +22,4 @@ use Alchemy\Phrasea\Helper\Record\Helper as RecordHelper;
 class Bridge extends RecordHelper
 {
     protected $flatten_groupings = true;
-
 }

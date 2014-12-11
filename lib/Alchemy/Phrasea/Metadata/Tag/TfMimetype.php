@@ -16,5 +16,4 @@ class TfMimetype extends AbstractTag
     protected $Type = '';
     protected $Writable = false;
     protected $Description = 'The mime type of the archived file';
-
 }

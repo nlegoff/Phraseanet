@@ -41,7 +41,7 @@ class StaticFileFactory
 
         $this->mapping = array(
             'mount-point' => $symlinker->getDefaultAlias(),
-            'directory' => $symlinker->getSymlinkDir()
+            'directory' => $symlinker->getSymlinkDir(),
         );
     }
 
@@ -49,7 +49,7 @@ class StaticFileFactory
      * Creates a new instance of StaticFileFactory Factory according to the application
      * configuration.
      *
-     * @param  Application $app
+     * @param  Application       $app
      * @return StaticFileFactory
      */
     public static function create(Application $app)

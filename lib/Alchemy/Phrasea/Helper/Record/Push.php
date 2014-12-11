@@ -26,5 +26,4 @@ class Push extends RecordHelper
 {
     protected $flatten_groupings = true;
     protected $required_rights = array('canpush');
-
 }

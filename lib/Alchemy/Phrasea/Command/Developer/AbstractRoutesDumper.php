@@ -44,7 +44,7 @@ abstract class AbstractRoutesDumper extends Command
                 'name' => $name,
                 'methods' => $methods ?: 'ALL',
                 'pattern' => $pattern,
-                'warning' => $warning
+                'warning' => $warning,
             );
         }
 

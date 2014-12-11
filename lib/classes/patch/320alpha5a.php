@@ -55,7 +55,6 @@ class patch_320alpha5a implements patchInterface
 
     public function apply(base $appbox, Application $app)
     {
-
         $sql = 'SELECT base_id, usr_id FROM order_masters';
         $stmt = $appbox->get_connection()->prepare($sql);
         $stmt->execute();
@@ -69,7 +68,7 @@ class patch_320alpha5a implements patchInterface
         foreach ($rs as $row) {
             $params = array(
                 ':base_id' => $row['base_id'],
-                ':usr_id'  => $row['usr_id']
+                ':usr_id'  => $row['usr_id'],
             );
             $stmt->execute($params);
         }

@@ -37,7 +37,7 @@ class NativeAuthentication implements PasswordAuthenticationInterface
     public function getUsrId($username, $password, Request $request)
     {
         if (in_array($username, array('invite', 'autoregister'))) {
-            return null;
+            return;
         }
 
         $sql = 'SELECT nonce, salted_password, mail_locked, usr_id, usr_login, usr_password
@@ -53,7 +53,7 @@ class NativeAuthentication implements PasswordAuthenticationInterface
         $stmt->closeCursor();
 
         if (!$row) {
-            return null;
+            return;
         }
 
         // check locked account
@@ -64,7 +64,6 @@ class NativeAuthentication implements PasswordAuthenticationInterface
         if ('0' == $row['salted_password']) {
             // we need a quick update and continue
             if ($this->oldEncoder->isPasswordValid($row['usr_password'], $password, $row['nonce'])) {
-
                 $row['nonce'] = \random::generatePassword(8, \random::LETTERS_AND_NUMBERS);
                 $row['usr_password'] = $this->encoder->encodePassword($password, $row['nonce']);
 
@@ -75,14 +74,14 @@ class NativeAuthentication implements PasswordAuthenticationInterface
                     ':password' => $row['usr_password'],
                     ':nonce' => $row['nonce'],
                     ':usr_id' => $row['usr_id'],
-                    ':salted_password' => 1
+                    ':salted_password' => 1,
                 ));
                 $stmt->closeCursor();
             }
         }
 
         if (!$this->encoder->isPasswordValid($row['usr_password'], $password, $row['nonce'])) {
-            return null;
+            return;
         }
 
         return $row['usr_id'];

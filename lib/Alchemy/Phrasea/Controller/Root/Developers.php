@@ -25,7 +25,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class Developers implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -345,16 +344,16 @@ class Developers implements ControllerProviderInterface
             $application = \API_OAuth2_Application::create($app, $app['authentication']->getUser(), $form->getName());
             $application
                 ->set_description($form->getDescription())
-                ->set_redirect_uri($form->getSchemeCallback() . $form->getCallback())
+                ->set_redirect_uri($form->getSchemeCallback().$form->getCallback())
                 ->set_type($form->getType())
-                ->set_website($form->getSchemeWebsite() . $form->getWebsite());
+                ->set_website($form->getSchemeWebsite().$form->getWebsite());
 
             return $app->redirectPath('developers_application', array('id' => $application->get_id()));
         }
 
         $var = array(
             "violations" => $violations,
-            "form"       => $form
+            "form"       => $form,
         );
 
         return $app['twig']->render('/developers/application_form.html.twig', $var);
@@ -370,7 +369,7 @@ class Developers implements ControllerProviderInterface
     public function listApps(Application $app, Request $request)
     {
         return $app['twig']->render('developers/applications.html.twig', array(
-            "applications" => \API_OAuth2_Application::load_dev_app_by_user($app, $app['authentication']->getUser())
+            "applications" => \API_OAuth2_Application::load_dev_app_by_user($app, $app['authentication']->getUser()),
         ));
     }
 
@@ -386,7 +385,7 @@ class Developers implements ControllerProviderInterface
         return $app['twig']->render('developers/application_form.html.twig', array(
             "violations" => null,
             'form'       => null,
-            'request'    => $request
+            'request'    => $request,
         ));
     }
 
@@ -411,7 +410,7 @@ class Developers implements ControllerProviderInterface
         return $app['twig']->render('developers/application.html.twig', array(
             "application" => $client,
             "user"        => $app['authentication']->getUser(),
-            "token"       => $token
+            "token"       => $token,
         ));
     }
 

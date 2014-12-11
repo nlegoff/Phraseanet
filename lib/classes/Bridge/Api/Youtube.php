@@ -231,7 +231,7 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
                 break;
 
             default:
-                throw new Bridge_Exception_ElementUnknown('Unknown element ' . $object);
+                throw new Bridge_Exception_ElementUnknown('Unknown element '.$object);
                 break;
         }
     }
@@ -263,7 +263,7 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
                 foreach ($playlist_feed as $entry) {
                     $playlist_video_feed = $this->_api->getPlaylistVideoFeed($entry->getPlaylistVideoFeedUrl());
                     $thumbnail = null;
-                    if ( ! is_null($playlist_video_feed)) {
+                    if (! is_null($playlist_video_feed)) {
                         foreach ($playlist_video_feed as $entry2) {
                             $playlist_thumbnails = $entry2->getVideoThumbnails();
                             foreach ($playlist_thumbnails as $playlist_thumbnail) {
@@ -283,7 +283,7 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
                 break;
 
             default:
-                throw new Bridge_Exception_ElementUnknown('Unknown element ' . $object);
+                throw new Bridge_Exception_ElementUnknown('Unknown element '.$object);
                 break;
         }
     }
@@ -295,22 +295,25 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
      * @param  array              $datas
      * @return Bridge_Api_Youtube
      */
-    public function update_element($object, $object_id, Array $datas)
+    public function update_element($object, $object_id, array $datas)
     {
         $required_fields = array("description", "category", "tags", "title", "privacy");
         foreach ($required_fields as $field) {
-            if ( ! array_key_exists($field, $datas))
-                throw new Bridge_Exception_ActionMandatoryField("Le paramétre " . $field . " est manquant");
+            if (! array_key_exists($field, $datas)) {
+                throw new Bridge_Exception_ActionMandatoryField("Le paramétre ".$field." est manquant");
+            }
         }
 
-        if ( ! $this->is_valid_object_id($object_id))
+        if (! $this->is_valid_object_id($object_id)) {
             throw new Bridge_Exception_ActionInvalidObjectId($object_id);
+        }
 
         switch ($object) {
             case "video" :
                 $videoEntry = $this->_api->getFullVideoEntry($object_id);
-                if ($videoEntry->getEditLink() === null)
+                if ($videoEntry->getEditLink() === null) {
                     throw new Bridge_Exception_ActionForbidden("You cannot edit this video object");
+                }
 
                 $videoEntry->setVideoDescription(trim($datas['description']));
                 $videoEntry->setVideoCategory(trim($datas['category']));
@@ -327,7 +330,7 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
                 break;
 
             default:
-                throw new Bridge_Exception_ElementUnknown('Unknown element ' . $object);
+                throw new Bridge_Exception_ElementUnknown('Unknown element '.$object);
                 break;
         }
 
@@ -348,8 +351,9 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
                 $container_title = $request->get('f_container_title');
 
                 $new_playlist = $this->_api->newPlaylistListEntry();
-                if (trim($container_desc) !== '')
+                if (trim($container_desc) !== '') {
                     $new_playlist->description = $this->_api->newDescription()->setText($container_desc);
+                }
                 $new_playlist->title = $this->_api->newTitle()->setText($container_title);
 
                 $post_location = 'http://gdata.youtube.com/feeds/api/users/default/playlists';
@@ -359,7 +363,7 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
 
                 break;
             default:
-                throw new Bridge_Exception_ElementUnknown('Unknown element ' . $container_type);
+                throw new Bridge_Exception_ElementUnknown('Unknown element '.$container_type);
                 break;
         }
     }
@@ -389,12 +393,12 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
                         return new Bridge_Api_Youtube_Container($playlistEntry, $destination, null);
                         break;
                     default:
-                        throw new Bridge_Exception_ContainerUnknown('Unknown element ' . $destination);
+                        throw new Bridge_Exception_ContainerUnknown('Unknown element '.$destination);
                         break;
                 }
                 break;
             default:
-                throw new Bridge_Exception_ElementUnknown('Unknown container ' . $element_type);
+                throw new Bridge_Exception_ElementUnknown('Unknown container '.$element_type);
                 break;
         }
     }
@@ -415,7 +419,7 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
                 $this->get_PlaylistEntry_from_Id($object_id)->delete();
                 break;
             default:
-                throw new Bridge_Exception_ObjectUnknown('Unknown object ' . $object);
+                throw new Bridge_Exception_ObjectUnknown('Unknown object '.$object);
                 break;
         }
 
@@ -444,10 +448,11 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
         $this->_api->setMajorProtocolVersion(1);
         $state = $this->_api->getFullVideoEntry($element->get_dist_id())->getVideoState();
 
-        if (is_null($state))
+        if (is_null($state)) {
             $result = Bridge_Element::STATUS_DONE;
-        else
+        } else {
             $result = $state->getName();
+        }
 
         $this->_api->setMajorProtocolVersion(2);
 
@@ -481,7 +486,7 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
                 return Bridge_Element::STATUS_ERROR;
                 break;
             default:
-                return null;
+                return;
                 break;
         }
     }
@@ -608,7 +613,7 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
                         break;
                 }
 
-                $message .= '<br/>' . $reason . '<br/>Youtube said : ' . $error['message'];
+                $message .= '<br/>'.$reason.'<br/>Youtube said : '.$error['message'];
             }
 
             if ($error == false && $response->getStatus() == 404) {
@@ -674,10 +679,11 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
                 $video_entry->SetVideoTags(explode(' ', $options['tags']));
                 $video_entry->setVideoDeveloperTags(array('phraseanet'));
 
-                if ($options['privacy'] == "public")
+                if ($options['privacy'] == "public") {
                     $video_entry->setVideoPublic();
-                else
+                } else {
                     $video_entry->setVideoPrivate();
+                }
 
                 $app_entry = $this->_api->insertEntry($video_entry, self::UPLOAD_URL, 'Zend_Gdata_YouTube_VideoEntry');
 
@@ -710,7 +716,7 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
                 return new Bridge_Api_Youtube_Element($this->_api->getVideoEntry($element_id), $object);
                 break;
             default:
-                throw new Bridge_Exception_ElementUnknown('Unknown element ' . $object);
+                throw new Bridge_Exception_ElementUnknown('Unknown element '.$object);
                 break;
         }
     }
@@ -752,7 +758,7 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
                 return new Bridge_Api_Youtube_Container($this->get_PlaylistEntry_from_Id($element_id), $object, null);
                 break;
             default:
-                throw new Bridge_Exception_ElementUnknown('Unknown element ' . $object);
+                throw new Bridge_Exception_ElementUnknown('Unknown element '.$object);
                 break;
         }
     }
@@ -769,23 +775,25 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
         $feed = null;
         switch ($object) {
             case self::ELEMENT_TYPE_VIDEO:
-                $uri = Zend_Gdata_YouTube::USER_URI . '/default/' . Zend_Gdata_YouTube::UPLOADS_URI_SUFFIX;
+                $uri = Zend_Gdata_YouTube::USER_URI.'/default/'.Zend_Gdata_YouTube::UPLOADS_URI_SUFFIX;
                 $query = new Zend_Gdata_Query($uri);
-                if ($quantity !== 0)
+                if ($quantity !== 0) {
                     $query->setMaxResults($quantity);
+                }
                 $query->setStartIndex($offset_start);
                 $feed = $this->_api->getUserUploads(null, $query);
                 break;
             case self::CONTAINER_TYPE_PLAYLIST:
-                $uri = Zend_Gdata_YouTube::USER_URI . '/default/playlists';
+                $uri = Zend_Gdata_YouTube::USER_URI.'/default/playlists';
                 $query = new Zend_Gdata_Query($uri);
-                if ($quantity !== 0)
+                if ($quantity !== 0) {
                     $query->setMaxResults($quantity);
+                }
                 $query->setStartIndex($offset_start);
                 $feed = $this->_api->getPlaylistListFeed(null, $query);
                 break;
             default:
-                throw new Bridge_Exception_ObjectUnknown('Unknown object ' . $object);
+                throw new Bridge_Exception_ObjectUnknown('Unknown object '.$object);
                 break;
         }
 
@@ -794,7 +802,7 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
 
     public function is_configured()
     {
-        if ( ! $this->registry->get('GV_youtube_api')) {
+        if (! $this->registry->get('GV_youtube_api')) {
             return false;
         }
 
@@ -817,13 +825,7 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
     {
         $this->_auth->set_parameters(
             array(
-                'client_id'      => $this->registry->get('GV_youtube_client_id')
-                , 'client_secret'  => $this->registry->get('GV_youtube_client_secret')
-                , 'redirect_uri'   => Bridge_Api::generate_callback_url($this->generator, $this->get_name())
-                , 'scope'          => 'http://gdata.youtube.com'
-                , 'response_type'  => 'code'
-                , 'token_endpoint' => self::OAUTH2_TOKEN_ENDPOINT
-                , 'auth_endpoint'  => self::OAUTH2_AUTHORIZE_ENDPOINT
+                'client_id'      => $this->registry->get('GV_youtube_client_id'), 'client_secret'  => $this->registry->get('GV_youtube_client_secret'), 'redirect_uri'   => Bridge_Api::generate_callback_url($this->generator, $this->get_name()), 'scope'          => 'http://gdata.youtube.com', 'response_type'  => 'code', 'token_endpoint' => self::OAUTH2_TOKEN_ENDPOINT, 'auth_endpoint'  => self::OAUTH2_AUTHORIZE_ENDPOINT,
             )
         );
 
@@ -876,7 +878,7 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
             }
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -888,9 +890,9 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
         $youtube_available_locale = array(
             'zh-CN', 'zh-TW', 'cs-CZ', 'nl-NL', 'en-GB', 'en-US', 'fr-FR', 'de-DE',
             'it-IT', 'ja-JP', 'ko-KR', 'pl-PL', 'pt-PT', 'ru-RU', 'es-ES', 'es-MX',
-            'sv-SE'
+            'sv-SE',
         );
-        if ( ! is_null($this->locale)) {
+        if (! is_null($this->locale)) {
             $youtube_format_locale = str_replace('_', '-', $this->locale);
             if (in_array(trim($youtube_format_locale), $youtube_available_locale)) {
                 return $this->locale;
@@ -908,7 +910,7 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
      *
      * @return array
      */
-    public function check_upload_constraints(Array $datas, record_adapter $record)
+    public function check_upload_constraints(array $datas, record_adapter $record)
     {
         $errors = $this->check_record_constraints($record);
 
@@ -919,15 +921,18 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
                 $required = ! ! $field['required'];
                 $empty = ! ! $field['empty'];
 
-                if ( ! isset($datas[$name])) {
-                    if ($required)
-                        $errors[$name . '_' . $key] = _("Ce champ est obligatoire");
+                if (! isset($datas[$name])) {
+                    if ($required) {
+                        $errors[$name.'_'.$key] = _("Ce champ est obligatoire");
+                    }
                 } elseif (trim($datas[$name]) === '') {
-                    if ( ! $empty)
-                        $errors[$name . '_' . $key] = _("Ce champ est obligatoire");
+                    if (! $empty) {
+                        $errors[$name.'_'.$key] = _("Ce champ est obligatoire");
+                    }
                 } elseif ($length !== 0) {
-                    if (mb_strlen($datas[$name]) > $length)
-                        $errors[$name . '_' . $key] = sprintf(_("Ce champ est trop long %s caracteres max"), $length);
+                    if (mb_strlen($datas[$name]) > $length) {
+                        $errors[$name.'_'.$key] = sprintf(_("Ce champ est trop long %s caracteres max"), $length);
+                    }
                 }
             };
 
@@ -936,7 +941,7 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
         return $errors;
     }
 
-    public function check_update_constraints(Array $datas)
+    public function check_update_constraints(array $datas)
     {
         $errors = array();
         $check = function ($field) use (&$errors, $datas) {
@@ -945,15 +950,18 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
                 $required = ! ! $field['required'];
                 $empty = ! ! $field['empty'];
 
-                if ( ! isset($datas[$name])) {
-                    if ($required)
+                if (! isset($datas[$name])) {
+                    if ($required) {
                         $errors[$name] = _("Ce champ est obligatoire");
+                    }
                 } elseif (trim($datas[$name]) === '') {
-                    if ( ! $empty)
+                    if (! $empty) {
                         $errors[$name] = _("Ce champ est obligatoire");
+                    }
                 } elseif ($length !== 0) {
-                    if (mb_strlen($datas[$name]) > $length)
+                    if (mb_strlen($datas[$name]) > $length) {
                         $errors[$name] = sprintf(_("Ce champ est trop long %s caracteres max"), $length);
+                    }
                 }
             };
 
@@ -994,11 +1002,11 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
     {
         $key = $record->get_serialize_key();
         $datas = array(
-            'title'       => $request->get('title_' . $key),
-            'description' => $request->get('description_' . $key),
-            'category'    => $request->get('category_' . $key),
-            'tags'        => $request->get('tags_' . $key),
-            'privacy'     => $request->get('privacy_' . $key),
+            'title'       => $request->get('title_'.$key),
+            'description' => $request->get('description_'.$key),
+            'category'    => $request->get('category_'.$key),
+            'tags'        => $request->get('tags_'.$key),
+            'privacy'     => $request->get('privacy_'.$key),
         );
 
         return $datas;
@@ -1024,14 +1032,17 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
     {
         $errors = array();
         $key = $record->get_serialize_key();
-        if ( ! $record->get_hd_file() instanceof SplFileInfo)
-            $errors["file_size_" . $key] = _("Le record n'a pas de fichier physique"); //Record must rely on real file
+        if (! $record->get_hd_file() instanceof SplFileInfo) {
+            $errors["file_size_".$key] = _("Le record n'a pas de fichier physique");
+        } //Record must rely on real file
 
-        if ($record->get_duration() > self::AUTH_VIDEO_DURATION)
-            $errors["duration_" . $key] = sprintf(_("La taille maximale d'une video est de %d minutes."), self::AUTH_VIDEO_DURATION / 60);
+        if ($record->get_duration() > self::AUTH_VIDEO_DURATION) {
+            $errors["duration_".$key] = sprintf(_("La taille maximale d'une video est de %d minutes."), self::AUTH_VIDEO_DURATION / 60);
+        }
 
-        if ($record->get_technical_infos('size') > self::AUTH_VIDEO_SIZE)
-            $errors["size_" . $key] = sprintf(_("Le poids maximum d'un fichier est de %s"), p4string::format_octets(self::AUTH_VIDEO_SIZE));
+        if ($record->get_technical_infos('size') > self::AUTH_VIDEO_SIZE) {
+            $errors["size_".$key] = sprintf(_("Le poids maximum d'un fichier est de %s"), p4string::format_octets(self::AUTH_VIDEO_SIZE));
+        }
 
         return $errors;
     }
@@ -1047,33 +1058,33 @@ class Bridge_Api_Youtube extends Bridge_Api_Abstract implements Bridge_Api_Inter
                 'name'     => 'title',
                 'length'   => '100',
                 'required' => true,
-                'empty'    => false
+                'empty'    => false,
             )
             , array(
                 'name'     => 'description',
                 'length'   => '2000',
                 'required' => true,
-                'empty'    => true
+                'empty'    => true,
             )
             , array(
                 'name'       => 'tags',
                 'length'     => '500',
                 'tag_length' => '30',
                 'required'   => true,
-                'empty'      => true
+                'empty'      => true,
             )
             , array(
                 'name'     => 'privacy',
                 'length'   => '0',
                 'required' => true,
-                'empty'    => false
+                'empty'    => false,
             )
             , array(
                 'name'     => 'category',
                 'length'   => '0',
                 'required' => true,
-                'empty'    => false
-            )
+                'empty'    => false,
+            ),
         );
     }
 }

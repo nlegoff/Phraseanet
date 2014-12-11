@@ -45,7 +45,7 @@ class eventsmanager_notify_ordernotdelivered extends eventsmanager_notifyAbstrac
         $default = array(
             'from' => ''
             , 'to'   => ''
-            , 'n'    => ''
+            , 'n'    => '',
         );
 
         $params = array_merge($default, $params);
@@ -76,7 +76,6 @@ class eventsmanager_notify_ordernotdelivered extends eventsmanager_notifyAbstrac
         $mailed = false;
 
         if ($this->shouldSendNotificationFor($params['to'])) {
-
             $readyToSend = false;
 
             try {
@@ -88,7 +87,6 @@ class eventsmanager_notify_ordernotdelivered extends eventsmanager_notifyAbstrac
 
                 $readyToSend = true;
             } catch (\Exception $e) {
-
             }
 
             if ($readyToSend) {
@@ -124,7 +122,7 @@ class eventsmanager_notify_ordernotdelivered extends eventsmanager_notifyAbstrac
             'text'  => sprintf(
                 _('%1$s a refuse la livraison de %2$d document(s) pour votre commande'), $sender, $n
             )
-            , 'class' => ''
+            , 'class' => '',
         );
 
         return $ret;

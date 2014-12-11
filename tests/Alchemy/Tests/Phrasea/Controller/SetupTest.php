@@ -197,7 +197,6 @@ class SetupTest extends \Silex\WebTestCase
         $this->assertEquals('application/json', $response->headers->get('content-type'));
     }
 
-
     public function testRouteMysql()
     {
         $this->app['phraseanet.configuration-tester']->expects($this->any())
@@ -216,7 +215,7 @@ class SetupTest extends \Silex\WebTestCase
             "password" => $connexion['password'],
             "dbname"   => $connexion['dbname'],
         );
-        
+
         $client = $this->createClient();
         $client->request("GET", "/setup/connection_test/mysql/", $params);
         $response = $client->getResponse();

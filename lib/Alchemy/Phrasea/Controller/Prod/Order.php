@@ -27,7 +27,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Order implements ControllerProviderInterface
 {
-
     /**
      * {@inheritDoc}
      */
@@ -192,7 +191,7 @@ class Order implements ControllerProviderInterface
 
             if (count($records) > 0) {
                 $success = (Boolean) \set_order::create(
-                    $app, $records, $app['authentication']->getUser(), $request->request->get('use', ''), ( (null !== $deadLine = $request->request->get('deadline')) ? new \DateTime($deadLine) : $deadLine)
+                    $app, $records, $app['authentication']->getUser(), $request->request->get('use', ''), ((null !== $deadLine = $request->request->get('deadline')) ? new \DateTime($deadLine) : $deadLine)
                 );
 
                 if ($success) {
@@ -216,7 +215,7 @@ class Order implements ControllerProviderInterface
 
         return $app->redirectPath('prod_orders', array(
             'success' => (int) $success,
-            'action'  => 'send'
+            'action'  => 'send',
         ));
     }
 
@@ -246,7 +245,7 @@ class Order implements ControllerProviderInterface
             'total'        => $total,
             'previousPage' => $page < 2 ? false : ($page - 1),
             'nextPage'     => $page >= ceil($total / $perPage) ? false : $page + 1,
-            'orders'       => new ArrayCollection($ordersList)
+            'orders'       => new ArrayCollection($ordersList),
         ));
     }
 
@@ -263,7 +262,7 @@ class Order implements ControllerProviderInterface
         $order = new \set_order($app, $order_id);
 
         return $app['twig']->render('prod/orders/order_item.html.twig', array(
-            'order' => $order
+            'order' => $order,
         ));
     }
 
@@ -285,20 +284,19 @@ class Order implements ControllerProviderInterface
             $order->send_elements($app, $request->request->get('elements', array()), !!$request->request->get('force', false));
             $success = true;
         } catch (\Exception $e) {
-
         }
 
         if ('json' === $app['request']->getRequestFormat()) {
             return $app->json(array(
                 'success'  => $success,
                 'msg'      => $success ? _('Order has been sent') : _('An error occured while sending, please retry  or contact an admin if problem persists'),
-                'order_id' => $order_id
+                'order_id' => $order_id,
             ));
         }
 
         return $app->redirectPath('prod_orders', array(
             'success' => (int) $success,
-            'action'  => 'send'
+            'action'  => 'send',
         ));
     }
 
@@ -320,20 +318,19 @@ class Order implements ControllerProviderInterface
             $order->deny_elements($request->request->get('elements', array()));
             $success = true;
         } catch (\Exception $e) {
-
         }
 
         if ('json' === $app['request']->getRequestFormat()) {
             return $app->json(array(
                 'success'  => $success,
                 'msg'      => $success ? _('Order has been denied') : _('An error occured while denying, please retry  or contact an admin if problem persists'),
-                'order_id' => $order_id
+                'order_id' => $order_id,
             ));
         }
 
         return $app->redirectPath('prod_orders', array(
             'success' => (int) $success,
-            'action'  => 'send'
+            'action'  => 'send',
         ));
     }
 

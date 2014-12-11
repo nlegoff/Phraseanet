@@ -65,7 +65,6 @@ class AuthenticationManagerServiceProvider implements ServiceProviderInterface
                         }
                     }
                 } catch (\Exception $e) {
-
                 }
             }, $authConf['auto-create']['templates']));
 

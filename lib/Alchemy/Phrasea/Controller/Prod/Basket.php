@@ -28,7 +28,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class Basket implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -154,7 +153,7 @@ class Basket implements ControllerProviderInterface
 
         $params = array(
             'basket' => $basket,
-            'ordre'  => $request->query->get('order')
+            'ordre'  => $request->query->get('order'),
         );
 
         return $app['twig']->render('prod/WorkZone/Basket.html.twig', $params);
@@ -200,8 +199,8 @@ class Basket implements ControllerProviderInterface
                 'success' => true
                 , 'message' => _('Basket created')
                 , 'basket'  => array(
-                    'id' => $Basket->getId()
-                )
+                    'id' => $Basket->getId(),
+                ),
             );
 
             return $app->json($data);
@@ -220,7 +219,7 @@ class Basket implements ControllerProviderInterface
 
         $data = array(
             'success' => true
-            , 'message' => _('Basket has been deleted')
+            , 'message' => _('Basket has been deleted'),
         );
 
         if ($request->getRequestFormat() == 'json') {
@@ -254,7 +253,7 @@ class Basket implements ControllerProviderInterface
 
         $data = array(
             'success' => true
-            , 'message' => _('Record removed from basket')
+            , 'message' => _('Record removed from basket'),
         );
 
         if ($request->getRequestFormat() == 'json') {
@@ -291,7 +290,7 @@ class Basket implements ControllerProviderInterface
         $data = array(
             'success' => $success
             , 'message' => $msg
-            , 'basket'  => array('id' => $basket_id)
+            , 'basket'  => array('id' => $basket_id),
         );
 
         if ($request->getRequestFormat() == 'json') {
@@ -340,7 +339,6 @@ class Basket implements ControllerProviderInterface
             $app['EM']->flush();
             $ret = array('success' => true, 'message' => _('Basket updated'));
         } catch (\Exception $e) {
-
         }
 
         return $app->json($ret);
@@ -367,7 +365,7 @@ class Basket implements ControllerProviderInterface
         $data = array(
             'success' => true
             , 'archive' => $archive_status
-            , 'message' => $message
+            , 'message' => $message,
         );
 
         if ($request->getRequestFormat() == 'json') {
@@ -387,8 +385,9 @@ class Basket implements ControllerProviderInterface
         $records = RecordsRequest::fromRequest($app, $request, true);
 
         foreach ($records as $record) {
-            if ($basket->hasRecord($app, $record))
+            if ($basket->hasRecord($app, $record)) {
                 continue;
+            }
 
             $basket_element = new BasketElement();
             $basket_element->setRecord($record);
@@ -399,7 +398,6 @@ class Basket implements ControllerProviderInterface
             $basket->addElement($basket_element);
 
             if (null !== $validationSession = $basket->getValidation()) {
-
                 $participants = $validationSession->getParticipants();
 
                 foreach ($participants as $participant) {
@@ -418,7 +416,7 @@ class Basket implements ControllerProviderInterface
 
         $data = array(
             'success' => true
-            , 'message' => sprintf(_('%d records added'), $n)
+            , 'message' => sprintf(_('%d records added'), $n),
         );
 
         if ($request->getRequestFormat() == 'json') {
@@ -452,7 +450,7 @@ class Basket implements ControllerProviderInterface
 
         $data = array(
             'success' => true
-            , 'message' => sprintf(_('%d records moved'), $n)
+            , 'message' => sprintf(_('%d records moved'), $n),
         );
 
         if ($request->getRequestFormat() == 'json') {

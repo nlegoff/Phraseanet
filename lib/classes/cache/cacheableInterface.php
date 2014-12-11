@@ -17,7 +17,6 @@
  */
 interface cache_cacheableInterface
 {
-
     public function get_cache_key($option = null);
 
     public function get_data_from_cache($option = null);

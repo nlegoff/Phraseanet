@@ -82,8 +82,8 @@ class ListPlugin extends AbstractPluginCommand
         }
 
         return array(
-            '<error>' . $plugin->getName() . '</error>',
-            '<error>Error : ' . $plugin->getError()->getMessage() . '</error>',
+            '<error>'.$plugin->getName().'</error>',
+            '<error>Error : '.$plugin->getError()->getMessage().'</error>',
             '',
         );
     }

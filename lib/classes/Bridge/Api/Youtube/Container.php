@@ -128,6 +128,6 @@ class Bridge_Api_Youtube_Container implements Bridge_Api_ContainerInterface
 
     public function is_private()
     {
-        return null;
+        return;
     }
 }

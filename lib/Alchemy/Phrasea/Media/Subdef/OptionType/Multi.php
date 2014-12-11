@@ -24,7 +24,7 @@ class Multi implements OptionType
     protected $defaultValue;
     protected $available;
 
-    public function __construct($displayName, $name, Array $available, $defaultValue = null)
+    public function __construct($displayName, $name, array $available, $defaultValue = null)
     {
         $this->displayName = $displayName;
         $this->name = $name;
@@ -50,13 +50,10 @@ class Multi implements OptionType
         }
 
         foreach ((array) $value as $v) {
-            if ( ! array_key_exists($v, $this->available)) {
+            if (! array_key_exists($v, $this->available)) {
                 throw new \Exception_InvalidArgument(
                     sprintf(
-                        'The value provided `%s` for %s does not fit in range ; available are %s'
-                        , $value
-                        , $this->getName()
-                        , implode(', ', $this->getAvailableValues())
+                        'The value provided `%s` for %s does not fit in range ; available are %s', $value, $this->getName(), implode(', ', $this->getAvailableValues())
                     )
                 );
             }

@@ -29,28 +29,28 @@ class Compiler
      */
     public function compile(array $data)
     {
-        return '<?php' . $this->addLine() . 'return ' . $this->doCompile($data) . ';' . $this->addLine();
+        return '<?php'.$this->addLine().'return '.$this->doCompile($data).';'.$this->addLine();
     }
 
     private function doCompile(array $data, $offset = 0)
     {
-        $out = 'array(' . $this->addLine();
+        $out = 'array('.$this->addLine();
 
         foreach ($data as $key => $value) {
             if (is_object($value)) {
                 $value = get_object_vars($value);
             }
 
-            $assoc = $this->addIndentation($offset + 1) . (is_int($key) ? '' : $this->quote($key) . ' => ');
+            $assoc = $this->addIndentation($offset + 1).(is_int($key) ? '' : $this->quote($key).' => ');
 
             if (is_array($value)) {
-                $out .= $assoc . $this->doCompile($value, $offset + 1) . ',' . $this->addLine();
+                $out .= $assoc.$this->doCompile($value, $offset + 1).','.$this->addLine();
             } else {
-                $out .= $assoc . $this->quoteValue($value) . ',' . $this->addLine();
+                $out .= $assoc.$this->quoteValue($value).','.$this->addLine();
             }
         }
 
-        $out .= $this->addIndentation($offset) . ')';
+        $out .= $this->addIndentation($offset).')';
 
         return $out;
     }

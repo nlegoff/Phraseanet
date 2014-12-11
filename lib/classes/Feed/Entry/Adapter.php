@@ -131,7 +131,6 @@ class Feed_Entry_Adapter implements Feed_Entry_Interface, cache_cacheableInterfa
 
             return $this;
         } catch (\Exception $e) {
-
         }
 
         $sql = 'SELECT publisher, title, description, created_on, updated_on
@@ -144,8 +143,9 @@ class Feed_Entry_Adapter implements Feed_Entry_Interface, cache_cacheableInterfa
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new Exception_Feed_EntryNotFound();
+        }
 
         $this->title = $row['title'];
         $this->subtitle = $row['description'];
@@ -162,7 +162,7 @@ class Feed_Entry_Adapter implements Feed_Entry_Interface, cache_cacheableInterfa
             , 'author_email' => $this->author_email
             , 'publisher_id' => $this->publisher_id
             , 'updated_on'   => $this->updated_on
-            , 'created_on'   => $this->created_on
+            , 'created_on'   => $this->created_on,
         );
 
         $this->set_data_to_cache($datas);
@@ -173,9 +173,7 @@ class Feed_Entry_Adapter implements Feed_Entry_Interface, cache_cacheableInterfa
     public function get_link()
     {
         $href = sprintf(
-            '%s/lightbox/feeds/entry/%d/'
-            , rtrim($this->app['phraseanet.registry']->get('GV_ServerName'), '/')
-            , $this->get_id()
+            '%s/lightbox/feeds/entry/%d/', rtrim($this->app['phraseanet.registry']->get('GV_ServerName'), '/'), $this->get_id()
         );
 
         return new Feed_Link($href, $this->get_title(), 'text/html');
@@ -251,8 +249,9 @@ class Feed_Entry_Adapter implements Feed_Entry_Interface, cache_cacheableInterfa
     {
         $title = trim(strip_tags($title));
 
-        if ($title === '')
+        if ($title === '') {
             throw new Exception_InvalidArgument();
+        }
 
         $sql = 'UPDATE feed_entries
             SET title = :title, updated_on = NOW() WHERE id = :entry_id';
@@ -299,7 +298,7 @@ class Feed_Entry_Adapter implements Feed_Entry_Interface, cache_cacheableInterfa
             WHERE id = :entry_id';
         $params = array(
             ':author_name' => $author_name,
-            ':entry_id'    => $this->get_id()
+            ':entry_id'    => $this->get_id(),
         );
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
         $stmt->execute($params);
@@ -322,7 +321,7 @@ class Feed_Entry_Adapter implements Feed_Entry_Interface, cache_cacheableInterfa
             WHERE id = :entry_id';
         $params = array(
             ':author_email' => $author_email,
-            ':entry_id'     => $this->get_id()
+            ':entry_id'     => $this->get_id(),
         );
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
         $stmt->execute($params);
@@ -340,7 +339,7 @@ class Feed_Entry_Adapter implements Feed_Entry_Interface, cache_cacheableInterfa
             WHERE id = :entry_id';
         $params = array(
             ':created_on' => $datetime->format(DATE_ISO8601),
-            ':entry_id'   => $this->get_id()
+            ':entry_id'   => $this->get_id(),
         );
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
         $stmt->execute($params);
@@ -358,7 +357,7 @@ class Feed_Entry_Adapter implements Feed_Entry_Interface, cache_cacheableInterfa
             WHERE id = :entry_id';
         $params = array(
             ':updated_on' => $datetime->format(DATE_ISO8601),
-            ':entry_id'   => $this->get_id()
+            ':entry_id'   => $this->get_id(),
         );
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
         $stmt->execute($params);
@@ -379,7 +378,6 @@ class Feed_Entry_Adapter implements Feed_Entry_Interface, cache_cacheableInterfa
             try {
                 $this->publisher = new Feed_Publisher_Adapter($this->app, $this->publisher_id);
             } catch (\Exception_Feed_PublisherNotFound $e) {
-
             }
         }
 
@@ -456,7 +454,6 @@ class Feed_Entry_Adapter implements Feed_Entry_Interface, cache_cacheableInterfa
                 try {
                     $items[] = new Feed_Entry_Item($this->app['phraseanet.appbox'], $this, $item_id);
                 } catch (NotFoundHttpException $e) {
-
                 }
             }
         }
@@ -471,7 +468,6 @@ class Feed_Entry_Adapter implements Feed_Entry_Interface, cache_cacheableInterfa
         try {
             return $this->get_data_from_cache(self::CACHE_ELEMENTS);
         } catch (\Exception $e) {
-
         }
 
         $sql = 'SELECT id FROM feed_entry_elements
@@ -510,15 +506,14 @@ class Feed_Entry_Adapter implements Feed_Entry_Interface, cache_cacheableInterfa
         return;
     }
 
-    public static function create(Application $app, Feed_Adapter $feed
-    , Feed_Publisher_Adapter $publisher, $title, $subtitle, $author_name, $author_mail, $notify = true)
+    public static function create(Application $app, Feed_Adapter $feed, Feed_Publisher_Adapter $publisher, $title, $subtitle, $author_name, $author_mail, $notify = true)
     {
-        if ( ! $feed->is_publisher($publisher->get_user())) {
+        if (! $feed->is_publisher($publisher->get_user())) {
             throw new Exception_Feed_PublisherNotFound("Publisher not found");
         }
 
-        if ( ! $feed->is_public() && $feed->get_collection() instanceof Collection) {
-            if ( ! $publisher->get_user()->ACL()->has_access_to_base($feed->get_collection()->get_base_id())) {
+        if (! $feed->is_public() && $feed->get_collection() instanceof Collection) {
+            if (! $publisher->get_user()->ACL()->has_access_to_base($feed->get_collection()->get_base_id())) {
                 throw new AccessDeniedHttpException("User has no rights to publish in current feed");
             }
         }
@@ -566,8 +561,9 @@ class Feed_Entry_Adapter implements Feed_Entry_Interface, cache_cacheableInterfa
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new Exception_Feed_EntryNotFound();
+        }
 
         $feed = new Feed_Adapter($app, $row['feed_id']);
 
@@ -576,7 +572,7 @@ class Feed_Entry_Adapter implements Feed_Entry_Interface, cache_cacheableInterfa
 
     public function get_cache_key($option = null)
     {
-        return 'feedentry_' . $this->get_id() . '_' . ($option ? '_' . $option : '');
+        return 'feedentry_'.$this->get_id().'_'.($option ? '_'.$option : '');
     }
 
     public function get_data_from_cache($option = null)

@@ -17,5 +17,4 @@
  */
 class Bridge_Exception_ActionInvalidObjectId extends Bridge_Exception
 {
-
 }

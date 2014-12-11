@@ -28,15 +28,15 @@ class Probe31 implements ProbeInterface
      */
     public function isMigrable()
     {
-        $oldFilesExist = is_file(__DIR__ . "/../../../../../../config/connexion.inc")
-            && is_file(__DIR__ . "/../../../../../../config/_GV.php");
+        $oldFilesExist = is_file(__DIR__."/../../../../../../config/connexion.inc")
+            && is_file(__DIR__."/../../../../../../config/_GV.php");
 
         if ($oldFilesExist) {
-            if (!is_file(__DIR__ . "/../../../../../../config/config.yml")) {
+            if (!is_file(__DIR__."/../../../../../../config/config.yml")) {
                 return true;
             }
             // previous upgrade did not rename this file
-            rename(__DIR__ . "/../../../../../../config/_GV.php", __DIR__ . "/../../../../../../config/_GV.php.old");
+            rename(__DIR__."/../../../../../../config/_GV.php", __DIR__."/../../../../../../config/_GV.php.old");
 
             return false;
         }

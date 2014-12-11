@@ -23,7 +23,6 @@ use Alchemy\Phrasea\Vocabulary\Term;
  */
 class UserProvider implements ControlProviderInterface
 {
-
     private $app;
 
     public function __construct(Application $app)
@@ -92,7 +91,6 @@ class UserProvider implements ControlProviderInterface
 
             return true;
         } catch (\Exception $e) {
-
         }
 
         return false;

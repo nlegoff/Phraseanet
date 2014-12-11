@@ -35,7 +35,7 @@ class PhraseanetMetadataSetter
             }
 
             foreach ($tagnameToFieldnameMapping[$tagname] as $fieldname) {
-                if ( ! isset($metadatas[$fieldname])) {
+                if (! isset($metadatas[$fieldname])) {
                     $metadatas[$fieldname] = array();
                 }
                 $metadatas[$fieldname] = array_merge($metadatas[$fieldname], $metadata->getValue()->asArray());

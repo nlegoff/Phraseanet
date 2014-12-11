@@ -17,7 +17,6 @@
  */
 interface Feed_Interface
 {
-
     public function get_title();
 
     public function get_subtitle();

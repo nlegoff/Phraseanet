@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Printer implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];

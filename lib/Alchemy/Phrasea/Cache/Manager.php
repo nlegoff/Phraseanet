@@ -115,7 +115,7 @@ class Manager
     {
         $date = new \DateTime();
         $data = $this->compiler->compile($this->registry)
-            . "\n// Last Update on ".$date->format(DATE_ISO8601)." \n";
+            ."\n// Last Update on ".$date->format(DATE_ISO8601)." \n";
 
         file_put_contents($this->file, $data);
     }

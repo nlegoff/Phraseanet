@@ -44,7 +44,7 @@ class ConfigurationPanel extends AbstractConfigurationPanel
 
         $params = array(
             'configuration' => $configuration,
-            'available_sort'=> $this->searchEngine->getAvailableSort(),
+            'available_sort' => $this->searchEngine->getAvailableSort(),
         );
 
         return $app['twig']->render('admin/search-engine/phrasea.html.twig', $params);

@@ -16,7 +16,6 @@
  */
 class http_query
 {
-
     /**
      *
      * @param  string $url
@@ -24,12 +23,12 @@ class http_query
      */
     public static function getHttpCodeFromUrl($url)
     {
-        if ( ! is_scalar($url)) {
-            return null;
+        if (! is_scalar($url)) {
+            return;
         }
 
         if (trim($url) === '') {
-            return null;
+            return;
         }
 
         $ch = curl_init();
@@ -52,12 +51,12 @@ class http_query
 
     public static function getHttpHeaders($url)
     {
-        if ( ! is_scalar($url)) {
-            return null;
+        if (! is_scalar($url)) {
+            return;
         }
 
         if (trim($url) === '') {
-            return null;
+            return;
         }
 
         $ch = curl_init();
@@ -86,12 +85,12 @@ class http_query
      */
     public static function getUrl($url, $post_data = false)
     {
-        if ( ! is_scalar($url)) {
-            return null;
+        if (! is_scalar($url)) {
+            return;
         }
 
         if (trim($url) === '') {
-            return null;
+            return;
         }
 
         $ch = curl_init();

@@ -56,7 +56,7 @@ class BowerInstall extends Command
         $output->writeln("<info>OK</info>");
 
         $output->write("Removing assets... ");
-        $this->container['filesystem']->remove($this->container['root.path'] . '/www/assets');
+        $this->container['filesystem']->remove($this->container['root.path'].'/www/assets');
         $output->writeln("<info>OK</info>");
 
         $success = false;

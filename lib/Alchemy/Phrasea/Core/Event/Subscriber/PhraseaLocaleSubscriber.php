@@ -42,7 +42,7 @@ class PhraseaLocaleSubscriber implements EventSubscriberInterface
             ),
             KernelEvents::TERMINATE => array(
                 array('unsetLocale', -255),
-            )
+            ),
         );
     }
 

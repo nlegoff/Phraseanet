@@ -195,8 +195,9 @@ class Helper extends \Alchemy\Phrasea\Helper\Helper
      */
     public function get_grouping_head()
     {
-        if (!$this->is_single_grouping())
-            throw new \Exception('Cannot use ' . __METHOD__ . ' here');
+        if (!$this->is_single_grouping()) {
+            throw new \Exception('Cannot use '.__METHOD__.' here');
+        }
         foreach ($this->get_elements() as $record) {
             return $record;
         }

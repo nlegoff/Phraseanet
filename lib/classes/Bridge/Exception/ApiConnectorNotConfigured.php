@@ -16,5 +16,4 @@
  */
 class Bridge_Exception_ApiConnectorNotConfigured extends \Bridge_Exception
 {
-
 }

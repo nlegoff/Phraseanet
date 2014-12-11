@@ -23,7 +23,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class MoveCollection implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];

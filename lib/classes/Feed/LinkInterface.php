@@ -17,7 +17,6 @@
  */
 interface Feed_LinkInterface
 {
-
     public function get_mimetype();
 
     public function get_title();

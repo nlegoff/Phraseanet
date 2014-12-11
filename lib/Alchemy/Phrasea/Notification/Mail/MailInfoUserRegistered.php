@@ -48,8 +48,8 @@ class MailInfoUserRegistered extends AbstractMail
         }
 
         return _('admin::register: un utilisateur a fait une demande d\'inscription')
-        . "\n\n" .  sprintf('%s %s',$this->registeredUser->get_firstname(),  $this->registeredUser->get_lastname())
-        . "\n\n" .  sprintf('%s %s',$this->registeredUser->get_job(),  $this->registeredUser->get_company());
+        ."\n\n".sprintf('%s %s', $this->registeredUser->get_firstname(),  $this->registeredUser->get_lastname())
+        ."\n\n".sprintf('%s %s', $this->registeredUser->get_job(),  $this->registeredUser->get_company());
     }
 
     /**

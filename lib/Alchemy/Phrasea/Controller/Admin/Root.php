@@ -12,8 +12,6 @@
 namespace Alchemy\Phrasea\Controller\Admin;
 
 use Alchemy\Phrasea\Exception\SessionNotFound;
-use Alchemy\Phrasea\Helper\DatabaseHelper;
-use Alchemy\Phrasea\Helper\PathHelper;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +24,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  */
 class Root implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -53,7 +50,7 @@ class Root implements ControllerProviderInterface
                 'bases',
                 'collection',
                 'user',
-                'users'
+                'users',
             );
 
             $feature = 'connected';
@@ -88,7 +85,7 @@ class Root implements ControllerProviderInterface
                 'feature'       => $feature,
                 'featured'      => $featured,
                 'databoxes'     => $databoxes,
-                'off_databoxes' => $off_databoxes
+                'off_databoxes' => $off_databoxes,
             );
 
             return $app['twig']->render('admin/index.html.twig', array(
@@ -119,7 +116,7 @@ class Root implements ControllerProviderInterface
                 'bases',
                 'collection',
                 'user',
-                'users'
+                'users',
             );
 
             $feature = 'connected';
@@ -156,7 +153,7 @@ class Root implements ControllerProviderInterface
                 'feature'       => $feature,
                 'featured'      => $featured,
                 'databoxes'     => $databoxes,
-                'off_databoxes' => $off_databoxes
+                'off_databoxes' => $off_databoxes,
             );
 
             return $app['twig']->render('admin/tree.html.twig', $params);
@@ -218,7 +215,7 @@ class Root implements ControllerProviderInterface
                 'errors'          => $errors,
                 'structure'       => $structure,
                 'errorsStructure' => $errorsStructure,
-                'updateOk'        => $updateOk
+                'updateOk'        => $updateOk,
             ));
         })->assert('databox_id', '\d+')
           ->bind('database_display_stucture');
@@ -309,7 +306,7 @@ class Root implements ControllerProviderInterface
 
             return $app['twig']->render('admin/statusbit/edit.html.twig', array(
                 'status' => $status,
-                'errorMsg' => $errorMsg
+                'errorMsg' => $errorMsg,
             ));
         })->assert('databox_id', '\d+')
           ->assert('bit', '\d+')

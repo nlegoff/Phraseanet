@@ -17,22 +17,21 @@
  */
 abstract class databox_Field_DCESAbstract
 {
-
-  const Contributor = 'Contributor';
-  const Coverage = 'Coverage';
-  const Creator = 'Creator';
-  const Date = 'Date';
-  const Description = 'Description';
-  const Format = 'Format';
-  const Identifier = 'Identifier';
-  const Language = 'Language';
-  const Publisher = 'Publisher';
-  const Relation = 'Relation';
-  const Rights = 'Rights';
-  const Source = 'Source';
-  const Subject = 'Subject';
-  const Title = 'Title';
-  const Type = 'Type';
+    const Contributor = 'Contributor';
+    const Coverage = 'Coverage';
+    const Creator = 'Creator';
+    const Date = 'Date';
+    const Description = 'Description';
+    const Format = 'Format';
+    const Identifier = 'Identifier';
+    const Language = 'Language';
+    const Publisher = 'Publisher';
+    const Relation = 'Relation';
+    const Rights = 'Rights';
+    const Source = 'Source';
+    const Subject = 'Subject';
+    const Title = 'Title';
+    const Type = 'Type';
 
   /**
    *
@@ -50,10 +49,10 @@ abstract class databox_Field_DCESAbstract
    */
   protected $URI;
 
-  public function __construct()
-  {
-    return $this;
-  }
+    public function __construct()
+    {
+        return $this;
+    }
 
   /**
    *
@@ -61,7 +60,7 @@ abstract class databox_Field_DCESAbstract
    */
   public function get_label()
   {
-    return $this->label;
+      return $this->label;
   }
 
   /**
@@ -70,7 +69,7 @@ abstract class databox_Field_DCESAbstract
    */
   public function get_definition()
   {
-    return $this->definition;
+      return $this->definition;
   }
 
   /**
@@ -79,7 +78,6 @@ abstract class databox_Field_DCESAbstract
    */
   public function get_documentation_link()
   {
-    return $this->URI;
+      return $this->URI;
   }
-
 }

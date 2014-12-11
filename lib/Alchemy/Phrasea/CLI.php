@@ -27,7 +27,6 @@ use Alchemy\Phrasea\Core\CLIProvider\PluginServiceProvider;
  */
 class CLI extends Application
 {
-
     /**
      * Registers the autoloader and necessary components.
      *
@@ -113,7 +112,7 @@ class CLI extends Application
         parent::loadPlugins();
 
         call_user_func(function ($cli) {
-            require $cli['plugins.directory'] . '/commands.php';
+            require $cli['plugins.directory'].'/commands.php';
         }, $this);
     }
 }

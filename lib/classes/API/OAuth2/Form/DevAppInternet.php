@@ -69,8 +69,8 @@ class API_OAuth2_Form_DevAppInternet
         $this->scheme_callback = $request->get('scheme-callback', 'http://');
         $this->type = API_OAuth2_Application::WEB_TYPE;
 
-        $this->urlwebsite = $this->scheme_website . $this->website;
-        $this->urlcallback = $this->scheme_callback . $this->callback;
+        $this->urlwebsite = $this->scheme_website.$this->website;
+        $this->urlcallback = $this->scheme_callback.$this->callback;
 
         return $this;
     }

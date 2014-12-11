@@ -22,16 +22,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class module_console_systemMailCheck extends Command
 {
-
     public function __construct($name = null)
     {
         parent::__construct($name);
 
         $this->setDescription('Checks if email addresses are uniques (mandatory since 3.5)');
-        $this->addOption('list'
-            , 'l'
-            , null
-            , 'List all bad accounts instead of the interactive mode'
+        $this->addOption('list', 'l', null, 'List all bad accounts instead of the interactive mode'
         );
 
         return $this;
@@ -69,10 +65,10 @@ class module_console_systemMailCheck extends Command
 
             do {
                 $question = '<question>What should I do ? '
-                    . 'continue (C), detach from mail (d), or stop (s)</question>';
+                    .'continue (C), detach from mail (d), or stop (s)</question>';
 
                 $continue = mb_strtolower($dialog->ask($output, $question, 'C'));
-            } while ( ! in_array($continue, array('c', 'd', 's')));
+            } while (! in_array($continue, array('c', 'd', 's')));
 
             if ($continue == 's') {
                 return false;
@@ -114,10 +110,7 @@ class module_console_systemMailCheck extends Command
         foreach ($users as $user) {
             $output->writeln(
                 sprintf(
-                    "\t %5d %40s   %s"
-                    , $user->get_id()
-                    , $user->get_display_name()
-                    , $user->get_last_connection()->format('Y m d')
+                    "\t %5d %40s   %s", $user->get_id(), $user->get_display_name(), $user->get_last_connection()->format('Y m d')
                 )
             );
         }

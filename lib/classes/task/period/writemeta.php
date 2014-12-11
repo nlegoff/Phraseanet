@@ -84,7 +84,6 @@ class task_period_writemeta extends task_databoxAbstract
     public function xml2graphic($xml, $form)
     {
         if (false !== $sxml = simplexml_load_string($xml)) {
-
             if ((int) ($sxml->period) < self::MINPERIOD) {
                 $sxml->period = self::MINPERIOD;
             } elseif ((int) ($sxml->period) > self::MAXPERIOD) {
@@ -124,7 +123,8 @@ class task_period_writemeta extends task_databoxAbstract
     {
         ?>
         <script type="text/javascript">
-            function taskFillGraphic_<?php echo(get_class($this));?>(xml)
+            function taskFillGraphic_<?php echo(get_class($this));
+        ?>(xml)
             {
                 if (xml) {
                     xml = $.parseXML(xml);
@@ -143,9 +143,15 @@ class task_period_writemeta extends task_databoxAbstract
 
             $(document).ready(function () {
                 var limits = {
-                    'period':{'min':<?php echo self::MINPERIOD; ?>, 'max':<?php echo self::MAXPERIOD; ?>},
-                    'maxrecs':{'min':<?php echo self::MINRECS; ?>, 'max':<?php echo self::MAXRECS; ?>},
-                    'maxmegs':{'min':<?php echo self::MINMEGS; ?>, 'max':<?php echo self::MAXMEGS; ?>}
+                    'period':{'min':<?php echo self::MINPERIOD;
+        ?>, 'max':<?php echo self::MAXPERIOD;
+        ?>},
+                    'maxrecs':{'min':<?php echo self::MINRECS;
+        ?>, 'max':<?php echo self::MAXRECS;
+        ?>},
+                    'maxmegs':{'min':<?php echo self::MINMEGS;
+        ?>, 'max':<?php echo self::MAXMEGS;
+        ?>}
                 } ;
                 $(".formElem").change(function () {
                     fieldname = $(this).attr("name");
@@ -166,6 +172,7 @@ class task_period_writemeta extends task_databoxAbstract
             });
         </script>
         <?php
+
     }
 
     public function getInterfaceHTML()
@@ -214,6 +221,7 @@ class task_period_writemeta extends task_databoxAbstract
                 </div>
             </form>
             <?php
+
         }
 
         return ob_get_clean();
@@ -229,7 +237,7 @@ class task_period_writemeta extends task_databoxAbstract
             foreach ($subdefs as $sub) {
                 $name = $sub->get_name();
                 if ($sub->meta_writeable()) {
-                    $metasubdefs[$name . '_' . $type] = true;
+                    $metasubdefs[$name.'_'.$type] = true;
                 }
             }
         }
@@ -237,7 +245,7 @@ class task_period_writemeta extends task_databoxAbstract
         $this->metasubdefs = $metasubdefs;
 
         $sql = 'SELECT SQL_CALC_FOUND_ROWS record_id, coll_id, jeton
-             FROM record WHERE (jeton & ' . JETON_WRITE_META . ' > 0)';
+             FROM record WHERE (jeton & '.JETON_WRITE_META.' > 0)';
 
         $stmt = $connbas->prepare($sql);
         $stmt->execute();
@@ -255,7 +263,7 @@ class task_period_writemeta extends task_databoxAbstract
         return $rs;
     }
 
-    protected function processOneContent(databox $databox, Array $row)
+    protected function processOneContent(databox $databox, array $row)
     {
         $record_id = $row['record_id'];
         $jeton = $row['jeton'];
@@ -269,7 +277,7 @@ class task_period_writemeta extends task_databoxAbstract
 
         foreach ($subdefs as $name => $subdef) {
             $write_document = (($jeton & JETON_WRITE_META_DOC) && $name == 'document');
-            $write_subdef = (($jeton & JETON_WRITE_META_SUBDEF) && isset($this->metasubdefs[$name . '_' . $type]));
+            $write_subdef = (($jeton & JETON_WRITE_META_SUBDEF) && isset($this->metasubdefs[$name.'_'.$type]));
 
             if (($write_document || $write_subdef) && $subdef->is_physically_present()) {
                 $tsub[$name] = $subdef->get_pathfile();
@@ -302,13 +310,12 @@ class task_period_writemeta extends task_databoxAbstract
         /* @var $caption \caption_record */
         $caption = $record->get_caption();
         /* @var $struct_field \databox_field */
-        foreach($databox->get_meta_structure() as $struct_field_id=>$struct_field) {
-
+        foreach ($databox->get_meta_structure() as $struct_field_id => $struct_field) {
             $tagName = $struct_field->get_tag()->getTagname();
             $fieldName = $struct_field->get_name();
 
             // skip fields with no src
-            if($tagName == '') {
+            if ($tagName == '') {
                 continue;
             }
 
@@ -337,12 +344,11 @@ class task_period_writemeta extends task_databoxAbstract
 
                     $value = new Value\Mono($value);
                 }
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 // the field is not set in the record, erase it
                 if ($struct_field->is_multi()) {
-                    $value = new Value\Multi(Array(""));
-                }
-                else {
+                    $value = new Value\Multi(array(""));
+                } else {
                     $value = new Value\Mono("");
                 }
             }
@@ -353,7 +359,7 @@ class task_period_writemeta extends task_databoxAbstract
         }
 
         $this->dependencyContainer['exiftool.writer']->reset();
-        if($this->mwg) {
+        if ($this->mwg) {
             $this->dependencyContainer['exiftool.writer']->setModule(ExifWriter::MODULE_MWG, true);
         }
 
@@ -376,14 +382,14 @@ class task_period_writemeta extends task_databoxAbstract
         return $this;
     }
 
-    protected function postProcessOneContent(databox $databox, Array $row)
+    protected function postProcessOneContent(databox $databox, array $row)
     {
         $this->_todo--;
         $this->setProgress(0, $this->_todo);
 
         $connbas = $databox->get_connection();
 
-        $sql = 'UPDATE record SET jeton=jeton & ~' . JETON_WRITE_META . '
+        $sql = 'UPDATE record SET jeton=jeton & ~'.JETON_WRITE_META.'
             WHERE record_id = :record_id';
         $stmt = $connbas->prepare($sql);
         $stmt->execute(array(':record_id' => $row['record_id']));

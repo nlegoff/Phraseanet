@@ -19,7 +19,6 @@ namespace Alchemy\Phrasea\Media\Type;
  */
 class Audio implements Type
 {
-
     public function getType()
     {
         return self::TYPE_AUDIO;

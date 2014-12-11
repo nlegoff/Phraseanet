@@ -83,7 +83,7 @@ class Session_Logger
             , ':record_id' => $record->get_record_id()
             , ':action'    => $action
             , ':final'     => $final
-            , ':comm'      => $comment
+            , ':comm'      => $comment,
         );
 
         $stmt->execute($params);
@@ -137,7 +137,7 @@ class Session_Logger
             ':fonction' => $app['authentication']->getUser() ? $app['authentication']->getUser()->get_job() : null,
             ':company'  => $app['authentication']->getUser() ? $app['authentication']->getUser()->get_company() : null,
             ':activity' => $app['authentication']->getUser() ? $app['authentication']->getUser()->get_position() : null,
-            ':country'  => $app['authentication']->getUser() ? $app['authentication']->getUser()->get_country() : null
+            ':country'  => $app['authentication']->getUser() ? $app['authentication']->getUser()->get_country() : null,
         );
 
         $stmt = $conn->prepare($sql);
@@ -151,7 +151,7 @@ class Session_Logger
         foreach ($colls as $collId) {
             $stmt->execute(array(
                 ':log_id'  => $log_id,
-                ':coll_id' => $collId
+                ':coll_id' => $collId,
             ));
         }
 
@@ -163,7 +163,7 @@ class Session_Logger
 
     public static function load(Application $app, databox $databox)
     {
-        if ( ! $app['authentication']->isAuthenticated()) {
+        if (! $app['authentication']->isAuthenticated()) {
             throw new Exception_Session_LoggerNotFound('Not authenticated');
         }
 
@@ -172,7 +172,7 @@ class Session_Logger
 
         $params = array(
             ':site'   => $app['phraseanet.configuration']['main']['key']
-            , ':ses_id' => $app['session']->get('session_id')
+            , ':ses_id' => $app['session']->get('session_id'),
         );
 
         $stmt = $databox->get_connection()->prepare($sql);
@@ -180,8 +180,9 @@ class Session_Logger
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new Exception_Session_LoggerNotFound('Logger not found');
+        }
 
         return new self($app, $databox, $row['id']);
     }

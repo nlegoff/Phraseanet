@@ -23,7 +23,6 @@ use Silex\ControllerProviderInterface;
  */
 class Tooltip implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -96,8 +95,7 @@ class Tooltip implements ControllerProviderInterface
         $user = \User_Adapter::getInstance($usr_id, $app);
 
         return $app['twig']->render(
-                'prod/Tooltip/User.html.twig'
-                , array('user' => $user)
+                'prod/Tooltip/User.html.twig', array('user' => $user)
         );
     }
 
@@ -105,7 +103,7 @@ class Tooltip implements ControllerProviderInterface
     {
         return $app['twig']->render('prod/Tooltip/Preview.html.twig', array(
             'record' => new \record_adapter($app, $sbas_id, $record_id),
-            'not_wrapped' => true
+            'not_wrapped' => true,
         ));
     }
 
@@ -128,8 +126,7 @@ class Tooltip implements ControllerProviderInterface
         }
 
         return $app['twig']->render(
-            'prod/Tooltip/Caption.html.twig'
-            , array(
+            'prod/Tooltip/Caption.html.twig', array(
             'record'       => $record,
             'view'         => $context,
             'highlight'    => $app['request']->request->get('query'),
@@ -148,8 +145,7 @@ class Tooltip implements ControllerProviderInterface
         }
 
         return $app['twig']->render(
-                'prod/Tooltip/TechnicalDatas.html.twig'
-                , array('record'   => $record, 'document' => $document)
+                'prod/Tooltip/TechnicalDatas.html.twig', array('record'   => $record, 'document' => $document)
         );
     }
 
@@ -159,8 +155,7 @@ class Tooltip implements ControllerProviderInterface
         $field = \databox_field::get_instance($app, $databox, $field_id);
 
         return $app['twig']->render(
-                'prod/Tooltip/DataboxField.html.twig'
-                , array('field' => $field)
+                'prod/Tooltip/DataboxField.html.twig', array('field' => $field)
         );
     }
 
@@ -170,8 +165,7 @@ class Tooltip implements ControllerProviderInterface
         $field = \databox_field::get_instance($app, $databox, $field_id);
 
         return $app['twig']->render(
-                'prod/Tooltip/DCESFieldInfo.html.twig'
-                , array('field' => $field)
+                'prod/Tooltip/DCESFieldInfo.html.twig', array('field' => $field)
         );
     }
 
@@ -181,8 +175,7 @@ class Tooltip implements ControllerProviderInterface
         $field = \databox_field::get_instance($app, $databox, $field_id);
 
         return $app['twig']->render(
-                'prod/Tooltip/DataboxFieldRestrictions.html.twig'
-                , array('field' => $field)
+                'prod/Tooltip/DataboxFieldRestrictions.html.twig', array('field' => $field)
         );
     }
 

@@ -36,7 +36,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  */
 class Upload implements ControllerProviderInterface
 {
-
     /**
      * Connect the ControllerCollection to the Silex Application
      *
@@ -122,7 +121,7 @@ class Upload implements ControllerProviderInterface
             'sessionId'           => session_id(),
             'collections'         => $this->getGrantedCollections($app['authentication']->getUser()),
             'maxFileSize'         => $maxFileSize,
-            'maxFileSizeReadable' => \p4string::format_octets($maxFileSize)
+            'maxFileSizeReadable' => \p4string::format_octets($maxFileSize),
         ));
     }
 
@@ -142,7 +141,7 @@ class Upload implements ControllerProviderInterface
             'prod/upload/upload.html.twig', array(
             'collections'         => $this->getGrantedCollections($app['authentication']->getUser()),
             'maxFileSize'         => $maxFileSize,
-            'maxFileSizeReadable' => \p4string::format_octets($maxFileSize)
+            'maxFileSizeReadable' => \p4string::format_octets($maxFileSize),
         ));
     }
 
@@ -192,7 +191,7 @@ class Upload implements ControllerProviderInterface
         try {
             // Add file extension, so mediavorus can guess file type for octet-stream file
             $uploadedFilename = $file->getRealPath();
-            $renamedFilename = $file->getRealPath() . '.' . pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+            $renamedFilename = $file->getRealPath().'.'.pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
 
             $app['filesystem']->rename($uploadedFilename, $renamedFilename);
 
@@ -270,7 +269,6 @@ class Upload implements ControllerProviderInterface
                         unset($media);
                         $app['temporary-filesystem']->clean('base_64_thumb');
                     } catch (DataUriException $e) {
-
                     }
                 }
             } else {
@@ -327,10 +325,10 @@ class Upload implements ControllerProviderInterface
         foreach ($user->ACL()->get_granted_base(array('canaddrecord')) as $collection) {
             $databox = $collection->get_databox();
 
-            if ( ! isset($collections[$databox->get_sbas_id()])) {
+            if (! isset($collections[$databox->get_sbas_id()])) {
                 $collections[$databox->get_sbas_id()] = array(
                     'databox'             => $databox,
-                    'databox_collections' => array()
+                    'databox_collections' => array(),
                 );
             }
 

@@ -15,7 +15,6 @@ use Alchemy\Phrasea\Core\Event\RecordEdit;
 use Alchemy\Phrasea\Core\PhraseaEvents;
 use Alchemy\Phrasea\Vocabulary\Controller as VocabularyController;
 use Alchemy\Phrasea\Controller\RecordsRequest;
-use Alchemy\Phrasea\Metadata\Tag\TfEditdate;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +26,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Edit implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -64,24 +62,7 @@ class Edit implements ControllerProviderInterface
                     $separator = $meta->get_separator();
 
                     $JSFields[$meta->get_id()] = array(
-                        'meta_struct_id' => $meta->get_id()
-                        , 'name'           => $meta->get_name()
-                        , '_status'        => 0
-                        , '_value'         => ''
-                        , '_sgval'         => array()
-                        , 'required'             => $meta->is_required()
-                        , 'label'                => $meta->get_label($app['locale.I18n'])
-                        , 'readonly'             => $meta->is_readonly()
-                        , 'type'                 => $meta->get_type()
-                        , 'format'               => ''
-                        , 'explain'              => ''
-                        , 'tbranch'              => $meta->get_tbranch()
-                        , 'maxLength'            => $meta->get_tag()->getMaxLength()
-                        , 'minLength'            => $meta->get_tag()->getMinLength()
-                        , 'multi'                => $meta->is_multi()
-                        , 'separator'            => $separator
-                        , 'vocabularyControl'    => $meta->getVocabularyControl() ? $meta->getVocabularyControl()->getType() : null
-                        , 'vocabularyRestricted' => $meta->getVocabularyControl() ? $meta->isVocabularyRestricted() : false
+                        'meta_struct_id' => $meta->get_id(), 'name'           => $meta->get_name(), '_status'        => 0, '_value'         => '', '_sgval'         => array(), 'required'             => $meta->is_required(), 'label'                => $meta->get_label($app['locale.I18n']), 'readonly'             => $meta->is_readonly(), 'type'                 => $meta->get_type(), 'format'               => '', 'explain'              => '', 'tbranch'              => $meta->get_tbranch(), 'maxLength'            => $meta->get_tag()->getMaxLength(), 'minLength'            => $meta->get_tag()->getMinLength(), 'multi'                => $meta->is_multi(), 'separator'            => $separator, 'vocabularyControl'    => $meta->getVocabularyControl() ? $meta->getVocabularyControl()->getType() : null, 'vocabularyRestricted' => $meta->getVocabularyControl() ? $meta->isVocabularyRestricted() : false,
                     );
 
                     if (trim($meta->get_tbranch()) !== '') {
@@ -95,7 +76,7 @@ class Edit implements ControllerProviderInterface
                 foreach ($records->collections() as $collection) {
                     /* @var $record record_adapter */
 
-                    $suggValues['b' . $collection->get_base_id()] = array();
+                    $suggValues['b'.$collection->get_base_id()] = array();
 
                     if ($sxe = simplexml_load_string($collection->get_prefs())) {
                         $z = $sxe->xpath('/baseprefs/sugestedValues');
@@ -110,10 +91,10 @@ class Edit implements ControllerProviderInterface
                                 continue;
                             }
 
-                            $suggValues['b' . $collection->get_base_id()][$field->get_id()] = array();
+                            $suggValues['b'.$collection->get_base_id()][$field->get_id()] = array();
 
                             foreach ($vi->value as $oneValue) {
-                                $suggValues['b' . $collection->get_base_id()][$field->get_id()][] = (string) $oneValue;
+                                $suggValues['b'.$collection->get_base_id()][$field->get_id()][] = (string) $oneValue;
                             }
                         }
                     }
@@ -144,7 +125,7 @@ class Edit implements ControllerProviderInterface
                     $databox_fields[$field->get_id()] = array(
                         'dirty'          => false,
                         'meta_struct_id' => $field->get_id(),
-                        'values'         => array()
+                        'values'         => array(),
                     );
                 }
 
@@ -155,7 +136,7 @@ class Edit implements ControllerProviderInterface
                         'rid'         => $record->get_record_id(),
                         'sselcont_id' => null,
                         '_selected'   => false,
-                        'fields'      => $databox_fields
+                        'fields'      => $databox_fields,
                     );
 
                     $elements[$indice]['statbits'] = array();
@@ -188,14 +169,14 @@ class Edit implements ControllerProviderInterface
                                 'meta_id'        => $value->getId(),
                                 'value'          => $value->getValue(),
                                 'vocabularyId'   => $id,
-                                'vocabularyType' => $type
+                                'vocabularyType' => $type,
                             );
                         }
 
                         $elements[$indice]['fields'][$meta_struct_id] = array(
                             'dirty'          => false,
                             'meta_struct_id' => $meta_struct_id,
-                            'values'         => $values
+                            'values'         => $values,
                         );
                     }
 
@@ -204,9 +185,7 @@ class Edit implements ControllerProviderInterface
                     $thumbnail = $record->get_thumbnail();
 
                     $elements[$indice]['subdefs']['thumbnail'] = array(
-                        'url' => (string) $thumbnail->get_url()
-                        , 'w'   => $thumbnail->get_width()
-                        , 'h'   => $thumbnail->get_height()
+                        'url' => (string) $thumbnail->get_url(), 'w'   => $thumbnail->get_width(), 'h'   => $thumbnail->get_height(),
                     );
 
                     $elements[$indice]['preview'] = $app['twig']->render('common/preview.html.twig', array('record' => $record));
@@ -306,7 +285,6 @@ class Edit implements ControllerProviderInterface
                         );
                     }
                 } catch (\Exception $e) {
-
                 }
             }
 

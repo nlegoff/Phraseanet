@@ -41,7 +41,7 @@ class Install extends Command
             ->addOption('databox', null, InputOption::VALUE_OPTIONAL, 'Database name for the DataBox', null)
             ->addOption('appbox', null, InputOption::VALUE_OPTIONAL, 'Database name for the ApplicationBox', null)
             ->addOption('indexer', null, InputOption::VALUE_OPTIONAL, 'Path to Phraseanet Indexer', 'auto')
-            ->addOption('data-path', null, InputOption::VALUE_OPTIONAL, 'Path to data repository', realpath(__DIR__ . '/../../../../../datas'))
+            ->addOption('data-path', null, InputOption::VALUE_OPTIONAL, 'Path to data repository', realpath(__DIR__.'/../../../../../datas'))
             ->addOption('server-name', null, InputOption::VALUE_OPTIONAL, 'Server name')
             ->addOption('indexer', null, InputOption::VALUE_OPTIONAL, 'Path to Phraseanet Indexer', 'auto')
             ->addOption('yes', 'y', InputOption::VALUE_NONE, 'Answer yes to all questions');
@@ -114,7 +114,7 @@ class Install extends Command
         if (null !== $this->getApplication()) {
             $command = $this->getApplication()->find('crossdomain:generate');
             $command->run(new ArrayInput(array(
-                'command' => 'crossdomain:generate'
+                'command' => 'crossdomain:generate',
             )), $output);
         }
 
@@ -181,7 +181,7 @@ class Install extends Command
         } else {
             $dbConn = new \connection_pdo('databox', $input->getOption('db-host'), $input->getOption('db-port'), $input->getOption('db-user'), $input->getOption('db-password'), $input->getOption('databox'), array(), $this->container['debug']);
             $output->writeln("\n\t<info>Data-Box : Connection successful !</info>\n");
-            $template = $input->getOption('db-template') ? : 'en';
+            $template = $input->getOption('db-template') ?: 'en';
         }
 
         return array($dbConn, $template);

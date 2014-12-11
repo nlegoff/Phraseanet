@@ -26,7 +26,7 @@ class eventsmanager_broker
     {
         $iterators_pool = array(
             'event' => array(
-                'eventsmanager_event_test'
+                'eventsmanager_event_test',
             ),
             'notify' => array(
                 'eventsmanager_notify_autoregister',
@@ -42,23 +42,25 @@ class eventsmanager_broker
                 'eventsmanager_notify_validate',
                 'eventsmanager_notify_validationdone',
                 'eventsmanager_notify_validationreminder',
-            )
+            ),
         );
 
         foreach ($iterators_pool as $type => $iterators) {
             foreach ($iterators as $fileinfo) {
                 $classname = $fileinfo;
 
-                if ( ! class_exists($classname, true)) {
+                if (! class_exists($classname, true)) {
                     continue;
                 }
                 $this->pool_classes[$classname] = new $classname($this->app, $this);
 
-                foreach ($this->pool_classes[$classname]->get_events() as $event)
+                foreach ($this->pool_classes[$classname]->get_events() as $event) {
                     $this->bind($event, $classname);
+                }
 
-                if ($type === 'notify' && $this->pool_classes[$classname])
+                if ($type === 'notify' && $this->pool_classes[$classname]) {
                     $this->notifications[] = $classname;
+                }
             }
         }
 
@@ -78,9 +80,9 @@ class eventsmanager_broker
 
     public function bind($event, $object_name)
     {
-
-        if ( ! array_key_exists($event, $this->events))
+        if (! array_key_exists($event, $this->events)) {
             $this->events[$event] = array();
+        }
 
         $this->events[$event][] = $object_name;
     }
@@ -98,7 +100,7 @@ class eventsmanager_broker
                 ':usr_id'     => $usr_id
                 , ':event_type' => $event_type
                 , ':mailed'     => ($mailed ? 1 : 0)
-                , ':datas'      => $datas
+                , ':datas'      => $datas,
             );
 
             $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -134,7 +136,7 @@ class eventsmanager_broker
         $sql = 'SELECT * FROM notifications
             WHERE usr_id = :usr_id
             ORDER BY created_on DESC
-            LIMIT ' . ((int) $page * $n) . ', ' . $n;
+            LIMIT '.((int) $page * $n).', '.$n;
 
         $data = array('notifications' => array(), 'next' => '');
 
@@ -144,10 +146,10 @@ class eventsmanager_broker
         $stmt->closeCursor();
 
         foreach ($rs as $row) {
-            $type = 'eventsmanager_' . $row['type'];
+            $type = 'eventsmanager_'.$row['type'];
             $content = $this->pool_classes[$type]->datas($row['datas'], $row['unread']);
 
-            if ( ! isset($this->pool_classes[$type]) || count($content) === 0) {
+            if (! isset($this->pool_classes[$type]) || count($content) === 0) {
                 $sql = 'DELETE FROM notifications WHERE id = :id';
                 $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
                 $stmt->execute(array(':id' => $row['id']));
@@ -158,24 +160,24 @@ class eventsmanager_broker
             $date_key = str_replace('-', '_', substr($row['created_on'], 0, 10));
             $display_date = $this->app['date-formatter']->getDate(new DateTime($row['created_on']));
 
-            if ( ! isset($data['notifications'][$date_key])) {
+            if (! isset($data['notifications'][$date_key])) {
                 $data['notifications'][$date_key] = array(
                     'display'       => $display_date
-                    , 'notifications' => array()
+                    , 'notifications' => array(),
                 );
             }
 
             $data['notifications'][$date_key]['notifications'][$row['id']] = array(
                 'classname' => $content['class']
                 , 'time'      => $this->app['date-formatter']->getTime(new DateTime($row['created_on']))
-                , 'icon'      => '<img src="' . $this->pool_classes[$type]->icon_url() . '" style="vertical-align:middle;width:16px;margin:2px;" />'
+                , 'icon'      => '<img src="'.$this->pool_classes[$type]->icon_url().'" style="vertical-align:middle;width:16px;margin:2px;" />'
                 , 'id'        => $row['id']
-                , 'text'      => $content['text']
+                , 'text'      => $content['text'],
             );
         }
 
         if (((int) $page + 1) * $n < $total) {
-            $data['next'] = '<a href="#" onclick="print_notifications(' . ((int) $page + 1) . ');return false;">' . _('charger d\'avantages de notifications') . '</a>';
+            $data['next'] = '<a href="#" onclick="print_notifications('.((int) $page + 1).');return false;">'._('charger d\'avantages de notifications').'</a>';
         }
 
         return $data;
@@ -233,13 +235,13 @@ class eventsmanager_broker
         $stmt->closeCursor();
 
         foreach ($rs as $row) {
-            $type = 'eventsmanager_' . $row['type'];
-            if ( ! isset($this->pool_classes[$type])) {
+            $type = 'eventsmanager_'.$row['type'];
+            if (! isset($this->pool_classes[$type])) {
                 continue;
             }
             $datas = $this->pool_classes[$type]->datas($row['datas'], $row['unread']);
 
-            if ( ! isset($this->pool_classes[$type]) || count($datas) === 0) {
+            if (! isset($this->pool_classes[$type]) || count($datas) === 0) {
                 $sql = 'DELETE FROM notifications WHERE id = :id';
                 $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
                 $stmt->execute(array(':id' => $row['id']));
@@ -248,12 +250,8 @@ class eventsmanager_broker
             }
 
             $ret[] = array_merge(
-                $datas
-                , array(
-                'created_on' => $this->app['date-formatter']->getPrettyString(new DateTime($row['created_on']))
-                , 'icon'       => $this->pool_classes[$type]->icon_url()
-                , 'id'         => $row['id']
-                , 'unread'     => $row['unread']
+                $datas, array(
+                'created_on' => $this->app['date-formatter']->getPrettyString(new DateTime($row['created_on'])), 'icon'       => $this->pool_classes[$type]->icon_url(), 'id'         => $row['id'], 'unread'     => $row['unread'],
                 )
             );
         }
@@ -263,7 +261,7 @@ class eventsmanager_broker
         return $ret;
     }
 
-    public function read(Array $notifications, $usr_id)
+    public function read(array $notifications, $usr_id)
     {
         if (count($notifications) == 0) {
             return false;
@@ -271,7 +269,7 @@ class eventsmanager_broker
 
         $sql = 'UPDATE notifications SET unread="0"
             WHERE usr_id = :usr_id
-              AND (id="' . implode('" OR id="', $notifications) . '")';
+              AND (id="'.implode('" OR id="', $notifications).'")';
 
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
         $stmt->execute(array(':usr_id' => $usr_id));
@@ -294,7 +292,6 @@ class eventsmanager_broker
 
     public function list_notifications_available($usr_id)
     {
-
         $personnal_notifications = array();
 
         foreach ($this->notifications as $notification) {
@@ -308,7 +305,7 @@ class eventsmanager_broker
                 'name'             => $this->pool_classes[$notification]->get_name()
                 , 'id'               => $notification
                 , 'description'      => $this->pool_classes[$notification]->get_description()
-                , 'subscribe_emails' => true
+                , 'subscribe_emails' => true,
             );
         }
 

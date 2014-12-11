@@ -294,7 +294,6 @@ class ValidationParticipant
 
     public function isReleasable()
     {
-
         if ($this->getIsConfirmed()) {
             return false;
         }

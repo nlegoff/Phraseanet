@@ -55,7 +55,7 @@ class eventsmanager_notify_validationdone extends eventsmanager_notifyAbstract
         $default = array(
             'from'    => ''
             , 'to'      => ''
-            , 'ssel_id' => ''
+            , 'ssel_id' => '',
         );
 
         $params = array_merge($default, $params);
@@ -101,7 +101,6 @@ class eventsmanager_notify_validationdone extends eventsmanager_notifyAbstract
 
                 $readyToSend = true;
             } catch (\Exception $e) {
-
             }
 
             if ($readyToSend) {
@@ -150,10 +149,10 @@ class eventsmanager_notify_validationdone extends eventsmanager_notifyAbstract
         $ret = array(
             'text'  => sprintf(
                 _('%1$s a envoye son rapport de validation de %2$s'), $sender, '<a href="/lightbox/validate/'
-                . (string) $sx->ssel_id . '/" target="_blank">'
-                . $basket->getName() . '</a>'
+                .(string) $sx->ssel_id.'/" target="_blank">'
+                .$basket->getName().'</a>'
             )
-            , 'class' => ''
+            , 'class' => '',
         );
 
         return $ret;

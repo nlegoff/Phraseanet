@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Property implements ControllerProviderInterface
 {
-
     /**
      * {@inheritDoc}
      */
@@ -157,7 +156,7 @@ class Property implements ControllerProviderInterface
         return new Response($app['twig']->render('prod/actions/Property/index.html.twig', array(
             'records'   => $records,
             'statusBit' => $statusBit,
-            'nRec'      => $nRec
+            'nRec'      => $nRec,
         )));
     }
 
@@ -257,7 +256,6 @@ class Property implements ControllerProviderInterface
                     $updated[$record->get_serialize_key()] = $recordType;
                 }
             } catch (\Exception $e) {
-
             }
         }
 
@@ -271,7 +269,7 @@ class Property implements ControllerProviderInterface
      * @param  array           $postStatus
      * @return array|null
      */
-    private function updateRecordStatus(\record_adapter $record, Array $postStatus)
+    private function updateRecordStatus(\record_adapter $record, array $postStatus)
     {
         $sbasId = $record->get_databox()->get_sbas_id();
 
@@ -288,11 +286,11 @@ class Property implements ControllerProviderInterface
 
             return array(
                 'current_status' => $currentStatus,
-                'new_status'     => $newStatus
+                'new_status'     => $newStatus,
             );
         }
 
-        return null;
+        return;
     }
 
     /**

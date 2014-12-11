@@ -19,5 +19,4 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  */
 class Bridge_Exception_ActionForbidden extends AccessDeniedHttpException
 {
-
 }

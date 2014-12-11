@@ -75,7 +75,7 @@ class Metadata implements AttributeInterface
      */
     public static function loadFromString(Application $app, $string)
     {
-        if ( ! $metadata = @unserialize($string)) {
+        if (! $metadata = @unserialize($string)) {
             throw new \InvalidArgumentException('Unable to load metadata from string');
         }
 

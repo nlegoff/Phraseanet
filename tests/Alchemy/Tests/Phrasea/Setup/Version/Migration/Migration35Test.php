@@ -59,7 +59,7 @@ class Migration35Test extends AbstractSetupTester
 
     private function getMigration(Application $app = null)
     {
-        $app = $app ? : new Application('test');
+        $app = $app ?: new Application('test');
 
         if ($this->specifications) {
             $app['phraseanet.configuration'] = $this->specifications;

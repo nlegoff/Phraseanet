@@ -19,5 +19,4 @@ class bengali extends AbstractCharset
     U+0985..U+0990, U+0993..U+09B0, U+09B2, U+09B6..U+09B9, U+09CE, U+09E0, U+09E1,
     U+09E6..U+09EF
 ';
-
 }

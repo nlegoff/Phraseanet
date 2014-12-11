@@ -17,7 +17,6 @@
  */
 class Bridge_Api_ElementCollection extends Bridge_Api_AbstractCollection
 {
-
     /**
      *
      * @param  Bridge_Api_ElementInterface  $element

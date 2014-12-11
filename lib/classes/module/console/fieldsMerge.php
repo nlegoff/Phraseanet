@@ -23,7 +23,6 @@ use Alchemy\Phrasea\Command\Command;
 
 class module_console_fieldsMerge extends Command
 {
-
     public function __construct($name = null)
     {
         parent::__construct($name);
@@ -35,11 +34,7 @@ class module_console_fieldsMerge extends Command
         $this->addArgument('source', InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Metadata structure ids for source');
 
         $this->addOption(
-            'separator'
-            , ''
-            , InputOption::VALUE_OPTIONAL
-            , 'Separator for concatenation (if destination is monovalued)'
-            , ';'
+            'separator', '', InputOption::VALUE_OPTIONAL, 'Separator for concatenation (if destination is monovalued)', ';'
         );
 
         return $this;
@@ -67,7 +62,7 @@ class module_console_fieldsMerge extends Command
             throw new \Exception('No sources to proceed');
         }
 
-        $separator = ' ' . $input->getOption('separator') . ' ';
+        $separator = ' '.$input->getOption('separator').' ';
 
         $destination = $databox->get_meta_structure()->get_element($input->getArgument('destination'));
 
@@ -83,8 +78,7 @@ class module_console_fieldsMerge extends Command
 
         if (count(array_unique($types)) > 1) {
             $output->writeln(
-                sprintf("Warning, trying to merge inconsistent types : <comment>%s</comment>\n"
-                    , implode(', ', $types)
+                sprintf("Warning, trying to merge inconsistent types : <comment>%s</comment>\n", implode(', ', $types)
                 )
             );
         }
@@ -108,9 +102,8 @@ class module_console_fieldsMerge extends Command
                 $output->writeln(
                     sprintf(
                         "You are going to merge <info>mono valued fields</info> in a "
-                        . "<info>monovalued field</info>, fields will be "
-                        . "<comment>concatenated</comment> in the following order : %s"
-                        , implode($separator, $field_names)
+                        ."<info>monovalued field</info>, fields will be "
+                        ."<comment>concatenated</comment> in the following order : %s", implode($separator, $field_names)
                     )
                 );
                 $this->displayHelpConcatenation($output);
@@ -118,9 +111,8 @@ class module_console_fieldsMerge extends Command
                 $output->writeln(
                     sprintf(
                         "You are going to merge <info>multi valued</info> fields in a "
-                        . "<info>monovalued field</info>, fields will be "
-                        . "<comment>concatenated</comment> in the following order : %s"
-                        , implode(' ', $field_names)
+                        ."<info>monovalued field</info>, fields will be "
+                        ."<comment>concatenated</comment> in the following order : %s", implode(' ', $field_names)
                     )
                 );
                 $this->displayHelpConcatenation($output);
@@ -128,14 +120,14 @@ class module_console_fieldsMerge extends Command
                 $output->writeln(
                     sprintf(
                         "You are going to merge <info>mono valued fields</info> in a "
-                        . "<info>multivalued field</info>"
+                        ."<info>multivalued field</info>"
                     )
                 );
             } elseif ($multis[0] === true && $destination->is_multi()) {
                 $output->writeln(
                     sprintf(
                         "You are going to merge <info>multi valued fields</info> in a "
-                        . "<info>multivalued field</info>"
+                        ."<info>multivalued field</info>"
                     )
                 );
             }
@@ -143,16 +135,15 @@ class module_console_fieldsMerge extends Command
             $output->writeln(
                 sprintf(
                     "You are going to merge <info>mixed valued</info> fields in a "
-                    . "<info>multivalued</info> field"
+                    ."<info>multivalued</info> field"
                 )
             );
         } else {
             $output->writeln(
                 sprintf(
                     "You are going to merge <info>mixed valued</info> fields in a "
-                    . "<info>monovalued field</info>, fields will be "
-                    . "<comment>concatenated</comment> in the following order : %s"
-                    , implode($separator, $field_names)
+                    ."<info>monovalued field</info>, fields will be "
+                    ."<comment>concatenated</comment> in the following order : %s", implode($separator, $field_names)
                 )
             );
             $this->displayHelpConcatenation($output);
@@ -163,7 +154,7 @@ class module_console_fieldsMerge extends Command
 
         do {
             $sql = 'SELECT record_id FROM record
-                  ORDER BY record_id LIMIT ' . $start . ', ' . $quantity;
+                  ORDER BY record_id LIMIT '.$start.', '.$quantity;
             $stmt = $databox->get_connection()->prepare($sql);
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -176,7 +167,6 @@ class module_console_fieldsMerge extends Command
 
                 foreach ($sources as $source) {
                     try {
-
                         $values = $record->get_caption()->get_field($source->get_name())->get_values();
 
                         foreach ($values as $captionValue) {
@@ -184,13 +174,12 @@ class module_console_fieldsMerge extends Command
                             $captionValue->delete();
                         }
                     } catch (\Exception $e) {
-
                     }
                 }
 
                 $datas = array_unique($datas);
 
-                if ( ! $destination->is_multi()) {
+                if (! $destination->is_multi()) {
                     $datas = implode($separator, $datas);
                 }
 
@@ -215,10 +204,9 @@ class module_console_fieldsMerge extends Command
 
     protected function displayHelpConcatenation(OutputInterface $output)
     {
-
         $output->writeln("\nYou can choose the concatenation order in the "
-            . "commandline (first option is first value) and set a separator "
-            . "with the --separator option)");
+            ."commandline (first option is first value) and set a separator "
+            ."with the --separator option)");
 
         return $this;
     }

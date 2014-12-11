@@ -19,7 +19,6 @@ use Alchemy\Phrasea\Application;
  */
 interface media_Permalink_Interface
 {
-
     public function get_url();
 
     public function get_page();

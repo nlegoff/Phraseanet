@@ -54,7 +54,7 @@ class RescanTechnicalDatas extends Command
         $dialog = $this->getHelperSet()->get('dialog');
         do {
             $continue = mb_strtolower($dialog->ask($output, sprintf('Estimated duration is %s, <question>continue ? (y/N)</question>', $duration), 'N'));
-        } while ( ! in_array($continue, array('y', 'n')));
+        } while (! in_array($continue, array('y', 'n')));
 
         if (strtolower($continue) !== 'y') {
             $output->writeln('Aborting !');
@@ -66,7 +66,6 @@ class RescanTechnicalDatas extends Command
         $n = 0;
 
         foreach ($this->container['phraseanet.appbox']->get_databoxes() as $databox) {
-
             $sql = 'SELECT record_id FROM record WHERE parent_record_id = 0';
             $stmt = $databox->get_connection()->prepare($sql);
             $stmt->execute();
@@ -77,7 +76,7 @@ class RescanTechnicalDatas extends Command
                 $record = $databox->get_record($row['record_id']);
                 $record->insertTechnicalDatas($this->getService('mediavorus'));
                 unset($record);
-                $output->write("\r" . $n . " records done");
+                $output->write("\r".$n." records done");
                 $n ++;
             }
         }

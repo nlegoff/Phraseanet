@@ -8,6 +8,6 @@ class CacheServerRequirementTest extends RequirementsTestCase
 {
     protected function provideRequirements()
     {
-        return new CacheServerRequirement;
+        return new CacheServerRequirement();
     }
 }

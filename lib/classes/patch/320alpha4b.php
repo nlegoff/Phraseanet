@@ -64,7 +64,6 @@ class patch_320alpha4b implements patchInterface
             $stmt->execute();
             $stmt->closeCursor();
         } catch (\Exception $e) {
-
         }
 
         $sql = 'SELECT ssel_id, usr_id, name, descript, pub_date
@@ -111,7 +110,6 @@ class patch_320alpha4b implements patchInterface
                     $record = new record_adapter($app, phrasea::sbasFromBas($app, $row['base_id']), $row['record_id']);
                     $item = Feed_Entry_Item::create($appbox, $entry, $record);
                 } catch (NotFoundHttpException $e) {
-
                 }
             }
 
@@ -140,21 +138,23 @@ class patch_320alpha4b implements patchInterface
 
     protected function get_feed(appbox $appbox, User_Adapter $user, $pub_restrict, $homelink)
     {
-        $user_key = 'user_' . $user->get_id();
-        if ($homelink == '1')
+        $user_key = 'user_'.$user->get_id();
+        if ($homelink == '1') {
             $feed_key = 'feed_homelink';
-        elseif ($pub_restrict == '1')
+        } elseif ($pub_restrict == '1') {
             $feed_key = 'feed_restricted';
-        else
+        } else {
             $feed_key = 'feed_public';
+        }
 
-        if ( ! array_key_exists($user_key, self::$feeds) || ! isset(self::$feeds[$user_key][$feed_key])) {
-            if ($homelink == '1')
-                $title = $user->get_display_name() . ' - ' . 'homelink Feed';
-            elseif ($pub_restrict == '1')
-                $title = $user->get_display_name() . ' - ' . 'private Feed';
-            else
-                $title = $user->get_display_name() . ' - ' . 'public Feed';
+        if (! array_key_exists($user_key, self::$feeds) || ! isset(self::$feeds[$user_key][$feed_key])) {
+            if ($homelink == '1') {
+                $title = $user->get_display_name().' - '.'homelink Feed';
+            } elseif ($pub_restrict == '1') {
+                $title = $user->get_display_name().' - '.'private Feed';
+            } else {
+                $title = $user->get_display_name().' - '.'public Feed';
+            }
 
             $feed = Feed_Adapter::create($app, $user, $title, '');
 
@@ -163,18 +163,19 @@ class patch_320alpha4b implements patchInterface
             } elseif ($pub_restrict == 1) {
                 $collections = $user->ACL()->get_granted_base();
                 $collection = array_shift($collections);
-                if ( ! ($collection instanceof collection)) {
+                if (! ($collection instanceof collection)) {
                     foreach ($appbox->get_databoxes() as $databox) {
                         foreach ($databox->get_collections() as $coll) {
                             $collection = $coll;
                             break;
                         }
-                        if ($collection instanceof collection)
+                        if ($collection instanceof collection) {
                             break;
+                        }
                     }
                 }
 
-                if ( ! ($collection instanceof collection)) {
+                if (! ($collection instanceof collection)) {
                     return false;
                 }
                 $feed->set_collection($collection);

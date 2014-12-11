@@ -64,7 +64,7 @@ class Bridge_Api_AbstractTest extends PhraseanetWebTestCaseAbstract
     {
         $this->bridgeApi->expects($this->once())
             ->method('is_configured')
-            ->will($this->returnValue(TRUE));
+            ->will($this->returnValue(true));
 
         $this->auth->expects($this->once())
             ->method('parse_request_token')
@@ -82,7 +82,7 @@ class Bridge_Api_AbstractTest extends PhraseanetWebTestCaseAbstract
     {
         $this->bridgeApi->expects($this->once())
             ->method('is_configured')
-            ->will($this->returnValue(FALSE));
+            ->will($this->returnValue(false));
 
         $this->setExpectedException("Bridge_Exception_ApiConnectorNotConfigured");
 
@@ -93,7 +93,7 @@ class Bridge_Api_AbstractTest extends PhraseanetWebTestCaseAbstract
     {
         $this->bridgeApi->expects($this->once())
             ->method('is_configured')
-            ->will($this->returnValue(TRUE));
+            ->will($this->returnValue(true));
 
         $this->auth->expects($this->once())
             ->method('reconnect');
@@ -107,7 +107,7 @@ class Bridge_Api_AbstractTest extends PhraseanetWebTestCaseAbstract
     {
         $this->bridgeApi->expects($this->once())
             ->method('is_configured')
-            ->will($this->returnValue(FALSE));
+            ->will($this->returnValue(false));
 
         $this->setExpectedException("Bridge_Exception_ApiConnectorNotConfigured");
 
@@ -118,7 +118,7 @@ class Bridge_Api_AbstractTest extends PhraseanetWebTestCaseAbstract
     {
         $this->bridgeApi->expects($this->once())
             ->method('is_configured')
-            ->will($this->returnValue(TRUE));
+            ->will($this->returnValue(true));
 
         $this->auth->expects($this->once())
             ->method('disconnect');
@@ -132,7 +132,7 @@ class Bridge_Api_AbstractTest extends PhraseanetWebTestCaseAbstract
     {
         $this->bridgeApi->expects($this->once())
             ->method('is_configured')
-            ->will($this->returnValue(FALSE));
+            ->will($this->returnValue(false));
 
         $this->setExpectedException("Bridge_Exception_ApiConnectorNotConfigured");
 
@@ -143,7 +143,7 @@ class Bridge_Api_AbstractTest extends PhraseanetWebTestCaseAbstract
     {
         $this->auth->expects($this->once())
             ->method('is_connected')
-            ->will($this->returnValue(TRUE));
+            ->will($this->returnValue(true));
 
         $return = $this->bridgeApi->is_connected();
 

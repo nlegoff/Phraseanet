@@ -27,10 +27,9 @@ use Silex\ServiceProviderInterface;
 
 class ORMServiceProvider implements ServiceProviderInterface
 {
-
     public function register(Application $app)
     {
-        $app['EM.sql-logger.file'] = $app['root.path'] . '/logs/doctrine-log.log';
+        $app['EM.sql-logger.file'] = $app['root.path'].'/logs/doctrine-log.log';
         $app['EM.sql-logger.max-files'] = 5;
 
         $app['EM.sql-logger'] = $app->share(function (Application $app) {
@@ -68,12 +67,12 @@ class ORMServiceProvider implements ServiceProviderInterface
             $config->setAutoGenerateProxyClasses($app['debug']);
 
             $chainDriverImpl = new DriverChain();
-            $driverYaml = new YamlDriver(array($app['root.path'] . '/lib/conf.d/Doctrine'));
+            $driverYaml = new YamlDriver(array($app['root.path'].'/lib/conf.d/Doctrine'));
             $chainDriverImpl->addDriver($driverYaml, 'Entities');
             $chainDriverImpl->addDriver($driverYaml, 'Gedmo\Timestampable');
             $config->setMetadataDriverImpl($chainDriverImpl);
 
-            $config->setProxyDir($app['root.path'] . '/lib/Doctrine/Proxies');
+            $config->setProxyDir($app['root.path'].'/lib/Doctrine/Proxies');
             $config->setProxyNamespace('Proxies');
 
             if ('test' === $app->getEnvironment()) {

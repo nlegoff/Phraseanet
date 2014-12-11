@@ -13,5 +13,4 @@ namespace Alchemy\Phrasea\Exception;
 
 class RuntimeException extends \RuntimeException implements Exception
 {
-
 }

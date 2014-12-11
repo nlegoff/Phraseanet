@@ -330,5 +330,4 @@ class CJK extends AbstractCharset
     U+AC00..U+D7A3, U+1100..U+1159, U+1161..U+11A2, U+11A8..U+11F9, U+A000..U+A48C,
     U+A492..U+A4C6
 ';
-
 }

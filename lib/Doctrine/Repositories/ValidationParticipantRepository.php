@@ -21,7 +21,6 @@ use Doctrine\DBAL\Types\Type;
  */
 class ValidationParticipantRepository extends EntityRepository
 {
-
     /**
      * Retrieve all not reminded participants where the validation has not expired
      *

@@ -10,7 +10,6 @@
  */
 
 use Alchemy\Phrasea\Application;
-
 use Alchemy\Phrasea\Exception\InvalidArgumentException;
 
 /**
@@ -70,7 +69,6 @@ class collection implements cache_cacheableInterface
 
             return $this;
         } catch (\Exception $e) {
-
         }
 
         $connbas = $this->databox->get_connection();
@@ -83,8 +81,9 @@ class collection implements cache_cacheableInterface
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
-            throw new Exception('Unknown collection ' . $this->coll_id . ' on ' . $this->databox->get_dbname());
+        if (! $row) {
+            throw new Exception('Unknown collection '.$this->coll_id.' on '.$this->databox->get_dbname());
+        }
 
         $this->available = true;
         $this->pub_wm = $row['pub_wm'];
@@ -125,7 +124,7 @@ class collection implements cache_cacheableInterface
             , 'name'      => $this->name
             , 'ord'       => $this->ord
             , 'prefs'     => $this->prefs
-            , 'labels'    => $this->labels
+            , 'labels'    => $this->labels,
         );
 
         $this->set_data_to_cache($datas);
@@ -184,7 +183,7 @@ class collection implements cache_cacheableInterface
         $pass_quantity = (int) $pass_quantity < 10 ? 10 : (int) $pass_quantity;
 
         $sql = "SELECT record_id FROM record WHERE coll_id = :coll_id
-            ORDER BY record_id DESC LIMIT 0, " . $pass_quantity;
+            ORDER BY record_id DESC LIMIT 0, ".$pass_quantity;
 
         $stmt = $this->databox->get_connection()->prepare($sql);
         $stmt->execute(array(':coll_id' => $this->get_coll_id()));
@@ -239,8 +238,9 @@ class collection implements cache_cacheableInterface
     {
         $name = trim(strip_tags($name));
 
-        if ($name === '')
-            throw new Exception_InvalidArgument ();
+        if ($name === '') {
+            throw new Exception_InvalidArgument();
+        }
 
         $sql = "UPDATE coll SET asciiname = :asciiname
             WHERE coll_id = :coll_id";
@@ -306,7 +306,6 @@ class collection implements cache_cacheableInterface
 
     public function get_record_details()
     {
-
         $sql = "SELECT record.coll_id,name,COALESCE(asciiname, CONCAT('_',record.coll_id)) AS asciiname,
                     SUM(1) AS n, SUM(size) AS size
                   FROM record NATURAL JOIN subdef
@@ -324,7 +323,7 @@ class collection implements cache_cacheableInterface
                 "coll_id" => (int) $row["coll_id"],
                 "name"    => $row["name"],
                 "amount"  => (int) $row["n"],
-                "size"    => (int) $row["size"]);
+                "size"    => (int) $row["size"], );
         }
 
         return $ret;
@@ -348,7 +347,6 @@ class collection implements cache_cacheableInterface
 
     public function reset_watermark()
     {
-
         $sql = 'SELECT path, file FROM record r INNER JOIN subdef s USING(record_id)
             WHERE r.coll_id = :coll_id AND r.type="image" AND s.name="preview"';
 
@@ -356,7 +354,7 @@ class collection implements cache_cacheableInterface
         $stmt->execute(array(':coll_id' => $this->get_coll_id()));
 
         while ($row2 = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            @unlink(p4string::addEndSlash($row2['path']) . 'watermark_' . $row2['file']);
+            @unlink(p4string::addEndSlash($row2['path']).'watermark_'.$row2['file']);
         }
         $stmt->closeCursor();
 
@@ -365,7 +363,6 @@ class collection implements cache_cacheableInterface
 
     public function reset_stamp($record_id = null)
     {
-
         $sql = 'SELECT path, file FROM record r INNER JOIN subdef s USING(record_id)
             WHERE r.coll_id = :coll_id
               AND r.type="image" AND s.name IN ("preview", "document")';
@@ -381,7 +378,7 @@ class collection implements cache_cacheableInterface
         $stmt->execute($params);
 
         while ($row2 = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            @unlink(p4string::addEndSlash($row2['path']) . 'stamp_' . $row2['file']);
+            @unlink(p4string::addEndSlash($row2['path']).'stamp_'.$row2['file']);
         }
         $stmt->closeCursor();
 
@@ -456,7 +453,7 @@ class collection implements cache_cacheableInterface
         assert(is_int($coll_id));
 
         $key = sprintf('%d_%d', $databox->get_sbas_id(), $coll_id);
-        if ( ! isset(self::$_collections[$key])) {
+        if (! isset(self::$_collections[$key])) {
             self::$_collections[$key] = new self($app, $coll_id, $databox);
         }
 
@@ -529,7 +526,7 @@ class collection implements cache_cacheableInterface
                 $user->ACL()->delete_data_from_cache(ACL::CACHE_RIGHTS_SBAS);
                 $user->ACL()->delete_data_from_cache(ACL::CACHE_RIGHTS_BAS);
             }
-            $n+=50;
+            $n += 50;
         }
 
         $sql = "DELETE FROM basusr WHERE base_id = :base_id";
@@ -621,7 +618,6 @@ class collection implements cache_cacheableInterface
 
     public function set_admin($base_id, user_adapter $user)
     {
-
         $rights = array(
             "canputinalbum"   => "1",
             "candwnldhd"      => "1",
@@ -639,7 +635,7 @@ class collection implements cache_cacheableInterface
             "chgstatus"       => "1",
             "imgtools"        => "1",
             "manage"          => "1",
-            "modify_struct"   => "1"
+            "modify_struct"   => "1",
         );
 
         $user->ACL()->update_rights_to_base($base_id, $rights);
@@ -649,7 +645,6 @@ class collection implements cache_cacheableInterface
 
     public static function mount_collection(Application $app, databox $databox, $coll_id, User_Adapter $user)
     {
-
         $sql = "INSERT INTO bas (base_id, active, server_coll_id, sbas_id, aliases, ord)
             VALUES
             (null, 1, :server_coll_id, :sbas_id, '', :ord)";
@@ -678,15 +673,14 @@ class collection implements cache_cacheableInterface
 
     public static function getLogo($base_id, Application $app, $printname = false)
     {
-        $base_id_key = $base_id . '_' . ($printname ? '1' : '0');
+        $base_id_key = $base_id.'_'.($printname ? '1' : '0');
 
-        if ( ! isset(self::$_logos[$base_id_key])) {
-
-            if (is_file($app['root.path'] . '/config/minilogos/' . $base_id)) {
+        if (! isset(self::$_logos[$base_id_key])) {
+            if (is_file($app['root.path'].'/config/minilogos/'.$base_id)) {
                 $name = phrasea::bas_labels($base_id, $app);
-                self::$_logos[$base_id_key] = '<img title="' . $name
-                    . '" src="' . $app['phraseanet.registry']->get('GV_STATIC_URL')
-                    . '/custom/minilogos/' . $base_id . '" />';
+                self::$_logos[$base_id_key] = '<img title="'.$name
+                    .'" src="'.$app['phraseanet.registry']->get('GV_STATIC_URL')
+                    .'/custom/minilogos/'.$base_id.'" />';
             } elseif ($printname) {
                 self::$_logos[$base_id_key] = phrasea::bas_labels($base_id, $app);
             }
@@ -697,10 +691,10 @@ class collection implements cache_cacheableInterface
 
     public static function getWatermark($base_id)
     {
-        if ( ! isset(self::$_watermarks['base_id'])) {
-
-            if (is_file(__DIR__  . '/../../config/wm/' . $base_id))
-                self::$_watermarks['base_id'] = '<img src="/custom/wm/' . $base_id . '" />';
+        if (! isset(self::$_watermarks['base_id'])) {
+            if (is_file(__DIR__.'/../../config/wm/'.$base_id)) {
+                self::$_watermarks['base_id'] = '<img src="/custom/wm/'.$base_id.'" />';
+            }
         }
 
         return isset(self::$_watermarks['base_id']) ? self::$_watermarks['base_id'] : '';
@@ -708,10 +702,10 @@ class collection implements cache_cacheableInterface
 
     public static function getPresentation($base_id)
     {
-        if ( ! isset(self::$_presentations['base_id'])) {
-
-            if (is_file(__DIR__ . '/../../config/presentation/' . $base_id))
-                self::$_presentations['base_id'] = '<img src="/custom/presentation/' . $base_id . '" />';
+        if (! isset(self::$_presentations['base_id'])) {
+            if (is_file(__DIR__.'/../../config/presentation/'.$base_id)) {
+                self::$_presentations['base_id'] = '<img src="/custom/presentation/'.$base_id.'" />';
+            }
         }
 
         return isset(self::$_presentations['base_id']) ? self::$_presentations['base_id'] : '';
@@ -719,10 +713,10 @@ class collection implements cache_cacheableInterface
 
     public static function getStamp($base_id)
     {
-        if ( ! isset(self::$_stamps['base_id'])) {
-
-            if (is_file(__DIR__ . '/../../config/stamp/' . $base_id))
-                self::$_stamps['base_id'] = '<img src="/custom/stamp/' . $base_id . '" />';
+        if (! isset(self::$_stamps['base_id'])) {
+            if (is_file(__DIR__.'/../../config/stamp/'.$base_id)) {
+                self::$_stamps['base_id'] = '<img src="/custom/stamp/'.$base_id.'" />';
+            }
         }
 
         return isset(self::$_stamps['base_id']) ? self::$_stamps['base_id'] : '';
@@ -730,7 +724,7 @@ class collection implements cache_cacheableInterface
 
     public function get_cache_key($option = null)
     {
-        return 'collection_' . $this->coll_id . ($option ? '_' . $option : '');
+        return 'collection_'.$this->coll_id.($option ? '_'.$option : '');
     }
 
     public function get_data_from_cache($option = null)

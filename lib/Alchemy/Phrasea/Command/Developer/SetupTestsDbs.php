@@ -13,12 +13,9 @@ namespace Alchemy\Phrasea\Command\Developer;
 
 use Alchemy\Phrasea\Command\Command;
 use Alchemy\Phrasea\Exception\RuntimeException;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Process\Process;
 
 class SetupTestsDbs extends Command
 {
@@ -37,7 +34,7 @@ class SetupTestsDbs extends Command
             ));
         }
 
-        $settings = Yaml::parse(file_get_contents(__DIR__ . '/../../../../../hudson/InstallDBs.yml'));
+        $settings = Yaml::parse(file_get_contents(__DIR__.'/../../../../../hudson/InstallDBs.yml'));
 
         $dbs = array();
 
@@ -46,7 +43,7 @@ class SetupTestsDbs extends Command
 
         $schema = $this->container['EM']->getConnection()->getSchemaManager();
 
-        foreach($dbs as $name) {
+        foreach ($dbs as $name) {
             $output->writeln('Creating database "'.$name.'"...<info>OK</info>');
             $schema->dropAndCreateDatabase($name);
         }

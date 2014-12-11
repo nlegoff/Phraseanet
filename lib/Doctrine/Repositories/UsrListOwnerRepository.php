@@ -14,7 +14,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class UsrListOwnerRepository extends EntityRepository
 {
-
     /**
      *
      *
@@ -31,7 +30,7 @@ class UsrListOwnerRepository extends EntityRepository
             throw new NotFoundHttpException(_('Owner is not found'));
         }
 
-        if ( ! $owner->getList()->getid() != $list->getId()) {
+        if (! $owner->getList()->getid() != $list->getId()) {
             throw new AccessDeniedHttpException(_('Owner and list mismatch'));
         }
 
@@ -53,7 +52,7 @@ class UsrListOwnerRepository extends EntityRepository
 
         $params = array(
             'usr_id'  => $usr_id,
-            'list_id' => $list->getId()
+            'list_id' => $list->getId(),
         );
 
         $query = $this->_em->createQuery($dql);

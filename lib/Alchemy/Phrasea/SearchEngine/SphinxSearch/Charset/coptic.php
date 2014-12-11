@@ -34,5 +34,4 @@ class coptic extends AbstractCharset
     U+2CDA->U+2CDB, U+2CDB, U+2CDC->U+2CDD, U+2CDD, U+2CDE->U+2CDF, U+2CDF,
     U+2CE0->U+2CE1, U+2CE1, U+2CE2->U+2CE3, U+2CE3
 ';
-
 }

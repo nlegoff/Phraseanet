@@ -34,8 +34,8 @@ class PhraseaRecoverPasswordForm extends AbstractType
         $builder->add('token', 'hidden', array(
             'required'      => true,
             'constraints'   => array(
-                new PasswordToken($this->app, $this->app['tokens'])
-            )
+                new PasswordToken($this->app, $this->app['tokens']),
+            ),
         ));
 
         $builder->add('password', 'repeated', array(
@@ -55,6 +55,6 @@ class PhraseaRecoverPasswordForm extends AbstractType
 
     public function getName()
     {
-        return null;
+        return;
     }
 }

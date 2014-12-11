@@ -35,8 +35,8 @@ class module_console_taskrun extends Command
     {
         parent::__construct($name);
 
-        $this->task = NULL;
-        $this->shedulerPID = NULL;
+        $this->task = null;
+        $this->shedulerPID = null;
 
         $this
             ->addArgument('task_id', InputArgument::REQUIRED, 'The task_id to run')
@@ -106,12 +106,12 @@ class module_console_taskrun extends Command
                 'enabled'   => true,
                 'level'     => 'INFO',
                 'max-files' => 10,
-            )
+            ),
         ), $taskManagerConf);
 
         if ($taskManagerConf['logger']['enabled']) {
             $level = defined('Monolog\\Logger::'.$taskManagerConf['logger']['level']) ? constant('Monolog\\Logger::'.$taskManagerConf['logger']['level']) : Logger::INFO;
-            $logfile = __DIR__ . '/../../../../logs/task_' . $task_id . '.log';
+            $logfile = __DIR__.'/../../../../logs/task_'.$task_id.'.log';
             $this->container['task-manager.logger']->pushHandler(new RotatingFileHandler($logfile, $taskManagerConf['logger']['max-files'], $level));
         }
 
@@ -123,7 +123,7 @@ class module_console_taskrun extends Command
             'WARNING'  => \task_abstract::LOG_WARNING,
             'ERROR'    => \task_abstract::LOG_ERROR,
             'CRITICAL' => \task_abstract::LOG_CRITICAL,
-            'ALERT'    => \task_abstract::LOG_ALERT
+            'ALERT'    => \task_abstract::LOG_ALERT,
         );
 
         $tmpTask = $task_manager->getTask($task_id, null);
@@ -143,7 +143,7 @@ class module_console_taskrun extends Command
         $this->task = $task_manager->getTask($task_id, $logger);
 
         register_tick_function(array($this, 'tick_handler'), true);
-        declare(ticks = 1);
+        declare (ticks = 1);
 
         if (function_exists('pcntl_signal')) {
             pcntl_signal(SIGTERM, array($this, 'sig_handler'));

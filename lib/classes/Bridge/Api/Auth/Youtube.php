@@ -16,7 +16,6 @@
  */
 class Bridge_Api_Auth_Youtube extends Bridge_Api_Auth_OAuth2
 {
-
     /**
      * Implements OAuth2.0 youtube specifications
      * @param  array  $supp_parameters
@@ -27,7 +26,7 @@ class Bridge_Api_Auth_Youtube extends Bridge_Api_Auth_OAuth2
         $supp_parameters = array_merge(
             $supp_parameters, array(
             'access_type'     => 'offline',
-            'approval_prompt' => 'force')
+            'approval_prompt' => 'force', )
         );
 
         return parent::get_auth_url($supp_parameters);

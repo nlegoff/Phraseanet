@@ -21,7 +21,6 @@ use Doctrine\ORM\EntityManager;
  */
 class Sha256 extends AbstractChecker
 {
-
     public function __construct(Application $app)
     {
         parent::__construct($app);

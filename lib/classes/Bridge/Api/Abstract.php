@@ -68,8 +68,9 @@ abstract class Bridge_Api_Abstract
      */
     public function connect()
     {
-        if ( ! $this->is_configured())
+        if (! $this->is_configured()) {
             throw new Bridge_Exception_ApiConnectorNotConfigured('Connector not configured');
+        }
         $request_token = $this->_auth->parse_request_token();
 
         return $this->_auth->connect($request_token);
@@ -81,8 +82,9 @@ abstract class Bridge_Api_Abstract
      */
     public function reconnect()
     {
-        if ( ! $this->is_configured())
+        if (! $this->is_configured()) {
             throw new Bridge_Exception_ApiConnectorNotConfigured();
+        }
         $this->_auth->reconnect();
 
         return $this;
@@ -94,8 +96,9 @@ abstract class Bridge_Api_Abstract
      */
     public function disconnect()
     {
-        if ( ! $this->is_configured())
+        if (! $this->is_configured()) {
             throw new Bridge_Exception_ApiConnectorNotConfigured();
+        }
         $this->_auth->disconnect();
 
         return $this;

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-require_once __DIR__ . "/../../../classes/DailymotionWithoutOauth2.php";
+require_once __DIR__."/../../../classes/DailymotionWithoutOauth2.php";
 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -242,23 +242,10 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
             case self::ELEMENT_TYPE_VIDEO:
 
                 $result = $this->_api->call('/me/videos', array('fields' => array(
-                        'created_time'
-                        , 'description'
-                        , 'duration'
-                        , 'modified_time'
-                        , 'private'
-                        , 'rating'
-                        , 'ratings_total'
-                        , 'thumbnail_small_url'
-                        , 'thumbnail_medium_url'
-                        , 'title'
-                        , 'url'
-                        , 'views_total'
-                        , 'id'
-                        , 'channel'
+                        'created_time', 'description', 'duration', 'modified_time', 'private', 'rating', 'ratings_total', 'thumbnail_small_url', 'thumbnail_medium_url', 'title', 'url', 'views_total', 'id', 'channel',
                     ),
                     'page'              => ! $offset_start ? 1 : $offset_start,
-                    'limit'             => $quantity), $this->oauth_token);
+                    'limit'             => $quantity, ), $this->oauth_token);
                 $element_collection = new Bridge_Api_ElementCollection();
                 $element_collection->set_items_per_page($result["limit"]);
 
@@ -278,7 +265,7 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
                 break;
 
             default:
-                throw new Bridge_Exception_ElementUnknown('Unknown element ' . $object);
+                throw new Bridge_Exception_ElementUnknown('Unknown element '.$object);
                 break;
         }
     }
@@ -301,9 +288,9 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
                 $params = array('fields' => array(
                         'description'
                         , 'id'
-                        , 'name'
+                        , 'name',
                     ),
-                    'page' => ! $offset_start ? 1 : $offset_start);
+                    'page' => ! $offset_start ? 1 : $offset_start, );
                 //add quantity
                 if (! ! $quantity) {
                     $params["limit"] = $quantity;
@@ -339,7 +326,7 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
                 break;
 
             default:
-                throw new Bridge_Exception_ElementUnknown('Unknown element ' . $object);
+                throw new Bridge_Exception_ElementUnknown('Unknown element '.$object);
                 break;
         }
     }
@@ -354,23 +341,25 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
      *
      * @return Bridge_Api_Dailymotion
      */
-    public function update_element($object, $object_id, Array $datas)
+    public function update_element($object, $object_id, array $datas)
     {
         $required_fields = array("title", "description", "category", "privacy");
         foreach ($required_fields as $field) {
-            if ( ! array_key_exists($field, $datas))
-                throw new Bridge_Exception_ActionMandatoryField("Le paramétre " . $field . " est manquant");
+            if (! array_key_exists($field, $datas)) {
+                throw new Bridge_Exception_ActionMandatoryField("Le paramétre ".$field." est manquant");
+            }
         }
 
         $params = array(
             'title'       => $datas["title"]
             , 'description' => $datas["description"]
             , 'channel'     => $datas["category"]
-            , 'private'     => ! $datas["private"]
+            , 'private'     => ! $datas["private"],
         );
 
-        if ( ! $this->is_valid_object_id($object_id))
+        if (! $this->is_valid_object_id($object_id)) {
             throw new Bridge_Exception_ActionInvalidObjectId($object_id);
+        }
 
         switch ($object) {
             case self::ELEMENT_TYPE_VIDEO :
@@ -378,7 +367,7 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
                 $result = $this->_api->call($url, $params, $this->oauth_token);
                 break;
             default:
-                throw new Bridge_Exception_ElementUnknown('Unknown element ' . $object);
+                throw new Bridge_Exception_ElementUnknown('Unknown element '.$object);
                 break;
         }
 
@@ -402,7 +391,7 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
                 return $playlist["id"];
                 break;
             default:
-                throw new Bridge_Exception_ElementUnknown('Unknown element ' . $container_type);
+                throw new Bridge_Exception_ElementUnknown('Unknown element '.$container_type);
                 break;
         }
     }
@@ -437,12 +426,12 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
                         return $this->get_container_from_id(self::CONTAINER_TYPE_PLAYLIST, $container_id);
                         break;
                     default:
-                        throw new Bridge_Exception_ContainerUnknown('Unknown element ' . $element_type);
+                        throw new Bridge_Exception_ContainerUnknown('Unknown element '.$element_type);
                         break;
                 }
                 break;
             default:
-                throw new Bridge_Exception_ElementUnknown('Unknown container ' . $element_type);
+                throw new Bridge_Exception_ElementUnknown('Unknown container '.$element_type);
                 break;
         }
     }
@@ -464,7 +453,7 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
                 $result = $this->_api->call($url, array(), $this->oauth_token);
                 break;
             default:
-                throw new Bridge_Exception_ObjectUnknown('Unknown object ' . $object);
+                throw new Bridge_Exception_ObjectUnknown('Unknown object '.$object);
                 break;
         }
 
@@ -493,7 +482,7 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
         $url = sprintf("/%s/%s", $element->get_type(), $element->get_dist_id());
 
         $result = $this->_api->call($url, array('fields' => array(
-                'status'
+                'status',
             )), $this->oauth_token);
 
         return $result["status"];
@@ -520,7 +509,7 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
                 return Bridge_Element::STATUS_ERROR;
                 break;
             default:
-                return null;
+                return;
                 break;
         }
     }
@@ -608,27 +597,13 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
         switch ($object) {
             case self::ELEMENT_TYPE_VIDEO:
                 $entry = $this->_api->call($url, array('fields' => array(
-                        'created_time'
-                        , 'description'
-                        , 'duration'
-                        , 'modified_time'
-                        , 'private'
-                        , 'rating'
-                        , 'ratings_total'
-                        , 'thumbnail_small_url'
-                        , 'thumbnail_medium_url'
-                        , 'title'
-                        , 'url'
-                        , 'views_total'
-                        , 'id'
-                        , 'channel'
-                        , 'tags'
+                        'created_time', 'description', 'duration', 'modified_time', 'private', 'rating', 'ratings_total', 'thumbnail_small_url', 'thumbnail_medium_url', 'title', 'url', 'views_total', 'id', 'channel', 'tags',
                     )), $this->oauth_token);
 
                 return new Bridge_Api_Dailymotion_Element($entry, $object);
                 break;
             default:
-                throw new Bridge_Exception_ElementUnknown('Unknown element ' . $object);
+                throw new Bridge_Exception_ElementUnknown('Unknown element '.$object);
                 break;
         }
     }
@@ -646,9 +621,7 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
         switch ($object) {
             case self::CONTAINER_TYPE_PLAYLIST:
                 $entry = $this->_api->call($url, array('fields' => array(
-                        'description'
-                        , 'id'
-                        , 'name'
+                        'description', 'id', 'name',
                     )), $this->oauth_token);
                 /**
                  * @todo Retieve thumb
@@ -657,14 +630,14 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
                 return new Bridge_Api_Dailymotion_Container($entry, $object, '');
                 break;
             default:
-                throw new Bridge_Exception_ElementUnknown('Unknown element ' . $object);
+                throw new Bridge_Exception_ElementUnknown('Unknown element '.$object);
                 break;
         }
     }
 
     public function is_configured()
     {
-        if ( ! $this->registry->get('GV_dailymotion_api')) {
+        if (! $this->registry->get('GV_dailymotion_api')) {
             return false;
         }
 
@@ -687,13 +660,7 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
     {
         $this->_auth->set_parameters(
             array(
-                'client_id'      => $this->registry->get('GV_dailymotion_client_id')
-                , 'client_secret'  => $this->registry->get('GV_dailymotion_client_secret')
-                , 'redirect_uri'   => Bridge_Api::generate_callback_url($this->generator, $this->get_name())
-                , 'scope'          => ''
-                , 'response_type'  => 'code'
-                , 'token_endpoint' => self::OAUTH2_TOKEN_ENDPOINT
-                , 'auth_endpoint'  => self::OAUTH2_AUTHORIZE_ENDPOINT
+                'client_id'      => $this->registry->get('GV_dailymotion_client_id'), 'client_secret'  => $this->registry->get('GV_dailymotion_client_secret'), 'redirect_uri'   => Bridge_Api::generate_callback_url($this->generator, $this->get_name()), 'scope'          => '', 'response_type'  => 'code', 'token_endpoint' => self::OAUTH2_TOKEN_ENDPOINT, 'auth_endpoint'  => self::OAUTH2_AUTHORIZE_ENDPOINT,
             )
         );
 
@@ -754,7 +721,7 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
      * @param  string                       $id
      * @return Bridge_Api_ElementCollection
      */
-    protected function list_containers_content($object, $id, Array $fields = array(), $iteration = 0)
+    protected function list_containers_content($object, $id, array $fields = array(), $iteration = 0)
     {
         $url = sprintf("/%s/%s/videos", $object, $id);
         $result = $this->_api->call($url, array('fields' => $fields), $this->oauth_token);
@@ -774,8 +741,9 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
         foreach ($result["list"] as $entry) {
             $i ++;
             $element_collection->add_element(new Bridge_Api_Dailymotion_Element($entry, $object));
-            if ($i == $iteration)
+            if ($i == $iteration) {
                 break;
+            }
         }
 
         return $element_collection;
@@ -801,7 +769,7 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
      * @param  record_adapter $record
      * @return array
      */
-    public function check_upload_constraints(Array $datas, record_adapter $record)
+    public function check_upload_constraints(array $datas, record_adapter $record)
     {
         $errors = $this->check_record_constraints($record);
         $check = function ($field) use (&$errors, $datas, $record) {
@@ -811,14 +779,17 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
                 $length = (int) $field["length"];
                 $length_min = (int) $field["length_min"];
 
-                if ( ! isset($datas[$name]) || trim($datas[$name]) === '') {
-                    if ($required)
-                        $errors[$name . '_' . $key] = _("Ce champ est obligatoire");
+                if (! isset($datas[$name]) || trim($datas[$name]) === '') {
+                    if ($required) {
+                        $errors[$name.'_'.$key] = _("Ce champ est obligatoire");
+                    }
                 } else {
-                    if ($length != 0 && mb_strlen($datas[$name]) > $length)
-                        $errors[$name . '_' . $key] = sprintf(_("Ce champ est trop long %s caracteres max"), $length);
-                    if ($length_min != 0 && mb_strlen($datas[$name]) < $length_min)
-                        $errors[$name . '_' . $key] = sprintf(_("Ce champ est trop court %s caracteres min"), $length_min);
+                    if ($length != 0 && mb_strlen($datas[$name]) > $length) {
+                        $errors[$name.'_'.$key] = sprintf(_("Ce champ est trop long %s caracteres max"), $length);
+                    }
+                    if ($length_min != 0 && mb_strlen($datas[$name]) < $length_min) {
+                        $errors[$name.'_'.$key] = sprintf(_("Ce champ est trop court %s caracteres min"), $length_min);
+                    }
                 }
             };
 
@@ -827,7 +798,7 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
         return $errors;
     }
 
-    public function check_update_constraints(Array $datas)
+    public function check_update_constraints(array $datas)
     {
         $errors = array();
         $check = function ($field) use (&$errors, $datas) {
@@ -836,14 +807,17 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
                 $length = (int) $field["length"];
                 $length_min = (int) $field["length_min"];
 
-                if ( ! isset($datas[$name]) || trim($datas[$name]) === '') {
-                    if ($required)
+                if (! isset($datas[$name]) || trim($datas[$name]) === '') {
+                    if ($required) {
                         $errors[$name] = _("Ce champ est obligatoire");
+                    }
                 } else {
-                    if ($length != 0 && mb_strlen($datas[$name]) > $length)
+                    if ($length != 0 && mb_strlen($datas[$name]) > $length) {
                         $errors[$name] = sprintf(_("Ce champ est trop long %s caracteres max"), $length);
-                    if ($length_min != 0 && mb_strlen($datas[$name]) < $length_min)
+                    }
+                    if ($length_min != 0 && mb_strlen($datas[$name]) < $length_min) {
                         $errors[$name] = sprintf(_("Ce champ est trop court %s caracteres min"), $length_min);
+                    }
                 }
             };
 
@@ -864,10 +838,10 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
     {
         $key = $record->get_serialize_key();
         $datas = array(
-            'title'       => $request->get('title_' . $key),
-            'description' => $request->get('description_' . $key),
-            'tag'         => $request->get('tags_' . $key),
-            'private'     => $request->get('privacy_' . $key) === 'private' ? true : false,
+            'title'       => $request->get('title_'.$key),
+            'description' => $request->get('description_'.$key),
+            'tag'         => $request->get('tags_'.$key),
+            'private'     => $request->get('privacy_'.$key) === 'private' ? true : false,
         );
 
         return $datas;
@@ -909,14 +883,17 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
     private function check_record_constraints(record_adapter $record)
     {
         $errors = array();
-        if ( ! $record->get_hd_file() instanceof \SplFileInfo)
-            $errors["file_size"] = _("Le record n'a pas de fichier physique"); //Record must rely on real file
+        if (! $record->get_hd_file() instanceof \SplFileInfo) {
+            $errors["file_size"] = _("Le record n'a pas de fichier physique");
+        } //Record must rely on real file
 
-        if ($record->get_duration() > self::AUTH_VIDEO_DURATION)
+        if ($record->get_duration() > self::AUTH_VIDEO_DURATION) {
             $errors["duration"] = sprintf(_("La taille maximale d'une video est de %d minutes."), self::AUTH_VIDEO_DURATION / 60);
+        }
 
-        if ($record->get_technical_infos('size') > self::AUTH_VIDEO_SIZE)
+        if ($record->get_technical_infos('size') > self::AUTH_VIDEO_SIZE) {
             $errors["size"] = sprintf(_("Le poids maximum d'un fichier est de %s"), p4string::format_octets(self::AUTH_VIDEO_SIZE));
+        }
 
         return $errors;
     }
@@ -932,26 +909,26 @@ class Bridge_Api_Dailymotion extends Bridge_Api_Abstract implements Bridge_Api_I
                 'name'       => 'title',
                 'length'     => '255',
                 'length_min' => '5',
-                'required'   => true
+                'required'   => true,
             )
             , array(
                 'name'       => 'description',
                 'length'     => '2000',
                 'length_min' => '0',
-                'required'   => false
+                'required'   => false,
             )
             , array(
                 'name'       => 'tags',
                 'length'     => '150',
                 'length_min' => '0',
-                'required'   => false
+                'required'   => false,
             )
             , array(
                 'name'       => 'private',
                 'length'     => '0',
                 'length_min' => '0',
-                'required'   => true
-            )
+                'required'   => true,
+            ),
         );
     }
 }

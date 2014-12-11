@@ -49,7 +49,7 @@ class eventsmanager_notify_push extends eventsmanager_notifyAbstract
             'from'    => ''
             , 'to'      => ''
             , 'message' => ''
-            , 'ssel_id' => ''
+            , 'ssel_id' => '',
         );
 
         $params = array_merge($default, $params);
@@ -83,7 +83,6 @@ class eventsmanager_notify_push extends eventsmanager_notifyAbstract
         $mailed = false;
 
         if ($this->shouldSendNotificationFor($params['to'])) {
-
             $readyToSend = false;
             try {
                 $repository = $this->app['EM']->getRepository('\Entities\Basket');
@@ -96,7 +95,6 @@ class eventsmanager_notify_push extends eventsmanager_notifyAbstract
                 $emitter = Emitter::fromUser($user_from);
                 $readyToSend = true;
             } catch (\Exception $e) {
-
             }
 
             if ($readyToSend) {
@@ -136,8 +134,8 @@ class eventsmanager_notify_push extends eventsmanager_notifyAbstract
         $ret = array(
             'text'  => sprintf(
                 _('%1$s vous a envoye un %2$spanier%3$s'), $sender, '<a href="#" onclick="openPreview(\'BASK\',1,\''
-                . (string) $sx->ssel_id . '\');return false;">', '</a>')
-            , 'class' => ($unread == 1 ? 'reload_baskets' : '')
+                .(string) $sx->ssel_id.'\');return false;">', '</a>')
+            , 'class' => ($unread == 1 ? 'reload_baskets' : ''),
         );
 
         return $ret;
@@ -170,5 +168,4 @@ class eventsmanager_notify_push extends eventsmanager_notifyAbstract
     {
         return true;
     }
-
 }

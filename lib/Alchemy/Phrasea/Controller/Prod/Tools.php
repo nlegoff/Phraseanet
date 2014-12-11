@@ -25,7 +25,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Tools implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -51,9 +50,7 @@ class Tools implements ControllerProviderInterface
                                 ->files($record->get_subdef('document')->get_pathfile())
                                 ->first()->getMetadatas();
                     } catch (\PHPExiftool\Exception\Exception $e) {
-
                     } catch (\Exception_Media_SubdefNotFound $e) {
-
                     }
                 }
             }
@@ -93,7 +90,6 @@ class Tools implements ControllerProviderInterface
             $selection = RecordsRequest::fromRequest($app, $request, false, array('canmodifrecord'));
 
             foreach ($selection as $record) {
-
                 $substituted = false;
                 foreach ($record->get_subdefs() as $subdef) {
                     if ($subdef->is_substituted()) {
@@ -115,17 +111,14 @@ class Tools implements ControllerProviderInterface
             $message = _('An error occured');
 
             if ($file = $request->files->get('newHD')) {
-
                 if ($file->isValid()) {
-
                     $fileName = $file->getClientOriginalName();
 
                     try {
-
                         $tempoDir = tempnam(sys_get_temp_dir(), 'substit');
                         unlink($tempoDir);
                         mkdir($tempoDir);
-                        $tempoFile = $tempoDir . DIRECTORY_SEPARATOR . $fileName;
+                        $tempoFile = $tempoDir.DIRECTORY_SEPARATOR.$fileName;
 
                         if (false === rename($file->getPathname(), $tempoFile)) {
                             throw new RuntimeException('Error while renaming file');
@@ -179,14 +172,13 @@ class Tools implements ControllerProviderInterface
             $message = _('An error occured');
 
             if ($file = $request->files->get('newThumb')) {
-
                 if ($file->isValid()) {
                     try {
                         $fileName = $file->getClientOriginalName();
                         $tempoDir = tempnam(sys_get_temp_dir(), 'substit');
                         unlink($tempoDir);
                         mkdir($tempoDir);
-                        $tempoFile = $tempoDir . DIRECTORY_SEPARATOR . $fileName;
+                        $tempoFile = $tempoDir.DIRECTORY_SEPARATOR.$fileName;
 
                         if (false === rename($file->getPathname(), $tempoFile)) {
                             throw new RuntimeException('Error while renaming file');
@@ -235,8 +227,7 @@ class Tools implements ControllerProviderInterface
             try {
                 $record = new \record_adapter($app, $request->request->get('sbas_id'), $request->request->get('record_id'));
                 $var = array(
-                    'video_title'    => $record->get_title()
-                    , 'image'          => $request->request->get('image', '')
+                    'video_title'    => $record->get_title(), 'image'          => $request->request->get('image', ''),
                 );
                 $return['datas'] = $app['twig']->render($template, $var);
             } catch (\Exception $e) {
@@ -255,7 +246,7 @@ class Tools implements ControllerProviderInterface
 
                 $dataUri = DataURI\Parser::parse($request->request->get('image', ''));
 
-                $path = $app['root.path'] . '/tmp';
+                $path = $app['root.path'].'/tmp';
 
                 $name = sprintf('extractor_thumb_%s', $record->get_serialize_key());
 

@@ -9,7 +9,7 @@ class TagProviderTest extends \PHPUnit_Framework_TestCase
     private $object;
     protected function setUp()
     {
-        $this->object = new TagProvider;
+        $this->object = new TagProvider();
     }
 
     /**

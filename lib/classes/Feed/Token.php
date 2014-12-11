@@ -66,7 +66,7 @@ class Feed_Token
 
         $params = array(
             ':feed_id' => $feed_id
-            , ':token'   => $token
+            , ':token'   => $token,
         );
 
         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -74,8 +74,9 @@ class Feed_Token
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ( ! $row)
+        if (! $row) {
             throw new NotFoundHttpException('Feed not found.');
+        }
 
         $this->feed_id = (int) $row['feed_id'];
         $this->usr_id = (int) $row['usr_id'];
@@ -90,8 +91,9 @@ class Feed_Token
      */
     public function get_user()
     {
-        if ( ! $this->user)
+        if (! $this->user) {
             $this->user = User_Adapter::getInstance($this->usr_id, $this->app);
+        }
 
         return $this->user;
     }
@@ -102,8 +104,9 @@ class Feed_Token
      */
     public function get_feed()
     {
-        if ( ! $this->feed)
+        if (! $this->feed) {
             $this->feed = Feed_Adapter::load_with_user($this->app, $this->get_user(), $this->feed_id);
+        }
 
         return $this->feed;
     }

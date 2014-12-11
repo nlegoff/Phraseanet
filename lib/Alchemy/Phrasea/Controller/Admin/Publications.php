@@ -24,7 +24,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  */
 class Publications implements ControllerProviderInterface
 {
-
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
@@ -187,8 +186,9 @@ class Publications implements ControllerProviderInterface
                 $feed = new \Feed_Adapter($app, $id);
                 $publisher = new \Feed_Publisher_Adapter($app, $request->request->get('publisher_id'));
                 $user = $publisher->get_user();
-                if ($feed->is_publisher($user) === true && $feed->is_owner($user) === false)
+                if ($feed->is_publisher($user) === true && $feed->is_owner($user) === false) {
                     $publisher->delete();
+                }
             } catch (\Exception $e) {
                 $error = $e->getMessage();
             }

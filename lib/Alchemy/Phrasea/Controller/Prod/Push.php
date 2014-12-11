@@ -26,7 +26,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class Push implements ControllerProviderInterface
 {
-
     protected function getUserFormatter()
     {
         return function (\User_Adapter $user) {
@@ -39,7 +38,7 @@ class Push implements ControllerProviderInterface
                 , 'lastname'     => $user->get_lastname()
                 , 'email'        => $user->get_email()
                 , 'display_name' => $user->get_display_name()
-                , 'subtitle'     => implode(', ', $subtitle)
+                , 'subtitle'     => implode(', ', $subtitle),
             );
         };
     }
@@ -55,7 +54,7 @@ class Push implements ControllerProviderInterface
                 /* @var $entry \Entities\UsrListEntry */
                 $entries[] = array(
                     'Id'   => $entry->getId(),
-                    'User' => $userFormatter($entry->getUser($app))
+                    'User' => $userFormatter($entry->getUser($app)),
                 );
             }
 
@@ -64,7 +63,7 @@ class Push implements ControllerProviderInterface
                 , 'list_id' => $List->getId()
                 , 'name'    => $List->getName()
                 , 'length'  => count($entries)
-                , 'entries' => $entries
+                , 'entries' => $entries,
             );
         };
     }
@@ -78,11 +77,13 @@ class Push implements ControllerProviderInterface
                 /* @var $record record_adapter */
                 foreach ($record->get_caption()->get_fields() as $caption_field) {
                     foreach ($caption_field->get_values() as $value) {
-                        if (!$value->getVocabularyType())
+                        if (!$value->getVocabularyType()) {
                             continue;
+                        }
 
-                        if ($value->getVocabularyType()->getType() !== 'User')
+                        if ($value->getVocabularyType()->getType() !== 'User') {
                             continue;
+                        }
 
                         $user = $value->getRessource();
 
@@ -123,7 +124,7 @@ class Push implements ControllerProviderInterface
                 'message'          => '',
                 'lists'            => $repository->findUserLists($app['authentication']->getUser()),
                 'context'          => 'Push',
-                'RecommendedUsers' => $RecommendedUsers
+                'RecommendedUsers' => $RecommendedUsers,
             );
 
             return $app['twig']->render('prod/actions/Push.html.twig', $params);
@@ -141,7 +142,7 @@ class Push implements ControllerProviderInterface
                 'message'          => '',
                 'lists'            => $repository->findUserLists($app['authentication']->getUser()),
                 'context'          => 'Feedback',
-                'RecommendedUsers' => $RecommendedUsers
+                'RecommendedUsers' => $RecommendedUsers,
             );
 
             return $app['twig']->render('prod/actions/Push.html.twig', $params);
@@ -152,7 +153,7 @@ class Push implements ControllerProviderInterface
 
             $ret = array(
                 'success' => false,
-                'message' => _('Unable to send the documents')
+                'message' => _('Unable to send the documents'),
             );
 
             try {
@@ -198,15 +199,11 @@ class Push implements ControllerProviderInterface
 
                         if ($receiver['HD']) {
                             $user_receiver->ACL()->grant_hd_on(
-                                $BasketElement->getRecord($app)
-                                , $app['authentication']->getUser()
-                                , \ACL::GRANT_ACTION_PUSH
+                                $BasketElement->getRecord($app), $app['authentication']->getUser(), \ACL::GRANT_ACTION_PUSH
                             );
                         } else {
                             $user_receiver->ACL()->grant_preview_on(
-                                $BasketElement->getRecord($app)
-                                , $app['authentication']->getUser()
-                                , \ACL::GRANT_ACTION_PUSH
+                                $BasketElement->getRecord($app), $app['authentication']->getUser(), \ACL::GRANT_ACTION_PUSH
                             );
                         }
                     }
@@ -231,15 +228,7 @@ class Push implements ControllerProviderInterface
                     $receipt = $request->get('recept') ? $app['authentication']->getUser()->get_email() : '';
 
                     $params = array(
-                        'from'       => $app['authentication']->getUser()->get_id()
-                        , 'from_email' => $app['authentication']->getUser()->get_email()
-                        , 'to'         => $user_receiver->get_id()
-                        , 'to_email'   => $user_receiver->get_email()
-                        , 'to_name'    => $user_receiver->get_display_name()
-                        , 'url'        => $url
-                        , 'accuse'     => $receipt
-                        , 'message'    => $request->request->get('message')
-                        , 'ssel_id'    => $Basket->getId()
+                        'from'       => $app['authentication']->getUser()->get_id(), 'from_email' => $app['authentication']->getUser()->get_email(), 'to'         => $user_receiver->get_id(), 'to_email'   => $user_receiver->get_email(), 'to_name'    => $user_receiver->get_display_name(), 'url'        => $url, 'accuse'     => $receipt, 'message'    => $request->request->get('message'), 'ssel_id'    => $Basket->getId(),
                     );
 
                     $app['events-manager']->trigger('__PUSH_DATAS__', $params);
@@ -251,17 +240,15 @@ class Push implements ControllerProviderInterface
                 $app['EM']->flush();
 
                 $message = sprintf(
-                    _('%1$d records have been sent to %2$d users')
-                    , count($pusher->get_elements())
-                    , count($receivers)
+                    _('%1$d records have been sent to %2$d users'), count($pusher->get_elements()), count($receivers)
                 );
 
                 $ret = array(
                     'success' => true,
-                    'message' => $message
+                    'message' => $message,
                 );
             } catch (ControllerException $e) {
-                $ret['message'] = $e->getMessage() . $e->getFile() . $e->getLine();
+                $ret['message'] = $e->getMessage().$e->getFile().$e->getLine();
             }
 
             return $app->json($ret);
@@ -272,7 +259,7 @@ class Push implements ControllerProviderInterface
 
             $ret = array(
                 'success' => false,
-                'message' => _('Unable to send the documents')
+                'message' => _('Unable to send the documents'),
             );
 
             $app['EM']->beginTransaction();
@@ -328,7 +315,7 @@ class Push implements ControllerProviderInterface
                     $duration = (int) $request->request->get('duration');
 
                     if ($duration > 0) {
-                        $date = new \DateTime('+' . $duration . ' day' . ($duration > 1 ? 's' : ''));
+                        $date = new \DateTime('+'.$duration.' day'.($duration > 1 ? 's' : ''));
                         $Validation->setExpires($date);
                     }
 
@@ -351,14 +338,15 @@ class Push implements ControllerProviderInterface
                         'see_others' => 1,
                         'usr_id'     => $app['authentication']->getUser()->get_id(),
                         'agree'      => 0,
-                        'HD'         => 0
+                        'HD'         => 0,
                     );
                 }
 
                 foreach ($participants as $key => $participant) {
                     foreach (array('see_others', 'usr_id', 'agree', 'HD') as $mandatoryparam) {
-                        if (!array_key_exists($mandatoryparam, $participant))
+                        if (!array_key_exists($mandatoryparam, $participant)) {
                             throw new ControllerException(sprintf(_('Missing mandatory parameter %s'), $mandatoryparam));
+                        }
                     }
 
                     try {
@@ -371,7 +359,6 @@ class Push implements ControllerProviderInterface
                         $Participant = $Validation->getParticipant($participant_user, $app);
                         continue;
                     } catch (NotFoundHttpException $e) {
-
                     }
 
                     $Participant = new \Entities\ValidationParticipant();
@@ -391,15 +378,11 @@ class Push implements ControllerProviderInterface
 
                         if ($participant['HD']) {
                             $participant_user->ACL()->grant_hd_on(
-                                $BasketElement->getRecord($app)
-                                , $app['authentication']->getUser()
-                                , \ACL::GRANT_ACTION_VALIDATE
+                                $BasketElement->getRecord($app), $app['authentication']->getUser(), \ACL::GRANT_ACTION_VALIDATE
                             );
                         } else {
                             $participant_user->ACL()->grant_preview_on(
-                                $BasketElement->getRecord($app)
-                                , $app['authentication']->getUser()
-                                , \ACL::GRANT_ACTION_VALIDATE
+                                $BasketElement->getRecord($app), $app['authentication']->getUser(), \ACL::GRANT_ACTION_VALIDATE
                             );
                         }
 
@@ -453,14 +436,12 @@ class Push implements ControllerProviderInterface
                 $app['EM']->flush();
 
                 $message = sprintf(
-                    _('%1$d records have been sent for validation to %2$d users')
-                    , count($pusher->get_elements())
-                    , count($request->request->get('participants'))
+                    _('%1$d records have been sent for validation to %2$d users'), count($pusher->get_elements()), count($request->request->get('participants'))
                 );
 
                 $ret = array(
                     'success' => true,
-                    'message' => $message
+                    'message' => $message,
                 );
 
                 $app['EM']->commit();
@@ -516,20 +497,25 @@ class Push implements ControllerProviderInterface
             $result = array('success' => false, 'message' => '', 'user'    => null);
 
             try {
-                if (!$app['authentication']->getUser()->ACL()->has_right('manageusers'))
+                if (!$app['authentication']->getUser()->ACL()->has_right('manageusers')) {
                     throw new ControllerException(_('You are not allowed to add users'));
+                }
 
-                if (!$request->request->get('firstname'))
+                if (!$request->request->get('firstname')) {
                     throw new ControllerException(_('First name is required'));
+                }
 
-                if (!$request->request->get('lastname'))
+                if (!$request->request->get('lastname')) {
                     throw new ControllerException(_('Last name is required'));
+                }
 
-                if (!$request->request->get('email'))
+                if (!$request->request->get('email')) {
                     throw new ControllerException(_('Email is required'));
+                }
 
-                if (!\Swift_Validate::email($request->request->get('email')))
+                if (!\Swift_Validate::email($request->request->get('email'))) {
                     throw new ControllerException(_('Email is invalid'));
+                }
             } catch (ControllerException $e) {
                 $result['message'] = $e->getMessage();
 
@@ -547,7 +533,6 @@ class Push implements ControllerProviderInterface
                 $result['success'] = true;
                 $result['user'] = $userFormatter($user);
             } catch (\Exception $e) {
-
             }
 
             if (!$user instanceof \User_Adapter) {
@@ -559,12 +544,15 @@ class Push implements ControllerProviderInterface
                     $user->set_firstname($request->request->get('firstname'))
                         ->set_lastname($request->request->get('lastname'));
 
-                    if ($request->request->get('company'))
+                    if ($request->request->get('company')) {
                         $user->set_company($request->request->get('company'));
-                    if ($request->request->get('job'))
+                    }
+                    if ($request->request->get('job')) {
                         $user->set_company($request->request->get('job'));
-                    if ($request->request->get('form_geonameid'))
+                    }
+                    if ($request->request->get('form_geonameid')) {
                         $user->set_geonameid($request->request->get('form_geonameid'));
+                    }
 
                     $result['message'] = _('User successfully created');
                     $result['success'] = true;
@@ -663,11 +651,7 @@ class Push implements ControllerProviderInterface
                     ->execute()->get_results();
 
             $params = array(
-                'query'   => $query
-                , 'results' => $results
-                , 'list'    => $list
-                , 'sort'    => $sort
-                , 'ord'     => $ord
+                'query'   => $query, 'results' => $results, 'list'    => $list, 'sort'    => $sort, 'ord'     => $ord,
             );
 
             if ($request->get('type') === 'fragment') {

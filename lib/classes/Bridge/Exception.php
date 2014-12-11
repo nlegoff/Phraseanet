@@ -17,5 +17,4 @@
  */
 class Bridge_Exception extends \Exception
 {
-
 }

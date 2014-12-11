@@ -118,7 +118,7 @@ abstract class task_abstract
     protected $todo;
     protected $done;
     protected $period = 60;
-    protected $taskid = NULL;
+    protected $taskid = null;
     protected $system = '';
     protected $dependencyContainer;
 
@@ -184,7 +184,7 @@ abstract class task_abstract
      */
     public function getState()
     {
-        static $stmt = NULL;
+        static $stmt = null;
         $conn = connection::getPDOConnection($this->dependencyContainer);
         if (! $stmt) {
             $sql = 'SELECT status FROM task2 WHERE task_id = :taskid';
@@ -206,7 +206,6 @@ abstract class task_abstract
      */
     public function printInterfaceHEAD()
     {
-
     }
 
     /**
@@ -214,7 +213,6 @@ abstract class task_abstract
      */
     public function printInterfaceJS()
     {
-
     }
 
     /**
@@ -240,10 +238,10 @@ abstract class task_abstract
             self::STATE_STOPPED,
             self::STATE_TORESTART,
             self::STATE_TOSTART,
-            self::STATE_TODELETE
+            self::STATE_TODELETE,
         );
 
-        if ( ! in_array($status, $av_status)) {
+        if (! in_array($status, $av_status)) {
             throw new Exception_InvalidArgument(sprintf('unknown status `%s`', $status));
         }
 
@@ -439,7 +437,7 @@ abstract class task_abstract
 
         $params = array(
             ':taskid' => $this->getID()
-            , ':runner' => $this->runner
+            , ':runner' => $this->runner,
         );
 
         $stmt = $conn->prepare($sql);
@@ -463,14 +461,14 @@ abstract class task_abstract
      */
     public function delete()
     {
-        if ( ! $this->getPID()) { // do not delete a running task
+        if (! $this->getPID()) { // do not delete a running task
             $conn = connection::getPDOConnection($this->dependencyContainer);
             $sql = "DELETE FROM task2 WHERE task_id = :task_id";
             $stmt = $conn->prepare($sql);
             $stmt->execute(array(':task_id' => $this->getID()));
             $stmt->closeCursor();
 
-            $lock_file = $this->dependencyContainer['root.path'] . '/tmp/locks/task_' . $this->getID() . '.lock';
+            $lock_file = $this->dependencyContainer['root.path'].'/tmp/locks/task_'.$this->getID().'.lock';
             @unlink($lock_file);
         }
     }
@@ -518,7 +516,7 @@ abstract class task_abstract
      */
     public function getPID()
     {
-        $pid = NULL;
+        $pid = null;
 
         $lockfile = $this->getLockfilePath();
 
@@ -549,7 +547,7 @@ abstract class task_abstract
     protected function pause($when_started = 0)
     {
         if ($this->records_done > 0) {
-            $this->log($this->records_done . ' records done');
+            $this->log($this->records_done.' records done');
         }
         if ($this->running) {       // && $this->records_done == 0)
             $when_started = time() - $when_started;
@@ -558,7 +556,7 @@ abstract class task_abstract
                     $s = $this->getState();
                     if ($s == self::STATE_TOSTOP) {
                         $this->setState(self::STATE_STOPPED);
-                        $this->running = FALSE;
+                        $this->running = false;
                     } else {
                         sleep(1);
                     }
@@ -591,8 +589,8 @@ abstract class task_abstract
      */
     private function getLockfilePath()
     {
-        $lockdir = $this->dependencyContainer['root.path'] . '/tmp/locks/';
-        $lockfilePath = ($lockdir . 'task_' . $this->getID() . '.lock');
+        $lockdir = $this->dependencyContainer['root.path'].'/tmp/locks/';
+        $lockfilePath = ($lockdir.'task_'.$this->getID().'.lock');
 
         return $lockfilePath;
     }
@@ -618,7 +616,7 @@ abstract class task_abstract
 
         // here we run the task
         ftruncate($lockFD, 0);
-        fwrite($lockFD, '' . getmypid());
+        fwrite($lockFD, ''.getmypid());
         fflush($lockFD);
 
         // for windows : unlock then lock shared to allow OTHER processes to read the file
@@ -637,11 +635,10 @@ abstract class task_abstract
         $this->setState(self::STATE_STARTED);
 
         // run the real code of the task -into the task's class- (may throw an exception)
-        $exception = NULL;
+        $exception = null;
         try {
             $this->run2();
         } catch (\Exception $exception) {
-
         }
 
         if ($this->getState() === self::STATE_STARTED && $this->runner === self::RUNNER_MANUAL) {
@@ -690,12 +687,11 @@ abstract class task_abstract
         $rowsdone = 0;
 
         foreach ($rs as $row) {
-
             try {
                 // process one record
                 $this->processOneContent($box, $row);
             } catch (\Exception $e) {
-                $this->log("Exception : " . $e->getMessage() . " " . basename($e->getFile()) . " " . $e->getLine(), self::LOG_ERROR);
+                $this->log("Exception : ".$e->getMessage()." ".basename($e->getFile())." ".$e->getLine(), self::LOG_ERROR);
             }
 
             $this->records_done ++;
@@ -711,23 +707,23 @@ abstract class task_abstract
             $current_memory = memory_get_usage();
             if ($current_memory >> 20 >= $this->maxmegs) {
                 $this->log(sprintf("Max memory (%s M) reached (actual is %.02f M)", $this->maxmegs, ($current_memory >> 10) / 1024), self::LOG_DEBUG);
-                $this->running = FALSE;
+                $this->running = false;
                 $ret = self::STATE_MAXMEGSREACHED;
             }
 
             if ($this->records_done >= (integer) ($this->maxrecs)) {
                 $this->log(sprintf("Max records done (%s) reached (actual is %s)", $this->maxrecs, $this->records_done), self::LOG_DEBUG);
-                $this->running = FALSE;
+                $this->running = false;
                 $ret = self::STATE_MAXRECSDONE;
             }
 
             try {
                 if ($this->getState() == self::STATE_TOSTOP) {
-                    $this->running = FALSE;
+                    $this->running = false;
                     $ret = self::STATE_TOSTOP;
                 }
             } catch (\Exception $e) {
-                $this->running = FALSE;
+                $this->running = false;
             }
 
             if (! $this->running) {
@@ -737,28 +733,27 @@ abstract class task_abstract
         //
         // if nothing was done, at least check the status
         if ($rowsdone == 0 && $this->running) {
-
             $current_memory = memory_get_usage();
             if ($current_memory >> 20 >= $this->maxmegs) {
                 $this->log(sprintf("Max memory (%s M) reached (current is %.02f M)", $this->maxmegs, ($current_memory >> 10) / 1024), self::LOG_INFO);
-                $this->running = FALSE;
+                $this->running = false;
                 $ret = self::STATE_MAXMEGSREACHED;
             }
 
             if ($this->records_done >= (integer) ($this->maxrecs)) {
                 $this->log(sprintf("Max records done (%s) reached (actual is %s)", $this->maxrecs, $this->records_done));
-                $this->running = FALSE;
+                $this->running = false;
                 $ret = self::STATE_MAXRECSDONE;
             }
 
             try {
                 $status = $this->getState();
                 if ($status == self::STATE_TOSTOP) {
-                    $this->running = FALSE;
+                    $this->running = false;
                     $ret = self::STATE_TOSTOP;
                 }
             } catch (\Exception $e) {
-                $this->running = FALSE;
+                $this->running = false;
             }
         }
 
@@ -811,7 +806,7 @@ abstract class task_abstract
         $d = debug_backtrace(false);
 
         $lastt = $t;
-        $this->logger->addDebug(memory_get_usage() . " -- " . memory_get_usage(true));
+        $this->logger->addDebug(memory_get_usage()." -- ".memory_get_usage(true));
     }
 
     public function log($message, $level = self::LOG_DEBUG)
@@ -863,7 +858,7 @@ abstract class task_abstract
             ':active'   => 1
             , ':name'     => ''
             , ':class'    => get_called_class()
-            , ':settings' => $settings
+            , ':settings' => $settings,
         );
 
         $stmt = $dependencyContainer['phraseanet.appbox']->get_connection()->prepare($sql);
@@ -881,9 +876,9 @@ abstract class task_abstract
     public function getUsage()
     {
         global $argc, $argv;
-        $t = "usage: " . $argv[0] . " [options]\noptions:\n";
+        $t = "usage: ".$argv[0]." [options]\noptions:\n";
         foreach ($this->argt as $n => $v) {
-            $t .= "\t" . $n . $v["usage"] . "\n";
+            $t .= "\t".$n.$v["usage"]."\n";
         }
 
         return $t;
@@ -913,13 +908,12 @@ abstract class task_abstract
             $stmt->execute(array(
                 ':todo'      => $todo,
                 ':done'      => $done,
-                ':taskid' => $this->getID()
+                ':taskid' => $this->getID(),
             ));
             $stmt->closeCursor();
             $this->todo = $todo;
             $this->done = $done;
         } catch (\Exception $e) {
-
         }
 
         return $this;

@@ -24,7 +24,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class Permalink extends AbstractDelivery
 {
-
     public function connect(Application $app)
     {
         $app['controller.permalink'] = $this;
@@ -164,7 +163,6 @@ class Permalink extends AbstractDelivery
             $watermark = ! $user->ACL()->has_right_on_base($record->get_base_id(), 'nowatermark');
 
             if ($watermark) {
-
                 $repository = $app['EM']->getRepository('\Entities\BasketElement');
 
                 if (count($repository->findReceivedValidationElementsByRecord($record, $user)) > 0) {

@@ -25,7 +25,7 @@ class Enum implements OptionType
     protected $available;
     protected $value;
 
-    public function __construct($displayName, $name, Array $available, $defaultValue = null)
+    public function __construct($displayName, $name, array $available, $defaultValue = null)
     {
         $this->displayName = $displayName;
         $this->name = $name;
@@ -45,13 +45,10 @@ class Enum implements OptionType
             return $this;
         }
 
-        if ( ! in_array($value, $this->available)) {
+        if (! in_array($value, $this->available)) {
             throw new \Exception_InvalidArgument(
                 sprintf(
-                    'The value provided `%s` for %s does not fit in range ; available are %s'
-                    , $value
-                    , $this->getName()
-                    , implode(', ', $this->getAvailableValues())
+                    'The value provided `%s` for %s does not fit in range ; available are %s', $value, $this->getName(), implode(', ', $this->getAvailableValues())
                 )
             );
         }

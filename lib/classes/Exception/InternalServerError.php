@@ -16,5 +16,4 @@
  */
 class Exception_InternalServerError extends Exception
 {
-
 }

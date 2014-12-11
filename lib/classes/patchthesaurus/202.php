@@ -16,7 +16,6 @@
  */
 class patchthesaurus_202
 {
-
     public function patch($version, &$domct, &$domth, connection_pdo &$connbas)
     {
         if ($version == "2.0.2") {

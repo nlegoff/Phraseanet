@@ -38,7 +38,7 @@ class Bridge_Api_Dailymotion_Container implements Bridge_Api_ContainerInterface
      * @param  String                           $url
      * @return Bridge_Api_Dailymotion_Container
      */
-    public function __construct(Array $entry, $type, $thumbnail = '', $url = '')
+    public function __construct(array $entry, $type, $thumbnail = '', $url = '')
     {
         $this->entry = $entry;
         $this->type = $type;
@@ -143,6 +143,6 @@ class Bridge_Api_Dailymotion_Container implements Bridge_Api_ContainerInterface
 
     public function is_private()
     {
-        return null;
+        return;
     }
 }

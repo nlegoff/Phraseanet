@@ -4,7 +4,6 @@ use Alchemy\Phrasea\Application;
 
 interface patchInterface
 {
-
     public function get_release();
 
     public function concern();

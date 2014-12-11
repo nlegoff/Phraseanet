@@ -19,7 +19,6 @@ use Alchemy\Phrasea\Application;
  */
 interface Feed_Publisher_Interface
 {
-
     public function __construct(Application $app, $id);
 
     public function get_user();

@@ -87,7 +87,7 @@ class patch_383alpha4a implements patchInterface
                      // change field type
                      "ALTER TABLE usr MODIFY usr_login VARCHAR(128) CHARACTER SET utf8 COLLATE utf8_bin;",
                      // recreate index
-                     "CREATE UNIQUE INDEX usr_login ON usr (usr_login);"
+                     "CREATE UNIQUE INDEX usr_login ON usr (usr_login);",
                  ) as $sql) {
             $em->getConnection()->executeQuery($sql);
         }

@@ -112,7 +112,7 @@ class patch_373alpha1a implements patchInterface
 
         $sql = 'SELECT value FROM registry WHERE `key` = :key';
         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
-        $stmt->execute(array(':key'=>'GV_sit'));
+        $stmt->execute(array(':key' => 'GV_sit'));
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
@@ -122,7 +122,7 @@ class patch_373alpha1a implements patchInterface
 
         $sql = 'DELETE FROM registry WHERE `key` = :key';
         $stmt = $app['phraseanet.appbox']->get_connection()->prepare($sql);
-        $stmt->execute(array(':key'=>'GV_sit'));
+        $stmt->execute(array(':key' => 'GV_sit'));
         $stmt->closeCursor();
 
         return true;

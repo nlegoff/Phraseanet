@@ -53,8 +53,9 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
         foreach ($this->users as $usr_id) {
             $usr_id = (int) $usr_id;
 
-            if ($usr_id > 0)
+            if ($usr_id > 0) {
                 $users[$usr_id] = $usr_id;
+            }
         }
 
         $this->users = $users;
@@ -134,9 +135,9 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
                 ON (bu.base_id = b.base_id AND u.usr_id = bu.usr_id)
               LEFT join  sbasusr sbu
                 ON (sbu.sbas_id = b.sbas_id AND u.usr_id = sbu.usr_id)
-            WHERE ( (u.usr_id = " . implode(' OR u.usr_id = ', $this->users) . " )
+            WHERE ( (u.usr_id = ".implode(' OR u.usr_id = ', $this->users)." )
                     AND b.sbas_id = s.sbas_id
-                    AND (b.base_id = '" . implode("' OR b.base_id = '", $list) . "'))
+                    AND (b.base_id = '".implode("' OR b.base_id = '", $list)."'))
             GROUP BY b.base_id
             ORDER BY s.ord, s.sbas_id, b.ord, b.base_id ";
 
@@ -146,8 +147,8 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
         $stmt->closeCursor();
 
         $sql = 'SELECT base_id, sum(1) as access FROM basusr
-            WHERE (usr_id = ' . implode(' OR usr_id = ', $this->users) . ')
-              AND  (base_id = ' . implode(' OR base_id = ', $list) . ')
+            WHERE (usr_id = '.implode(' OR usr_id = ', $this->users).')
+              AND  (base_id = '.implode(' OR base_id = ', $list).')
             GROUP BY base_id';
         $stmt = $this->app['phraseanet.appbox']->get_connection()->prepare($sql);
         $stmt->execute();
@@ -163,8 +164,9 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
         foreach ($rs as $k => $row) {
             $rs[$k]['access'] = array_key_exists($row['base_id'], $base_ids) ? $base_ids[$row['base_id']]['access'] : '0';
             foreach ($row as $dk => $data) {
-                if (is_null($data))
+                if (is_null($data)) {
                     $rs[$k][$dk] = '0';
+                }
             }
         }
 
@@ -180,7 +182,7 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
             'users_serial' => implode(';', $this->users),
             'base_id'      => $this->base_id,
             'main_user'    => null,
-            'templates'    => $templates
+            'templates'    => $templates,
         );
 
         if (count($this->users) == 1) {
@@ -197,7 +199,7 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
 
         $sql = "SELECT u.usr_id, restrict_dwnld, remain_dwnld, month_dwnld_max
       FROM (usr u INNER JOIN basusr bu ON u.usr_id = bu.usr_id)
-      WHERE (u.usr_id = " . implode(' OR u.usr_id = ', $this->users) . ")
+      WHERE (u.usr_id = ".implode(' OR u.usr_id = ', $this->users).")
       AND bu.base_id = :base_id";
 
         $conn = \connection::getPDOConnection($this->app);
@@ -223,7 +225,7 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
 
         $sql = "SELECT BIN(mask_and) AS mask_and, BIN(mask_xor) AS mask_xor
             FROM basusr
-            WHERE usr_id IN (" . implode(',', $this->users) . ")
+            WHERE usr_id IN (".implode(',', $this->users).")
               AND base_id = :base_id";
 
         $conn = $this->app['phraseanet.appbox']->get_connection();
@@ -239,17 +241,20 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
 
         $nrows = 0;
 
-        for ($bit = 0; $bit < 32; $bit++)
+        for ($bit = 0; $bit < 32; $bit++) {
             $tbits_and[$bit] = $tbits_xor[$bit] = array("nset" => 0);
+        }
 
         foreach ($rs as $row) {
             $sta_xor = strrev($row["mask_xor"]);
-            for ($bit = 0; $bit < strlen($sta_xor); $bit++)
+            for ($bit = 0; $bit < strlen($sta_xor); $bit++) {
                 $tbits_xor[$bit]["nset"] += substr($sta_xor, $bit, 1) != "0" ? 1 : 0;
+            }
 
             $sta_and = strrev($row["mask_and"]);
-            for ($bit = 0; $bit < strlen($sta_and); $bit++)
+            for ($bit = 0; $bit < strlen($sta_and); $bit++) {
                 $tbits_and[$bit]["nset"] += substr($sta_and, $bit, 1) != "0" ? 1 : 0;
+            }
 
             $nrows++;
         }
@@ -279,19 +284,19 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
                     $tbits_left[$bit]["nset"] = 2;
                     $tbits_right[$bit]["nset"] = 2;
                 }
-                $vand_and = "1" . $vand_and;
-                $vand_or = "0" . $vand_or;
-                $vxor_and = "1" . $vxor_and;
-                $vxor_or = "0" . $vxor_or;
+                $vand_and = "1".$vand_and;
+                $vand_or = "0".$vand_or;
+                $vxor_and = "1".$vxor_and;
+                $vxor_or = "0".$vxor_or;
             } else {
                 if (isset($tbits_left[$bit]) && isset($tbits_right[$bit])) {
-                    $tbits_left[$bit]["nset"] = (($tbits_and[$bit]["nset"] == $nrows && $tbits_xor[$bit]["nset"] == 0) || $tbits_and[$bit]["nset"] == 0 ) ? 1 : 0;
-                    $tbits_right[$bit]["nset"] = (($tbits_and[$bit]["nset"] == $nrows && $tbits_xor[$bit]["nset"] == $nrows) || $tbits_and[$bit]["nset"] == 0 ) ? 1 : 0;
+                    $tbits_left[$bit]["nset"] = (($tbits_and[$bit]["nset"] == $nrows && $tbits_xor[$bit]["nset"] == 0) || $tbits_and[$bit]["nset"] == 0) ? 1 : 0;
+                    $tbits_right[$bit]["nset"] = (($tbits_and[$bit]["nset"] == $nrows && $tbits_xor[$bit]["nset"] == $nrows) || $tbits_and[$bit]["nset"] == 0) ? 1 : 0;
                 }
-                $vand_and = ($tbits_and[$bit]["nset"] == 0 ? "0" : "1") . $vand_and;
-                $vand_or = ($tbits_and[$bit]["nset"] == $nrows ? "1" : "0") . $vand_or;
-                $vxor_and = ($tbits_xor[$bit]["nset"] == 0 ? "0" : "1") . $vxor_and;
-                $vxor_or = ($tbits_xor[$bit]["nset"] == $nrows ? "1" : "0") . $vxor_or;
+                $vand_and = ($tbits_and[$bit]["nset"] == 0 ? "0" : "1").$vand_and;
+                $vand_or = ($tbits_and[$bit]["nset"] == $nrows ? "1" : "0").$vand_or;
+                $vxor_and = ($tbits_xor[$bit]["nset"] == 0 ? "0" : "1").$vxor_and;
+                $vxor_or = ($tbits_xor[$bit]["nset"] == $nrows ? "1" : "0").$vxor_or;
             }
         }
 
@@ -301,7 +306,7 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
             'vand_and'    => $vand_and,
             'vand_or'     => $vand_or,
             'vxor_and'    => $vxor_and,
-            'vxor_or'     => $vxor_or
+            'vxor_or'     => $vxor_or,
         );
 
         return array(
@@ -319,7 +324,7 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
 
         $sql = "SELECT u.usr_id, time_limited, limited_from, limited_to
       FROM (usr u INNER JOIN basusr bu ON u.usr_id = bu.usr_id)
-      WHERE (u.usr_id = " . implode(' OR u.usr_id = ', $this->users) . ")
+      WHERE (u.usr_id = ".implode(' OR u.usr_id = ', $this->users).")
       AND bu.base_id = :base_id";
 
         $conn = \connection::getPDOConnection($this->app);
@@ -332,10 +337,12 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
         $limited_from = $limited_to = false;
 
         foreach ($rs as $row) {
-            if ($time_limited < 0)
+            if ($time_limited < 0) {
                 $time_limited = $row['time_limited'];
-            if ($time_limited < 2 && $row['time_limited'] != $row['time_limited'])
+            }
+            if ($time_limited < 2 && $row['time_limited'] != $row['time_limited']) {
                 $time_limited = 2;
+            }
 
             if ($limited_from !== '' && trim($row['limited_from']) != '0000-00-00 00:00:00') {
                 $limited_from = $limited_from === false ? $row['limited_from'] : (($limited_from == $row['limited_from']) ? $limited_from : '');
@@ -375,7 +382,7 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
             FROM (usr u
               INNER JOIN basusr bu ON u.usr_id = bu.usr_id
               INNER JOIN bas b ON b.base_id = bu.base_id)
-            WHERE (u.usr_id = " . implode(' OR u.usr_id = ', $this->users) . ")
+            WHERE (u.usr_id = ".implode(' OR u.usr_id = ', $this->users).")
               AND b.sbas_id = :sbas_id";
 
         $conn = \connection::getPDOConnection($this->app);
@@ -419,13 +426,13 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
             $datas = array(
                 'time_limited' => array_pop($time_limited),
                 'limited_from' => $limited_from,
-                'limited_to'   => $limited_to
+                'limited_to'   => $limited_to,
             );
         } else {
             $datas = array(
                 'time_limited' => 2,
                 'limited_from' => '',
-                'limited_to'   => ''
+                'limited_to'   => '',
             );
         }
 
@@ -466,7 +473,7 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
                 'canreport',
                 'canpush',
                 'manage',
-                'modify_struct'
+                'modify_struct',
             );
             foreach ($rights as $k => $right) {
                 if (($right == 'access' && !$ACL->has_access_to_base($base_id))
@@ -474,13 +481,14 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
                     unset($rights[$k]);
                     continue;
                 }
-                $rights[$k] = $right . '_' . $base_id;
+                $rights[$k] = $right.'_'.$base_id;
             }
             $parm = $request->get_parms_from_serialized_datas($rights, 'values');
 
             foreach ($parm as $p => $v) {
-                if (trim($v) == '')
+                if (trim($v) == '') {
                     continue;
+                }
 
                 $serial = explode('_', $p);
                 $base_id = array_pop($serial);
@@ -491,8 +499,9 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
                     if ($v === '1') {
                         $create_sbas[\phrasea::sbasFromBas($this->app, $base_id)] = \phrasea::sbasFromBas($this->app, $base_id);
                         $create[] = $base_id;
-                    } else
+                    } else {
                         $delete[] = $base_id;
+                    }
                 } else {
                     $create_sbas[\phrasea::sbasFromBas($this->app, $base_id)] = \phrasea::sbasFromBas($this->app, $base_id);
                     $update[$base_id][$p] = $v;
@@ -507,21 +516,22 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
                 'bas_modif_th',
                 'bas_manage',
                 'bas_modify_struct',
-                'bas_chupub'
+                'bas_chupub',
             );
             foreach ($rights as $k => $right) {
                 if (!$ACL->has_right_on_sbas($databox->get_sbas_id(), $right)) {
                     unset($rights[$k]);
                     continue;
                 }
-                $rights[$k] = $right . '_' . $databox->get_sbas_id();
+                $rights[$k] = $right.'_'.$databox->get_sbas_id();
             }
 
             $parm = $request->get_parms_from_serialized_datas($rights, 'values');
 
             foreach ($parm as $p => $v) {
-                if (trim($v) == '')
+                if (trim($v) == '') {
                     continue;
+                }
 
                 $serial = explode('_', $p);
                 $sbas_id = array_pop($serial);
@@ -590,7 +600,7 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
             , 'company'
             , 'activite'
             , 'telephone'
-            , 'fax'
+            , 'fax',
         );
 
         $parm = $request->get_parms_from_serialized_datas($infos, 'user_infos');
@@ -621,7 +631,6 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
             try {
                 $oldReceiver = new Receiver(null, $old_email);
             } catch (InvalidArgumentException $e) {
-
             }
 
             if ($oldReceiver) {
@@ -632,7 +641,6 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
             try {
                 $newReceiver = new Receiver(null, $new_email);
             } catch (InvalidArgumentException $e) {
-
             }
 
             if ($newReceiver) {
@@ -673,10 +681,11 @@ class Edit extends \Alchemy\Phrasea\Helper\Helper
 
         foreach ($this->users as $usr_id) {
             $user = \User_Adapter::getInstance($usr_id, $this->app);
-            if ($this->request->get('quota'))
+            if ($this->request->get('quota')) {
                 $user->ACL()->set_quotas_on_base($this->base_id, $this->request->get('droits'), $this->request->get('restes'));
-            else
+            } else {
                 $user->ACL()->remove_quotas_on_base($this->base_id);
+            }
         }
 
         return $this;

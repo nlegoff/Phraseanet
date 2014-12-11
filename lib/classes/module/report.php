@@ -613,12 +613,13 @@ class module_report
      */
     protected function setDisplay($tab, $groupby = false)
     {
-        if ($tab == false && $groupby == false)
+        if ($tab == false && $groupby == false) {
             $this->initDefaultConfigColumn($this->default_display);
-        elseif ($groupby != false && $tab == false)
+        } elseif ($groupby != false && $tab == false) {
             $this->initDefaultConfigColumn($this->champ);
-        elseif ($tab != false)
+        } elseif ($tab != false) {
             $this->setConfigColumn($tab);
+        }
 
         return;
     }
@@ -681,7 +682,7 @@ class module_report
             'mime'           => _('report:: type'),
             'size'           => _('report:: taille'),
             'copyright'      => _('report:: copyright'),
-            'final'          => _('phraseanet:: sous definition')
+            'final'          => _('phraseanet:: sous definition'),
         );
 
         return;
@@ -693,14 +694,14 @@ class module_report
      */
     private function setDay()
     {
-        return Array(
+        return array(
             1 => _('phraseanet::jours:: lundi'),
             2 => _('phraseanet::jours:: mardi'),
             3 => _('phraseanet::jours:: mercredi'),
             4 => _('phraseanet::jours:: jeudi'),
             5 => _('phraseanet::jours:: vendredi'),
             6 => _('phraseanet::jours:: samedi'),
-            7 => _('phraseanet::jours:: dimanche'));
+            7 => _('phraseanet::jours:: dimanche'), );
     }
 
     /**
@@ -721,7 +722,7 @@ class module_report
             _('septembre'),
             _('octobre'),
             _('novembre'),
-            _('decembre')
+            _('decembre'),
         );
     }
 
@@ -733,14 +734,16 @@ class module_report
     {
         if ($this->nb_record && $this->total > $this->nb_record) {
             $this->previous_page = $this->nb_page - 1;
-            if ($this->previous_page == 0)
+            if ($this->previous_page == 0) {
                 $this->previous_page = false;
+            }
 
             $test = ($this->total / $this->nb_record);
-            if ($this->nb_page == intval(ceil($test)))
+            if ($this->nb_page == intval(ceil($test))) {
                 $this->next_page = false;
-            else
+            } else {
                 $this->next_page = $this->nb_page + 1;
+            }
         }
     }
 
@@ -750,8 +753,9 @@ class module_report
      */
     protected function setDisplayNav()
     {
-        if ($this->total > $this->nb_record)
+        if ($this->total > $this->nb_record) {
             $this->display_nav = true;
+        }
     }
 
     /**
@@ -762,8 +766,9 @@ class module_report
     protected function initDefaultConfigColumn($display)
     {
         $array = array();
-        foreach ($display as $key => $value)
+        foreach ($display as $key => $value) {
             $array[$value] = array("", 0, 0, 0, 0);
+        }
         $this->setConfigColumn($array);
     }
 
@@ -797,7 +802,7 @@ class module_report
                     'sort'           => $sort,
                     'bound'          => $bound,
                     'filter'         => $filter,
-                    'groupby'        => $groupby
+                    'groupby'        => $groupby,
                 );
 
                 $this->display[$column] = $config;
@@ -829,7 +834,7 @@ class module_report
      */
     public function buildReport($tab = false, $groupby = false, $on = false)
     {
-// no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
+        // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
 
         if (sizeof($this->report) > 0) {
             return $this->report;
@@ -853,7 +858,6 @@ class module_report
                 $stmt->closeCursor();
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\ncount==%s\n\n", __FILE__, __LINE__, count($rs)), FILE_APPEND);
-
             } catch (PDOException $e) {
                 echo $e->getMessage();
 
@@ -881,7 +885,6 @@ class module_report
             $this->setReport();
 
 // no_file_put_contents("/tmp/report.txt", sprintf("%s (%s)\n\n", __FILE__, __LINE__), FILE_APPEND);
-
             return $this->report;
         } catch (\Exception $e) {
             echo $e->getMessage();

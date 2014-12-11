@@ -35,8 +35,8 @@ class SessionManagerSubscriber implements EventSubscriberInterface
         return array(
             KernelEvents::REQUEST => array(
                 array('initSession', Application::EARLY_EVENT),
-                array('checkSessionActivity', Application::LATE_EVENT)
-            )
+                array('checkSessionActivity', Application::LATE_EVENT),
+            ),
         );
     }
 
@@ -48,7 +48,6 @@ class SessionManagerSubscriber implements EventSubscriberInterface
 
         if ($this->isFlashUploadRequest($event->getRequest())) {
             if (null !== $sessionId = $event->getRequest()->request->get('php_session_id')) {
-
                 $request = $event->getRequest();
                 $request->cookies->set($this->app['session']->getName(), $sessionId);
 
@@ -76,7 +75,7 @@ class SessionManagerSubscriber implements EventSubscriberInterface
         }
         $moduleName = strtolower($pathInfo[1]);
 
-        if (!array_key_exists($moduleName, $modulesIds) ) {
+        if (!array_key_exists($moduleName, $modulesIds)) {
             return;
         }
         // this route is polled by js in admin/databox to refresh infos (progress bar...)
@@ -101,7 +100,7 @@ class SessionManagerSubscriber implements EventSubscriberInterface
             if ($event->getRequest()->isXmlHttpRequest()) {
                 $response = new Response("End-Session", 403);
             } else {
-                $response = new RedirectResponse($this->app["url_generator"]->generate("homepage", array("redirect"=>'..' . $event->getRequest()->getPathInfo())));
+                $response = new RedirectResponse($this->app["url_generator"]->generate("homepage", array("redirect" => '..'.$event->getRequest()->getPathInfo())));
             }
             $response->headers->set('X-Phraseanet-End-Session', '1');
 
@@ -123,7 +122,7 @@ class SessionManagerSubscriber implements EventSubscriberInterface
             if ($event->getRequest()->isXmlHttpRequest()) {
                 $response = new Response("End-Session", 403);
             } else {
-                $response = new RedirectResponse($this->app["url_generator"]->generate("homepage", array("redirect"=>'..' . $event->getRequest()->getPathInfo())));
+                $response = new RedirectResponse($this->app["url_generator"]->generate("homepage", array("redirect" => '..'.$event->getRequest()->getPathInfo())));
             }
             $response->headers->set('X-Phraseanet-End-Session', '1');
 

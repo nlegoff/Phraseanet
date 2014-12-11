@@ -18,5 +18,4 @@ class kannada extends AbstractCharset
     U+0C85..U+0C8C, U+0C8E..U+0C90, U+0C92..U+0CA8, U+0CAA..U+0CB3, U+0CB5..U+0CB9,
     U+0CE0, U+0CE1, U+0CE6..U+0CEF
 ';
-
 }

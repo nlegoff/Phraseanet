@@ -30,7 +30,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Setup implements ControllerProviderInterface
 {
-
     public function connect(SilexApplication $app)
     {
         $controllers = $app['controllers_factory'];
@@ -83,7 +82,7 @@ class Setup implements ControllerProviderInterface
      */
     public function getGlobals(Application $app, Request $request)
     {
-        $GV = require_once __DIR__ . "/../../../../conf.d/_GV_template.inc";
+        $GV = require_once __DIR__."/../../../../conf.d/_GV_template.inc";
 
         if (null !== $update = $request->query->get('update')) {
             if (!!$update) {
@@ -96,7 +95,7 @@ class Setup implements ControllerProviderInterface
         return $app['twig']->render('admin/setup.html.twig', array(
             'GV'                => $GV,
             'update_post_datas' => $update,
-            'listTimeZone'      => \DateTimeZone::listAbbreviations()
+            'listTimeZone'      => \DateTimeZone::listAbbreviations(),
         ));
     }
 
@@ -111,12 +110,12 @@ class Setup implements ControllerProviderInterface
     {
         if (\setup::create_global_values($app, $request->request->all())) {
             return $app->redirectPath('setup_display_globals', array(
-                'success' => 1
+                'success' => 1,
             ));
         }
 
         return $app->redirectPath('setup_display_globals', array(
-            'success' => 0
+            'success' => 0,
         ));
     }
 

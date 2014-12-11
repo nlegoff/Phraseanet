@@ -17,7 +17,6 @@
  */
 interface Feed_XML_RSS_ImageInterface
 {
-
     public function __construct($url, $title, $link);
 
     public function get_url();

@@ -80,7 +80,7 @@ class task_period_apiwebhooks extends task_appboxAbstract
         $requests = array();
         foreach ($urls as $url) {
             $requests[] = $client->createRequest('POST', $url, array(
-                'Content-Type' => 'application/vnd.phraseanet.event+json'
+                'Content-Type' => 'application/vnd.phraseanet.event+json',
             ), $body);
         }
         $client->send($requests);
@@ -133,12 +133,12 @@ class task_period_apiwebhooks extends task_appboxAbstract
                 'id' => $entry->get_id(),
                 'author' => array(
                     'name' => $entry->get_author_name(),
-                    'email' => $entry->get_author_email()
+                    'email' => $entry->get_author_email(),
                 ),
                 'title' => $entry->get_title(),
                 'description' => $entry->get_subtitle() ?: null,
             ),
-            'users' => $users
+            'users' => $users,
         );
     }
 }

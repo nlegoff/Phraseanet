@@ -55,7 +55,6 @@ class patch_370alpha4a implements patchInterface
 
     public function apply(base $databox, Application $app)
     {
-
         $sql = 'SELECT id, src FROM metadatas_structure';
         $stmt = $databox->get_connection()->prepare($sql);
         $stmt->execute();
@@ -68,7 +67,6 @@ class patch_370alpha4a implements patchInterface
         $tagBasename = new \Alchemy\Phrasea\Metadata\Tag\TfBasename();
 
         foreach ($rs as $row) {
-
             if (strpos(strtolower($row['src']), 'tf-parentdir') !== false) {
                 $update[] = array('id'  => $row['id'], 'src' => $tagDirname->getTagname());
             }

@@ -65,7 +65,7 @@ class databox_subdefsStructure implements IteratorAggregate, Countable
             }
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -81,7 +81,7 @@ class databox_subdefsStructure implements IteratorAggregate, Countable
             'video' => array(),
             'audio' => array(),
             'document' => array(),
-            'flash' => array()
+            'flash' => array(),
         );
 
         if (! $sx_struct) {
@@ -93,7 +93,7 @@ class databox_subdefsStructure implements IteratorAggregate, Countable
         foreach ($subdefgroup as $k => $subdefs) {
             $subdefgroup_name = strtolower($subdefs->attributes()->name);
 
-            if ( ! isset($AvSubdefs[$subdefgroup_name])) {
+            if (! isset($AvSubdefs[$subdefgroup_name])) {
                 $AvSubdefs[$subdefgroup_name] = array();
             }
 
@@ -156,13 +156,12 @@ class databox_subdefsStructure implements IteratorAggregate, Countable
      */
     public function delete_subdef($group, $name)
     {
-
         $dom_struct = $this->databox->get_dom_structure();
         $dom_xp = $this->databox->get_xpath_structure();
         $nodes = $dom_xp->query(
             '//record/subdefs/'
-            . 'subdefgroup[@name="' . $group . '"]/'
-            . 'subdef[@name="' . $name . '"]'
+            .'subdefgroup[@name="'.$group.'"]/'
+            .'subdef[@name="'.$name.'"]'
         );
 
         for ($i = 0; $i < $nodes->length; $i++) {
@@ -196,7 +195,7 @@ class databox_subdefsStructure implements IteratorAggregate, Countable
         $subdef->setAttribute('name', mb_strtolower($name));
 
         $dom_xp = $this->databox->get_xpath_structure();
-        $query = '//record/subdefs/subdefgroup[@name="' . $groupname . '"]';
+        $query = '//record/subdefs/subdefgroup[@name="'.$groupname.'"]';
         $groups = $dom_xp->query($query);
 
         if ($groups->length == 0) {
@@ -243,16 +242,12 @@ class databox_subdefsStructure implements IteratorAggregate, Countable
         }
 
         foreach ($options as $option => $value) {
-
             if (is_scalar($value)) {
-
                 $child = $dom_struct->createElement($option);
                 $child->appendChild($dom_struct->createTextNode($value));
                 $subdef->appendChild($child);
             } elseif (is_array($value)) {
-
                 foreach ($value as $v) {
-
                     $child = $dom_struct->createElement($option);
                     $child->appendChild($dom_struct->createTextNode($v));
                     $subdef->appendChild($child);
@@ -263,7 +258,7 @@ class databox_subdefsStructure implements IteratorAggregate, Countable
         $dom_xp = $this->databox->get_xpath_structure();
 
         $nodes = $dom_xp->query('//record/subdefs/'
-            . 'subdefgroup[@name="' . $group . '"]');
+            .'subdefgroup[@name="'.$group.'"]');
         if ($nodes->length > 0) {
             $dom_group = $nodes->item(0);
         } else {
@@ -280,8 +275,8 @@ class databox_subdefsStructure implements IteratorAggregate, Countable
 
         $nodes = $dom_xp->query(
             '//record/subdefs/'
-            . 'subdefgroup[@name="' . $group . '"]/'
-            . 'subdef[@name="' . $name . '"]'
+            .'subdefgroup[@name="'.$group.'"]/'
+            .'subdef[@name="'.$name.'"]'
         );
 
         $refNode = null;

@@ -31,11 +31,11 @@ interface Bridge_Api_Auth_Interface
 
     public function parse_request_token();
 
-    public function get_auth_url(Array $supp_parameters = array());
+    public function get_auth_url(array $supp_parameters = array());
 
     public function get_auth_signatures();
 
     public function set_settings(Bridge_AccountSettings $settings);
 
-    public function set_parameters(Array $parameters);
+    public function set_parameters(array $parameters);
 }

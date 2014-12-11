@@ -21,7 +21,6 @@ namespace Alchemy\Phrasea\Vocabulary\ControlProvider;
  */
 interface ControlProviderInterface
 {
-
     /**
      * @return the type of the ControlProvider
      *

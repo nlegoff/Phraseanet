@@ -55,11 +55,11 @@ class patch_380alpha16a implements patchInterface
         }
 
         $xsendfile['mapping'][] = array(
-            'directory' => $app['root.path'] . '/tmp/lazaret/',
+            'directory' => $app['root.path'].'/tmp/lazaret/',
             'mount-point' => '/lazaret/',
         );
         $xsendfile['mapping'][] = array(
-            'directory' => $app['root.path'] . '/tmp/download/',
+            'directory' => $app['root.path'].'/tmp/download/',
             'mount-point' => '/download/',
         );
 

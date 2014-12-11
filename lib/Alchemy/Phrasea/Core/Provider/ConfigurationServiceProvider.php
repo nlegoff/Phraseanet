@@ -11,7 +11,6 @@
 
 namespace Alchemy\Phrasea\Core\Provider;
 
-use Alchemy\Phrasea\Application;
 use Alchemy\Phrasea\Core\Configuration\Configuration;
 use Alchemy\Phrasea\Core\Configuration\Compiler;
 use Silex\Application as SilexApplication;
@@ -29,8 +28,8 @@ class ConfigurationServiceProvider implements ServiceProviderInterface
         $app['phraseanet.configuration.compiler'] = $app->share(function (SilexApplication $app) {
             return new Compiler();
         });
-        $app['phraseanet.configuration.config-path'] = $app['root.path'] . '/config/configuration.yml';
-        $app['phraseanet.configuration.config-compiled-path'] = $app['root.path'] . '/tmp/configuration-compiled.php';
+        $app['phraseanet.configuration.config-path'] = $app['root.path'].'/config/configuration.yml';
+        $app['phraseanet.configuration.config-compiled-path'] = $app['root.path'].'/tmp/configuration-compiled.php';
 
         $app['phraseanet.configuration'] = $app->share(function (SilexApplication $app) {
             return new Configuration(

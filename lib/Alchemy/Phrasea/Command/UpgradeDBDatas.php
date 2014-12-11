@@ -73,7 +73,7 @@ EOF
                     continue;
                 }
 
-                $classname = __NAMESPACE__ . '\\' . $classname;
+                $classname = __NAMESPACE__.'\\'.$classname;
                 $this->upgrades[] = new $classname($this->container);
             }
         }
@@ -129,8 +129,8 @@ EOF
         $dialog = $this->getHelperSet()->get('dialog');
 
         do {
-            $continue = strtolower($dialog->ask($output, $question . '<question>Continue ? (Y/n)</question>', 'Y'));
-        } while ( ! in_array($continue, array('y', 'n')));
+            $continue = strtolower($dialog->ask($output, $question.'<question>Continue ? (Y/n)</question>', 'Y'));
+        } while (! in_array($continue, array('y', 'n')));
 
         if (strtolower($continue) !== 'y') {
             $output->writeln('Aborting !');

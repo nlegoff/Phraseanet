@@ -22,7 +22,6 @@ use Alchemy\Phrasea\Command\Command;
 
 class module_console_fieldsDelete extends Command
 {
-
     public function __construct($name = null)
     {
         parent::__construct($name);
@@ -58,9 +57,7 @@ class module_console_fieldsDelete extends Command
         $dialog = $this->getHelperSet()->get('dialog');
         $continue = mb_strtolower(
             $dialog->ask(
-                $output
-                , "<question>About to delete " . $field->get_name() . " (y/N)</question>"
-                , 'n'
+                $output, "<question>About to delete ".$field->get_name()." (y/N)</question>", 'n'
             )
         );
 

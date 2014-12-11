@@ -57,7 +57,6 @@ class PhraseanetServiceProvider implements ServiceProviderInterface
             try {
                 $reader->setPdfToText($app['xpdf.pdftotext']);
             } catch (BinaryNotFoundException $e) {
-
             }
 
             return $reader;

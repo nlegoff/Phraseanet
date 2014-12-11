@@ -142,11 +142,10 @@ class Baskets implements ControllerProviderInterface
             $app['EM']->remove($basketElement);
             $app['EM']->flush();
         } catch (\Exception $e) {
-
         }
 
         return $app->redirectPath('get_client_baskets', array(
-            'courChuId' => $request->request->get('courChuId', '')
+            'courChuId' => $request->request->get('courChuId', ''),
         ));
     }
 
@@ -168,7 +167,6 @@ class Baskets implements ControllerProviderInterface
             $app['EM']->flush();
             unset($basket);
         } catch (\Exception $e) {
-
         }
 
         return $app->redirectPath('get_client_baskets');
@@ -192,13 +190,11 @@ class Baskets implements ControllerProviderInterface
 
             $app['EM']->persist($basket);
             $app['EM']->flush();
-
         } catch (\Exception $e) {
-
         }
 
         return $app->redirectPath('get_client_baskets', array(
-            'courChuId' => null !== $basket ? $basket->getId() : ''
+            'courChuId' => null !== $basket ? $basket->getId() : '',
         ));
     }
 
@@ -228,12 +224,11 @@ class Baskets implements ControllerProviderInterface
 
                 $app['EM']->flush();
             } catch (\Exception $e) {
-
             }
         }
 
         return $app->redirectPath('get_client_baskets', array(
-            'courChuId' => $basket ? $basket->getId() : ''
+            'courChuId' => $basket ? $basket->getId() : '',
         ));
     }
 
@@ -267,7 +262,7 @@ class Baskets implements ControllerProviderInterface
             'user_baskets'             => $basketCollections[1],
             'recept_user_basket'       => $basketCollections[0],
             'selected_basket'          => $selectedBasket,
-            'selected_basket_elements' => $selectedBasket ? $selectedBasket->getElements() : new ArrayCollection()
+            'selected_basket_elements' => $selectedBasket ? $selectedBasket->getElements() : new ArrayCollection(),
         ));
     }
 
@@ -295,7 +290,7 @@ class Baskets implements ControllerProviderInterface
         return $app->json(array(
             'success' => true,
             'message' => '',
-            'no_view' => $noview
+            'no_view' => $noview,
         ));
     }
 

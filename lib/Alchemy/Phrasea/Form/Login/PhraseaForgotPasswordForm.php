@@ -24,13 +24,13 @@ class PhraseaForgotPasswordForm extends AbstractType
             'required' => true,
             'constraints' => array(
                 new Assert\NotBlank(),
-                new Assert\Email()
+                new Assert\Email(),
             ),
         ));
     }
 
     public function getName()
     {
-        return null;
+        return;
     }
 }

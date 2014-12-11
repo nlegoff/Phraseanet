@@ -62,7 +62,7 @@ class MailInfoPushReceived extends AbstractMailWithLink
 
         return
             sprintf(_('You just received a push containing %s documents from %s'), count($this->basket->getElements()), $this->pusher->get_display_name())
-            . "\n" . $this->message;
+            ."\n".$this->message;
     }
 
     /**

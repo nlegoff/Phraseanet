@@ -28,7 +28,7 @@ class Audio extends Provider
     {
         $AVaudiosamplerate = array(
             8000, 11025, 16000, 22050, 32000, 44056, 44100,
-            47250, 48000, 50000, 50400, 88200, 96000
+            47250, 48000, 50000, 50400, 88200, 96000,
         );
 
         $this->registerOption(new OptionType\Range(_('Audio Birate'), self::OPTION_AUDIOBITRATE, 32, 320, 128, 32));

@@ -16,5 +16,4 @@ class TfHeight extends AbstractTag
     protected $Type = '';
     protected $Writable = false;
     protected $Description = 'The height of the file (if available)';
-
 }

@@ -3,7 +3,6 @@
 namespace Alchemy\Tests\Phrasea\Http\StaticFile;
 
 use Alchemy\Phrasea\Http\StaticFile\Nginx;
-use Symfony\Component\HttpFoundation\Request;
 
 class NginxModeTest extends \PhraseanetPHPUnitAbstract
 {

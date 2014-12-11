@@ -35,7 +35,7 @@ class BridgeExceptionSubscriberTest extends \PHPUnit_Framework_TestCase
         unset($app['exception_handler']);
         $app['dispatcher']->addSubscriber(new BridgeExceptionSubscriber($app));
         $app->get('/', function () {
-            throw new \InvalidArgumentException;
+            throw new \InvalidArgumentException();
         });
 
         $client = new Client($app);

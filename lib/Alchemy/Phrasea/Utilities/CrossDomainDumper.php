@@ -9,7 +9,7 @@ class CrossDomainDumper
     {
         $xml = '<?xml version="1.0"?>'.PHP_EOL;
         $xml .= '<!DOCTYPE cross-domain-policy SYSTEM "http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd">'.PHP_EOL;
-        $xml .= '<cross-domain-policy>' . PHP_EOL;
+        $xml .= '<cross-domain-policy>'.PHP_EOL;
         $xml .= $this->getSiteControl($configuration);
         $xml .= $this->getAllowAccess($configuration);
         $xml .= $this->getAllowIdentity($configuration);
@@ -51,7 +51,7 @@ class CrossDomainDumper
             $secure = isset($access['secure']) ? $access['secure'] : false;
             $ports = isset($access['to-ports']) ? $access['to-ports'] : false;
 
-            $xml .= "\t".'<allow-access-from domain="'.$domain.'"'. ($ports ? ' to-ports="'.$ports.'"' : '') . ($secure ? ' secure="'.$secure.'"': ''). '/>'.PHP_EOL;
+            $xml .= "\t".'<allow-access-from domain="'.$domain.'"'.($ports ? ' to-ports="'.$ports.'"' : '').($secure ? ' secure="'.$secure.'"' : '').'/>'.PHP_EOL;
         }
 
         return $xml;
@@ -99,7 +99,7 @@ class CrossDomainDumper
             }
             $secure = isset($access['secure']) ? $access['secure'] : false;
 
-            $xml .= "\t".'<allow-http-request-headers-from domain="'.$access['domain'].'" headers="'.$access['headers'].'"'. ($secure ? ' secure="'.$secure.'"': '') . '/>'.PHP_EOL;
+            $xml .= "\t".'<allow-http-request-headers-from domain="'.$access['domain'].'" headers="'.$access['headers'].'"'.($secure ? ' secure="'.$secure.'"' : '').'/>'.PHP_EOL;
         }
 
         return $xml;
