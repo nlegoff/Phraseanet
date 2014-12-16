@@ -2730,52 +2730,31 @@ DIV.thesaurus U.w {
 }
 
 #PREVIEWOTHERSINNER ul {
-    margin: 0;
-    padding: 0;
-    position: relative;
-    float: left;
-    list-style-type: none;
-    width: 100%;
+    padding: 5px;
 }
 
-#PREVIEWOTHERSINNER li {
-    position: relative;
-    float: left;
-    width: 150px;
-    margin: 4px 10px;
-    line-height: 14px;
+#PREVIEWOTHERSINNER hr {
+    margin: 5px 0 10px 0;
+    border-color: #4d4d4d
 }
 
-#PREVIEWOTHERSINNER li.otherRegToolTip {
-    height: 25px;
+#PREVIEWOTHERSINNER li a {
+    color: #fff;
+    margin-left: 30px;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    display: block;
     overflow: hidden;
-}
-
-#PREVIEWOTHERSINNER li.title {
-    font-weight: bold;
-    font-size: 13px;
-    margin: 10px 10px 5px;
-}
-
-#PREVIEWOTHERSINNER li.otherRegToolTip,
-#PREVIEWOTHERSINNER li.otherBaskToolTip {
-    background-color: #404040;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-#PREVIEWOTHERSINNER li.otherRegToolTip span.title {
+    white-space: nowrap;
+    width: 120px;
     line-height: 25px;
-    margin-left: 3px;
+    height: 25px;
 }
 
-#PREVIEWOTHERSINNER li .others_img {
-    position: relative;
-    float: left;
-    width: 25px;
-    height: 25px;
+#PREVIEWOTHERSINNER li img {
+    max-width:25px;
+    max-height:25px;
+    float:left;
 }
 
 #PREVIEWTITLEWRAPPER {
