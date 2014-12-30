@@ -18,7 +18,6 @@ use Alchemy\Phrasea\Command\Setup\H264MappingGenerator;
 use Alchemy\Phrasea\Command\SearchEngine\Debug\QueryParseCommand;
 use Alchemy\Phrasea\Command\SearchEngine\IndexCreateCommand;
 use Alchemy\Phrasea\Command\SearchEngine\IndexDropCommand;
-use Alchemy\Phrasea\Command\SearchEngine\IndexFull;
 use Alchemy\Phrasea\Command\SearchEngine\IndexPopulateCommand;
 use Alchemy\Phrasea\Command\Thesaurus\FindConceptsCommand;
 use Alchemy\Phrasea\Command\WebsocketServer;
@@ -123,8 +122,6 @@ $cli->command(new H264ConfigurationDumper());
 $cli->command(new H264MappingGenerator());
 $cli->command(new XSendFileConfigurationDumper());
 $cli->command(new XSendFileMappingGenerator());
-$cli->command(new StaticConfigurationDumper());
-$cli->command(new StaticMappingGenerator());
 
 if ($cli['search_engine.type'] === SearchEngineInterface::TYPE_ELASTICSEARCH) {
     $cli->command(new IndexCreateCommand());

@@ -440,6 +440,7 @@ module.exports = function(grunt) {
         "copy:tinymce",
         "copy:underscore",
         "copy:web-socket-js",
+        "copy:fancytree",
         "copy:zxcvbn"
     ]);
     grunt.registerTask("install-assets", [

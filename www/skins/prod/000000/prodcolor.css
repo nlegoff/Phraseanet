@@ -4399,3 +4399,17 @@ ui-dialog-titlebar {
     max-width: 16px;
     max-heigh: 16px;
 }
+
+.fancytree-container {
+    background-color: #3B3B3B;
+    margin-top: 30px;
+    border:none;
+}
+
+span.fancytree-title {
+    color: #ffffff;
+}
+
+span.fancytree-title:hover {
+    background-color: darkslategray;
+}
