@@ -303,27 +303,11 @@ class ElasticSearchEngine implements SearchEngineInterface
 
 
         $params = $this->createRecordQueryParams($recordQuery, $options, null);
+
         $params['body']['from'] = $offset;
         $params['body']['size'] = $perPage;
 
-        // Debug at the moment. See https://phraseanet.atlassian.net/browse/PHRAS-322
-        $params['body']['aggs'] = array (
-            'Keywords' => array ('terms' =>
-                array ('field' => 'caption.Keywords.raw', 'size' => 20),
-            ),
-            'Photographer' => array ('terms' =>
-                array ('field' => 'caption.Photographer.raw', 'size' => 20),
-            ),
-            'Headline' => array ('terms' =>
-                array ('field' => 'caption.Headline.raw', 'size' => 20),
-            ),
-            'City' => array ('terms' =>
-                array ('field' => 'caption.City.raw', 'size' => 20),
-            ),
-            'Country' => array ('terms' =>
-                array ('field' => 'caption.Country.raw', 'size' => 20),
-            ),
-        );
+        $params['body']['aggs'] = $this->getAggregationQueryParams($options);
 
         $res = $this->doExecute('search', $params);
 
@@ -427,6 +411,28 @@ class ElasticSearchEngine implements SearchEngineInterface
         }
 
         $params['body']['query'] = $ESQuery;
+
+        return $params;
+    }
+
+    private function getAggregationQueryParams(SearchEngineOptions $options)
+    {
+        $params = [];
+
+        foreach ($options->getDataboxes() as $databox) {
+            foreach ($databox->get_meta_structure() as $fieldStructure) {
+                if (!$fieldStructure->isAggregable()) {
+                    continue;
+                }
+
+                $params[$fieldStructure->get_name()] = [
+                    'terms' => [
+                        'field' => sprintf('caption.%s.raw', $fieldStructure->get_name()),
+                        'size' => 20
+                    ]
+                ];
+            }
+        }
 
         return $params;
     }
