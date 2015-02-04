@@ -537,7 +537,7 @@ class ElasticSearchEngine implements SearchEngineInterface
     {
         $sort = [];
 
-        if ($options->getSortBy() === SearchEngineOptions::SORT_RELEVANCE) {
+        if ($options->getSortBy() === null || $options->getSortBy() === SearchEngineOptions::SORT_RELEVANCE) {
             $sort['_score'] = $options->getSortOrder();
         } elseif ($options->getSortBy() === SearchEngineOptions::SORT_CREATED_ON) {
             $sort['created_on'] = $options->getSortOrder();
