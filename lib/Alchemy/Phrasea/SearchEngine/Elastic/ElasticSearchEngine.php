@@ -307,7 +307,9 @@ class ElasticSearchEngine implements SearchEngineInterface
         $params['body']['from'] = $offset;
         $params['body']['size'] = $perPage;
 
-        $params['body']['aggs'] = $this->getAggregationQueryParams($options);
+        if (0 !== count($aggs = $this->getAggregationQueryParams($options))) {
+            $params['body']['aggs'] = $aggs;
+        }
 
         $res = $this->doExecute('search', $params);
 
@@ -331,7 +333,7 @@ class ElasticSearchEngine implements SearchEngineInterface
 
         return new SearchEngineResult($results, json_encode($query), $res['took'], $offset,
             $res['hits']['total'], $res['hits']['total'], null, null, $suggestions, [],
-            $this->indexName, $res['aggregations']);
+            $this->indexName, isset($res['aggregations']) ? $res['aggregations'] : []);
     }
 
     /**
@@ -421,13 +423,27 @@ class ElasticSearchEngine implements SearchEngineInterface
 
         foreach ($options->getDataboxes() as $databox) {
             foreach ($databox->get_meta_structure() as $fieldStructure) {
-                if (!$fieldStructure->isAggregable()) {
+                if (false === $fieldStructure->isAggregable()) {
                     continue;
+                }
+
+                $indexField = 'caption';
+
+                if ($fieldStructure->isBusiness()) {
+                    if (false === $this->app['authentication']->isAuthenticated()) {
+                        continue;
+                    }
+                    $acl = $this->app['acl']->get($this->app['authentication']->getUser());
+                    if (false === $acl->can_see_business_fields($databox)) {
+                        continue;
+                    }
+
+                    $indexField = 'private_caption';
                 }
 
                 $params[$fieldStructure->get_name()] = [
                     'terms' => [
-                        'field' => sprintf('caption.%s.raw', $fieldStructure->get_name()),
+                        'field' => sprintf('%s.%s.raw', $indexField, $fieldStructure->get_name()),
                         'size' => 20
                     ]
                 ];
