@@ -506,7 +506,7 @@ function initAnswerForm() {
                         entry.children.push({
                             "title": bucket.key + ' ('+ bucket.doc_count + ')',
                             "key": bucket.key,
-                            "query": bucket.key + " IN " + key
+                            "query": '"'+ bucket.key + '" IN ' + key
                         });
                     });
                     treeData.push(entry);
@@ -528,11 +528,24 @@ function initAnswerForm() {
                             if (typeof node.data.query === "undefined") {
                                 return;
                             }
-                            $('form[name="phrasea_query"] input[name="qry"]').val(node.data.query);
+
+                            var $input = $('form[name="phrasea_query"] input[name="qry"]');
+                            var current_query = $input.val();
+                            var query = node.data.query;
+
+                            if (current_query != '') {
+                                query = '('+current_query+') AND ('+query+')';
+                            }
+                            $input.val(query);
+
                             checkFilters();
                             newSearch();
                             $('searchForm').trigger('submit');
                         }
+                    });
+
+                    $tree.fancytree("getRootNode").visit(function(node){
+                        node.setExpanded(true);
                     });
                 }
 
