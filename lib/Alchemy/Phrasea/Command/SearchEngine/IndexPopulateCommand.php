@@ -13,7 +13,9 @@ namespace Alchemy\Phrasea\Command\SearchEngine;
 
 use Alchemy\Phrasea\Command\Command;
 use Alchemy\Phrasea\SearchEngine\Elastic\Indexer;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class IndexPopulateCommand extends Command
@@ -23,11 +25,20 @@ class IndexPopulateCommand extends Command
         $this
             ->setName('searchengine:index:populate')
             ->setDescription('Populate search index with record data')
-        ;
+            ->addOption(
+                'databox_id',
+                null,
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                '',
+                null
+            );;
     }
 
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
-        $this->container['elasticsearch.indexer']->populateIndex();
+
+        $databox_ids = $input->getOption('databox_id');
+
+        $this->container['elasticsearch.indexer']->populateIndex($databox_ids);
     }
 }

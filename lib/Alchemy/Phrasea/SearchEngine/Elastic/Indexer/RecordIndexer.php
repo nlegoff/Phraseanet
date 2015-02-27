@@ -65,9 +65,14 @@ class RecordIndexer
         $this->locales = $locales;
     }
 
-    public function populateIndex(BulkOperation $bulk)
+    public function populateIndex(BulkOperation $bulk, array $databox_ids = array())
     {
+        $all = empty($databox_ids);
+
         foreach ($this->appbox->get_databoxes() as $databox) {
+            if (!$all && !in_array($databox->get_sbas_id(), $databox_ids)) {
+                continue;
+            }
             $fetcher = $this->createFetcherForDatabox($databox);
             $this->indexFromFetcher($bulk, $fetcher);
         }

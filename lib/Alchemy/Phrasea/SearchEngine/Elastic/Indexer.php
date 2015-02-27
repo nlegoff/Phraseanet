@@ -95,12 +95,12 @@ class Indexer
         return $this->client->indices()->exists($params);
     }
 
-    public function populateIndex()
+    public function populateIndex(array $databox_ids = array())
     {
         $stopwatch = new Stopwatch();
         $stopwatch->start('populate');
 
-        $this->apply(function(BulkOperation $bulk) {
+        $this->apply(function(BulkOperation $bulk) use ($databox_ids) {
             $this->termIndexer->populateIndex($bulk);
 
             // Record indexing depends on indexed terms so we need to make
@@ -108,7 +108,7 @@ class Indexer
             $bulk->flush();
             $this->client->indices()->refresh();
 
-            $this->recordIndexer->populateIndex($bulk);
+            $this->recordIndexer->populateIndex($bulk, $databox_ids);
 
             // Final flush
             $bulk->flush();
